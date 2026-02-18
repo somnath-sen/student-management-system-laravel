@@ -9,61 +9,82 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    // List subjects
+    /**
+     * Display list
+     */
     public function index()
     {
         $subjects = Subject::with('course')->latest()->get();
         return view('admin.subjects.index', compact('subjects'));
     }
 
-    // Show create form
+    /**
+     * Show create form
+     */
     public function create()
     {
         $courses = Course::all();
         return view('admin.subjects.create', compact('courses'));
     }
 
-    // Store subject
+    /**
+     * Store subject
+     */
     public function store(Request $request)
     {
         $request->validate([
             'course_id' => 'required|exists:courses,id',
-            'name' => 'required|string|max:255',
+            'name'      => 'required|string|max:255',
         ]);
 
-        Subject::create($request->only('course_id', 'name'));
+        Subject::create([
+            'course_id' => $request->course_id,
+            'name'      => $request->name,
+        ]);
 
-        return redirect()->route('admin.subjects.index')
-            ->with('success', 'Subject created successfully!');
+        return redirect()
+            ->route('admin.subjects.index')
+            ->with('success', 'Subject created successfully.');
     }
-    // Show edit form
+
+    /**
+     * Show edit form
+     */
     public function edit(Subject $subject)
     {
         $courses = Course::all();
         return view('admin.subjects.edit', compact('subject', 'courses'));
     }
 
-    // Update subject
+    /**
+     * Update subject
+     */
     public function update(Request $request, Subject $subject)
     {
         $request->validate([
             'course_id' => 'required|exists:courses,id',
-            'name' => 'required|string|max:255',
+            'name'      => 'required|string|max:255',
         ]);
 
-        $subject->update($request->only('course_id', 'name'));
+        $subject->update([
+            'course_id' => $request->course_id,
+            'name'      => $request->name,
+        ]);
 
-        return redirect()->route('admin.subjects.index')
-            ->with('success', 'Subject updated successfully!');
+        return redirect()
+            ->route('admin.subjects.index')
+            ->with('success', 'Subject updated successfully.');
     }
 
-    // Delete subject
+    /**
+     * Delete subject
+     */
     public function destroy(Subject $subject)
     {
         $subject->delete();
 
-        return redirect()->route('admin.subjects.index')
-            ->with('success', 'Subject deleted successfully!');
+        return redirect()
+            ->route('admin.subjects.index')
+            ->with('success', 'Subject deleted successfully.');
     }
-
 }
