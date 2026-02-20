@@ -12,6 +12,14 @@ use App\Http\Controllers\Student\AttendanceController as StudentAttendanceContro
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Admin\ResultPublishController;
 use App\Http\Controllers\Student\MarksheetController;
+use App\Http\Controllers\Teacher\MarkController;
+// use App\Http\Controllers\Teacher\PerformanceController;
+use App\Http\Controllers\Teacher\DetailsController;
+use App\Http\Controllers\Student\ResultController;
+// use App\Http\Controllers\Student\PerformanceController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -178,6 +186,12 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/teacher/performance/{subject}', [\App\Http\Controllers\Teacher\PerformanceController::class, 'show'])
         ->name('teacher.performance.show');
 
+    
+    /* Emergency Contact */
+    Route::get('/teacher/emergency', function () {
+        return view('teacher.emergency');
+        })->name('teacher.emergency');
+
 });
 
 /*
@@ -211,5 +225,12 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     /* Performance Analysis */
     Route::get('/student/performance', [\App\Http\Controllers\Student\PerformanceController::class, 'index'])
         ->name('student.performance.index');
+
+    /* Emergency Contact */
+    Route::get('/student/emergency', function () {
+        return view('student.emergency');
+        })->name('student.emergency');
+
+
 
 });
