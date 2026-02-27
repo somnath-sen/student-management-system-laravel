@@ -30,7 +30,7 @@ class StudyAIController extends Controller
         $user = Auth::user();
         
         // 1. Get API Key (Using the one you provided as fallback)
-        $apiKey = env('GEMINI_API_KEY', 'AIzaSyCf4S2EtiL2ibii-lcepXj7EhsrGfFEpOE');
+        $apiKey = env('GEMINI_API_KEY', '');
 
         try {
             // 2. Call Gemini API (Switched to gemini-pro for better compatibility)
