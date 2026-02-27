@@ -17,6 +17,7 @@ use App\Http\Controllers\Teacher\MarkController;
 use App\Http\Controllers\Teacher\DetailsController;
 use App\Http\Controllers\Student\ResultController;
 // use App\Http\Controllers\Student\PerformanceController;
+use App\Http\Controllers\StudyAIController;
 
 
 
@@ -192,6 +193,7 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
         return view('teacher.emergency');
         })->name('teacher.emergency');
 
+
 });
 
 /*
@@ -230,6 +232,15 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/emergency', function () {
         return view('student.emergency');
         })->name('student.emergency');
+
+    
+    /* Study AI */
+    Route::get('/studyai', [App\Http\Controllers\StudyAIController::class, 'index'])
+        ->name('studyai.index');
+
+    Route::post('/studyai/send', [App\Http\Controllers\StudyAIController::class, 'send'])
+        ->name('studyai.send');
+
 
 
 
