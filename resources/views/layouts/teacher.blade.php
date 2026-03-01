@@ -87,6 +87,11 @@
                     <span class="font-medium">Performance</span>
                 </a>
 
+                <a href="{{ route('studyai.index') }}"class="nav-link flex items-center gap-3 px-6 py-3.5 transition-all duration-200 group {{ request()->is('studyai*')? 'bg-indigo-600 text-white': 'text-gray-300 hover:bg-indigo-600 hover:text-white' }}">
+                   <i data-lucide="Bot" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
+                    <span class="font-medium">StudyAI</span>
+                </a>
+
                 <a href="{{ route('teacher.emergency') }}" 
                    class="nav-link flex items-center gap-3 px-6 py-3.5 transition-all duration-200 group {{ request()->is('student/emergency*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                     <i data-lucide="shield-alert" class="w-5 h-5 transition-transform group-hover:scale-110"></i>

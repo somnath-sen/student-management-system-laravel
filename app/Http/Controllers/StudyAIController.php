@@ -14,11 +14,15 @@ class StudyAIController extends Controller
     {
         $messages = ChatMessage::where('user_id', Auth::id())
             ->latest()
-            ->take(50)
+            ->take(100)
             ->get()
             ->reverse();
 
-        return view('studyai.index', compact('messages'));
+        $layout = Auth::user()->role_id == 2
+            ? 'layouts.teacher'
+            : 'layouts.student';
+
+    return view('studyai.index', compact('messages', 'layout'));
     }
 
     public function send(Request $request)

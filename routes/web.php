@@ -234,14 +234,29 @@ Route::middleware(['auth', 'role:student'])->group(function () {
         })->name('student.emergency');
 
     
-    /* Study AI */
-    Route::get('/studyai', [App\Http\Controllers\StudyAIController::class, 'index'])
+    // /* Study AI */
+    // Route::get('/studyai', [App\Http\Controllers\StudyAIController::class, 'index'])
+    //     ->name('studyai.index');
+
+    // Route::post('/studyai/send', [App\Http\Controllers\StudyAIController::class, 'send'])
+    //     ->name('studyai.send');
+
+
+
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| STUDENT ROUTES + TECHERS ROUTES   [STUDYAI]
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:teacher,student'])->group(function () {
+
+    Route::get('/studyai', [StudyAIController::class, 'index'])
         ->name('studyai.index');
 
-    Route::post('/studyai/send', [App\Http\Controllers\StudyAIController::class, 'send'])
+    Route::post('/studyai/send', [StudyAIController::class, 'send'])
         ->name('studyai.send');
-
-
-
 
 });

@@ -1,4 +1,4 @@
-@extends('layouts.student')
+@extends(auth()->user()->role_id == 2 ? 'layouts.teacher' : 'layouts.student')
 
 @section('title', 'StudyAI Assistant')
 
