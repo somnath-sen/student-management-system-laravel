@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Course;
+use App\Mail\StudentWelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Exception;
 
 class StudentController extends Controller
 {
@@ -25,9 +28,10 @@ class StudentController extends Controller
         return view('admin.students.create', compact('courses'));
     }
 
-    // Store student
+    // Store student and Send Welcome Email
     public function store(Request $request)
     {
+        // 1. Validation
         $request->validate([
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:users,email',
@@ -36,25 +40,47 @@ class StudentController extends Controller
             'course_id'   => 'required|exists:courses,id',
         ]);
 
-        // 1️⃣ Create user (role = student)
-        $user = \App\Models\User::create([
+        // 2. Create user (role = student)
+        $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'role_id'  => 3, // student
         ]);
 
-        // 2️⃣ Create student profile
-        \App\Models\Student::create([
+        // 3. Create student profile
+        $student = Student::create([
             'user_id'     => $user->id,
             'course_id'   => $request->course_id,
             'roll_number' => $request->roll_number,
         ]);
 
-        return redirect()
-            ->route('admin.students.index')
-            ->with('success', 'Student added successfully!');
+        // 4. Prepare Data for Email
+        $course = Course::find($request->course_id);
+        $emailData = [
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'password'    => $request->password, // Sending raw password safely via email
+            'roll_number' => $request->roll_number,
+            'course_name' => $course->name
+        ];
+
+        // 5. Send the Professional Mail with Error Handling
+        try {
+            Mail::to($request->email)->send(new StudentWelcomeMail($emailData));
+            
+            return redirect()
+                ->route('admin.students.index')
+                ->with('success', 'Student added and credentials emailed successfully!');
+                
+        } catch (Exception $e) {
+            // If email fails, the student is still created, but we warn the admin
+            return redirect()
+                ->route('admin.students.index')
+                ->with('warning', 'Student added, but the welcome email failed to send. Please check your mail server settings.');
+        }
     }
+
     // Show edit form
     public function edit(Student $student)
     {
@@ -97,5 +123,4 @@ class StudentController extends Controller
         return redirect()->route('admin.students.index')
             ->with('success', 'Student deleted successfully!');
     }
-
 }
