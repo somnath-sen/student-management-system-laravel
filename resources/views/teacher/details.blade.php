@@ -5,6 +5,14 @@
 @section('content')
 
 <style>
+    /* ================= FORCE CREAMY WHITE BACKGROUND ================= */
+    body {
+        background-color: #FDFBF7 !important;
+    }
+    .dark body {
+        background-color: #0f172a !important; /* Midnight slate for dark mode */
+    }
+
     /* ================= ANIMATIONS ================= */
     .animate-enter {
         animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -30,7 +38,7 @@
     }
 </style>
 
-<div class="min-h-screen bg-gray-50 text-gray-800 p-6 font-sans">
+<div class="min-h-screen text-gray-800 p-6 font-sans">
     
     <div class="max-w-7xl mx-auto">
 
@@ -43,30 +51,31 @@
             <div class="px-8 pb-6 relative">
                 
                 <div class="absolute -top-16 left-8">
-                    <div class="w-32 h-32 rounded-full border-4 border-white bg-indigo-600 text-white flex items-center justify-center text-4xl font-bold shadow-lg">
-                        {{ substr($user->name, 0, 1) }}
+                    <div class="w-32 h-32 rounded-full border-4 border-[#FDFBF7] bg-indigo-600 text-white flex items-center justify-center text-4xl font-bold shadow-lg">
+                        {{ isset($user->name) ? substr($user->name, 0, 1) : 'T' }}
                     </div>
-                    <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></div>
+                    <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-[#FDFBF7] rounded-full"></div>
                 </div>
 
-                <div class="pt-20 md:pt-4 md:pl-40 flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div class="pt-20 md:pt-4 md:pl-40 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     
                     <div class="mb-4 md:mb-0">
-                        <h1 class="text-3xl font-bold text-gray-900">{{ $user->name }}</h1>
-                        <div class="flex items-center gap-2 mt-1">
+                        <h1 class="text-3xl font-bold text-gray-900">{{ $user->name ?? 'Instructor' }}</h1>
+                        <div class="flex flex-wrap items-center gap-2 mt-1">
                             <span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded border border-indigo-100 font-semibold uppercase">
                                 Faculty
                             </span>
                             <span class="text-gray-500 text-sm flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2z"></path></svg>
-                                {{ $user->email }}
+                                {{ $user->email ?? 'No email provided' }}
                             </span>
                         </div>
                     </div>
 
-                    <button class="px-6 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
+                    <a href="{{ route('profile.edit') }}" class="px-6 py-2.5 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200 flex items-center justify-center w-full md:w-auto">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         Edit Profile
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -75,7 +84,7 @@
 
             <div class="lg:col-span-1 space-y-6 animate-enter stagger-1">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
+                    <div class="px-6 py-4 border-b border-gray-100 bg-[#FDFBF7] flex items-center gap-2">
                         <div class="p-1.5 bg-indigo-100 rounded text-indigo-600">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </div>
@@ -85,8 +94,8 @@
                     <div class="p-6 space-y-5">
                         <div>
                             <p class="text-xs text-gray-400 font-bold uppercase mb-1">Employee ID</p>
-                            <p class="text-lg font-mono font-medium text-gray-800 bg-gray-50 p-2 rounded border border-gray-100">
-                                {{ $teacher->employee_id }}
+                            <p class="text-lg font-mono font-medium text-gray-800 bg-[#FDFBF7] p-2 rounded border border-gray-100">
+                                {{ isset($teacher) && $teacher->employee_id ? $teacher->employee_id : 'PENDING' }}
                             </p>
                         </div>
 
@@ -108,7 +117,7 @@
                         <div class="absolute -right-6 -top-6 w-24 h-24 bg-white opacity-10 rounded-full"></div>
                         
                         <p class="text-indigo-100 text-sm font-medium">Assigned Subjects</p>
-                        <h3 class="text-4xl font-bold mt-1">{{ $subjects->count() }}</h3>
+                        <h3 class="text-4xl font-bold mt-1">{{ isset($subjects) ? $subjects->count() : 0 }}</h3>
                     </div>
                     
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -118,13 +127,13 @@
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#FDFBF7]">
                         <h2 class="font-bold text-gray-800">Assigned Classes</h2>
                         <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded">Semester 1</span>
                     </div>
 
                     <div class="p-6">
-                        @if($subjects->count())
+                        @if(isset($subjects) && $subjects->count() > 0)
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach($subjects as $subject)
                                     <div class="hover-card flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:border-indigo-300 transition-all cursor-default">
@@ -140,7 +149,7 @@
                             </div>
                         @else
                             <div class="text-center py-10">
-                                <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400">
+                                <div class="w-12 h-12 bg-[#FDFBF7] rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400 border border-gray-100">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                 </div>
                                 <p class="text-gray-500 font-medium">No subjects assigned.</p>
