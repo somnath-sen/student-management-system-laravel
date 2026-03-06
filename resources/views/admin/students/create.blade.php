@@ -47,13 +47,13 @@
             <h1 class="text-3xl font-bold text-gray-900">Register New Student</h1>
             <p class="text-gray-500 mt-1">Create a new student profile and assign credentials.</p>
         </div>
-        <a href="{{ route('admin.students.index') }}" class="group flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-indigo-600 transition-colors">
-            <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        <a href="{{ route('admin.students.index') }}" class="group flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-indigo-600 transition-colors">
+            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
             Back to Directory
         </a>
     </div>
 
-    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8 animate-enter stagger-1">
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 animate-enter stagger-1">
         
         <form method="POST" action="{{ route('admin.students.store') }}">
             @csrf
@@ -67,55 +67,47 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <i class="fa-solid fa-user text-gray-400"></i>
                             </div>
                             <input type="text" 
                                    name="name" 
-                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700"
+                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none text-gray-700 font-medium"
                                    placeholder="John Doe"
                                    value="{{ old('name') }}" 
                                    required 
                                    autofocus>
                         </div>
-                        @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('name') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2z"></path></svg>
+                                <i class="fa-solid fa-envelope text-gray-400"></i>
                             </div>
                             <input type="email" 
                                    name="email" 
-                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700"
+                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none text-gray-700 font-medium"
                                    placeholder="student@example.com"
                                    value="{{ old('email') }}" 
                                    required>
                         </div>
-                        @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('email') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <div x-data="{ show: false }">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            </div>
-                            
-                            <input :type="show ? 'text' : 'password'" 
-                                   name="password" 
-                                   class="input-field w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700"
-                                   placeholder="••••••••"
-                                   required>
-                            
-                            <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none cursor-pointer">
-                                <svg x-show="!show" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                <svg x-show="show" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.059 10.059 0 013.999-5.325m-3.641 4.166l15.856 10.15m-1.857-1.857l1.857 1.857"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
-                            </button>
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-start gap-4">
+                        <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg shrink-0 mt-0.5">
+                            <i class="fa-solid fa-shield-halved text-lg"></i>
                         </div>
-                        @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        <div>
+                            <h4 class="text-sm font-bold text-indigo-900">Auto-Generated Security</h4>
+                            <p class="text-xs text-indigo-700 mt-1 leading-relaxed font-medium">
+                                A secure, randomized 10-character password will be automatically generated for this student. It will be emailed directly to them upon account creation.
+                            </p>
+                        </div>
                     </div>
+                    
                 </div>
 
                 <div class="space-y-6">
@@ -125,26 +117,26 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Roll Number <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                                <i class="fa-solid fa-id-card text-gray-400"></i>
                             </div>
                             <input type="text" 
                                    name="roll_number" 
-                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700 font-mono"
+                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none text-gray-700 font-mono font-bold tracking-wide uppercase"
                                    placeholder="e.g. 2023-CS-001"
                                    value="{{ old('roll_number') }}" 
                                    required>
                         </div>
-                        @error('roll_number') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('roll_number') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Assign Course <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                <i class="fa-solid fa-book-open text-gray-400"></i>
                             </div>
                             <select name="course_id" 
-                                    class="input-field w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700 bg-white cursor-pointer" 
+                                    class="input-field w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:outline-none text-gray-700 bg-white cursor-pointer font-medium" 
                                     required>
                                 <option value="" disabled selected>-- Select Program --</option>
                                 @foreach($courses as $course)
@@ -154,22 +146,22 @@
                                 @endforeach
                             </select>
                         </div>
-                        @error('course_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('course_id') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
             </div>
 
-            <div class="pt-8 mt-6 border-t border-gray-100 flex items-center justify-end gap-4">
+            <div class="pt-8 mt-8 border-t border-gray-100 flex items-center justify-end gap-4">
                 <a href="{{ route('admin.students.index') }}" 
-                   class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                   class="px-6 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-bold hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm">
                     Cancel
                 </a>
 
                 <button type="submit" 
-                        class="px-8 py-2.5 bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
-                    Create Student
+                        class="px-8 py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Student & Send Email
                 </button>
             </div>
 

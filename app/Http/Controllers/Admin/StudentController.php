@@ -10,85 +10,99 @@ use App\Mail\StudentWelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str; 
 use Exception;
 
 class StudentController extends Controller
 {
-    // List all students
+    /**
+     * Display a listing of the students.
+     */
     public function index()
     {
         $students = Student::with(['user', 'course'])->latest()->get();
         return view('admin.students.index', compact('students'));
     }
 
-    // Show create form
+    /**
+     * Show the form for creating a new student.
+     */
     public function create()
     {
         $courses = Course::all();
         return view('admin.students.create', compact('courses'));
     }
 
-    // Store student and Send Welcome Email
+    /**
+     * Store a newly created student in storage with auto-generated credentials.
+     */
     public function store(Request $request)
     {
         // 1. Validation
         $request->validate([
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:users,email',
-            'password'    => 'required|string|min:6',
             'roll_number' => 'required|string|unique:students,roll_number',
             'course_id'   => 'required|exists:courses,id',
         ]);
 
-        // 2. Create user (role = student)
+        // 2. Auto-Generate a secure randomized password
+        $generatedPassword = Str::random(10);
+
+        // 3. Create the User (Account Level)
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id'  => 3, // student
+            'password' => Hash::make($generatedPassword), // Securely Hashed
+            'role_id'  => 3, // student role
         ]);
 
-        // 3. Create student profile
+        // 4. Create the Student Profile (Academic Level)
         $student = Student::create([
             'user_id'     => $user->id,
             'course_id'   => $request->course_id,
             'roll_number' => $request->roll_number,
         ]);
 
-        // 4. Prepare Data for Email
+        // 5. Prepare Data for the Welcome Email
         $course = Course::find($request->course_id);
         $emailData = [
             'name'        => $request->name,
             'email'       => $request->email,
-            'password'    => $request->password, // Sending raw password safely via email
+            'password'    => $generatedPassword, // Sending raw password for first-time access
             'roll_number' => $request->roll_number,
             'course_name' => $course->name
         ];
 
-        // 5. Send the Professional Mail with Error Handling
+        // 6. Queue the Welcome Email (Background Processing)
         try {
-            Mail::to($request->email)->send(new StudentWelcomeMail($emailData));
+            // Using ->queue() ensures the Admin doesn't wait for the mail server to respond
+            Mail::to($request->email)->queue(new StudentWelcomeMail($emailData));
             
             return redirect()
                 ->route('admin.students.index')
-                ->with('success', 'Student added and credentials emailed successfully!');
+                ->with('success', '✔ Student created successfully! Credentials have been queued for delivery.');
                 
         } catch (Exception $e) {
-            // If email fails, the student is still created, but we warn the admin
+            // Log the error if necessary and warn the admin
             return redirect()
                 ->route('admin.students.index')
-                ->with('warning', 'Student added, but the welcome email failed to send. Please check your mail server settings.');
+                ->with('warning', 'Student created, but the email delivery failed to queue. Please check mail logs.');
         }
     }
 
-    // Show edit form
+    /**
+     * Show the form for editing the specified student.
+     */
     public function edit(Student $student)
     {
         $courses = Course::all();
         return view('admin.students.edit', compact('student', 'courses'));
     }
 
-    // Update student
+    /**
+     * Update the specified student in storage.
+     */
     public function update(Request $request, Student $student)
     {
         $request->validate([
@@ -98,13 +112,13 @@ class StudentController extends Controller
             'course_id'   => 'required|exists:courses,id',
         ]);
 
-        // Update user info
+        // Update User Model
         $student->user->update([
             'name'  => $request->name,
             'email' => $request->email,
         ]);
 
-        // Update student info
+        // Update Student Model
         $student->update([
             'roll_number' => $request->roll_number,
             'course_id'   => $request->course_id,
@@ -114,10 +128,12 @@ class StudentController extends Controller
             ->with('success', 'Student updated successfully!');
     }
 
-    // Delete student
+    /**
+     * Remove the specified student from storage.
+     */
     public function destroy(Student $student)
     {
-        // deleting user will auto delete student (FK cascade)
+        // Deleting the user will trigger cascade deletion of the student record
         $student->user->delete();
 
         return redirect()->route('admin.students.index')

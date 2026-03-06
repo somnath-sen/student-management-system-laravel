@@ -5,9 +5,14 @@
 @section('content')
 
 <style>
+    /* ================= FORCE LIGHT BACKGROUND ================= */
+    body {
+        background-color: #FDFBF7 !important; /* Premium Creamy White */
+    }
+
     /* ================= ANIMATIONS ================= */
     .animate-enter {
-        animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
         transform: translateY(20px);
     }
@@ -48,11 +53,11 @@
 
     <div class="flex items-center justify-between mb-8 animate-enter">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Add New Teacher</h1>
-            <p class="text-gray-500 mt-1">Register a new faculty member and assign subjects.</p>
+            <h1 class="text-3xl font-bold text-slate-900">Add New Teacher</h1>
+            <p class="text-slate-500 mt-1 font-medium">Register a new faculty member and assign subjects.</p>
         </div>
-        <a href="{{ route('admin.teachers.index') }}" class="group flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-indigo-600 transition-colors">
-            <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        <a href="{{ route('admin.teachers.index') }}" class="group flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">
+            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
             Back to Directory
         </a>
     </div>
@@ -63,100 +68,92 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <div class="lg:col-span-1 space-y-6 animate-enter stagger-1">
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-3 mb-4">
-                        Faculty Credentials
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-[#F0EBE1]">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider border-b border-[#F0EBE1] pb-3 mb-5 flex items-center gap-2">
+                        <i class="fa-solid fa-id-badge text-indigo-500"></i> Faculty Credentials
                     </h3>
 
                     <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Full Name <span class="text-rose-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <i class="fa-solid fa-user text-slate-400"></i>
                             </div>
                             <input type="text" 
                                    name="name" 
-                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700"
+                                   class="input-field w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none text-slate-700 font-medium bg-[#FDFBF7]"
                                    placeholder="Jane Smith"
                                    value="{{ old('name') }}"
                                    required 
                                    autofocus>
                         </div>
-                        @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('name') <p class="text-rose-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-5">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Email Address <span class="text-rose-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2z"></path></svg>
+                                <i class="fa-solid fa-envelope text-slate-400"></i>
                             </div>
                             <input type="email" 
                                    name="email" 
-                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700"
+                                   class="input-field w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none text-slate-700 font-medium bg-[#FDFBF7]"
                                    placeholder="teacher@school.com"
                                    value="{{ old('email') }}"
                                    required>
                         </div>
-                        @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('email') <p class="text-rose-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="mb-5" x-data="{ show: false }">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password <span class="text-red-500">*</span></label>
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Employee ID <span class="text-rose-500">*</span></label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            </div>
-                            
-                            <input :type="show ? 'text' : 'password'" 
-                                   name="password" 
-                                   class="input-field w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700"
-                                   placeholder="••••••••"
-                                   required>
-
-                            <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none cursor-pointer">
-                                <svg x-show="!show" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                <svg x-show="show" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.059 10.059 0 013.999-5.325m-3.641 4.166l15.856 10.15m-1.857-1.857l1.857 1.857"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
-                            </button>
-                        </div>
-                        @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Employee ID <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                                <i class="fa-solid fa-hashtag text-slate-400"></i>
                             </div>
                             <input type="text" 
                                    name="employee_id" 
-                                   class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700 font-mono"
+                                   class="input-field w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none text-slate-700 font-mono font-bold tracking-wide uppercase bg-[#FDFBF7]"
                                    placeholder="FAC-001"
                                    value="{{ old('employee_id') }}"
                                    required>
                         </div>
-                        @error('employee_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('employee_id') <p class="text-rose-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
+
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-start gap-4">
+                        <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg shrink-0 mt-0.5">
+                            <i class="fa-solid fa-shield-halved text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-indigo-900">Auto-Generated Security</h4>
+                            <p class="text-xs text-indigo-700 mt-1 leading-relaxed font-medium">
+                                A secure, randomized 10-character password will be automatically generated for this instructor. It will be emailed directly to them upon account creation.
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
             <div class="lg:col-span-2 space-y-6 animate-enter stagger-2">
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-full">
-                    <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
-                        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">
-                            Assign Subjects
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-[#F0EBE1] h-full flex flex-col">
+                    <div class="flex justify-between items-center border-b border-[#F0EBE1] pb-3 mb-5">
+                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-book-open-reader text-indigo-500"></i> Assign Subjects
                         </h3>
-                        <span class="text-xs text-gray-500">Select at least one subject</span>
+                        <span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md border border-slate-200">Select at least one</span>
                     </div>
 
                     @error('subjects')
-                        <div class="mb-4 bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="mb-5 bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-xl text-sm font-bold flex items-center gap-3 shadow-sm">
+                            <i class="fa-solid fa-circle-exclamation"></i>
                             {{ $message }}
                         </div>
                     @enderror
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
                         @foreach($subjects as $subject)
                             <label class="relative cursor-pointer group">
                                 <input type="checkbox" 
@@ -165,18 +162,18 @@
                                        class="peer sr-only"
                                        {{ in_array($subject->id, old('subjects', [])) ? 'checked' : '' }}>
                                 
-                                <div class="subject-card p-4 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-gray-50 flex items-center justify-between">
+                                <div class="subject-card p-4 rounded-xl border border-slate-200 bg-[#FDFBF7] hover:border-indigo-300 hover:bg-white flex items-center justify-between cursor-pointer">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-xs peer-checked:bg-indigo-200 peer-checked:text-indigo-700">
+                                        <div class="w-10 h-10 rounded-lg bg-white border border-slate-200 text-slate-500 flex items-center justify-center font-black text-sm peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition-colors shadow-sm">
                                             {{ substr($subject->name, 0, 1) }}
                                         </div>
-                                        <div class="text-sm font-medium text-gray-700 peer-checked:text-indigo-900">
+                                        <div class="text-sm font-bold text-slate-700 peer-checked:text-indigo-900 transition-colors">
                                             {{ $subject->name }}
                                         </div>
                                     </div>
                                     
-                                    <div class="check-icon w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center text-white opacity-0 transform scale-50 transition-all duration-200">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                    <div class="check-icon w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-white opacity-0 transform scale-50 transition-all duration-200 shadow-md">
+                                        <i class="fa-solid fa-check text-xs"></i>
                                     </div>
                                 </div>
                             </label>
@@ -184,8 +181,12 @@
                     </div>
                     
                     @if($subjects->isEmpty())
-                        <div class="text-center py-8 text-gray-400">
-                            No subjects available. Please add subjects first.
+                        <div class="flex flex-col items-center justify-center py-12 text-center h-full">
+                            <div class="w-16 h-16 bg-[#FDFBF7] border border-[#F0EBE1] rounded-full flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-folder-open text-2xl text-slate-300"></i>
+                            </div>
+                            <p class="text-slate-600 font-bold text-lg">No subjects available.</p>
+                            <p class="text-sm text-slate-400 font-medium mt-1">Please add subjects to the system first.</p>
                         </div>
                     @endif
                 </div>
@@ -193,16 +194,16 @@
 
         </div>
 
-        <div class="mt-8 border-t border-gray-200 pt-6 flex items-center justify-end gap-4 animate-enter stagger-2">
+        <div class="mt-8 border-t border-[#F0EBE1] pt-8 flex items-center justify-end gap-4 animate-enter stagger-2">
             <a href="{{ route('admin.teachers.index') }}" 
-               class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 hover:text-gray-900 transition-colors">
+               class="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm">
                 Cancel
             </a>
 
             <button type="submit" 
-                    class="px-8 py-2.5 bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
-                Create Teacher
+                    class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+                <i class="fa-solid fa-user-tie"></i>
+                Create Teacher & Send Email
             </button>
         </div>
 
