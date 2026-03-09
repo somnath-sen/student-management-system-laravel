@@ -22,7 +22,7 @@ class StudyAIController extends Controller
             ? 'layouts.teacher'
             : 'layouts.student';
 
-    return view('studyai.index', compact('messages', 'layout'));
+        return view('studyai.index', compact('messages', 'layout'));
     }
 
     public function send(Request $request)
@@ -33,11 +33,17 @@ class StudyAIController extends Controller
 
         $user = Auth::user();
         
-        // 1. Get API Key (Using the one you provided as fallback)
-        $apiKey = env('GEMINI_API_KEY', '');
+        // 1. Get API Key Securely from config (which reads from .env)
+        $apiKey = config('services.gemini.api_key');
+
+        // Fail gracefully if the API key is missing
+        if (empty($apiKey)) {
+            Log::error('Gemini API Error: API Key is missing from .env file.');
+            return response()->json(['error' => 'Server configuration error. API key missing.'], 500);
+        }
 
         try {
-            // 2. Call Gemini API (Switched to gemini-pro for better compatibility)
+            // 2. Call Gemini API
             $response = Http::withoutVerifying() 
                 ->withHeaders(['Content-Type' => 'application/json'])
                 ->post(

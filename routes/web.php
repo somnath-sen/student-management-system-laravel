@@ -16,6 +16,7 @@ use App\Http\Controllers\Teacher\MarkController;
 use App\Http\Controllers\Teacher\DetailsController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\StudyAIController;
+use App\Http\Controllers\Admin\ApplicantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,19 @@ use App\Http\Controllers\StudyAIController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Registration Routes
+Route::get('/register/student', function () {
+    return view('register.student');
+});
+Route::get('/register/teacher', function () {
+    return view('register.teacher');
+});
+
+
+// Put these inside your Route::prefix('admin')->group(...)
+Route::get('/applicants/students', [ApplicantController::class, 'students'])->name('admin.applicants.students');
+Route::get('/applicants/teachers', [ApplicantController::class, 'teachers'])->name('admin.applicants.teachers');
 
 /*
 |--------------------------------------------------------------------------

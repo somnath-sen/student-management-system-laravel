@@ -34,6 +34,7 @@
                         'fade-in': 'fadeIn 0.8s ease-out forwards',
                         'float': 'float 6s ease-in-out infinite',
                         'marquee': 'marquee 25s linear infinite',
+                        'marquee-slow': 'marquee 45s linear infinite',
                         'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'scale-in': 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'text-shimmer': 'textShimmer 3s linear infinite',
@@ -100,13 +101,17 @@
         }
 
         /* Smooth Theme Transition */
-        body, nav, div, section, footer, input, button {
+        body, nav, div, section, footer, input, button, p, h1, h2, h3, h4 {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
-        /* Pause Marquee on Hover */
-        .hover\:pause-marquee:hover .animate-marquee {
-            animation-play-state: paused;
+        /* Hide scrollbar for marquee */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
@@ -128,17 +133,21 @@
                     <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white">EdFlow<span class="text-brand-600">.</span></span>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-8">
+                <div class="hidden md:flex items-center space-x-6">
                     <a href="#features" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Features</a>
-                    <a href="#stats" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Analytics</a>
-                    <a href="#contact" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Support</a>
+                    <a href="#testimonials" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Testimonials</a>
+                    <a href="#stats" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors mr-2">Analytics</a>
                     
                     <button id="theme-toggle" class="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-all">
                         <i class="fa-solid fa-moon text-lg dark:hidden"></i> 
                         <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i> 
                     </button>
 
-                    <button onclick="toggleModal()" class="px-5 py-2.5 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                    <button onclick="toggleRegisterModal()" class="px-5 py-2 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm hover:shadow-md">
+                        Register
+                    </button>
+
+                    <button onclick="toggleModal()" class="px-6 py-2 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                         Log In
                     </button>
                 </div>
@@ -174,8 +183,8 @@
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style="animation-delay: 0.3s;">
-                <button onclick="toggleModal()" class="px-8 py-4 rounded-full bg-brand-600 text-white font-bold text-lg hover:bg-brand-700 transition-all shadow-xl shadow-brand-500/30 hover:-translate-y-1">
-                    Get Started Free
+                <button onclick="toggleRegisterModal()" class="px-8 py-4 rounded-full bg-brand-600 text-white font-bold text-lg hover:bg-brand-700 transition-all shadow-xl shadow-brand-500/30 hover:-translate-y-1">
+                    Apply Now
                 </button>
                 <a href="#features" class="px-8 py-4 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
                     Explore Features
@@ -209,9 +218,8 @@
         </div>
     </section>
 
-    <div class="relative bg-gradient-to-r from-brand-700 via-purple-700 to-brand-700 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-4 overflow-hidden border-y border-brand-500/30 shadow-lg shadow-brand-500/20 hover:pause-marquee group cursor-pointer">
+    <div class="relative bg-gradient-to-r from-brand-700 via-purple-700 to-brand-700 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-4 overflow-hidden border-y border-brand-500/30 shadow-lg shadow-brand-500/20 group cursor-pointer">
         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse-glow pointer-events-none"></div>
-        
         <div class="flex animate-marquee whitespace-nowrap group-hover:[animation-play-state:paused]">
             <div class="flex items-center gap-12 mx-4">
                 <div class="flex items-center gap-3">
@@ -226,11 +234,10 @@
                     <span class="w-2 h-2 bg-white rounded-full"></span>
                     <span class="text-gray-100 font-medium">Scholarships up to 50%</span>
                 </div>
-                <a href="#" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
+                <button onclick="toggleRegisterModal()" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
                     Apply Now <i class="fa-solid fa-arrow-right ml-1"></i>
-                </a>
+                </button>
             </div>
-
             <div class="flex items-center gap-12 mx-4">
                 <div class="flex items-center gap-3">
                     <span class="text-yellow-400 text-xl animate-bounce">🔔</span>
@@ -244,27 +251,9 @@
                     <span class="w-2 h-2 bg-white rounded-full"></span>
                     <span class="text-gray-100 font-medium">Scholarships up to 50%</span>
                 </div>
-                <a href="#" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
+                <button onclick="toggleRegisterModal()" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
                     Apply Now <i class="fa-solid fa-arrow-right ml-1"></i>
-                </a>
-            </div>
-
-            <div class="flex items-center gap-12 mx-4">
-                <div class="flex items-center gap-3">
-                    <span class="text-yellow-400 text-xl animate-bounce">🔔</span>
-                    <span class="text-white font-bold text-lg uppercase tracking-wide">Admissions Open for 2026-2027</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="w-2 h-2 bg-white rounded-full"></span>
-                    <span class="text-gray-100 font-medium">Limited Seats Available</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="w-2 h-2 bg-white rounded-full"></span>
-                    <span class="text-gray-100 font-medium">Scholarships up to 50%</span>
-                </div>
-                <a href="#" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
-                    Apply Now <i class="fa-solid fa-arrow-right ml-1"></i>
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -304,31 +293,169 @@
         </div>
     </section>
 
+    <section id="testimonials" class="py-24 bg-gray-50 dark:bg-gray-900 overflow-hidden relative border-t border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16 relative z-10">
+            <h2 class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-sm mb-2">Wall of Love</h2>
+            <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">Trusted by educators globally</h3>
+            <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">See how EdFlow is transforming campuses everywhere.</p>
+        </div>
+
+        <div class="relative flex overflow-x-hidden group pb-8 hide-scrollbar">
+            <div class="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-20 pointer-events-none"></div>
+            <div class="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-20 pointer-events-none"></div>
+
+            <div class="flex animate-marquee-slow group-hover:[animation-play-state:paused] shrink-0 gap-6 px-3">
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "EdFlow completely removed the friction from our administrative tasks. The AI integrations alone save our staff dozens of hours every week."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-300 flex items-center justify-center font-bold text-lg">SJ</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Sarah Jenkins</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Principal, Westfield High</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "The analytics dashboard is a game-changer. We can now accurately track student performance trends and intervene before issues arise."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold text-lg">DR</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Dr. Robert Chen</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Dean of Academics</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "As a student, having all my attendance, fees, and examination results in one clean interface makes my college life so much less stressful."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-lg">MK</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Maya Patel</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Computer Science Student</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "Deployment was seamless. The ability to manage thousands of student records securely on the cloud is exactly what our IT team needed."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold text-lg">JD</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">James Doe</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">IT Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex animate-marquee-slow group-hover:[animation-play-state:paused] shrink-0 gap-6 px-3">
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "EdFlow completely removed the friction from our administrative tasks. The AI integrations alone save our staff dozens of hours every week."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-300 flex items-center justify-center font-bold text-lg">SJ</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Sarah Jenkins</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Principal, Westfield High</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "The analytics dashboard is a game-changer. We can now accurately track student performance trends and intervene before issues arise."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold text-lg">DR</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Dr. Robert Chen</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Dean of Academics</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "As a student, having all my attendance, fees, and examination results in one clean interface makes my college life so much less stressful."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-lg">MK</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Maya Patel</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Computer Science Student</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="flex text-yellow-400 mb-4 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
+                        "Deployment was seamless. The ability to manage thousands of student records securely on the cloud is exactly what our IT team needed."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold text-lg">JD</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">James Doe</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">IT Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <section id="stats" class="py-20 bg-gray-900 dark:bg-black text-white border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-gray-800">
                 <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2">
-                        <span class="count-up" data-target="50">0</span>k+
-                    </div>
+                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="50">0</span>k+</div>
                     <div class="text-gray-400">Students Managed</div>
                 </div>
                 <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2">
-                        <span class="count-up" data-target="120">0</span>+
-                    </div>
+                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="120">0</span>+</div>
                     <div class="text-gray-400">Institutions</div>
                 </div>
                 <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2">
-                        <span class="count-up" data-target="99.9">0</span>%
-                    </div>
+                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="99.9">0</span>%</div>
                     <div class="text-gray-400">Uptime</div>
                 </div>
                 <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2">
-                        <span class="count-up" data-target="24">0</span>/7
-                    </div>
+                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="24">0</span>/7</div>
                     <div class="text-gray-400">Live Support</div>
                 </div>
             </div>
@@ -337,9 +464,7 @@
 
     <footer id="contact" class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pt-20 pb-10 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                
                 <div class="space-y-6">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white">
@@ -351,18 +476,10 @@
                         The all-in-one campus management solution. We help educational institutions streamline operations and focus on delivering quality education.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1">
-                            <i class="fa-brands fa-twitter"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/in/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1">
-                            <i class="fa-brands fa-linkedin-in"></i>
-                        </a>
-                        <a href="https://github.com/somnath-sen" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1">
-                            <i class="fa-brands fa-github"></i>
-                        </a>
-                        <a href="https://www.instagram.com/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/in/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://github.com/somnath-sen" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://www.instagram.com/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
 
@@ -370,8 +487,8 @@
                     <h4 class="font-bold text-gray-900 dark:text-white mb-6">Product</h4>
                     <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
                         <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Overview</a></li>
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Features</a></li>
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Solutions</a></li>
+                        <li><a href="#features" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Features</a></li>
+                        <li><a href="#testimonials" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Testimonials</a></li>
                         <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Pricing</a></li>
                     </ul>
                 </div>
@@ -388,7 +505,6 @@
                 <div>
                     <h4 class="font-bold text-gray-900 dark:text-white mb-6">Stay Updated</h4>
                     <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Subscribe to our newsletter for the latest updates.</p>
-                    
                     <form id="newsletterForm" class="space-y-3">
                         <div class="relative">
                             <input type="email" id="newsletterEmail" name="email" placeholder="Enter your email" required class="w-full pl-4 pr-10 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white transition-all">
@@ -399,7 +515,6 @@
                         </button>
                     </form>
                 </div>
-
             </div>
 
             <div class="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -437,9 +552,7 @@
                     
                     <div class="space-y-4">
                         <a href="{{ route('login') }}?type=student" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-gray-700 transition-all group">
-                            <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 flex items-center justify-center mr-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 flex items-center justify-center mr-4 group-hover:bg-brand-600 group-hover:text-white transition-colors"><i class="fa-solid fa-graduation-cap"></i></div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Student</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Access course & results</p>
@@ -447,9 +560,7 @@
                             <i class="fa-solid fa-chevron-right ml-auto text-gray-300 dark:text-gray-600 group-hover:text-brand-500"></i>
                         </a>
                         <a href="{{ route('login') }}?type=teacher" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-700 transition-all group">
-                            <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center mr-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-chalkboard-user"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center mr-4 group-hover:bg-purple-600 group-hover:text-white transition-colors"><i class="fa-solid fa-chalkboard-user"></i></div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Teacher</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Manage class & attendance</p>
@@ -457,14 +568,48 @@
                             <i class="fa-solid fa-chevron-right ml-auto text-gray-300 dark:text-gray-600 group-hover:text-purple-500"></i>
                         </a>
                         <a href="{{ route('login') }}?type=admin" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-900 dark:hover:border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all group">
-                            <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center mr-4 group-hover:bg-gray-900 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-shield-halved"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center mr-4 group-hover:bg-gray-900 group-hover:text-white transition-colors"><i class="fa-solid fa-shield-halved"></i></div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Administrator</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">System settings</p>
                             </div>
                             <i class="fa-solid fa-chevron-right ml-auto text-gray-300 dark:text-gray-600 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleRegisterModal()"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Join EdFlow</h2>
+                        <button onclick="toggleRegisterModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 mb-8">Select your application type to submit a registration request.</p>
+                    
+                    <div class="space-y-4">
+                        <a href="/register/student" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-gray-700 transition-all group">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 flex items-center justify-center mr-4 group-hover:bg-brand-600 group-hover:text-white transition-colors"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Apply as Student</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Enrollment application</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right ml-auto text-gray-300 dark:text-gray-600 group-hover:text-brand-500"></i>
+                        </a>
+                        <a href="/register/teacher" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-700 transition-all group">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center mr-4 group-hover:bg-purple-600 group-hover:text-white transition-colors"><i class="fa-solid fa-chalkboard-user"></i></div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Apply as Faculty</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Instructor application</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right ml-auto text-gray-300 dark:text-gray-600 group-hover:text-purple-500"></i>
                         </a>
                     </div>
                 </div>
@@ -489,39 +634,44 @@
     </div>
 
     <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-    
     <script src="https://files.bpcontent.cloud/2026/02/20/10/20260220102644-17W4KRC6.js" defer></script>
 
     <script>
-        // Use window.onload to ensure the bot script has run
+        // Botpress Customization
         window.addEventListener('load', function() {
-            // Helper to wait until botpress object is ready
             const checkForBot = setInterval(() => {
                 if (window.botpressWebChat) {
                     clearInterval(checkForBot);
-                    
-                    // Force update the configuration
                     window.botpressWebChat.mergeConfig({
-                        botName: 'EdFlow Assistant', // Customized Name
+                        botName: 'EdFlow Assistant',
                         botConversationDescription: 'Smart Campus Support',
-                        themeColor: '#2563eb', // Matches your brand
+                        themeColor: '#2563eb',
                         showPoweredBy: false
                     });
                 }
-            }, 500); // Check every 500ms
+            }, 500); 
         });
-    </script>
 
-    <script>
-        // Modal Logic
-        const modal = document.getElementById('loginModal');
-        
+        // Login Modal Logic
+        const loginModal = document.getElementById('loginModal');
         function toggleModal() {
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
+            if (loginModal.classList.contains('hidden')) {
+                loginModal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden'; 
             } else {
-                modal.classList.add('hidden');
+                loginModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Register Modal Logic
+        const registerModal = document.getElementById('registerModal');
+        function toggleRegisterModal() {
+            if (registerModal.classList.contains('hidden')) {
+                registerModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                registerModal.classList.add('hidden');
                 document.body.style.overflow = 'auto';
             }
         }
@@ -578,12 +728,8 @@
         themeToggleBtn.addEventListener('click', toggleTheme);
         themeToggleMobile.addEventListener('click', toggleTheme);
 
-        /* =========================================================
-           NEWSLETTER LOGIC (Google Sheets)
-           =========================================================
-        */
+        /* Newsletter Logic */
         const form = document.getElementById('newsletterForm');
-        // Your Google Apps Script Web App URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyzMyhmjvyiDU1n8oZGtKIlzbEFeXNgXfJDemrfxcyUW3NF-Q0qcJ9qWWIXhmiV2ZAV1w/exec'; 
         const successModal = document.getElementById('successModal');
         const btnLoader = document.getElementById('btnLoader');
@@ -617,10 +763,7 @@
             successModal.classList.add('hidden');
         }
 
-        /* =========================================================
-           NUMBER COUNTER ANIMATION
-           =========================================================
-        */
+        /* Number Counter Animation */
         const observerOptions = {
             root: null,
             rootMargin: '0px',

@@ -83,7 +83,7 @@
                                    name="name" 
                                    class="input-field w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none text-slate-700 font-medium bg-[#FDFBF7]"
                                    placeholder="Jane Smith"
-                                   value="{{ old('name') }}"
+                                   value="{{ old('name', request('name')) }}"
                                    required 
                                    autofocus>
                         </div>
@@ -100,7 +100,7 @@
                                    name="email" 
                                    class="input-field w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none text-slate-700 font-medium bg-[#FDFBF7]"
                                    placeholder="teacher@school.com"
-                                   value="{{ old('email') }}"
+                                   value="{{ old('email', request('email')) }}"
                                    required>
                         </div>
                         @error('email') <p class="text-rose-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror

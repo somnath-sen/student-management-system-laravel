@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
+    'google' => [
+        'script_url' => env('GOOGLE_SCRIPT_URL'),
+    ],
+
 ];
