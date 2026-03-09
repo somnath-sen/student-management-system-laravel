@@ -113,6 +113,24 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        
+        /* Custom Scrollbar for inner modals */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 10px; }
+        .dark .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(75, 85, 99, 0.5); }
+
+        /* Smooth Accordion transition */
+        .faq-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .faq-content.open {
+            max-height: 500px;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-gray-900 dark:text-gray-100 selection:bg-brand-500 selection:text-white">
@@ -136,7 +154,8 @@
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="#features" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Features</a>
                     <a href="#testimonials" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Testimonials</a>
-                    <a href="#stats" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors mr-2">Analytics</a>
+                    <a href="#stats" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Analytics</a>
+                    <a href="#faq" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors mr-2">FAQ</a>
                     
                     <button id="theme-toggle" class="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-all">
                         <i class="fa-solid fa-moon text-lg dark:hidden"></i> 
@@ -147,7 +166,7 @@
                         Register
                     </button>
 
-                    <button onclick="toggleModal()" class="px-6 py-2 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                    <button onclick="toggleCustomModal('loginModal')" class="px-6 py-2 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                         Log In
                     </button>
                 </div>
@@ -167,7 +186,6 @@
 
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm mb-8 animate-fade-in">
                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                 <span class="text-sm font-medium text-gray-600 dark:text-gray-300">v2.0 is now live</span>
@@ -462,6 +480,74 @@
         </div>
     </section>
 
+    <section id="faq" class="py-24 bg-white dark:bg-gray-800 transition-colors duration-300 border-t border-gray-200 dark:border-gray-800">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-sm mb-2">Got Questions?</h2>
+                <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">Frequently Asked Questions</h3>
+                <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">Everything you need to know about the product and billing.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
+                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">What exactly is EdFlow?</span>
+                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        <div class="pb-5">
+                            EdFlow is an all-in-one cloud-based Smart Campus Management system. It provides dedicated portals for Administrators, Teachers, and Students to manage everything from academic results and attendance to admissions and internal communications securely.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
+                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Is our institutional data secure?</span>
+                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        <div class="pb-5">
+                            Absolutely. EdFlow uses industry-standard encryption protocols. We feature role-based access control (RBAC), meaning a student can never see administrative settings, and a teacher can only modify grades for their assigned subjects. Passwords are automatically generated and securely hashed.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
+                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">How does the integrated AI Assistant work?</span>
+                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        <div class="pb-5">
+                            Our StudyAI feature utilizes the powerful Gemini API. It acts as an on-demand tutor for students to ask academic questions, summarize notes, or prepare for exams. For teachers, it can help draft lesson plans and generate quiz questions instantly inside the portal.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
+                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
+                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Do you support custom integrations?</span>
+                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        <div class="pb-5">
+                            Yes! Our admissions portal already seamlessly integrates with Google Sheets CRM so your administration team can review applicant data in real-time without leaving their familiar workflow. We offer additional API webhooks upon request.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer id="contact" class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pt-20 pb-10 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -489,16 +575,16 @@
                         <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Overview</a></li>
                         <li><a href="#features" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Features</a></li>
                         <li><a href="#testimonials" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Testimonials</a></li>
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Pricing</a></li>
+                        <li><a href="#faq" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="font-bold text-gray-900 dark:text-white mb-6">Company</h4>
                     <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">About Us</a></li>
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Careers</a></li>
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Contact</a></li>
+                        <li><button onclick="toggleCustomModal('aboutModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer text-left focus:outline-none">About Us</button></li>
+                        <li><button onclick="toggleCustomModal('careersModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer text-left focus:outline-none">Careers</button></li>
+                        <li><button onclick="toggleCustomModal('contactDetailsModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer text-left focus:outline-none">Contact</button></li>
                     </ul>
                 </div>
 
@@ -520,8 +606,8 @@
             <div class="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-sm text-gray-400 text-center md:text-left">&copy; {{ date('Y') }} EdFlow Inc. All rights reserved.</p>
                 <div class="flex space-x-6 text-sm text-gray-500 dark:text-gray-400">
-                    <a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Privacy Policy</a>
-                    <a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Terms of Service</a>
+                    <button onclick="toggleCustomModal('privacyModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors focus:outline-none">Privacy Policy</button>
+                    <button onclick="toggleCustomModal('termsModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors focus:outline-none">Terms of Service</button>
                 </div>
             </div>
 
@@ -537,14 +623,14 @@
         </div>
     </footer>
 
-    <div id="loginModal" class="fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleModal()"></div>
-        <div class="relative min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700">
+    <div id="loginModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('loginModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
-                        <button onclick="toggleModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <button onclick="toggleCustomModal('loginModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
                             <i class="fa-solid fa-xmark text-xl"></i>
                         </button>
                     </div>
@@ -581,14 +667,14 @@
         </div>
     </div>
 
-    <div id="registerModal" class="fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleRegisterModal()"></div>
-        <div class="relative min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700">
+    <div id="registerModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('registerModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Join EdFlow</h2>
-                        <button onclick="toggleRegisterModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <button onclick="toggleCustomModal('registerModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
                             <i class="fa-solid fa-xmark text-xl"></i>
                         </button>
                     </div>
@@ -617,10 +703,226 @@
         </div>
     </div>
 
-    <div id="successModal" class="fixed inset-0 z-[110] hidden">
+    <div id="aboutModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('aboutModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-building text-lg"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">About EdFlow</h2>
+                        </div>
+                        <button onclick="toggleCustomModal('aboutModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-5">
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
+                            EdFlow is a next-generation campus management platform built to seamlessly bridge the gap between modern education and advanced cloud technology. 
+                        </p>
+                        <div class="bg-brand-50 dark:bg-brand-900/20 p-5 rounded-xl border border-brand-100 dark:border-brand-800/50">
+                            <h4 class="font-bold text-brand-700 dark:text-brand-400 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye"></i> Our Mission
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                To completely eliminate administrative friction so educators can focus 100% of their energy on teaching and student success.
+                            </p>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
+                            Founded on the principles of speed, security, and simplicity, EdFlow replaces dozens of outdated systems with one beautiful, unified dashboard.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="careersModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('careersModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-briefcase text-lg"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Join Our Team</h2>
+                        </div>
+                        <button onclick="toggleCustomModal('careersModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 mb-6 text-sm">We are always looking for passionate individuals to build the future of education technology.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors group cursor-not-allowed opacity-80">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white transition-colors">Laravel Backend Engineer</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Remote • Full Time</p>
+                                </div>
+                                <span class="text-xs font-bold px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 rounded">Filled</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors group cursor-not-allowed opacity-80">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white transition-colors">UI/UX Product Designer</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Hybrid • Full Time</p>
+                                </div>
+                                <span class="text-xs font-bold px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 rounded">Filled</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center p-4 rounded-xl bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800/50">
+                        <p class="text-sm text-brand-700 dark:text-brand-300 font-medium">Don't see a perfect fit right now?</p>
+                        <p class="text-xs text-brand-600/80 dark:text-brand-400 mt-1">Send your resume to <a href="mailto:careers@edflow.com" class="font-bold hover:underline">careers@edflow.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactDetailsModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('contactDetailsModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Get in Touch</h2>
+                        <button onclick="toggleCustomModal('contactDetailsModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 mb-6">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-md">
+                                SS
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Somnath Sen</h3>
+                                <p class="text-sm text-brand-600 dark:text-brand-400 font-medium">Founder & Lead Developer</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-5">
+                            <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm border border-gray-100 dark:border-gray-700 text-brand-500"><i class="fa-solid fa-phone"></i></div>
+                                <div>
+                                    <p class="text-[11px] uppercase tracking-wider font-bold text-gray-400">Direct Contact</p>
+                                    <p class="font-medium text-sm">+91 98765 43210</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm border border-gray-100 dark:border-gray-700 text-purple-500"><i class="fa-solid fa-envelope"></i></div>
+                                <div>
+                                    <p class="text-[11px] uppercase tracking-wider font-bold text-gray-400">Business Email</p>
+                                    <a href="mailto:somnath@edflow.com" class="font-medium text-sm hover:text-brand-600 transition-colors">somnath@edflow.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm border border-gray-100 dark:border-gray-700 text-emerald-500"><i class="fa-solid fa-location-dot"></i></div>
+                                <div>
+                                    <p class="text-[11px] uppercase tracking-wider font-bold text-gray-400">Headquarters</p>
+                                    <p class="font-medium text-sm">Academy of Technology Campus, WB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="privacyModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('privacyModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto flex flex-col max-h-[85vh]">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-shield-halved text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Privacy Policy</h2>
+                    </div>
+                    <button onclick="toggleCustomModal('privacyModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="p-8 overflow-y-auto custom-scroll flex-1">
+                    <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 space-y-5">
+                        <p><strong>Last Updated: {{ date('F Y') }}</strong></p>
+                        <p>At EdFlow, we take your privacy seriously. This policy explains how we collect, use, and protect your personal information.</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">1. Information We Collect</h4>
+                        <p>We collect information necessary to provide our educational management services. This includes names, email addresses, academic records, and role assignments (Student, Teacher, Admin).</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">2. How We Use Information</h4>
+                        <p>Your data is exclusively used to operate the EdFlow platform. We do not sell your personal data to third parties. We use your email to send auto-generated credentials and system notifications.</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">3. Data Security</h4>
+                        <p>We implement strict security measures including database encryption, secure password hashing, and role-based access control (RBAC) to ensure your institutional data remains private.</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">4. Third-Party Integrations</h4>
+                        <p>Certain features utilize third-party APIs (such as Google Sheets for registrations or Google Gemini for StudyAI). Data shared with these services is strictly limited to the function requested.</p>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-right">
+                    <button onclick="toggleCustomModal('privacyModal')" class="px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-semibold transition-colors shadow-sm">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="fixed inset-0 z-[100] hidden custom-modal">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('termsModal')"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto flex flex-col max-h-[85vh]">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-file-contract text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Terms of Service</h2>
+                    </div>
+                    <button onclick="toggleCustomModal('termsModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="p-8 overflow-y-auto custom-scroll flex-1">
+                    <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 space-y-5">
+                        <p><strong>Last Updated: {{ date('F Y') }}</strong></p>
+                        <p>By accessing and using EdFlow, you accept and agree to be bound by the terms and provisions of this agreement.</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">1. Account Responsibilities</h4>
+                        <p>Users are responsible for maintaining the confidentiality of their login credentials. Any activities that occur under your account are your sole responsibility. Automated creation of accounts is strictly prohibited.</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">2. Acceptable Use</h4>
+                        <p>EdFlow must only be used for legitimate academic and administrative purposes. You may not use the service to distribute malware, harass others, or attempt to bypass security protocols (RBAC).</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">3. AI Assistant Usage</h4>
+                        <p>The StudyAI feature is designed as an educational aid. Responses generated by AI should be verified by human educators. EdFlow is not responsible for inaccuracies in AI-generated content.</p>
+                        
+                        <h4 class="text-gray-900 dark:text-white font-bold">4. Termination</h4>
+                        <p>Administrators reserve the right to suspend or terminate access to any user account that violates these terms or poses a security risk to the institution.</p>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-right">
+                    <button onclick="toggleCustomModal('termsModal')" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors shadow-sm">Accept Terms</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="fixed inset-0 z-[110] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"></div>
-        <div class="relative min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center transform scale-90 animate-scale-in border border-green-100 dark:border-green-900">
+        <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center transform scale-90 animate-scale-in border border-green-100 dark:border-green-900 pointer-events-auto">
                 <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fa-solid fa-check text-2xl text-green-600 dark:text-green-400"></i>
                 </div>
@@ -652,28 +954,44 @@
             }, 500); 
         });
 
-        // Login Modal Logic
-        const loginModal = document.getElementById('loginModal');
-        function toggleModal() {
-            if (loginModal.classList.contains('hidden')) {
-                loginModal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
+        // FAQ Accordion Logic
+        const faqBtns = document.querySelectorAll('.faq-btn');
+        faqBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('i');
+                
+                faqBtns.forEach(otherBtn => {
+                    if (otherBtn !== btn) {
+                        otherBtn.nextElementSibling.classList.remove('open');
+                        otherBtn.querySelector('i').classList.remove('rotate-180');
+                    }
+                });
+
+                content.classList.toggle('open');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // Unified Modal Toggle Logic
+        function toggleCustomModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
             } else {
-                loginModal.classList.add('hidden');
-                document.body.style.overflow = 'auto';
+                modal.classList.add('hidden');
             }
+            checkBodyOverflow();
         }
 
-        // Register Modal Logic
-        const registerModal = document.getElementById('registerModal');
-        function toggleRegisterModal() {
-            if (registerModal.classList.contains('hidden')) {
-                registerModal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
-            } else {
-                registerModal.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }
+        // Keep legacy modal functions working with new unified check
+        function toggleModal() { toggleCustomModal('loginModal'); }
+        function toggleRegisterModal() { toggleCustomModal('registerModal'); }
+
+        // Check if any modal is open to prevent background scrolling
+        function checkBodyOverflow() {
+            const anyOpen = document.querySelectorAll('.custom-modal:not(.hidden)').length > 0;
+            document.body.style.overflow = anyOpen ? 'hidden' : 'auto';
         }
 
         // Navbar Scroll Effect
@@ -746,7 +1064,7 @@
             fetch(scriptURL, { method: 'POST', body: requestBody})
                 .then(response => {
                     form.reset();
-                    successModal.classList.remove('hidden');
+                    toggleCustomModal('successModal');
                     subscribeBtn.disabled = false;
                     subscribeBtn.classList.remove('opacity-75');
                     btnLoader.classList.add('hidden');
@@ -760,7 +1078,7 @@
         });
 
         function closeSuccessModal() {
-            successModal.classList.add('hidden');
+            toggleCustomModal('successModal');
         }
 
         /* Number Counter Animation */
