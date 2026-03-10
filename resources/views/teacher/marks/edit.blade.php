@@ -23,7 +23,8 @@
     .mark-input {
         transition: all 0.2s ease;
         text-align: center;
-        font-weight: 600;
+        font-weight: 800;
+        font-size: 1.125rem;
     }
     
     /* Interactive State */
@@ -31,144 +32,135 @@
         transform: scale(1.05);
         box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         border-color: #4f46e5;
+        background-color: #ffffff;
     }
 
     /* Locked State */
     .mark-input:disabled {
-        background-color: #f3f4f6;
-        color: #6b7280;
+        background-color: #f8fafc;
+        color: #94a3b8;
         cursor: not-allowed;
-        border-color: #e5e7eb;
+        border-color: #e2e8f0;
     }
 
-    .table-row-hover:hover {
-        background-color: #f9fafb;
-    }
+    .table-row-hover { transition: background-color 0.2s; }
+    .table-row-hover:hover { background-color: #f8fafc; }
 </style>
 
-<div class="min-h-screen bg-gray-50 text-gray-800 p-6 font-sans">
+<div class="min-h-screen bg-slate-50 text-slate-800 p-6 font-sans">
     
     <div class="max-w-5xl mx-auto">
 
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 animate-enter">
             <div>
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide {{ $isLocked ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
+                <a href="{{ route('teacher.marks.index') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 mb-3 inline-flex items-center gap-1.5 transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Subjects
+                </a>
+                <div class="flex items-center gap-3 mb-1">
+                    <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Grade Entry</h1>
+                    <span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider {{ $isLocked ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700' }}">
                         {{ $isLocked ? 'Finalized' : 'Editing Mode' }}
                     </span>
-                    <span class="text-gray-400 text-sm">/ {{ $subject->name }}</span>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900">Modify Results</h1>
+                <p class="text-slate-500 font-medium mt-1">Course: <span class="text-slate-700 font-bold">{{ $subject->name }}</span></p>
             </div>
 
             @if(! $isLocked)
-                <form method="POST" 
-                      action="{{ route('teacher.marks.lock', $subject) }}" 
-                      onsubmit="return confirm('⚠️ ARE YOU SURE?\n\nLocking this result will prevent any further changes. This action cannot be undone by you.')">
+                <form method="POST" action="{{ route('teacher.marks.lock', $subject) }}" onsubmit="return confirm('⚠️ ARE YOU SURE?\n\nLocking this result will prevent any further changes. This allows the Admin to publish the grades. This action cannot be undone by you.')" class="mt-4 md:mt-0">
                     @csrf
-                    <button type="submit" class="group flex items-center gap-2 px-5 py-2.5 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all shadow-sm">
-                        <svg class="w-4 h-4 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                        <span class="font-semibold">Lock Results</span>
+                    <button type="submit" class="group flex items-center gap-2 px-5 py-2.5 bg-white border border-rose-200 text-rose-600 rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-all shadow-sm font-bold text-sm">
+                        <i class="fa-solid fa-lock group-hover:animate-pulse"></i> Lock Results
                     </button>
                 </form>
             @endif
         </div>
 
         @if($isLocked)
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg mb-6 animate-enter stagger-1 shadow-sm">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700 font-medium">
-                            This result sheet is locked.
-                        </p>
-                        <p class="text-xs text-red-600 mt-1">
-                            Marks can no longer be edited. Contact the administrator if this is an error.
-                        </p>
-                    </div>
+            <div class="bg-rose-50 border border-rose-200 p-5 rounded-2xl mb-6 animate-enter stagger-1 shadow-sm flex gap-4 items-start">
+                <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-rose-800">Result Sheet Locked</h3>
+                    <p class="text-sm text-rose-600 mt-1 font-medium">These marks have been finalized and submitted to the administration. They can no longer be edited. Contact the admin if you need to request an override.</p>
                 </div>
             </div>
         @endif
 
-        <form method="POST" action="{{ route('teacher.marks.update', $subject) }}">
+        <form method="POST" action="{{ route('teacher.marks.update', $subject) }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden animate-enter stagger-1">
             @csrf
             @method('PUT')
 
-            <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden animate-enter stagger-1">
-                
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                    <h2 class="font-bold text-gray-800">Student Gradebook</h2>
-                    @if(!$isLocked)
-                        <span class="text-xs text-gray-500 flex items-center gap-1">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            Editable
-                        </span>
-                    @endif
+            <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                <div>
+                    <h2 class="font-bold text-slate-800 text-lg">Student Roster</h2>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">Maximum Marks: <span class="font-bold text-slate-700">100</span></p>
                 </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-white text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
-                            <tr>
-                                <th class="px-6 py-3 font-semibold">Student Name</th>
-                                <th class="px-6 py-3 font-semibold text-center w-40">Current Marks</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @foreach($students as $student)
-                                <tr class="table-row-hover group transition-colors">
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-9 h-9 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm border border-indigo-100">
-                                                {{ substr($student->user->name, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-gray-900">{{ $student->user->name }}</p>
-                                                <p class="text-xs text-gray-400">Roll: {{ $student->roll_number ?? 'N/A' }}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-6 py-4 text-center">
-                                        <div class="relative inline-block">
-                                            <input type="number" 
-                                                   name="marks[{{ $student->id }}]" 
-                                                   value="{{ $marks[$student->id]->marks_obtained ?? '' }}"
-                                                   class="mark-input w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                                                   min="0" 
-                                                   max="100"
-                                                   {{ $isLocked ? 'disabled' : '' }}>
-                                            
-                                            @if($isLocked)
-                                                <div class="absolute -right-6 top-2.5 text-gray-300">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                @if(! $isLocked)
-                    <div class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
-                        <p class="text-sm text-gray-500">
-                            Changes are not permanent until you click Update.
-                        </p>
-                        <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            Update Marks
-                        </button>
-                    </div>
+                @if(!$isLocked)
+                    <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100 flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen-to-square"></i> Editable
+                    </span>
                 @endif
-
             </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-white">
+                        <tr class="border-b border-slate-200">
+                            <th class="py-4 px-6 text-xs font-black text-slate-400 uppercase tracking-wider w-2/3">Student Information</th>
+                            <th class="py-4 px-6 text-xs font-black text-slate-400 uppercase tracking-wider text-center w-1/3">Marks Obtained</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($students as $student)
+                            <tr class="table-row-hover group">
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-sm border border-indigo-100 shadow-inner group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                            {{ substr($student->user->name, 0, 1) }}
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-slate-900">{{ $student->user->name }}</p>
+                                            <p class="text-xs font-medium text-slate-400 mt-0.5">Roll No: {{ $student->roll_number ?? 'N/A' }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="py-4 px-6 text-center">
+                                    <div class="relative inline-flex items-center justify-center">
+                                        <input type="number" 
+                                               name="marks[{{ $student->id }}]" 
+                                               value="{{ $marks[$student->id]->marks_obtained ?? '' }}"
+                                               class="mark-input w-28 px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none bg-slate-50 placeholder-slate-300"
+                                               min="0" 
+                                               max="100"
+                                               placeholder="-"
+                                               {{ $isLocked ? 'disabled' : 'required' }}>
+                                        
+                                        @if($isLocked)
+                                            <div class="absolute -right-6 text-slate-300">
+                                                <i class="fa-solid fa-lock text-sm"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            @if(! $isLocked)
+                <div class="p-6 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <p class="text-sm font-medium text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-indigo-400"></i> Changes are not permanent until updated.
+                    </p>
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Update Grades
+                    </button>
+                </div>
+            @endif
+
         </form>
 
     </div>
