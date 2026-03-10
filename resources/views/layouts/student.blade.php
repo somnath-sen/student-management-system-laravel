@@ -95,6 +95,13 @@
                     <span class="text-[10px] text-white px-2.5 py-0.5 rounded-full font-bold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_10px_rgba(99,102,241,0.6)] animate-pulse">NEW</span>
                 </a>  
 
+                <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Financials</p>
+
+                <a href="{{ route('student.fees.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.fees.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-credit-card w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">My Fees</span>
+                </a>
+
                 <div class="pt-4 pb-2 px-4">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tools</p>
                 </div>
@@ -103,6 +110,7 @@
                     <span class="font-bold text-sm flex-1">StudyAI</span>
                     <span class="text-[10px] text-white px-2.5 py-0.5 rounded-full font-bold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_10px_rgba(99,102,241,0.6)] animate-pulse">NEW</span>
                 </a>
+
 
                 <div class="pt-4 pb-2 px-4">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</p>
@@ -124,10 +132,10 @@
             <div class="p-5 border-t border-slate-800 bg-slate-900/80">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white shadow-inner border border-slate-600">
-                        {{ substr(auth()->user()->name, 0, 1) }}
+                        {{ substr(auth()->user()->name ?? 'S', 0, 1) }}
                     </div>
                     <div class="overflow-hidden flex-1">
-                        <p class="text-sm font-bold text-white truncate">{{ auth()->user()->name }}</p>
+                        <p class="text-sm font-bold text-white truncate">{{ auth()->user()->name ?? 'Student' }}</p>
                         <p class="text-xs text-indigo-400 truncate font-medium">Student Account</p>
                     </div>
                 </div>

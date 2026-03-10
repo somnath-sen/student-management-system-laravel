@@ -43,4 +43,9 @@ return [
         'script_url' => env('GOOGLE_SCRIPT_URL'),
     ],
 
+    'razorpay' => [
+        'key' => env('RAZORPAY_KEY'),
+        'secret' => env('RAZORPAY_SECRET'),
+    ],
+
 ];

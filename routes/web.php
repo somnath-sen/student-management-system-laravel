@@ -17,6 +17,8 @@ use App\Http\Controllers\Teacher\DetailsController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\StudyAIController;
 use App\Http\Controllers\Admin\ApplicantController;
+use App\Http\Controllers\Admin\FeeController as AdminFeeController;
+use App\Http\Controllers\Student\FeeController as StudentFeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,11 +37,6 @@ Route::get('/register/student', function () {
 Route::get('/register/teacher', function () {
     return view('register.teacher');
 });
-
-
-// Put these inside your Route::prefix('admin')->group(...)
-Route::get('/applicants/students', [ApplicantController::class, 'students'])->name('admin.applicants.students');
-Route::get('/applicants/teachers', [ApplicantController::class, 'teachers'])->name('admin.applicants.teachers');
 
 /*
 |--------------------------------------------------------------------------
@@ -80,8 +77,7 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
     /* Dashboard */
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])
-        ->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         
     /* Courses CRUD */
     Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses.index');
@@ -115,6 +111,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/teachers/{teacher}', [TeacherController::class, 'update'])->name('admin.teachers.update');
     Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])->name('admin.teachers.destroy');
 
+    /* Applications (Secured inside Admin Middleware) */
+    Route::get('/admin/applicants/students', [ApplicantController::class, 'students'])->name('admin.applicants.students');
+    Route::get('/admin/applicants/teachers', [ApplicantController::class, 'teachers'])->name('admin.applicants.teachers');
+
     // Result publish
     Route::get('/admin/results', [ResultPublishController::class, 'index'])->name('admin.results.index');
     Route::post('/admin/results/{subject}/publish', [ResultPublishController::class, 'publish'])->name('admin.results.publish');
@@ -123,7 +123,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     /* Analytics */
     Route::get('/admin/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
     Route::get('/admin/analytics/export', [\App\Http\Controllers\Admin\AnalyticsController::class, 'export'])->name('admin.analytics.export');
-
+    
+    // Fee Management Routes
+    Route::get('/admin/fees', [AdminFeeController::class, 'index'])->name('admin.fees.index');
+    Route::post('/admin/fees', [AdminFeeController::class, 'store'])->name('admin.fees.store');
+    Route::post('/admin/fees/approve/{payment}', [AdminFeeController::class, 'approvePayment'])->name('admin.fees.approve');
 });
 
 /*
@@ -155,7 +159,6 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/teacher/performance', [\App\Http\Controllers\Teacher\PerformanceController::class, 'index'])->name('teacher.performance.index');
     Route::get('/teacher/performance/{subject}', [\App\Http\Controllers\Teacher\PerformanceController::class, 'show'])->name('teacher.performance.show');
 
-    
     /* Emergency Contact */
     Route::get('/teacher/emergency', function () {
         return view('teacher.emergency');
@@ -192,6 +195,15 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/emergency', function () {
         return view('student.emergency');
     })->name('student.emergency');
+
+    // Student Fee Routes
+    Route::get('/student/fees', [StudentFeeController::class, 'index'])->name('student.fees.index');
+    Route::post('/student/fees/create-order', [StudentFeeController::class, 'createOrder'])->name('student.fees.order');
+    Route::post('/student/fees/verify', [StudentFeeController::class, 'verifyPayment'])->name('student.fees.verify');
+
+    // ADD THIS NEW ROUTE:
+    Route::get('/student/fees/{fee}/receipt', [StudentFeeController::class, 'receipt'])->name('student.fees.receipt');
+    Route::post('/student/fees/offline', [StudentFeeController::class, 'submitOfflinePayment'])->name('student.fees.offline');
 });
 
 /*
