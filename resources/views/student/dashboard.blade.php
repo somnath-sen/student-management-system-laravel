@@ -24,6 +24,7 @@
     .delay-100 { animation-delay: 100ms; }
     .delay-200 { animation-delay: 200ms; }
     .delay-300 { animation-delay: 300ms; }
+    .delay-400 { animation-delay: 400ms; }
 
     /* Progress Bar Animation */
     .progress-bar-fill {
@@ -132,7 +133,6 @@
             
             <div class="lg:col-span-1 space-y-6 animate-fade-up delay-200">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-full flex flex-col">
-                    
                     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-5 relative overflow-hidden">
                         <div class="absolute right-0 top-0 w-24 h-24 bg-white opacity-10 rounded-full -mr-4 -mt-4"></div>
                         <h2 class="text-white font-bold text-lg flex items-center gap-2 relative z-10">
@@ -171,7 +171,6 @@
 
             <div class="lg:col-span-2 animate-fade-up delay-300">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-full flex flex-col">
-                    
                     <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
                         <h2 class="font-bold text-gray-800 text-lg flex items-center gap-2">
                             <i class="fa-solid fa-chart-pie text-indigo-500"></i> Subject-wise Analytics
@@ -242,8 +241,70 @@
                 </div>
             </div>
 
+        </div> <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 relative overflow-hidden animate-fade-up delay-400">
+            
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+
+            <div class="flex items-center justify-between mb-8 mt-1">
+                <h2 class="text-xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
+                    <i class="fa-solid fa-bullhorn text-indigo-500"></i> Campus Feed
+                </h2>
+                <span class="flex h-2.5 w-2.5 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                </span>
+            </div>
+
+            <div class="space-y-6 max-w-4xl">
+                @if(isset($notices))
+                    @forelse($notices as $notice)
+                        @php
+                            $badgeColors = [
+                                'Urgent' => 'bg-rose-100 text-rose-700 border-rose-200',
+                                'Exam' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                                'Holiday' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                                'General' => 'bg-blue-100 text-blue-700 border-blue-200',
+                            ];
+                            $colorClass = $badgeColors[$notice->category] ?? $badgeColors['General'];
+                        @endphp
+
+                        <div class="group relative pl-5 pb-5 border-l-2 border-gray-100 last:border-l-0 last:pb-0">
+                            <div class="absolute -left-[5px] top-0 w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-indigo-500 transition-colors shadow-sm"></div>
+
+                            <div class="bg-gray-50 rounded-xl p-5 border border-gray-100 shadow-sm group-hover:shadow-md transition-all group-hover:border-indigo-100 group-hover:bg-white">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                    <span class="px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border w-max {{ $colorClass }}">
+                                        {{ $notice->category }}
+                                    </span>
+                                    <span class="text-xs font-bold text-gray-400 flex items-center gap-1">
+                                        <i class="fa-regular fa-clock"></i> {{ $notice->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $notice->title }}</h3>
+                                <p class="text-sm text-gray-600 leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all duration-300 whitespace-pre-wrap">{{ $notice->content }}</p>
+                                
+                                <div class="mt-4 pt-3 border-t border-gray-200/60 flex items-center gap-2">
+                                    <i class="fa-solid fa-pen-nib text-gray-400 text-xs"></i>
+                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">
+                                        Posted by {{ $notice->author->name ?? 'Admin Dept.' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-10 border-2 border-dashed border-gray-100 rounded-2xl">
+                            <div class="w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                                <i class="fa-solid fa-mug-hot text-2xl"></i>
+                            </div>
+                            <h3 class="text-gray-900 font-bold text-lg">You're all caught up!</h3>
+                            <p class="text-sm font-medium text-gray-500 mt-1">There are no new announcements on campus.</p>
+                        </div>
+                    @endforelse
+                @endif
+            </div>
         </div>
+
     </div>
 </div>
-
 @endsection

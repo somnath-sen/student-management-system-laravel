@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Subject;
+use App\Models\Notice; // ✅ Notice model imported
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -68,6 +69,15 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Notice Board Feed (Campus Broadcasts)
+        |--------------------------------------------------------------------------
+        */
+        
+        // Fetch the 5 most recent notices to show on the dashboard widget
+        $notices = Notice::with('author')->latest()->take(5)->get();
+
+        /*
+        |--------------------------------------------------------------------------
         | Return View
         |--------------------------------------------------------------------------
         */
@@ -80,7 +90,13 @@ class DashboardController extends Controller
             'presentCount',
             'absentCount',
             'attendancePercentage',
-            'subjectAttendance'
+            'subjectAttendance',
+            'notices' // ✅ Added notices to the view
         ));
+    }
+    // Add this new method
+    public function showNotice(Notice $notice)
+    {
+        return view('student.notices.show', compact('notice'));
     }
 }

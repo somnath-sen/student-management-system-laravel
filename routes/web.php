@@ -19,6 +19,7 @@ use App\Http\Controllers\StudyAIController;
 use App\Http\Controllers\Admin\ApplicantController;
 use App\Http\Controllers\Admin\FeeController as AdminFeeController;
 use App\Http\Controllers\Student\FeeController as StudentFeeController;
+use App\Http\Controllers\Admin\NoticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +129,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/fees', [AdminFeeController::class, 'index'])->name('admin.fees.index');
     Route::post('/admin/fees', [AdminFeeController::class, 'store'])->name('admin.fees.store');
     Route::post('/admin/fees/approve/{payment}', [AdminFeeController::class, 'approvePayment'])->name('admin.fees.approve');
+
+    // Notice Board Routes
+    Route::get('/admin/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'index'])->name('admin.notices.index');
+    Route::post('/admin/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'store'])->name('admin.notices.store');
+    Route::delete('/admin/notices/{notice}', [\App\Http\Controllers\Admin\NoticeController::class, 'destroy'])->name('admin.notices.destroy');
 });
 
 /*
@@ -204,6 +210,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     // ADD THIS NEW ROUTE:
     Route::get('/student/fees/{fee}/receipt', [StudentFeeController::class, 'receipt'])->name('student.fees.receipt');
     Route::post('/student/fees/offline', [StudentFeeController::class, 'submitOfflinePayment'])->name('student.fees.offline');
+
+    //Notice
+    Route::get('/student/notices/{notice}', [\App\Http\Controllers\Student\DashboardController::class, 'showNotice'])->name('student.notices.show');
 });
 
 /*
