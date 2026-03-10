@@ -31,6 +31,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 // Registration Routes
 Route::get('/register/student', function () {
     return view('register.student');
@@ -38,6 +40,13 @@ Route::get('/register/student', function () {
 Route::get('/register/teacher', function () {
     return view('register.teacher');
 });
+
+// Put this at the BOTTOM of web.php (Outside Auth middleware!)
+Route::get('/verify/student/{id}', function($id) {
+    $student = \App\Models\Student::with('user')->findOrFail($id);
+    return view('public.verify-student', compact('student'));
+})->name('verify.student');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -213,6 +222,12 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 
     //Notice
     Route::get('/student/notices/{notice}', [\App\Http\Controllers\Student\DashboardController::class, 'showNotice'])->name('student.notices.show');
+
+    
+    // Digital Smart ID Card Routes
+    Route::get('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'index'])->name('student.smart-id');
+    Route::post('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'update'])->name('student.smart-id.update');
+    
 });
 
 /*

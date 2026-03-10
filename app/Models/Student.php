@@ -12,6 +12,11 @@ class Student extends Model
         'user_id',
         'course_id',
         'roll_number',
+        // ... any other existing fields ...
+        'parent_name', 
+        'emergency_phone', 
+        'blood_group', 
+        'home_address'
     ];
 
     public function user()

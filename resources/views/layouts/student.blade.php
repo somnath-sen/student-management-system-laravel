@@ -18,9 +18,10 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #FDFBF7 !important; 
+            background-color: #FDFBF7 !important; /* Forces the creamy white background globally */
         }
         
+        /* Smooth Content Entrance */
         .animate-content {
             animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
@@ -31,13 +32,15 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Sidebar Active State Styling */
         .nav-link.active {
-            background: rgba(99, 102, 241, 0.15); 
-            color: #818cf8; 
+            background: rgba(99, 102, 241, 0.15); /* Indigo tint */
+            color: #818cf8; /* Indigo-400 */
             border-right: 3px solid #6366f1;
             font-weight: 700;
         }
 
+        /* Premium Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -65,6 +68,7 @@
             </div>
 
             <nav class="flex-1 overflow-y-auto py-6 space-y-1.5 px-3">
+                
                 <a href="{{ route('student.dashboard') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.dashboard') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-chart-pie w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Dashboard</span>
@@ -109,6 +113,12 @@
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</p>
                 </div>
                 
+                <a href="{{ route('student.smart-id') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.smart-id.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-id-badge w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Smart ID Card</span>
+                    <span class="text-[10px] text-white px-2 py-0.5 rounded-full font-bold bg-emerald-500">QR</span>
+                </a>
+
                 <a href="{{ route('student.emergency') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.emergency.*') ? 'active' : 'text-slate-400 hover:text-rose-400 hover:bg-rose-500/10' }}">
                     <i class="fa-solid fa-shield-halved w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Emergency Info</span>
