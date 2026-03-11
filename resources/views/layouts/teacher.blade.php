@@ -50,6 +50,26 @@
 
 <body class="text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ sidebarOpen: false }">
 
+    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-[#FDFBF7] flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+        <div class="relative w-32 h-32 flex items-center justify-center mb-4">
+            <div class="absolute inset-0 border-4 border-transparent border-t-indigo-600 border-r-indigo-600 rounded-full animate-spin shadow-[0_0_15px_rgba(79,70,229,0.4)]"></div>
+            <div class="absolute inset-2 border-4 border-transparent border-l-purple-600 border-b-purple-600 rounded-full animate-[spin_1.5s_linear_infinite_reverse] shadow-[0_0_15px_rgba(147,51,234,0.4)]"></div>
+            
+            <div class="relative w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center border border-slate-200 animate-pulse">
+                <i class="fa-solid fa-graduation-cap text-3xl text-indigo-600"></i>
+            </div>
+        </div>
+        
+        <h2 class="text-xs font-black tracking-[0.3em] text-slate-500 uppercase flex items-center gap-2">
+            Teacher Portal 
+            <span class="flex gap-1">
+                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
+                <span class="w-1.5 h-1.5 bg-purple-600 rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
+                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
+            </span>
+        </h2>
+    </div>
+    
     <div class="flex h-screen overflow-hidden">
 
         <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity 
@@ -208,6 +228,21 @@
 
         </div>
     </div>
+    <script>
+        // Page Loader Logic
+        window.addEventListener('load', function () {
+            const loader = document.getElementById('edflow-loader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                    setTimeout(() => {
+                        loader.remove();
+                    }, 700); 
+                }, 500); 
+            }
+        });
+    </script>
 
 </body>
 </html>

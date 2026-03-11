@@ -127,6 +127,25 @@
 </head>
 <body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-gray-900 dark:text-gray-100 selection:bg-brand-500 selection:text-white">
 
+    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+        <div class="relative w-32 h-32 flex items-center justify-center mb-4">
+            <div class="absolute inset-0 border-4 border-transparent border-t-brand-500 border-r-brand-500 rounded-full animate-spin shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
+            <div class="absolute inset-2 border-4 border-transparent border-l-purple-500 border-b-purple-500 rounded-full animate-[spin_1.5s_linear_infinite_reverse] shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
+            
+            <div class="relative w-16 h-16 bg-white dark:bg-gray-800 rounded-2xl shadow-xl flex items-center justify-center border border-gray-100 dark:border-gray-700 animate-pulse">
+                <i class="fa-solid fa-graduation-cap text-3xl text-brand-600 dark:text-brand-400"></i>
+            </div>
+        </div>
+        
+        <h2 class="text-xs font-black tracking-[0.3em] text-gray-500 dark:text-gray-400 uppercase flex items-center gap-2">
+            Loading EdFlow 
+            <span class="flex gap-1">
+                <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
+                <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
+                <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
+            </span>
+        </h2>
+    </div>
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
         <div class="absolute top-0 right-1/4 w-96 h-96 bg-yellow-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -794,7 +813,7 @@
                     <p class="text-gray-500 dark:text-gray-400 mb-6 text-sm">We are always looking for passionate individuals to build the future of education technology.</p>
                     
                     <div class="space-y-3">
-                        <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors group cursor-not-allowed opacity-80">
+                        <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-50 transition-colors group cursor-not-allowed opacity-80">
                             <div class="flex justify-between items-center">
                                 <div>
                                     <h4 class="font-bold text-gray-900 dark:text-white transition-colors">Laravel Backend Engineer</h4>
@@ -1026,7 +1045,7 @@
         // Check if any modal is open to prevent background scrolling
         function checkBodyOverflow() {
             const anyOpen = document.querySelectorAll('.custom-modal:not(.hidden)').length > 0;
-            if(!isMobileMenuOpen) {
+            if(typeof isMobileMenuOpen !== 'undefined' && !isMobileMenuOpen) {
                 document.body.style.overflow = anyOpen ? 'hidden' : 'auto';
             }
         }
@@ -1198,6 +1217,24 @@
 
         const statsSection = document.getElementById('stats');
         if(statsSection) observer.observe(statsSection);
+
+        // Page Loader Logic
+        window.addEventListener('load', function () {
+            const loader = document.getElementById('edflow-loader');
+            if (loader) {
+                // Add a tiny delay so the user can actually see the beautiful animation for a second
+                setTimeout(() => {
+                    // Fade it out
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                    
+                    // Remove it completely from the page after the fade transition finishes
+                    setTimeout(() => {
+                        loader.remove();
+                    }, 700); 
+                }, 500); 
+            }
+        });
 
     </script>
 </body>
