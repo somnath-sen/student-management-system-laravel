@@ -21,6 +21,9 @@ use App\Http\Controllers\Admin\FeeController as AdminFeeController;
 use App\Http\Controllers\Student\FeeController as StudentFeeController;
 use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Student\LocationController;
+// use App\Http\Controllers\Student\TimetableController;
+// use App\Http\Controllers\Admin\TimetableController;
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -143,6 +146,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'index'])->name('admin.notices.index');
     Route::post('/admin/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'store'])->name('admin.notices.store');
     Route::delete('/admin/notices/{notice}', [\App\Http\Controllers\Admin\NoticeController::class, 'destroy'])->name('admin.notices.destroy');
+
+    // Admin Timetable Builder
+    Route::get('/admin/timetable', [\App\Http\Controllers\Admin\TimetableController::class, 'index'])->name('admin.timetable.index');
+    Route::post('/admin/timetable', [\App\Http\Controllers\Admin\TimetableController::class, 'store'])->name('admin.timetable.store');
+    Route::delete('/admin/timetable/{timetable}', [\App\Http\Controllers\Admin\TimetableController::class, 'destroy'])->name('admin.timetable.destroy');
+
 });
 
 /*
@@ -178,6 +187,9 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/teacher/emergency', function () {
         return view('teacher.emergency');
     })->name('teacher.emergency');
+
+    // Teacher Timetable
+    Route::get('/teacher/timetable', [\App\Http\Controllers\Teacher\TimetableController::class, 'index'])->name('teacher.timetable');
 
 });
 
@@ -231,6 +243,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     // Location Tracker Routes
     Route::get('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'index'])->name('student.location');
     Route::post('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'update'])->name('student.location.update');
+
+    // Timetable Route
+    Route::get('/student/timetable', [\App\Http\Controllers\Student\TimetableController::class, 'index'])->name('student.timetable');
 });
 
 /*

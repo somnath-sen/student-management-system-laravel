@@ -74,6 +74,11 @@
                     <span class="font-semibold text-sm">Dashboard</span>
                 </a>
 
+                <a href="{{ route('teacher.timetable') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.timetable.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-calendar-days w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm">My Schedule</span>
+                </a>
+
                 <a href="{{ route('teacher.attendance.create') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.attendance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-clipboard-user w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Mark Attendance</span>

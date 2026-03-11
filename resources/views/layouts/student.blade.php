@@ -70,6 +70,11 @@
                     <span class="font-semibold text-sm">Dashboard</span>
                 </a>
 
+                <a href="{{ route('student.timetable') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.timetable.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-calendar-days w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm">Class Routine</span>
+                </a>
+
                 <a href="{{ route('student.attendance.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.attendance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-calendar-check w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Attendance</span>
