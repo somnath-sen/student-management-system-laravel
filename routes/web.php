@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\ApplicantController;
 use App\Http\Controllers\Admin\FeeController as AdminFeeController;
 use App\Http\Controllers\Student\FeeController as StudentFeeController;
 use App\Http\Controllers\Admin\NoticeController;
-
+use App\Http\Controllers\Student\LocationController;
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -228,6 +228,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'index'])->name('student.smart-id');
     Route::post('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'update'])->name('student.smart-id.update');
     
+    // Location Tracker Routes
+    Route::get('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'index'])->name('student.location');
+    Route::post('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'update'])->name('student.location.update');
 });
 
 /*

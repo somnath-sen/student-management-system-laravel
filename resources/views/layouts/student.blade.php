@@ -18,10 +18,9 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #FDFBF7 !important; /* Forces the creamy white background globally */
+            background-color: #FDFBF7 !important; 
         }
         
-        /* Smooth Content Entrance */
         .animate-content {
             animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
@@ -32,15 +31,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Sidebar Active State Styling */
         .nav-link.active {
-            background: rgba(99, 102, 241, 0.15); /* Indigo tint */
-            color: #818cf8; /* Indigo-400 */
+            background: rgba(99, 102, 241, 0.15); 
+            color: #818cf8; 
             border-right: 3px solid #6366f1;
             font-weight: 700;
         }
 
-        /* Premium Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -68,7 +65,6 @@
             </div>
 
             <nav class="flex-1 overflow-y-auto py-6 space-y-1.5 px-3">
-                
                 <a href="{{ route('student.dashboard') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.dashboard') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-chart-pie w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Dashboard</span>
@@ -107,16 +103,25 @@
                 <a href="{{ route('studyai.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('studyai.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'text-slate-300 hover:bg-indigo-600/10 hover:text-indigo-400' }}">
                     <i class="fa-solid fa-robot w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-bold text-sm flex-1">StudyAI</span>
+                    <span class="text-[9px] text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/50 font-black tracking-wider uppercase group-hover:bg-indigo-500 group-hover:text-white transition-colors">AI</span>
                 </a>
 
                 <div class="pt-4 pb-2 px-4">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</p>
                 </div>
+
+                <a href="{{ route('student.location') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.location.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-location-crosshairs w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Family Tracker</span>
+                    <span class="flex items-center gap-1.5 text-[9px] text-rose-400 px-2 py-0.5 rounded border border-rose-500/30 font-black tracking-wider uppercase group-hover:bg-rose-500/20 transition-colors">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Live
+                    </span>
+                </a>
                 
                 <a href="{{ route('student.smart-id') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.smart-id.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-id-badge w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Smart ID Card</span>
-                    <span class="text-[10px] text-white px-2 py-0.5 rounded-full font-bold bg-emerald-500">QR</span>
+                    <span class="text-[9px] text-slate-500 px-2 py-0.5 rounded border border-slate-600 font-black tracking-wider uppercase group-hover:border-emerald-500 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-colors">QR</span>
                 </a>
 
                 <a href="{{ route('student.emergency') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.emergency.*') ? 'active' : 'text-slate-400 hover:text-rose-400 hover:bg-rose-500/10' }}">
