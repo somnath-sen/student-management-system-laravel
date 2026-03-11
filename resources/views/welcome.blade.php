@@ -106,13 +106,8 @@
         }
 
         /* Hide scrollbar for marquee */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         /* Custom Scrollbar for inner modals */
         .custom-scroll::-webkit-scrollbar { width: 6px; }
@@ -127,10 +122,7 @@
             opacity: 0;
             overflow: hidden;
         }
-        .faq-content.open {
-            max-height: 500px;
-            opacity: 1;
-        }
+        .faq-content.open { max-height: 500px; opacity: 1; }
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-gray-900 dark:text-gray-100 selection:bg-brand-500 selection:text-white">
@@ -172,17 +164,35 @@
                 </div>
 
                 <div class="md:hidden flex items-center gap-4">
-                     <button id="theme-toggle-mobile" class="p-2 rounded-full text-gray-500 dark:text-gray-400">
+                     <button id="theme-toggle-mobile" class="p-2 rounded-full text-gray-500 dark:text-gray-400 focus:outline-none">
                         <i class="fa-solid fa-moon text-lg dark:hidden"></i>
                         <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i>
                     </button>
-                    <button class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                        <i class="fa-solid fa-bars text-2xl"></i>
+                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-none p-1">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-2xl transition-transform duration-300"></i>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
+
+    <div id="mobileMenu" class="fixed inset-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl transform translate-x-full transition-transform duration-500 ease-in-out md:hidden flex flex-col pt-28 px-8 pb-8 overflow-y-auto">
+        <div class="flex flex-col space-y-6 flex-1 text-center mt-8">
+            <a href="#features" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Features</a>
+            <a href="#testimonials" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Testimonials</a>
+            <a href="#stats" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Analytics</a>
+            <a href="#faq" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a>
+        </div>
+        
+        <div class="mt-auto pt-8 flex flex-col gap-4">
+            <button onclick="toggleRegisterModal(); toggleMobileMenu();" class="w-full py-4 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-bold text-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all border border-gray-200 dark:border-gray-700 shadow-sm">
+                Register
+            </button>
+            <button onclick="toggleCustomModal('loginModal'); toggleMobileMenu();" class="w-full py-4 rounded-full bg-brand-600 text-white font-bold text-lg hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/30">
+                Log In
+            </button>
+        </div>
+    </div>
 
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -277,36 +287,61 @@
     </div>
 
     <section id="features" class="py-24 bg-white dark:bg-gray-800 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">Everything you need</h2>
                 <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">Powerful modules integrated into a single ecosystem.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="group p-8 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-brand-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-brand-100 dark:hover:border-gray-600 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                
+                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-gray-600 hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
                         <i class="fa-solid fa-users text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Performance Analytics</h3>
-                    <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Real-time insights into student performance, course trends, and institutional health.</p>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Performance Analytics</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Real-time insights into student performance, course trends, and institutional health.</p>
                 </div>
 
-                <div class="group p-8 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-purple-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-purple-100 dark:hover:border-gray-600 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-indigo-200 dark:hover:border-gray-600 hover:-translate-y-1 relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/20 transition-all"></div>
+                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
+                        <i class="fa-solid fa-id-card-clip text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Smart QR Identity</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Instantly generate scannable digital ID cards for every student containing vital emergency details.</p>
+                </div>
+
+                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-rose-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-rose-200 dark:hover:border-gray-600 hover:-translate-y-1 relative overflow-hidden">
+                    <div class="absolute right-4 top-4">
+                        <span class="flex h-2.5 w-2.5 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                        </span>
+                    </div>
+                    <div class="w-12 h-12 bg-rose-100 dark:bg-rose-900/30 rounded-lg flex items-center justify-center text-rose-600 dark:text-rose-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
+                        <i class="fa-solid fa-satellite-dish text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Live Family Tracker</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Secure GPS location pinging and interactive maps to ensure student safety on and off campus.</p>
+                </div>
+
+                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-purple-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-gray-600 hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
                         <i class="fa-solid fa-clipboard-user text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Emergency Assistance</h3>
-                    <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Quick response protocols and real-time incident tracking for campus safety.</p>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Emergency Assistance</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Quick response protocols and real-time incident tracking for complete campus security.</p>
                 </div>
 
-                <div class="group p-8 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-green-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-green-100 dark:hover:border-gray-600 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-chart-pie text-xl"></i>
+                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-green-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-gray-600 hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
+                        <i class="fa-solid fa-robot text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">AI Chatbots</h3>
-                    <p class="text-gray-500 dark:text-gray-400 leading-relaxed">AI-powered conversational agents to assist students with queries and support.</p>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">StudyAI Integration</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Next-gen Gemini-powered conversational agents to assist students with real-time academic queries.</p>
                 </div>
+
             </div>
         </div>
     </section>
@@ -991,7 +1026,9 @@
         // Check if any modal is open to prevent background scrolling
         function checkBodyOverflow() {
             const anyOpen = document.querySelectorAll('.custom-modal:not(.hidden)').length > 0;
-            document.body.style.overflow = anyOpen ? 'hidden' : 'auto';
+            if(!isMobileMenuOpen) {
+                document.body.style.overflow = anyOpen ? 'hidden' : 'auto';
+            }
         }
 
         // Navbar Scroll Effect
@@ -1046,6 +1083,40 @@
         themeToggleBtn.addEventListener('click', toggleTheme);
         themeToggleMobile.addEventListener('click', toggleTheme);
 
+        /* Mobile Menu Toggle Logic */
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMobileMenuOpen = false;
+
+        function toggleMobileMenu() {
+            isMobileMenuOpen = !isMobileMenuOpen;
+            if (isMobileMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('translate-x-0');
+                mobileMenuIcon.classList.remove('fa-bars');
+                mobileMenuIcon.classList.add('fa-xmark');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.remove('translate-x-0');
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenuIcon.classList.remove('fa-xmark');
+                mobileMenuIcon.classList.add('fa-bars');
+                if (!document.querySelectorAll('.custom-modal:not(.hidden)').length) {
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(isMobileMenuOpen) toggleMobileMenu();
+            });
+        });
+
         /* Newsletter Logic */
         const form = document.getElementById('newsletterForm');
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyzMyhmjvyiDU1n8oZGtKIlzbEFeXNgXfJDemrfxcyUW3NF-Q0qcJ9qWWIXhmiV2ZAV1w/exec'; 
@@ -1053,29 +1124,31 @@
         const btnLoader = document.getElementById('btnLoader');
         const subscribeBtn = document.getElementById('subscribeBtn');
 
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            
-            subscribeBtn.disabled = true;
-            subscribeBtn.classList.add('opacity-75');
-            btnLoader.classList.remove('hidden');
+        if(form) {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                
+                subscribeBtn.disabled = true;
+                subscribeBtn.classList.add('opacity-75');
+                btnLoader.classList.remove('hidden');
 
-            let requestBody = new FormData(form);
-            fetch(scriptURL, { method: 'POST', body: requestBody})
-                .then(response => {
-                    form.reset();
-                    toggleCustomModal('successModal');
-                    subscribeBtn.disabled = false;
-                    subscribeBtn.classList.remove('opacity-75');
-                    btnLoader.classList.add('hidden');
-                })
-                .catch(error => {
-                    alert('Error! ' + error.message);
-                    subscribeBtn.disabled = false;
-                    subscribeBtn.classList.remove('opacity-75');
-                    btnLoader.classList.add('hidden');
-                });
-        });
+                let requestBody = new FormData(form);
+                fetch(scriptURL, { method: 'POST', body: requestBody})
+                    .then(response => {
+                        form.reset();
+                        toggleCustomModal('successModal');
+                        subscribeBtn.disabled = false;
+                        subscribeBtn.classList.remove('opacity-75');
+                        btnLoader.classList.add('hidden');
+                    })
+                    .catch(error => {
+                        alert('Error! ' + error.message);
+                        subscribeBtn.disabled = false;
+                        subscribeBtn.classList.remove('opacity-75');
+                        btnLoader.classList.add('hidden');
+                    });
+            });
+        }
 
         function closeSuccessModal() {
             toggleCustomModal('successModal');

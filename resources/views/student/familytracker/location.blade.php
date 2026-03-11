@@ -16,8 +16,12 @@
         height: 500px;
         width: 100%;
         border-radius: 1rem;
-        z-index: 10; /* Keep it below dropdowns */
+        z-index: 10; 
     }
+
+    /* Ensure the Leaflet popup looks modern */
+    .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+    .leaflet-popup-content { font-family: 'Plus Jakarta Sans', sans-serif; margin: 14px 20px; }
 
     .pulse-ring {
         animation: pulsing 2s infinite;
@@ -81,8 +85,8 @@
                         </div>
                         <div>
                             <p class="text-sm font-bold text-slate-900">Location Active</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Last updated: {{ $student->location_updated_at->diffForHumans() }}</p>
-                            <p class="text-[10px] text-slate-400 mt-1">{{ $student->location_updated_at->format('l, d F Y - h:i A') }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Last updated: {{ $student->location_updated_at->timezone('Asia/Kolkata')->diffForHumans() }}</p>
+                            <p class="text-[10px] text-slate-400 mt-1 font-semibold">{{ $student->location_updated_at->timezone('Asia/Kolkata')->format('l, d M Y - h:i A') }}</p>
                         </div>
                     </div>
                     <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 text-xs font-mono text-slate-600 break-all">
@@ -104,11 +108,11 @@
 
         </div>
 
-        <div class="lg:col-span-2 animate-enter stagger-2">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-full flex flex-col min-h-[500px] relative">
+        <div class="lg:col-span-2 animate-enter stagger-2 relative">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-full relative" style="min-height: 500px;">
                 
                 @if($student->last_lat && $student->last_lng)
-                    <div id="map" class="flex-1 w-full relative z-0"></div>
+                    <div id="map" class="w-full absolute inset-0 z-0" style="height: 100%; min-height: 500px;"></div>
                     
                     <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl shadow-lg border border-slate-200 z-[400] flex items-center gap-2">
                         <span class="flex h-2.5 w-2.5 relative">
@@ -118,8 +122,8 @@
                         <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Live GPS Signal</span>
                     </div>
                 @else
-                    <div class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 border-2 border-dashed border-slate-200 m-6 rounded-xl">
-                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-300 mb-4 shadow-sm">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-slate-50">
+                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-300 mb-4 shadow-sm border border-slate-100">
                             <i class="fa-solid fa-map-location-dot text-4xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-slate-700">Map Offline</h3>
@@ -153,10 +157,11 @@
         status.classList.add('hidden');
 
         if (navigator.geolocation) {
+            // FORCED STRICT ACCURACY: This forces the browser to use raw GPS rather than IP address
             navigator.geolocation.getCurrentPosition(showPosition, showError, {
                 enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+                timeout: 15000, // 15 seconds to lock onto satellites
+                maximumAge: 0 // Do not use cached locations
             });
         } else {
             status.innerHTML = "Geolocation is not supported by your browser.";
@@ -166,11 +171,8 @@
     }
 
     function showPosition(position) {
-        // Put the coordinates into the hidden form
         document.getElementById('lat-input').value = position.coords.latitude;
         document.getElementById('lng-input').value = position.coords.longitude;
-        
-        // Submit the form
         document.getElementById('location-form').submit();
     }
 
@@ -183,7 +185,7 @@
                 status.innerHTML = "Request denied. Please allow location access in your browser settings.";
                 break;
             case error.POSITION_UNAVAILABLE:
-                status.innerHTML = "Location information is unavailable.";
+                status.innerHTML = "Location information is unavailable. Are you on a desktop without GPS?";
                 break;
             case error.TIMEOUT:
                 status.innerHTML = "The request to get user location timed out.";
@@ -202,35 +204,39 @@
         btn.classList.replace('opacity-70', 'hover:bg-rose-600');
     }
 
-    // Map Initialization Logic (Only runs if coordinates exist in database)
+    // Map Initialization Logic
     @if($student->last_lat && $student->last_lng)
         document.addEventListener('DOMContentLoaded', function() {
-            var lat = {{ $student->last_lat }};
-            var lng = {{ $student->last_lng }};
+            var lat = {{ floatval($student->last_lat) }};
+            var lng = {{ floatval($student->last_lng) }};
             
-            // Initialize map and set center to student coordinates
-            var map = L.map('map').setView([lat, lng], 16);
+            // Initialize map with closer zoom for exact street tracking
+            var map = L.map('map').setView([lat, lng], 17);
 
-            // Load Premium English-forced Map Tiles (CartoDB Voyager)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap contributors, © CARTO',
-                subdomains: 'abcd'
+            // BULLETPROOF MAP LAYER: Google Maps Standard Tiles (Extreme accuracy, deep zoom, English labels)
+            L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                attribution: '© Google Maps'
             }).addTo(map);
 
             // Custom modern marker icon
             var customIcon = L.divIcon({
                 className: 'custom-div-icon',
-                html: "<div style='background-color:#e11d48; width:20px; height:20px; border-radius:50%; border:3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);'></div>",
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
+                html: "<div style='background-color:#e11d48; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow: 0 0 15px rgba(225,29,72,0.8);'></div>",
+                iconSize: [22, 22],
+                iconAnchor: [11, 11]
             });
 
             // Add marker to map
             var marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
             
             // Add popup
-            marker.bindPopup("<b>{{ $student->user->name }}</b><br>Last Known Safe Location").openPopup();
+            marker.bindPopup("<div class='text-center mb-1'><b>{{ $student->user->name }}</b></div><div class='text-xs text-gray-500'>Last Known Safe Location</div>").openPopup();
+            
+            // Force Leaflet to recalculate the map size after a tiny delay 
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 250);
         });
     @endif
 </script>
