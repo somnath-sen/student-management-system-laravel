@@ -152,6 +152,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/timetable', [\App\Http\Controllers\Admin\TimetableController::class, 'store'])->name('admin.timetable.store');
     Route::delete('/admin/timetable/{timetable}', [\App\Http\Controllers\Admin\TimetableController::class, 'destroy'])->name('admin.timetable.destroy');
 
+
+    // Admin Admit Card Manager
+    Route::get('/admin/admit-cards', [\App\Http\Controllers\Admin\AdmitCardController::class, 'index'])->name('admin.admit-card.index');
+    Route::post('/admin/admit-cards/{course}/toggle', [\App\Http\Controllers\Admin\AdmitCardController::class, 'togglePublish'])->name('admin.admit-card.toggle');
+
 });
 
 /*
@@ -246,6 +251,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 
     // Timetable Route
     Route::get('/student/timetable', [\App\Http\Controllers\Student\TimetableController::class, 'index'])->name('student.timetable');
+
+    // Admit Card Route
+    Route::get('/student/admit-card', [\App\Http\Controllers\Student\AdmitCardController::class, 'show'])->name('student.admit-card.show');
 });
 
 /*
