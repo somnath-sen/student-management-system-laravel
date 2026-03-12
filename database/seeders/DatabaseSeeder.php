@@ -14,17 +14,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::insert([
-            ['id' => 1, 'name' => 'admin'],
-            ['id' => 2, 'name' => 'teacher'],
-            ['id' => 3, 'name' => 'student'],
-        ]);
+        // Only create the roles if they do not already exist
+        Role::firstOrCreate(['id' => 1], ['name' => 'admin']);
+        Role::firstOrCreate(['id' => 2], ['name' => 'teacher']);
+        Role::firstOrCreate(['id' => 3], ['name' => 'student']);
 
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('admin123'),
-            'role_id' => 1,
-        ]);
+        // Only create the admin user if this email doesn't already exist
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('admin123'),
+                'role_id' => 1,
+            ]
+        );
     }
 }
