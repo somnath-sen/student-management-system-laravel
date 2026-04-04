@@ -125,31 +125,30 @@
         .faq-content.open { max-height: 500px; opacity: 1; }
     </style>
 </head>
-<body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-gray-900 dark:text-gray-100 selection:bg-brand-500 selection:text-white">
+<body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-black dark:text-gray-100 selection:bg-gray-900 selection:text-white dark:selection:bg-white dark:selection:text-gray-900">
 
-    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
-        <div class="relative w-32 h-32 flex items-center justify-center mb-4">
-            <div class="absolute inset-0 border-4 border-transparent border-t-brand-500 border-r-brand-500 rounded-full animate-spin shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-            <div class="absolute inset-2 border-4 border-transparent border-l-purple-500 border-b-purple-500 rounded-full animate-[spin_1.5s_linear_infinite_reverse] shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
+    <!-- Premium Initial Loader -->
+    <div id="edflow-loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white dark:bg-black transition-opacity duration-700 ease-in-out">
+        <div class="relative flex items-center justify-center w-16 h-16">
+            <!-- Outer smooth spinning ring -->
+            <div class="absolute inset-0 rounded-full border border-gray-100 dark:border-white/5"></div>
+            <div class="absolute inset-0 rounded-full border-t border-brand-500 animate-[spin_1s_cubic-bezier(0.8,_0,_0.2,_1)_infinite]"></div>
             
-            <div class="relative w-16 h-16 bg-white dark:bg-gray-800 rounded-2xl shadow-xl flex items-center justify-center border border-gray-100 dark:border-gray-700 animate-pulse">
-                <i class="fa-solid fa-graduation-cap text-3xl text-brand-600 dark:text-brand-400"></i>
+            <!-- Inner pulsing brand logo -->
+            <div class="w-10 h-10 bg-brand-50 dark:bg-brand-900/20 rounded-xl flex items-center justify-center text-brand-600 animate-[pulseGlow_2s_infinite]">
+                <i class="fa-solid fa-graduation-cap text-lg"></i>
             </div>
         </div>
-        
-        <h2 class="text-xs font-black tracking-[0.3em] text-gray-500 dark:text-gray-400 uppercase flex items-center gap-2">
-            Loading EdFlow 
-            <span class="flex gap-1">
-                <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
-                <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
-                <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
-            </span>
-        </h2>
+        <div class="mt-8 flex flex-col items-center">
+            <span class="font-bold tracking-[0.2em] text-[10px] uppercase text-gray-400 dark:text-gray-500 animate-pulse">Initializing System</span>
+        </div>
     </div>
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
-        <div class="absolute top-0 right-1/4 w-96 h-96 bg-yellow-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-300 dark:bg-brand-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+
+    <!-- Elegant animated background effect -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 via-gray-50 to-white dark:from-gray-900 dark:via-black dark:to-black">
+        <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-brand-500/20 dark:bg-brand-500/20 blur-[120px] animate-[blob_15s_ease-in-out_infinite_alternate]"></div>
+        <div class="absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-purple-500/20 dark:bg-purple-900/30 blur-[120px] animate-[blob_20s_ease-in-out_infinite_alternate-reverse]" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-[20%] left-[20%] w-[60%] h-[60%] rounded-full bg-indigo-500/10 dark:bg-indigo-900/20 blur-[120px] animate-[blob_18s_ease-in-out_infinite_alternate]" style="animation-delay: 4s;"></div>
     </div>
 
     <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
@@ -195,67 +194,137 @@
         </div>
     </nav>
 
-    <div id="mobileMenu" class="fixed inset-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl transform translate-x-full transition-transform duration-500 ease-in-out md:hidden flex flex-col pt-28 px-8 pb-8 overflow-y-auto">
-        <div class="flex flex-col space-y-6 flex-1 text-center mt-8">
-            <a href="#features" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Features</a>
-            <a href="#testimonials" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Testimonials</a>
-            <a href="#stats" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Analytics</a>
-            <a href="#faq" class="mobile-link text-3xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a>
+    <div id="mobileMenu" class="fixed inset-0 z-40 bg-white/95 dark:bg-black/95 backdrop-blur-2xl transform translate-x-full transition-transform duration-500 ease-in-out md:hidden flex flex-col overflow-hidden">
+        <!-- Ambient Colorful Glowing Orbs inside Mobile Menu -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-60">
+            <div class="absolute top-[10%] -left-[20%] w-[300px] h-[300px] bg-brand-500/30 rounded-full blur-[80px] mix-blend-screen animate-[pulse_6s_infinite]"></div>
+            <div class="absolute bottom-[20%] -right-[20%] w-[350px] h-[350px] bg-purple-600/30 rounded-full blur-[80px] mix-blend-screen animate-[pulse_8s_infinite_reverse]"></div>
         </div>
-        
-        <div class="mt-auto pt-8 flex flex-col gap-4">
-            <button onclick="toggleRegisterModal(); toggleMobileMenu();" class="w-full py-4 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-bold text-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all border border-gray-200 dark:border-gray-700 shadow-sm">
-                Register
-            </button>
-            <button onclick="toggleCustomModal('loginModal'); toggleMobileMenu();" class="w-full py-4 rounded-full bg-brand-600 text-white font-bold text-lg hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/30">
-                Log In
-            </button>
+
+        <div class="relative z-10 flex flex-col h-full pt-32 px-8 pb-10 overflow-y-auto hide-scrollbar">
+            <!-- Navigation Links -->
+            <div class="flex flex-col space-y-8 flex-1 text-center mt-4">
+                <a href="#features" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
+                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Features</span>
+                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">Features</span>
+                </a>
+                <a href="#testimonials" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
+                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Testimonials</span>
+                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">Testimonials</span>
+                </a>
+                <a href="#stats" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
+                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Analytics</span>
+                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">Analytics</span>
+                </a>
+                <a href="#faq" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
+                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">FAQ</span>
+                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">FAQ</span>
+                </a>
+            </div>
+            
+            <!-- Bottom Auth Buttons & Footer -->
+            <div class="mt-auto pt-10 flex flex-col gap-4">
+                <button onclick="toggleRegisterModal(); toggleMobileMenu();" class="relative group w-full py-4 rounded-2xl bg-white dark:bg-white/5 text-gray-900 dark:text-white font-black text-lg transition-all border border-gray-200 dark:border-white/10 hover:border-brand-500 shadow-sm overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <span class="relative z-10">Create Account</span>
+                </button>
+                <button onclick="toggleCustomModal('loginModal'); toggleMobileMenu();" class="relative group w-full py-4 rounded-2xl text-white font-black text-lg transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-600 to-purple-600 group-hover:scale-105 transition-transform duration-500"></div>
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        Log In <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </button>
+                
+                <div class="mt-8 flex items-center justify-center gap-6 text-2xl text-gray-400">
+                    <a href="https://www.facebook.com/thesomishere/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://github.com/somnath-sen/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/thesomishere/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm mb-8 animate-fade-in">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span class="text-sm font-medium text-gray-600 dark:text-gray-300">v2.0 is now live</span>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 dark:bg-white/5 backdrop-blur-md border border-gray-200/50 dark:border-white/10 shadow-sm mb-8 animate-fade-in">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">EdFlow v2.0 Live</span>
             </div>
 
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8 animate-fade-in" style="animation-delay: 0.1s;">
-                Manage your task <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600">with intelligence.</span>
+            <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white mb-6 animate-fade-in leading-tight md:leading-tight" style="animation-delay: 0.1s;">
+                Student Management <br class="hidden md:block">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-500">beautifully unified.</span>
             </h1>
 
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-400 mb-10 animate-fade-in" style="animation-delay: 0.2s;">
-                Streamline admissions, attendance, fees, and examinations in one unified cloud platform designed for modern institutions.
+            <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-10 animate-fade-in font-medium" style="animation-delay: 0.2s;">
+                Admissions, attendance, fees, and examinations in one sleek cloud platform. Built for modern institutions that value design and speed.
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style="animation-delay: 0.3s;">
-                <button onclick="toggleRegisterModal()" class="px-8 py-4 rounded-full bg-brand-600 text-white font-bold text-lg hover:bg-brand-700 transition-all shadow-xl shadow-brand-500/30 hover:-translate-y-1">
+                <button onclick="toggleRegisterModal()" class="px-8 py-3.5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-sm hover:scale-105 transition-transform shadow-lg shadow-gray-900/20 dark:shadow-white/10">
                     Apply Now
                 </button>
-                <a href="#features" class="px-8 py-4 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                <a href="#features" class="px-8 py-3.5 rounded-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors inline-block leading-normal">
                     Explore Features
                 </a>
             </div>
 
-            <div class="mt-16 relative mx-auto max-w-5xl animate-fade-in" style="animation-delay: 0.5s;">
-                <div class="rounded-2xl bg-gray-900 p-2 shadow-2xl animate-float">
-                    <div class="rounded-xl bg-gray-800 overflow-hidden relative aspect-[16/9] border border-gray-700">
-                        <div class="absolute inset-0 bg-gray-800 flex flex-col">
-                            <div class="h-12 border-b border-gray-700 flex items-center px-4 gap-2 bg-gray-900">
-                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            <div class="mt-20 relative mx-auto max-w-5xl animate-fade-in" style="animation-delay: 0.5s;">
+                <div class="rounded-2xl md:rounded-[2rem] bg-gray-100/50 dark:bg-white/5 p-2 md:p-3 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-2xl">
+                    <div class="rounded-xl md:rounded-2xl bg-white dark:bg-black overflow-hidden relative aspect-[16/9] border border-gray-200 dark:border-gray-800 flex flex-col shadow-inner">
+                        <div class="h-10 border-b border-gray-100 dark:border-gray-800 flex items-center px-4 gap-2 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-md">
+                            <div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                        </div>
+                        <div class="flex-1 relative overflow-hidden bg-gray-900 dark:bg-black flex items-center justify-center group">
+                            <!-- Animated Aura Background imitating a video -->
+                            <div class="absolute inset-0 z-0 opacity-80 group-hover:opacity-100 transition-opacity duration-1000">
+                                <div class="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] bg-gradient-to-r from-brand-600/20 via-purple-500/10 to-indigo-900/30 rounded-full blur-3xl animate-[spin_20s_linear_infinite]"></div>
+                                <div class="absolute -bottom-[50%] -right-[50%] w-[200%] h-[200%] bg-gradient-to-l from-brand-400/10 via-blue-500/10 to-purple-600/20 rounded-full blur-3xl animate-[spin_25s_linear_infinite_reverse]"></div>
                             </div>
-                            <div class="flex-1 p-8 grid grid-cols-4 gap-6 bg-gray-800">
-                                <div class="col-span-1 bg-gray-700/50 rounded-lg h-full animate-pulse"></div>
-                                <div class="col-span-3 grid grid-rows-3 gap-6">
-                                    <div class="row-span-1 grid grid-cols-3 gap-6">
-                                        <div class="bg-gray-700/50 rounded-lg h-32 animate-pulse"></div>
-                                        <div class="bg-gray-700/50 rounded-lg h-32 animate-pulse" style="animation-delay: 100ms"></div>
-                                        <div class="bg-gray-700/50 rounded-lg h-32 animate-pulse" style="animation-delay: 200ms"></div>
+                            
+                            <!-- Glass Overlay UI Elements -->
+                            <div class="relative z-10 w-full h-full p-6 md:p-10 flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div class="space-y-5 w-1/3">
+                                        <div class="h-10 w-full bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden relative shadow-lg">
+                                            <div class="absolute inset-y-0 left-0 bg-brand-500/60 w-[65%] shadow-[0_0_20px_rgba(59,130,246,0.8)]"></div>
+                                        </div>
+                                        <div class="h-10 w-4/5 bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden relative shadow-lg">
+                                            <div class="absolute inset-y-0 left-0 bg-purple-500/60 w-[45%] shadow-[0_0_20px_rgba(168,85,247,0.8)]"></div>
+                                        </div>
                                     </div>
-                                    <div class="row-span-2 bg-gray-700/50 rounded-lg h-full animate-pulse"></div>
+                                    
+                                    <!-- A stylized central orb or chart ring -->
+                                    <div class="w-28 h-28 md:w-36 md:h-36 rounded-full border-[12px] border-white/5 relative flex items-center justify-center backdrop-blur-sm shadow-2xl">
+                                        <div class="absolute inset-[-12px] rounded-full border-[12px] border-transparent border-t-brand-500/80 border-r-brand-500/80 animate-[spin_3s_linear_infinite]"></div>
+                                        <div class="absolute inset-[-12px] rounded-full border-[12px] border-transparent border-b-purple-500/80 animate-[spin_5s_linear_infinite_reverse]"></div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-white font-black text-2xl md:text-3xl tracking-tighter">94%</span>
+                                            <span class="text-brand-200 text-[8px] uppercase tracking-widest">Efficiency</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-4 md:gap-6 mt-8">
+                                    <div class="h-24 md:h-32 bg-white/10 dark:bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl flex items-end p-4">
+                                        <div class="w-full flex items-end gap-2 h-16">
+                                            <div class="w-1/4 bg-brand-500/80 rounded-t h-[40%] animate-pulse"></div>
+                                            <div class="w-1/4 bg-brand-500/80 rounded-t h-[70%] animate-pulse" style="animation-delay: 150ms"></div>
+                                            <div class="w-1/4 bg-brand-500/90 rounded-t h-[95%] shadow-[0_0_15px_rgba(59,130,246,0.5)] animate-pulse" style="animation-delay: 300ms"></div>
+                                            <div class="w-1/4 bg-brand-500/80 rounded-t h-[60%] animate-pulse" style="animation-delay: 450ms"></div>
+                                        </div>
+                                    </div>
+                                    <div class="h-24 md:h-32 bg-white/10 dark:bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl flex items-center justify-center relative overflow-hidden">
+                                        <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%] animate-[textShimmer_3s_linear_infinite]"></div>
+                                        <i class="fa-solid fa-microchip text-4xl text-white/80 z-10 animate-pulse"></i>
+                                    </div>
+                                    <div class="h-24 md:h-32 bg-white/10 dark:bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col justify-center gap-3">
+                                        <div class="h-2.5 w-full bg-white/30 rounded-full animate-pulse" style="animation-delay: 0ms"></div>
+                                        <div class="h-2.5 w-5/6 bg-white/30 rounded-full animate-pulse" style="animation-delay: 200ms"></div>
+                                        <div class="h-2.5 w-4/6 bg-white/30 rounded-full animate-pulse" style="animation-delay: 400ms"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -265,413 +334,566 @@
         </div>
     </section>
 
-    <div class="relative bg-gradient-to-r from-brand-700 via-purple-700 to-brand-700 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-4 overflow-hidden border-y border-brand-500/30 shadow-lg shadow-brand-500/20 group cursor-pointer">
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse-glow pointer-events-none"></div>
-        <div class="flex animate-marquee whitespace-nowrap group-hover:[animation-play-state:paused]">
+    <div class="relative py-4 overflow-hidden border-y border-white/20 group cursor-pointer text-sm shadow-2xl shadow-brand-500/20">
+        <!-- Animated vibrant background -->
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-600 via-purple-500 to-brand-600 bg-[length:200%_auto] animate-[textShimmer_4s_linear_infinite]"></div>
+        
+        <div class="flex animate-marquee whitespace-nowrap group-hover:[animation-play-state:paused] relative z-10 items-center">
+            
+            <!-- Block 1 -->
             <div class="flex items-center gap-12 mx-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-yellow-400 text-xl animate-bounce">🔔</span>
-                    <span class="text-white font-bold text-lg uppercase tracking-wide">Admissions Open for 2026-2027</span>
+                    <span class="text-white font-black uppercase tracking-[0.2em] text-xs drop-shadow-md">Admissions Open 2026-2027</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="w-2 h-2 bg-white rounded-full"></span>
-                    <span class="text-gray-100 font-medium">Limited Seats Available</span>
+                    <span class="w-2.5 h-2.5 bg-yellow-300 rounded-full animate-pulse shadow-[0_0_12px_rgba(253,224,71,0.9)]"></span>
+                    <span class="text-white font-medium tracking-wide">Limited Seats Available</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="w-2 h-2 bg-white rounded-full"></span>
-                    <span class="text-gray-100 font-medium">Scholarships up to 50%</span>
+                    <span class="w-2.5 h-2.5 bg-green-300 rounded-full animate-pulse shadow-[0_0_12px_rgba(134,239,172,0.9)]" style="animation-delay: 500ms;"></span>
+                    <span class="text-white font-medium tracking-wide">Scholarships up to 50%</span>
                 </div>
-                <button onclick="toggleRegisterModal()" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
-                    Apply Now <i class="fa-solid fa-arrow-right ml-1"></i>
+                <button onclick="toggleRegisterModal()" class="relative inline-flex items-center justify-center px-6 py-2 font-black text-brand-700 bg-white rounded-full overflow-hidden hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.5)] group/btn border-2 border-transparent hover:border-white hover:text-white hover:bg-transparent">
+                    <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover/btn:duration-1000 group-hover/btn:[transform:skew(-12deg)_translateX(150%)]">
+                        <div class="relative h-full w-8 bg-white/40"></div>
+                    </div>
+                    <span class="relative flex items-center gap-2">Apply Now <i class="fa-solid fa-arrow-right text-xs group-hover/btn:translate-x-1 transition-transform"></i></span>
                 </button>
             </div>
+
+            <!-- Block 2 -->
             <div class="flex items-center gap-12 mx-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-yellow-400 text-xl animate-bounce">🔔</span>
-                    <span class="text-white font-bold text-lg uppercase tracking-wide">Admissions Open for 2026-2027</span>
+                    <span class="text-white font-black uppercase tracking-[0.2em] text-xs drop-shadow-md">Admissions Open 2026-2027</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="w-2 h-2 bg-white rounded-full"></span>
-                    <span class="text-gray-100 font-medium">Limited Seats Available</span>
+                    <span class="w-2.5 h-2.5 bg-yellow-300 rounded-full animate-pulse shadow-[0_0_12px_rgba(253,224,71,0.9)]"></span>
+                    <span class="text-white font-medium tracking-wide">Limited Seats Available</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="w-2 h-2 bg-white rounded-full"></span>
-                    <span class="text-gray-100 font-medium">Scholarships up to 50%</span>
+                    <span class="w-2.5 h-2.5 bg-green-300 rounded-full animate-pulse shadow-[0_0_12px_rgba(134,239,172,0.9)]" style="animation-delay: 500ms;"></span>
+                    <span class="text-white font-medium tracking-wide">Scholarships up to 50%</span>
                 </div>
-                <button onclick="toggleRegisterModal()" class="px-6 py-1.5 bg-yellow-400 text-gray-900 rounded-full font-bold text-sm hover:bg-yellow-300 transition-colors shadow-md">
-                    Apply Now <i class="fa-solid fa-arrow-right ml-1"></i>
+                <button onclick="toggleRegisterModal()" class="relative inline-flex items-center justify-center px-6 py-2 font-black text-brand-700 bg-white rounded-full overflow-hidden hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.5)] group/btn border-2 border-transparent hover:border-white hover:text-white hover:bg-transparent">
+                    <div class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover/btn:duration-1000 group-hover/btn:[transform:skew(-12deg)_translateX(150%)]">
+                        <div class="relative h-full w-8 bg-white/40"></div>
+                    </div>
+                    <span class="relative flex items-center gap-2">Apply Now <i class="fa-solid fa-arrow-right text-xs group-hover/btn:translate-x-1 transition-transform"></i></span>
                 </button>
             </div>
+
         </div>
     </div>
 
-    <section id="features" class="py-24 bg-white dark:bg-gray-800 transition-colors duration-300">
-        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">Everything you need</h2>
-                <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">Powerful modules integrated into a single ecosystem.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                
-                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-gray-600 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
-                        <i class="fa-solid fa-users text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Performance Analytics</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Real-time insights into student performance, course trends, and institutional health.</p>
-                </div>
-
-                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-indigo-200 dark:hover:border-gray-600 hover:-translate-y-1 relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/20 transition-all"></div>
-                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
-                        <i class="fa-solid fa-id-card-clip text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Smart QR Identity</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Instantly generate scannable digital ID cards for every student containing vital emergency details.</p>
-                </div>
-
-                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-rose-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-rose-200 dark:hover:border-gray-600 hover:-translate-y-1 relative overflow-hidden">
-                    <div class="absolute right-4 top-4">
-                        <span class="flex h-2.5 w-2.5 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
-                        </span>
-                    </div>
-                    <div class="w-12 h-12 bg-rose-100 dark:bg-rose-900/30 rounded-lg flex items-center justify-center text-rose-600 dark:text-rose-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
-                        <i class="fa-solid fa-satellite-dish text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Live Family Tracker</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Secure GPS location pinging and interactive maps to ensure student safety on and off campus.</p>
-                </div>
-
-                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-purple-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-gray-600 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
-                        <i class="fa-solid fa-clipboard-user text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Emergency Assistance</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Quick response protocols and real-time incident tracking for complete campus security.</p>
-                </div>
-
-                <div class="group p-6 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:bg-green-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-gray-600 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 mb-5 group-hover:scale-110 transition-transform shadow-sm">
-                        <i class="fa-solid fa-robot text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">StudyAI Integration</h3>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Next-gen Gemini-powered conversational agents to assist students with real-time academic queries.</p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="testimonials" class="py-24 bg-gray-50 dark:bg-gray-900 overflow-hidden relative border-t border-gray-200 dark:border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16 relative z-10">
-            <h2 class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-sm mb-2">Wall of Love</h2>
-            <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">Trusted by educators globally</h3>
-            <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">See how EdFlow is transforming campuses everywhere.</p>
-        </div>
-
-        <div class="relative flex overflow-x-hidden group pb-8 hide-scrollbar">
-            <div class="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-20 pointer-events-none"></div>
-            <div class="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-20 pointer-events-none"></div>
-
-            <div class="flex animate-marquee-slow group-hover:[animation-play-state:paused] shrink-0 gap-6 px-3">
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "EdFlow completely removed the friction from our administrative tasks. The AI integrations alone save our staff dozens of hours every week."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-300 flex items-center justify-center font-bold text-lg">SJ</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Sarah Jenkins</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Principal, Westfield High</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "The analytics dashboard is a game-changer. We can now accurately track student performance trends and intervene before issues arise."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold text-lg">DR</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Dr. Robert Chen</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Dean of Academics</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "As a student, having all my attendance, fees, and examination results in one clean interface makes my college life so much less stressful."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-lg">MK</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Maya Patel</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Computer Science Student</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "Deployment was seamless. The ability to manage thousands of student records securely on the cloud is exactly what our IT team needed."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold text-lg">JD</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">James Doe</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">IT Administrator</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex animate-marquee-slow group-hover:[animation-play-state:paused] shrink-0 gap-6 px-3">
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "EdFlow completely removed the friction from our administrative tasks. The AI integrations alone save our staff dozens of hours every week."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-300 flex items-center justify-center font-bold text-lg">SJ</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Sarah Jenkins</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Principal, Westfield High</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "The analytics dashboard is a game-changer. We can now accurately track student performance trends and intervene before issues arise."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold text-lg">DR</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Dr. Robert Chen</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Dean of Academics</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "As a student, having all my attendance, fees, and examination results in one clean interface makes my college life so much less stressful."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-lg">MK</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Maya Patel</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Computer Science Student</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-80 md:w-96 whitespace-normal p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="flex text-yellow-400 mb-4 text-sm">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic leading-relaxed">
-                        "Deployment was seamless. The ability to manage thousands of student records securely on the cloud is exactly what our IT team needed."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold text-lg">JD</div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">James Doe</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">IT Administrator</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="stats" class="py-20 bg-gray-900 dark:bg-black text-white border-t border-gray-800">
+    <section id="features" class="py-24 bg-white dark:bg-black transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-gray-800">
-                <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="50">0</span>k+</div>
-                    <div class="text-gray-400">Students Managed</div>
+            <div class="text-center mb-16">
+                <h2 class="text-brand-600 dark:text-gray-400 font-bold tracking-widest uppercase text-xs mb-3">Core Modules</h2>
+                <h3 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">Everything you need.</h3>
+                <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">Powerful systems perfectly integrated into one unified dashboard.</p>
+            </div>
+
+            <!-- New Premium Animated Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
+                
+                <!-- Large Card: Analytics -->
+                <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-brand-500/40 dark:hover:from-brand-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-brand-500/50 rounded-full blur-[80px] animate-[spin_8s_linear_infinite]"></div>
+                        <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-purple-600/50 rounded-full blur-[80px] animate-[spin_12s_linear_infinite_reverse]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-brand-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
+                            <i class="fa-solid fa-chart-line text-2xl"></i>
+                        </div>
+                        
+                        <div class="mt-auto relative z-20">
+                            <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">Performance Analytics</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Deep, actionable insights into student performance, attendance patterns, and institutional health across the entire ecosystem.</p>
+                        </div>
+
+                        <!-- Abstract decorative rings -->
+                        <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-brand-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
+                            <div class="w-48 h-48 border border-purple-500/30 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="120">0</span>+</div>
-                    <div class="text-gray-400">Institutions</div>
+
+                <!-- Medium Card: QR Identity -->
+                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-blue-500/40 dark:hover:from-blue-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-blue-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shrink-0">
+                            <i class="fa-solid fa-id-card-clip text-2xl"></i>
+                        </div>
+                        
+                        <div class="relative z-20">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Smart QR Identity</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instantly generate scannable digital ID cards for dynamic & highly secure campus access control.</p>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="99.9">0</span>%</div>
-                    <div class="text-gray-400">Uptime</div>
+
+                <!-- Small Card: Tracker -->
+                <div class="md:col-span-1 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-emerald-500/40 dark:hover:from-emerald-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute bottom-0 right-0 w-[200px] h-[200px] bg-emerald-500/50 rounded-full blur-[60px] animate-pulse"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-col justify-between border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden text-center items-center">
+                        <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-emerald-500/20 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500">
+                            <i class="fa-solid fa-satellite-dish text-xl animate-[pulse_2s_infinite]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Live Tracker</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Secure live GPS tracking.</p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Small Card: AI Agent -->
+                <div class="md:col-span-1 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-rose-500/40 dark:hover:from-rose-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-gradient-to-r from-rose-500/60 to-orange-500/60 rounded-full blur-[60px] animate-[spin_5s_linear_infinite]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-gray-900 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-col justify-between border border-transparent dark:border-white/5 group-hover:bg-black transition-colors duration-700 overflow-hidden text-center items-center">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-rose-500/30 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 border border-white/20">
+                            <i class="fa-solid fa-robot text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black tracking-tight text-white mb-1">StudyAI Agent</h3>
+                            <p class="text-gray-400 text-sm font-medium">Gemini-powered tutor.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-24 bg-white dark:bg-black overflow-hidden relative border-t border-gray-100 dark:border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Text Side -->
                 <div>
-                    <div class="text-4xl font-bold text-brand-500 mb-2"><span class="count-up" data-target="24">0</span>/7</div>
-                    <div class="text-gray-400">Live Support</div>
+                    <h2 class="text-brand-600 dark:text-gray-400 font-bold tracking-widest uppercase text-xs mb-3">Wall of Love</h2>
+                    <h3 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl leading-tight mb-6">Trusted by leading educators.</h3>
+                    <p class="text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-lg leading-relaxed">See how EdFlow is transforming campuses globally. Our platform completely removes administrative friction, allowing staff to focus entirely on improving student success.</p>
+                    
+                    <div class="flex items-center gap-4">
+                        <div class="flex -space-x-4">
+                            <div class="w-12 h-12 rounded-full border-[3px] border-white dark:border-black bg-brand-500 text-white flex items-center justify-center font-bold text-sm shadow-sm relative z-40">SJ</div>
+                            <div class="w-12 h-12 rounded-full border-[3px] border-white dark:border-black bg-purple-500 text-white flex items-center justify-center font-bold text-sm shadow-sm relative z-30">DR</div>
+                            <div class="w-12 h-12 rounded-full border-[3px] border-white dark:border-black bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-sm relative z-20">MP</div>
+                            <div class="w-12 h-12 rounded-full border-[3px] border-white dark:border-black bg-rose-500 text-white flex items-center justify-center font-bold text-sm shadow-sm relative z-10">JD</div>
+                        </div>
+                        <div>
+                            <div class="flex items-center text-yellow-400 text-sm mb-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white">1,200+ 5-Star Reviews</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Shuffle Side -->
+                <div class="relative h-[380px] md:h-[350px] w-full max-w-lg mx-auto lg:ml-auto [perspective:1000px]">
+                    <!-- Shuffle Cards -->
+                    <div class="shuffle-card absolute w-full rounded-[2rem] bg-white/95 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 shadow-2xl p-8 transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]" data-index="0">
+                        <div class="text-brand-500 mb-6 opacity-80"><i class="fa-solid fa-quote-left text-4xl"></i></div>
+                        <p class="text-gray-900 dark:text-white mb-8 leading-relaxed text-lg font-medium">"EdFlow completely removed the friction from our administrative tasks. The AI integrations alone save our staff dozens of hours every week."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-lg">SJ</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white text-sm">Sarah Jenkins</h4>
+                                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase mt-1">Principal, Westfield High</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shuffle-card absolute w-full rounded-[2rem] bg-white/95 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 shadow-2xl p-8 transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]" data-index="1">
+                        <div class="text-purple-500 mb-6 opacity-80"><i class="fa-solid fa-quote-left text-4xl"></i></div>
+                        <p class="text-gray-900 dark:text-white mb-8 leading-relaxed text-lg font-medium">"The analytics dashboard is a game-changer. We can now accurately track student performance trends and intervene before issues arise."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-lg">DR</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white text-sm">Dr. Robert Chen</h4>
+                                <p class="text-xs text-purple-600 dark:text-purple-400 font-bold tracking-wide uppercase mt-1">Dean of Academics</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shuffle-card absolute w-full rounded-[2rem] bg-white/95 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 shadow-2xl p-8 transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]" data-index="2">
+                        <div class="text-emerald-500 mb-6 opacity-80"><i class="fa-solid fa-quote-left text-4xl"></i></div>
+                        <p class="text-gray-900 dark:text-white mb-8 leading-relaxed text-lg font-medium">"As a student, having all my attendance, fees, and examination results in one clean interface makes my college life so much less stressful."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg">MP</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white text-sm">Maya Patel</h4>
+                                <p class="text-xs text-emerald-600 dark:text-emerald-400 font-bold tracking-wide uppercase mt-1">Computer Science Student</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shuffle-card absolute w-full rounded-[2rem] bg-white/95 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 shadow-2xl p-8 transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]" data-index="3">
+                        <div class="text-rose-500 mb-6 opacity-80"><i class="fa-solid fa-quote-left text-4xl"></i></div>
+                        <p class="text-gray-900 dark:text-white mb-8 leading-relaxed text-lg font-medium">"Deployment was seamless. The ability to manage thousands of student records securely on the cloud is exactly what our IT team needed."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-lg">JD</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white text-sm">James Doe</h4>
+                                <p class="text-xs text-rose-600 dark:text-rose-400 font-bold tracking-wide uppercase mt-1">IT Administrator</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="faq" class="py-24 bg-white dark:bg-gray-800 transition-colors duration-300 border-t border-gray-200 dark:border-gray-800">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="stats" class="py-24 relative overflow-hidden bg-black border-t border-white/5">
+        <!-- Colorful ambient background glow -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div class="absolute -top-[20%] right-[10%] w-[600px] h-[600px] bg-brand-500/20 rounded-full blur-[100px] mix-blend-screen animate-[pulse_10s_infinite]"></div>
+            <div class="absolute -bottom-[20%] left-[10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[100px] mix-blend-screen animate-[pulse_15s_infinite_reverse]"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Section Title -->
             <div class="text-center mb-16">
-                <h2 class="text-brand-600 dark:text-brand-400 font-bold tracking-wide uppercase text-sm mb-2">Got Questions?</h2>
-                <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">Frequently Asked Questions</h3>
-                <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">Everything you need to know about the product and billing.</p>
+                <h2 class="text-brand-500 font-bold tracking-widest uppercase text-xs mb-3">Live Metrics</h2>
+                <h3 class="text-3xl font-black tracking-tight text-white sm:text-5xl">Scale with confidence.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <!-- Stat 1: Blue -->
+                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10">
+                        <i class="fa-solid fa-users text-4xl text-brand-400 mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="50">0</span>k+</div>
+                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-brand-300 transition-colors">Students Managed</div>
+                    </div>
+                </div>
+                
+                <!-- Stat 2: Purple -->
+                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-purple-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10">
+                        <i class="fa-solid fa-building-columns text-4xl text-purple-400 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="120">0</span>+</div>
+                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-purple-300 transition-colors">Institutions</div>
+                    </div>
+                </div>
+                
+                <!-- Stat 3: Emerald -->
+                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-emerald-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10">
+                        <i class="fa-solid fa-server text-4xl text-emerald-400 mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="99.9">0</span>%</div>
+                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-emerald-300 transition-colors">Uptime Guarantee</div>
+                    </div>
+                </div>
+                
+                <!-- Stat 4: Orange -->
+                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-orange-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10">
+                        <i class="fa-solid fa-headset text-4xl text-orange-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(251,146,60,0.5)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="24">0</span>/7</div>
+                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-orange-300 transition-colors">Live Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section id="how-to-use" class="py-32 relative bg-white dark:bg-black transition-colors duration-300 border-t border-gray-100 dark:border-white/5 overflow-hidden">
+        <!-- Ambient animated background -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20">
+            <div class="absolute top-[20%] right-[10%] w-[400px] h-[400px] bg-brand-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen animate-[pulse_10s_infinite]"></div>
+            <div class="absolute bottom-[20%] left-[10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen animate-[pulse_12s_infinite_reverse]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/20 text-brand-600 dark:text-brand-400 font-bold tracking-widest uppercase text-xs mb-6 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Guide
+                </div>
+                <h3 class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white mb-4">See EdFlow in <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600 dark:from-brand-400 dark:to-purple-400">Action</span></h3>
+                <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-medium">Master the platform in minutes. Watch our quick start guide and follow the simple steps to revolutionize your campus management today.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Video Container (Left Side) -->
+                <div class="relative group mx-auto w-full max-w-2xl lg:max-w-none [perspective:1000px]">
+                    <!-- Glowing backplate -->
+                    <div class="absolute -inset-2 bg-gradient-to-r from-brand-600 to-purple-600 rounded-[3rem] blur-xl opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                    
+                    <div class="relative rounded-[2.5rem] bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl p-2 md:p-4 border border-gray-200/50 dark:border-white/10 shadow-2xl overflow-hidden transform group-hover:scale-[1.02] group-hover:-rotate-1 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                        <!-- Mac OS window style bar -->
+                        <div class="h-12 border-b border-gray-100 dark:border-white/5 flex items-center px-5 gap-2 bg-gray-50/50 dark:bg-black/50 mb-3 rounded-t-[2rem]">
+                            <div class="w-3.5 h-3.5 rounded-full bg-rose-400 dark:bg-rose-500/80 shadow-sm"></div>
+                            <div class="w-3.5 h-3.5 rounded-full bg-amber-400 dark:bg-amber-500/80 shadow-sm"></div>
+                            <div class="w-3.5 h-3.5 rounded-full bg-emerald-400 dark:bg-emerald-500/80 shadow-sm"></div>
+                            <div class="ml-4 flex-1 flex justify-center">
+                                <div class="px-5 py-1.5 rounded-full bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 text-[11px] text-gray-500 dark:text-gray-400 font-bold tracking-wider hover:bg-white dark:hover:bg-white/10 transition-colors cursor-default">edflow-demo.mp4</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Video iframe container -->
+                        <div class="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100 dark:bg-black drop-shadow-xl border border-gray-200/50 dark:border-white/5 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-shadow duration-500">
+                            <iframe class="absolute inset-0 w-full h-full object-cover" src="https://www.youtube.com/embed/hxMNYkLN7tI?autoplay=0&controls=1&rel=0&showinfo=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions (Right Side) -->
+                <div class="space-y-8 relative">
+                    <!-- Vertical joining line (desktop only) -->
+                    <div class="hidden lg:block absolute left-[27px] top-8 bottom-8 w-1 h-[calc(100%-4rem)] bg-gradient-to-b from-brand-500/30 via-purple-500/30 to-emerald-500/30 z-0 rounded-full"></div>
+
+                    <!-- Step 1 -->
+                    <div class="relative z-10 flex gap-6 group">
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-14 h-14 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-brand-500 shadow-lg shadow-brand-500/20 flex items-center justify-center font-black text-xl text-brand-600 dark:text-brand-400 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500 overflow-hidden">
+                                <div class="absolute inset-0 bg-brand-500/5 group-hover:bg-brand-500/20 transition-colors"></div>
+                                1
+                            </div>
+                        </div>
+                        <div class="pt-2 group-hover:translate-x-2 transition-transform duration-500">
+                            <h4 class="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Create your account</h4>
+                            <p class="text-gray-600 dark:text-gray-400 font-medium leading-relaxed">Sign up in seconds. Enter your institutional details, role, and set up your secure credentials to join the ecosystem instantly.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative z-10 flex gap-6 group">
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-14 h-14 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-purple-500 shadow-lg shadow-purple-500/20 flex items-center justify-center font-black text-xl text-purple-600 dark:text-purple-400 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 overflow-hidden">
+                                <div class="absolute inset-0 bg-purple-500/5 group-hover:bg-purple-500/20 transition-colors"></div>
+                                2
+                            </div>
+                        </div>
+                        <div class="pt-2 group-hover:translate-x-2 transition-transform duration-500">
+                            <h4 class="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Configure Dashboard</h4>
+                            <p class="text-gray-600 dark:text-gray-400 font-medium leading-relaxed">Personalize your workspace. Set up your classes, subjects, and sync data seamlessly with our smart import tools.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative z-10 flex gap-6 group">
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-14 h-14 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-emerald-500 shadow-lg shadow-emerald-500/20 flex items-center justify-center font-black text-xl text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 overflow-hidden">
+                                <div class="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/20 transition-colors"></div>
+                                3
+                            </div>
+                        </div>
+                        <div class="pt-2 group-hover:translate-x-2 transition-transform duration-500">
+                            <h4 class="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Automate & Manage</h4>
+                            <p class="text-gray-600 dark:text-gray-400 font-medium leading-relaxed">Let EdFlow handle the rest. Track attendance with QR codes, generate fee receipts, and analyze results on auto-pilot.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 pl-[80px]">
+                        <button onclick="toggleRegisterModal()" class="relative group/btn inline-flex items-center justify-center px-8 py-4 font-black text-white bg-gray-900 dark:bg-white dark:text-gray-900 text-sm rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:scale-105 hover:-translate-y-1 group border border-transparent">
+                            <div class="absolute inset-0 bg-gradient-to-r from-brand-600 to-purple-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 dark:hidden"></div>
+                            <span class="relative z-10 flex items-center gap-3 group-hover/btn:text-white dark:group-hover/btn:text-gray-900 transition-colors">Start using EdFlow <i class="fa-solid fa-arrow-right text-xs transform group-hover/btn:translate-x-1 transition-transform"></i></span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-32 relative bg-white dark:bg-black transition-colors duration-300 border-t border-gray-100 dark:border-white/5 overflow-hidden">
+        
+        <!-- Animated Ambient Background -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20">
+            <div class="absolute top-[30%] -left-[10%] w-[500px] h-[500px] bg-brand-500/30 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-[pulse_8s_infinite]"></div>
+            <div class="absolute bottom-[10%] -right-[10%] w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-[pulse_12s_infinite_reverse]"></div>
+        </div>
+
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <!-- Glowing badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/20 text-brand-600 dark:text-brand-400 font-bold tracking-widest uppercase text-xs mb-6 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> FAQ
+                </div>
+                <!-- Colorful gradient title -->
+                <h3 class="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-brand-600 to-gray-900 dark:from-white dark:via-brand-400 dark:to-white sm:text-6xl mb-4 leading-tight">Got questions? <br/>We have answers.</h3>
             </div>
             
-            <div class="space-y-4">
-                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
-                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
-                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">What exactly is EdFlow?</span>
-                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
-                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+            <div class="space-y-6">
+                <!-- FAQ Item 1 -->
+                <div class="group relative bg-white dark:bg-zinc-900/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] hover:border-brand-500/50 dark:hover:border-brand-500/50 shadow-sm hover:shadow-2xl hover:shadow-brand-500/10 transition-all duration-500 overflow-hidden transform hover:-translate-y-1">
+                    <!-- Left colorful accent bar -->
+                    <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-gradient-to-b from-brand-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors text-lg pr-4">What exactly is EdFlow?</span>
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center border border-gray-200 dark:border-white/10 group-hover:bg-brand-500 group-hover:border-brand-500 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300">
+                            <i class="fa-solid fa-chevron-down text-gray-500 dark:text-gray-400 group-hover:text-white transition-transform duration-300 text-sm"></i>
                         </div>
                     </button>
-                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                        <div class="pb-5">
+                    <div class="faq-content px-8 text-gray-600 dark:text-gray-300 text-base font-medium leading-relaxed">
+                        <div class="pb-6 border-t border-gray-100 dark:border-white/5 pt-4 mt-2">
                             EdFlow is an all-in-one cloud-based Smart Campus Management system. It provides dedicated portals for Administrators, Teachers, and Students to manage everything from academic results and attendance to admissions and internal communications securely.
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
-                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
-                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Is our institutional data secure?</span>
-                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
-                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                <!-- FAQ Item 2 -->
+                <div class="group relative bg-white dark:bg-zinc-900/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] hover:border-purple-500/50 dark:hover:border-purple-500/50 shadow-sm hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 overflow-hidden transform hover:-translate-y-1">
+                    <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-gradient-to-b from-purple-400 to-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors text-lg pr-4">Is our institutional data secure?</span>
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center border border-gray-200 dark:border-white/10 group-hover:bg-purple-500 group-hover:border-purple-500 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-300">
+                            <i class="fa-solid fa-chevron-down text-gray-500 dark:text-gray-400 group-hover:text-white transition-transform duration-300 text-sm"></i>
                         </div>
                     </button>
-                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                        <div class="pb-5">
+                    <div class="faq-content px-8 text-gray-600 dark:text-gray-300 text-base font-medium leading-relaxed">
+                        <div class="pb-6 border-t border-gray-100 dark:border-white/5 pt-4 mt-2">
                             Absolutely. EdFlow uses industry-standard encryption protocols. We feature role-based access control (RBAC), meaning a student can never see administrative settings, and a teacher can only modify grades for their assigned subjects. Passwords are automatically generated and securely hashed.
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
-                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
-                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">How does the integrated AI Assistant work?</span>
-                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
-                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                <!-- FAQ Item 3 -->
+                <div class="group relative bg-white dark:bg-zinc-900/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] hover:border-emerald-500/50 dark:hover:border-emerald-500/50 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 overflow-hidden transform hover:-translate-y-1">
+                    <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-gradient-to-b from-emerald-400 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors text-lg pr-4">How does the integrated AI Assistant work?</span>
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center border border-gray-200 dark:border-white/10 group-hover:bg-emerald-500 group-hover:border-emerald-500 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all duration-300">
+                            <i class="fa-solid fa-chevron-down text-gray-500 dark:text-gray-400 group-hover:text-white transition-transform duration-300 text-sm"></i>
                         </div>
                     </button>
-                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                        <div class="pb-5">
+                    <div class="faq-content px-8 text-gray-600 dark:text-gray-300 text-base font-medium leading-relaxed">
+                        <div class="pb-6 border-t border-gray-100 dark:border-white/5 pt-4 mt-2">
                             Our StudyAI feature utilizes the powerful Gemini API. It acts as an on-demand tutor for students to ask academic questions, summarize notes, or prepare for exams. For teachers, it can help draft lesson plans and generate quiz questions instantly inside the portal.
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900 hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-300">
-                    <button class="faq-btn w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none group">
-                        <span class="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Do you support custom integrations?</span>
-                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm">
-                            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform duration-300 text-sm"></i>
+                <!-- FAQ Item 4 -->
+                <div class="group relative bg-white dark:bg-zinc-900/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] hover:border-rose-500/50 dark:hover:border-rose-500/50 shadow-sm hover:shadow-2xl hover:shadow-rose-500/10 transition-all duration-500 overflow-hidden transform hover:-translate-y-1">
+                    <div class="absolute top-0 bottom-0 left-0 w-1.5 bg-gradient-to-b from-rose-400 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors text-lg pr-4">Do you support custom integrations?</span>
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center border border-gray-200 dark:border-white/10 group-hover:bg-rose-500 group-hover:border-rose-500 group-hover:shadow-[0_0_15px_rgba(244,63,94,0.5)] transition-all duration-300">
+                            <i class="fa-solid fa-chevron-down text-gray-500 dark:text-gray-400 group-hover:text-white transition-transform duration-300 text-sm"></i>
                         </div>
                     </button>
-                    <div class="faq-content px-6 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                        <div class="pb-5">
+                    <div class="faq-content px-8 text-gray-600 dark:text-gray-300 text-base font-medium leading-relaxed">
+                        <div class="pb-6 border-t border-gray-100 dark:border-white/5 pt-4 mt-2">
                             Yes! Our admissions portal already seamlessly integrates with Google Sheets CRM so your administration team can review applicant data in real-time without leaving their familiar workflow. We offer additional API webhooks upon request.
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <footer id="contact" class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pt-20 pb-10 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer id="contact" class="relative bg-white dark:bg-black border-t border-gray-200 dark:border-white/5 pt-24 pb-10 transition-colors duration-300 overflow-hidden">
+        
+        <!-- Ambient Footer Glow -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[800px] h-[400px] bg-brand-600/30 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand Profile -->
                 <div class="space-y-6">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white">
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]">
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
-                        <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white">EdFlow<span class="text-brand-600">.</span></span>
+                        <span class="font-black text-2xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">EdFlow<span class="text-brand-500">.</span></span>
                     </div>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                        The all-in-one campus management solution. We help educational institutions streamline operations and focus on delivering quality education.
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium">
+                        The all-in-one cloud campus management solution. Streamlining operations so institutions can focus purely on education.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="https://www.linkedin.com/in/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://github.com/somnath-sen" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://www.instagram.com/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 dark:hover:text-white transition-all transform hover:-translate-y-1"><i class="fa-brands fa-instagram"></i></a>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-500 hover:text-white transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/in/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(37,99,235,0.5)]"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://github.com/somnath-sen" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://www.instagram.com/thesomishere/" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-rose-500 hover:text-white transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(244,63,94,0.5)]"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
 
+                <!-- Product Links -->
                 <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white mb-6">Product</h4>
-                    <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Overview</a></li>
-                        <li><a href="#features" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Features</a></li>
-                        <li><a href="#testimonials" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Testimonials</a></li>
-                        <li><a href="#faq" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a></li>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest text-xs">Product</h4>
+                    <ul class="space-y-4 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-brand-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><a href="#" class="group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Overview</a></li>
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-brand-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><a href="#features" class="group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Features</a></li>
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-brand-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><a href="#testimonials" class="group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Testimonials</a></li>
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-brand-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><a href="#faq" class="group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
+                <!-- Company Links -->
                 <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white mb-6">Company</h4>
-                    <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
-                        <li><button onclick="toggleCustomModal('aboutModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer text-left focus:outline-none">About Us</button></li>
-                        <li><button onclick="toggleCustomModal('careersModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer text-left focus:outline-none">Careers</button></li>
-                        <li><button onclick="toggleCustomModal('contactDetailsModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer text-left focus:outline-none">Contact</button></li>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest text-xs">Company</h4>
+                    <ul class="space-y-4 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-purple-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><button onclick="toggleCustomModal('aboutModal')" class="group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors cursor-pointer text-left focus:outline-none">About Us</button></li>
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-purple-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><button onclick="toggleCustomModal('careersModal')" class="group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors cursor-pointer text-left focus:outline-none">Careers</button></li>
+                        <li class="group flex items-center"><i class="fa-solid fa-arrow-right text-[10px] text-purple-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mr-2"></i><button onclick="toggleCustomModal('contactDetailsModal')" class="group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors cursor-pointer text-left focus:outline-none">Contact</button></li>
                     </ul>
                 </div>
 
+                <!-- Newsletter -->
                 <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white mb-6">Stay Updated</h4>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Subscribe to our newsletter for the latest updates.</p>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest text-xs">Stay Updated</h4>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 font-medium">Subscribe to our newsletter for the latest updates.</p>
                     <form id="newsletterForm" class="space-y-3">
-                        <div class="relative">
-                            <input type="email" id="newsletterEmail" name="email" placeholder="Enter your email" required class="w-full pl-4 pr-10 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white transition-all">
+                        <div class="relative group/input">
+                            <div class="absolute inset-0 bg-gradient-to-r from-brand-500 to-purple-600 rounded-xl blur opacity-20 group-hover/input:opacity-50 transition-opacity duration-500"></div>
+                            <input type="email" id="newsletterEmail" name="email" placeholder="Enter your email" required class="relative w-full pl-5 pr-10 py-3.5 rounded-xl bg-white dark:bg-zinc-900/80 backdrop-blur-sm border border-gray-200 dark:border-white/10 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:text-white transition-all shadow-sm placeholder-gray-400">
                         </div>
-                        <button type="submit" id="subscribeBtn" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-brand-500/30 flex items-center justify-center">
-                            <span>Subscribe</span>
-                            <i class="fa-solid fa-spinner fa-spin ml-2 hidden" id="btnLoader"></i>
+                        <button type="submit" id="subscribeBtn" class="relative group/btn w-full py-3.5 px-4 rounded-xl text-sm font-black transition-all shadow-lg overflow-hidden border border-transparent hover:border-white/20">
+                            <div class="absolute inset-0 bg-gradient-to-r from-brand-600 to-purple-600 group-hover/btn:scale-105 transition-transform duration-500"></div>
+                            <span class="relative z-10 flex items-center justify-center text-white gap-2">
+                                Subscribe <i class="fa-solid fa-paper-plane text-xs"></i>
+                                <i class="fa-solid fa-spinner fa-spin hidden" id="btnLoader"></i>
+                            </span>
                         </button>
                     </form>
                 </div>
             </div>
 
-            <div class="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-sm text-gray-400 text-center md:text-left">&copy; {{ date('Y') }} EdFlow Inc. All rights reserved.</p>
-                <div class="flex space-x-6 text-sm text-gray-500 dark:text-gray-400">
-                    <button onclick="toggleCustomModal('privacyModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors focus:outline-none">Privacy Policy</button>
-                    <button onclick="toggleCustomModal('termsModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors focus:outline-none">Terms of Service</button>
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-200 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 mt-10">
+                <p class="text-sm font-bold text-gray-600 dark:text-gray-400 text-center md:text-left">&copy; {{ date('Y') }} EdFlow Inc. All rights reserved.</p>
+                <div class="flex space-x-6 text-sm font-bold text-gray-600 dark:text-gray-400">
+                    <button onclick="toggleCustomModal('privacyModal')" class="hover:text-brand-600 dark:hover:text-white transition-colors focus:outline-none">Privacy Policy</button>
+                    <button onclick="toggleCustomModal('termsModal')" class="hover:text-brand-600 dark:hover:text-white transition-colors focus:outline-none">Terms of Service</button>
                 </div>
             </div>
 
-            <div class="mt-8 text-center border-t border-gray-100 dark:border-gray-800 pt-8 pb-4">
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
-                    Design & Developed by 
-                    <span class="inline-block animate-pulse text-red-500 mx-1 drop-shadow-md">❤️</span> 
-                    <a href="https://github.com/somnath-sen" target="_blank" class="font-bold bg-gradient-to-r from-brand-600 via-purple-500 to-brand-600 bg-clip-text text-transparent hover:from-brand-500 hover:to-purple-400 transition-all duration-300 animate-text-shimmer bg-[length:200%_auto]">
-                        Somnath Sen
-                    </a>
+            <div class="mt-8 text-center bg-gray-50 dark:bg-white/5 rounded-2xl py-4 border border-gray-200 dark:border-white/10">
+                <p class="text-sm font-bold text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2">
+                    Designed & Developed by 
+                    <span class="inline-block animate-pulse text-rose-500 text-lg drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]"><i class="fa-solid fa-heart"></i></span> 
+                    <a href="https://somnath-sen.github.io/somnathsen/" target="_blank" class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600 dark:from-brand-400 dark:to-purple-400 hover:opacity-80 transition-opacity">Somnath Sen</a>
                 </p>
             </div>
         </div>
@@ -680,15 +902,20 @@
     <div id="loginModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('loginModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
-                <div class="p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
-                        <button onclick="toggleCustomModal('loginModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
-                            <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-md rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('loginModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
                         </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
                     </div>
-                    <p class="text-gray-500 dark:text-gray-400 mb-8">Select your account type to continue.</p>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide">Welcome Back</h2>
+                    <div class="w-16"></div>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-500 dark:text-gray-400 mb-8 text-center text-sm font-medium">Select your account type to continue.</p>
                     
                     <div class="space-y-4">
                         <a href="{{ route('login') }}?type=student" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-gray-700 transition-all group">
@@ -724,15 +951,20 @@
     <div id="registerModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('registerModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
-                <div class="p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Join EdFlow</h2>
-                        <button onclick="toggleCustomModal('registerModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
-                            <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-md rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('registerModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
                         </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
                     </div>
-                    <p class="text-gray-500 dark:text-gray-400 mb-8">Select your application type to submit a registration request.</p>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide">Join EdFlow</h2>
+                    <div class="w-16"></div>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-500 dark:text-gray-400 mb-8 text-center text-sm font-medium">Select your application type to submit a registration request.</p>
                     
                     <div class="space-y-4">
                         <a href="/register/student" class="flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-gray-700 transition-all group">
@@ -760,18 +992,23 @@
     <div id="aboutModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('aboutModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-lg rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('aboutModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
+                        </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
+                    </div>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide flex items-center gap-2"><i class="fa-solid fa-building text-brand-500"></i> About EdFlow</h2>
+                    <div class="w-16"></div>
+                </div>
                 <div class="p-8">
-                    <div class="flex justify-between items-center mb-6">
+                    <div class="flex justify-center items-center mb-6 hidden">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-building text-lg"></i>
-                            </div>
                             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">About EdFlow</h2>
                         </div>
-                        <button onclick="toggleCustomModal('aboutModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
-                            <i class="fa-solid fa-xmark text-xl"></i>
-                        </button>
                     </div>
                     <div class="space-y-5">
                         <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
@@ -797,20 +1034,20 @@
     <div id="careersModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('careersModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
-                <div class="p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-briefcase text-lg"></i>
-                            </div>
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Join Our Team</h2>
-                        </div>
-                        <button onclick="toggleCustomModal('careersModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
-                            <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-lg rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('careersModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
                         </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
                     </div>
-                    <p class="text-gray-500 dark:text-gray-400 mb-6 text-sm">We are always looking for passionate individuals to build the future of education technology.</p>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide flex items-center gap-2"><i class="fa-solid fa-briefcase text-purple-500"></i> Join Our Team</h2>
+                    <div class="w-16"></div>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-500 dark:text-gray-400 mb-6 text-center text-sm font-medium">We are always looking for passionate individuals to build the future of education technology.</p>
                     
                     <div class="space-y-3">
                         <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-50 transition-colors group cursor-not-allowed opacity-80">
@@ -844,14 +1081,19 @@
     <div id="contactDetailsModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('contactDetailsModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto">
-                <div class="p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Get in Touch</h2>
-                        <button onclick="toggleCustomModal('contactDetailsModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
-                            <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-md rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('contactDetailsModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
                         </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
                     </div>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide">Get in Touch</h2>
+                    <div class="w-16"></div>
+                </div>
+                <div class="p-8">
                     
                     <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 mb-6">
                         <div class="flex items-center gap-4 mb-6">
@@ -896,17 +1138,17 @@
     <div id="privacyModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('privacyModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto flex flex-col max-h-[85vh]">
-                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center">
-                            <i class="fa-solid fa-shield-halved text-lg"></i>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Privacy Policy</h2>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-2xl rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col max-h-[85vh]">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('privacyModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
+                        </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
                     </div>
-                    <button onclick="toggleCustomModal('privacyModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-500"></i> Privacy Policy</h2>
+                    <div class="w-16"></div>
                 </div>
                 <div class="p-8 overflow-y-auto custom-scroll flex-1">
                     <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 space-y-5">
@@ -926,8 +1168,8 @@
                         <p>Certain features utilize third-party APIs (such as Google Sheets for registrations or Google Gemini for StudyAI). Data shared with these services is strictly limited to the function requested.</p>
                     </div>
                 </div>
-                <div class="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-right">
-                    <button onclick="toggleCustomModal('privacyModal')" class="px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-semibold transition-colors shadow-sm">I Understand</button>
+                <div class="px-6 py-4 border-t border-gray-200/50 dark:border-white/10 bg-white/40 dark:bg-white/5 text-right flex justify-end">
+                    <button onclick="toggleCustomModal('privacyModal')" class="px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] focus:outline-none border border-transparent">I Understand</button>
                 </div>
             </div>
         </div>
@@ -936,17 +1178,17 @@
     <div id="termsModal" class="fixed inset-0 z-[100] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="toggleCustomModal('termsModal')"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 border border-gray-100 dark:border-gray-700 pointer-events-auto flex flex-col max-h-[85vh]">
-                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center">
-                            <i class="fa-solid fa-file-contract text-lg"></i>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Terms of Service</h2>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl w-full max-w-2xl rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all scale-100 border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col max-h-[85vh]">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="toggleCustomModal('termsModal')" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
+                        </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
                     </div>
-                    <button onclick="toggleCustomModal('termsModal')" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide flex items-center gap-2"><i class="fa-solid fa-file-contract text-purple-500"></i> Terms of Service</h2>
+                    <div class="w-16"></div>
                 </div>
                 <div class="p-8 overflow-y-auto custom-scroll flex-1">
                     <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 space-y-5">
@@ -966,8 +1208,8 @@
                         <p>Administrators reserve the right to suspend or terminate access to any user account that violates these terms or poses a security risk to the institution.</p>
                     </div>
                 </div>
-                <div class="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-right">
-                    <button onclick="toggleCustomModal('termsModal')" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors shadow-sm">Accept Terms</button>
+                <div class="px-6 py-4 border-t border-gray-200/50 dark:border-white/10 bg-white/40 dark:bg-white/5 text-right flex justify-end">
+                    <button onclick="toggleCustomModal('termsModal')" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-[0_4px_14px_0_rgba(168,85,247,0.39)] focus:outline-none border border-transparent">Accept Terms</button>
                 </div>
             </div>
         </div>
@@ -976,15 +1218,28 @@
     <div id="successModal" class="fixed inset-0 z-[110] hidden custom-modal">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4 pointer-events-none">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center transform scale-90 animate-scale-in border border-green-100 dark:border-green-900 pointer-events-auto">
-                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-check text-2xl text-green-600 dark:text-green-400"></i>
+            <div class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-3xl rounded-[20px] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] max-w-sm w-full transform scale-90 animate-scale-in border border-white/50 dark:border-white/10 pointer-events-auto flex flex-col overflow-hidden">
+                <div class="flex items-center justify-between px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
+                    <div class="flex items-center gap-2 w-16">
+                        <button onclick="closeSuccessModal()" class="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 flex items-center justify-center group focus:outline-none transition-colors border border-black/10">
+                            <i class="fa-solid fa-xmark text-[6px] text-[#4d0000] opacity-0 group-hover:opacity-100"></i>
+                        </button>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10"></div>
+                    </div>
+                    <h2 class="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-wide">Success</h2>
+                    <div class="w-16"></div>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Successfully Subscribed!</h3>
-                <p class="text-gray-500 dark:text-gray-400 mb-6 text-sm">Thank you for joining our newsletter. We'll keep you updated.</p>
-                <button onclick="closeSuccessModal()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-semibold transition-colors">
-                    Awesome
-                </button>
+                <div class="p-8 text-center pt-6">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-200/50 dark:border-green-800">
+                        <i class="fa-solid fa-check text-2xl text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Successfully Subscribed!</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mb-6 text-[13px] leading-relaxed">Thank you for joining our newsletter. We'll keep you updated.</p>
+                    <button onclick="closeSuccessModal()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm focus:outline-none">
+                        Awesome
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1236,6 +1491,139 @@
             }
         });
 
+        // Role Auth Loader Logic
+        function handleRoleLogin(e, roleName, url, themeContext) {
+            e.preventDefault();
+            
+            // Close login modal if open
+            const loginModal = document.getElementById('loginModal');
+            if(loginModal && !loginModal.classList.contains('hidden')) {
+                toggleCustomModal('loginModal');
+            }
+            
+            // Setup Loader UI based on Role
+            const loader = document.getElementById('role-auth-loader');
+            const ringInner = document.getElementById('role-ring-inner');
+            const iconContainer = document.getElementById('role-icon-container');
+            const icon = document.getElementById('role-icon');
+            const title = document.getElementById('role-auth-title');
+            const progress = document.getElementById('role-progress');
+            
+            title.innerText = `Authenticating ${roleName}`;
+            
+            // Re-apply classes dynamically based on the role to change themes
+            if (themeContext === 'student') {
+                ringInner.className = 'absolute inset-0 rounded-full border-t-4 border-brand-500 animate-[spin_1s_cubic-bezier(0.8,_0,_0.2,_1)_infinite]';
+                iconContainer.className = 'w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl transition-colors duration-300 bg-brand-600 shadow-brand-500/30';
+                icon.className = 'fa-solid fa-graduation-cap text-2xl text-white animate-pulse';
+                progress.className = 'h-full bg-brand-500 w-0 transition-all duration-[1500ms] ease-out rounded-full';
+            } else if (themeContext === 'teacher') {
+                ringInner.className = 'absolute inset-0 rounded-full border-t-4 border-purple-500 animate-[spin_1s_cubic-bezier(0.8,_0,_0.2,_1)_infinite]';
+                iconContainer.className = 'w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl transition-colors duration-300 bg-purple-600 shadow-purple-500/30';
+                icon.className = 'fa-solid fa-chalkboard-user text-2xl text-white animate-pulse';
+                progress.className = 'h-full bg-purple-500 w-0 transition-all duration-[1500ms] ease-out rounded-full';
+            } else if (themeContext === 'admin') {
+                ringInner.className = 'absolute inset-0 rounded-full border-t-4 border-gray-900 dark:border-white animate-[spin_1s_cubic-bezier(0.8,_0,_0.2,_1)_infinite]';
+                iconContainer.className = 'w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl transition-colors duration-300 bg-gray-900 dark:bg-gray-100 shadow-gray-900/30 dark:shadow-white/20';
+                icon.className = 'fa-solid fa-shield-halved text-2xl text-white dark:text-gray-900 animate-pulse';
+                progress.className = 'h-full bg-gray-900 dark:bg-white w-0 transition-all duration-[1500ms] ease-out rounded-full';
+            }
+            
+            // Reset Progress bar
+            progress.style.width = '0%';
+            
+            // Show Loader Overlay
+            loader.classList.remove('hidden');
+            
+            // Trigger animation frame for opacity transition
+            requestAnimationFrame(() => {
+                loader.classList.remove('opacity-0', 'pointer-events-none');
+                loader.classList.add('opacity-100');
+                
+                // Animate progress bar across screen
+                setTimeout(() => {
+                    progress.style.width = '100%';
+                }, 100);
+            });
+            
+            // Redirect after simulating a brief authentication delay
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1500);
+        }
+
+        // Testimonial Card Shuffle Logic
+        function initCardShuffle() {
+            const cards = document.querySelectorAll('.shuffle-card');
+            if(cards.length > 0) {
+                let activeIndex = 0;
+                
+                function updateCards() {
+                    cards.forEach((card, index) => {
+                        let offset = index - activeIndex;
+                        if (offset < 0) offset += cards.length;
+                        
+                        // Apply CSS transforms for the 3D stack effect
+                        if (offset === 0) { // Active Front Card
+                            card.style.transform = 'translateY(0px) scale(1) translateZ(0px)';
+                            card.style.opacity = '1';
+                            card.style.zIndex = '30';
+                            card.style.filter = 'blur(0px)';
+                        } else if (offset === 1) { // 1st behind
+                            card.style.transform = 'translateY(24px) scale(0.95) translateZ(-50px)';
+                            card.style.opacity = '0.7';
+                            card.style.zIndex = '20';
+                            card.style.filter = 'blur(1px)';
+                        } else if (offset === 2) { // 2nd behind
+                            card.style.transform = 'translateY(48px) scale(0.90) translateZ(-100px)';
+                            card.style.opacity = '0.4';
+                            card.style.zIndex = '10';
+                            card.style.filter = 'blur(2px)';
+                        } else { // Hidden
+                            card.style.transform = 'translateY(72px) scale(0.85) translateZ(-150px)';
+                            card.style.opacity = '0';
+                            card.style.zIndex = '0';
+                            card.style.filter = 'blur(4px)';
+                        }
+                    });
+                }
+                
+                updateCards();
+                
+                // Automatically shuffle every 4 seconds
+                setInterval(() => {
+                    activeIndex = (activeIndex + 1) % cards.length;
+                    updateCards();
+                }, 4000);
+            }
+        }
+        
+        // Initialize
+        initCardShuffle();
+
     </script>
+    <!-- Role Auth Loader Overlay -->
+    <div id="role-auth-loader" class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-white/95 dark:bg-black/95 backdrop-blur-2xl transition-all duration-500 ease-in-out opacity-0 pointer-events-none hidden">
+        <div class="relative flex items-center justify-center w-28 h-28 mb-8">
+            <!-- Pulsing outer ring -->
+            <div class="absolute inset-0 rounded-full border-4 border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5"></div>
+            <!-- Dynamic Spinning inner ring -->
+            <div id="role-ring-inner" class="absolute inset-0 rounded-full border-t-4 border-brand-500 animate-[spin_1s_cubic-bezier(0.8,_0,_0.2,_1)_infinite]"></div>
+            
+            <!-- Dynamic Center Icon Container -->
+            <div id="role-icon-container" class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transition-colors duration-300 relative z-10">
+                <i id="role-icon" class="fa-solid fa-user text-3xl text-white"></i>
+            </div>
+        </div>
+        
+        <h3 id="role-auth-title" class="text-2xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">Authenticating</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 font-medium animate-pulse">Establishing secure connection...</p>
+        
+        <!-- Progress bar -->
+        <div class="mt-10 w-64 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="role-progress" class="h-full bg-brand-500 w-0 transition-all duration-[1500ms] ease-out rounded-full"></div>
+        </div>
+    </div>
+
 </body>
 </html>
