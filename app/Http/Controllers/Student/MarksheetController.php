@@ -19,7 +19,7 @@ class MarksheetController extends Controller
 
         $marks = Mark::with('subject')
             ->where('student_id', $student->id)
-            ->where('is_published', true)
+            ->where('is_locked', true)
             ->get();
 
         return view('student.marksheet.show', compact('student', 'marks'));
@@ -33,20 +33,20 @@ class MarksheetController extends Controller
             abort(403, 'Student profile not found.');
         }
 
-        $isPublished = \App\Models\Mark::where('student_id', $student->id)
-        ->where('is_published', true)
-        ->exists();
+        $hasMarks = Mark::where('student_id', $student->id)
+            ->where('is_locked', true)
+            ->exists();
 
-        if (! $isPublished) {
+        if (! $hasMarks) {
             return redirect()
                 ->route('student.marksheet')
                 ->with('error', 'Sorry, your result has not been published yet.');
         }
 
-        $marks = \App\Models\Mark::where('student_id', $student->id)
-        ->where('is_published', true)
-        ->with('subject')
-        ->get();
+        $marks = Mark::where('student_id', $student->id)
+            ->where('is_locked', true)
+            ->with('subject')
+            ->get();
 
         $pdf = Pdf::loadView('student.marksheet.pdf', compact('student', 'marks'))
             ->setPaper('A4');

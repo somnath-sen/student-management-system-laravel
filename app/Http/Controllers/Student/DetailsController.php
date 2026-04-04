@@ -9,21 +9,23 @@ class DetailsController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('gamificationStat');
         $student = $user->student;
 
         if (! $student) {
             abort(403, 'Student profile not found.');
         }
 
-        $course = $student->course;
+        $course  = $student->course;
         $subjects = $course ? $course->subjects : collect();
+        $gamification = $user->gamificationStat;
 
         return view('student.details', compact(
             'user',
             'student',
             'course',
-            'subjects'
+            'subjects',
+            'gamification'
         ));
     }
 }

@@ -3,43 +3,48 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Mark;
 use App\Models\Subject;
 
 class ResultPublishController extends Controller
 {
     /**
-     * Show locked subjects for publishing
+     * Show all courses that have marks entered
      */
     public function index()
     {
-        $subjects = Subject::whereHas('marks', function ($q) {
-            $q->where('is_locked', true);
-        })->with(['course'])->get();
+        $courses = Course::whereHas('subjects.marks')->with([
+            'subjects' => fn($q) => $q->whereHas('marks'),
+            'subjects.marks',
+        ])->get();
 
-        return view('admin.results.index', compact('subjects'));
+        return view('admin.results.index', compact('courses'));
     }
 
     /**
-     * Publish result
+     * Publish all marks for every subject in a course
      */
-    public function publish(Subject $subject)
+    public function publish(Course $course)
     {
-        Mark::where('subject_id', $subject->id)
-            ->where('is_locked', true)
-            ->update(['is_published' => true]);
+        $subjectIds = Subject::where('course_id', $course->id)->pluck('id');
 
-        return back()->with('success', 'Result published successfully.');
+        Mark::whereIn('subject_id', $subjectIds)
+            ->update(['is_locked' => true]);
+
+        return back()->with('success', "Results for \"{$course->name}\" published successfully.");
     }
 
     /**
-     * Unpublish result
+     * Unpublish all marks for every subject in a course
      */
-    public function unpublish(Subject $subject)
+    public function unpublish(Course $course)
     {
-        Mark::where('subject_id', $subject->id)
-            ->update(['is_published' => false]);
+        $subjectIds = Subject::where('course_id', $course->id)->pluck('id');
 
-        return back()->with('success', 'Result unpublished successfully.');
+        Mark::whereIn('subject_id', $subjectIds)
+            ->update(['is_locked' => false]);
+
+        return back()->with('success', "Results for \"{$course->name}\" unpublished successfully.");
     }
 }

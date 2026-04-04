@@ -51,24 +51,42 @@
 
 <body class="text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ sidebarOpen: false }">
 
-    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-[#FDFBF7] flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
-        <div class="relative w-32 h-32 flex items-center justify-center mb-4">
-            <div class="absolute inset-0 border-4 border-transparent border-t-indigo-600 border-r-indigo-600 rounded-full animate-spin shadow-[0_0_15px_rgba(79,70,229,0.4)]"></div>
-            <div class="absolute inset-2 border-4 border-transparent border-l-purple-600 border-b-purple-600 rounded-full animate-[spin_1.5s_linear_infinite_reverse] shadow-[0_0_15px_rgba(147,51,234,0.4)]"></div>
-            
-            <div class="relative w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center border border-slate-200 animate-pulse">
-                <i class="fa-solid fa-graduation-cap text-3xl text-indigo-600"></i>
+    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-[#FDFBF7] flex flex-col items-center justify-center transition-all duration-700 ease-in-out overflow-hidden">
+        <!-- Floating Animated Background Orbs for Premium Vibe -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center">
+            <div class="absolute w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[80px] animate-[pulse_4s_ease-in-out_infinite]"></div>
+            <div class="absolute w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[80px] animate-[pulse_3s_ease-in-out_infinite_reverse] translate-x-32"></div>
+        </div>
+
+        <div class="relative z-10 flex flex-col items-center">
+            <!-- Sleek Glassmorphic Icon Container -->
+            <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
+                <!-- Inner Shield Icon with Glass Effect -->
+                <div class="relative z-10 w-16 h-16 bg-white/70 backdrop-blur-2xl border border-white shadow-xl rounded-2xl flex items-center justify-center group">
+                    <i class="fa-solid fa-shield-halved text-2xl bg-clip-text text-transparent bg-gradient-to-br from-indigo-600 to-purple-600 drop-shadow-sm group-hover:scale-110 transition-transform duration-500"></i>
+                </div>
+                
+                <!-- Rotating Loading Ring -->
+                <div class="absolute inset-0 rounded-[28px] border-2 border-transparent border-t-indigo-500 border-r-purple-500 animate-[spin_1.5s_cubic-bezier(0.68,-0.55,0.265,1.55)_infinite]"></div>
+                <!-- Second Reverse Ring -->
+                <div class="absolute inset-[-6px] rounded-[32px] border-2 border-transparent border-b-purple-500 border-l-indigo-500 animate-[spin_1.5s_cubic-bezier(0.68,-0.55,0.265,1.55)_infinite_reverse] opacity-60"></div>
+            </div>
+
+            <!-- Typography & Loading Dots -->
+            <div class="flex flex-col items-center gap-3">
+                <h2 class="text-xs font-black tracking-[0.4em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">
+                    EduAdmin
+                </h2>
+                <div class="flex items-center gap-2 px-5 py-2 bg-white/50 border border-white/80 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.03)] backdrop-blur-lg">
+                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase ml-1 relative top-[1px]">Authenticating</span>
+                    <span class="flex gap-1.5 items-center h-full">
+                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(99,102,241,0.6)]" style="animation-delay: 0ms;"></span>
+                        <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(168,85,247,0.6)]" style="animation-delay: 150ms;"></span>
+                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(99,102,241,0.6)]" style="animation-delay: 300ms;"></span>
+                    </span>
+                </div>
             </div>
         </div>
-        
-        <h2 class="text-xs font-black tracking-[0.3em] text-slate-500 uppercase flex items-center gap-2">
-            Administrator Portal 
-            <span class="flex gap-1">
-                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
-                <span class="w-1.5 h-1.5 bg-purple-600 rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
-                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
-            </span>
-        </h2>
     </div>
 
     <div class="flex h-screen overflow-hidden">

@@ -5,7 +5,9 @@
 @section('content')
 
 @php
-    $publishedMarks = $marks->where('is_published', true);
+    // The controller already filters marks by is_locked = true (published)
+    // is_locked = true means the result has been published by admin
+    $publishedMarks = $marks; // all marks passed in are already published
     $hasPublished = $publishedMarks->count() > 0;
     
     $totalMax = $publishedMarks->sum('total_marks');

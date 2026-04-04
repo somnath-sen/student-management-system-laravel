@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class FeePayment extends Model
 {
+    use HasFactory;
     protected $fillable = ['fee_id', 'user_id', 'amount_paid', 'payment_method', 'transaction_id', 'receipt_path', 'status'];
 
     public function fee()

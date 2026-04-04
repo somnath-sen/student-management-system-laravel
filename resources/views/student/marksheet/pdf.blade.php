@@ -37,7 +37,8 @@
 <body>
 
 @php
-    $publishedMarks = $marks->where('is_published', true);
+    // Controller already filters by is_locked = true before rendering this PDF
+    $publishedMarks = $marks;
     
     // ✅ FIXED: Using an anonymous function prevents PDF rendering crashes
     $getLetter = function($percent) {

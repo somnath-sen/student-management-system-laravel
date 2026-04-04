@@ -128,10 +128,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/applicants/students', [ApplicantController::class, 'students'])->name('admin.applicants.students');
     Route::get('/admin/applicants/teachers', [ApplicantController::class, 'teachers'])->name('admin.applicants.teachers');
 
-    // Result publish
+    // Result publish (Course-wise)
     Route::get('/admin/results', [ResultPublishController::class, 'index'])->name('admin.results.index');
-    Route::post('/admin/results/{subject}/publish', [ResultPublishController::class, 'publish'])->name('admin.results.publish');
-    Route::post('/admin/results/{subject}/unpublish', [ResultPublishController::class, 'unpublish'])->name('admin.results.unpublish');
+    Route::post('/admin/results/{course}/publish', [ResultPublishController::class, 'publish'])->name('admin.results.publish');
+    Route::post('/admin/results/{course}/unpublish', [ResultPublishController::class, 'unpublish'])->name('admin.results.unpublish');
 
     /* Analytics */
     Route::get('/admin/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
