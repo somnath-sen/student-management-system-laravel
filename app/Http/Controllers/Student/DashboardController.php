@@ -24,6 +24,36 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Gamification & Streaks
+        |--------------------------------------------------------------------------
+        */
+        $stats = $user->gamificationStat()->firstOrCreate(
+            ['user_id' => $user->id],
+            ['total_points' => 0, 'level' => 1, 'current_streak' => 0]
+        );
+
+        $today = \Carbon\Carbon::today();
+        $yesterday = \Carbon\Carbon::yesterday();
+
+        if (!$stats->last_login_date) {
+            $stats->current_streak = 1;
+        } else {
+            $lastLogin = \Carbon\Carbon::parse($stats->last_login_date);
+            
+            if ($lastLogin->equalTo($yesterday)) {
+                $stats->current_streak += 1;
+            } elseif (!$lastLogin->equalTo($today)) {
+                $stats->current_streak = 1;
+            }
+        }
+        
+        $stats->last_login_date = $today;
+        $stats->save();
+
+        $badges = $user->badges()->latest()->get();
+
+        /*
+        |--------------------------------------------------------------------------
         | Course & Subjects
         |--------------------------------------------------------------------------
         */
@@ -91,7 +121,9 @@ class DashboardController extends Controller
             'absentCount',
             'attendancePercentage',
             'subjectAttendance',
-            'notices' // ✅ Added notices to the view
+            'notices',
+            'stats',
+            'badges'
         ));
     }
     // Add this new method

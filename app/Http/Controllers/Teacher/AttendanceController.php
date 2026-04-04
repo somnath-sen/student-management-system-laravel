@@ -62,7 +62,7 @@ class AttendanceController extends Controller
         }
 
         foreach ($request->attendance as $studentId => $present) {
-            Attendance::updateOrCreate(
+            $attendance = Attendance::updateOrCreate(
                 [
                     'student_id' => $studentId,
                     'subject_id' => $request->subject_id,
@@ -73,6 +73,18 @@ class AttendanceController extends Controller
                     'present'    => $present,
                 ]
             );
+
+            // Award XP if marked present
+            if ($present) {
+                $student = Student::find($studentId);
+                if ($student && $student->user) {
+                    $student->user->addXP(
+                        50, 
+                        'Perfect Attendance', 
+                        "Earned 50 XP for attending class on " . $request->date . "!"
+                    );
+                }
+            }
         }
 
         // ✅ UX Improvement: Redirect back to the exact same class and date so they can verify it saved!

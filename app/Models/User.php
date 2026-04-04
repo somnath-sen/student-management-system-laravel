@@ -41,7 +41,6 @@ class User extends Authenticatable
 
     /**
      * User → Role relationship
-     * (Admin / Teacher / Student)
      */
     public function role()
     {
@@ -62,5 +61,84 @@ class User extends Authenticatable
     public function teacher()
     {
         return $this->hasOne(Teacher::class);
+    }
+
+    /**
+     * Gamification Relationships
+     */
+    public function gamificationStat()
+    {
+        return $this->hasOne(GamificationStat::class);
+    }
+
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class);
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Gamification Engine
+     */
+    public function addXP($amount, $title, $description, $type = 'XP')
+    {
+        $stats = $this->gamificationStat()->firstOrCreate(
+            ['user_id' => $this->id],
+            [
+                'total_points' => 0,
+                'level' => 1,
+                'current_streak' => 0,
+                'last_login_date' => null
+            ]
+        );
+
+        $stats->total_points += $amount;
+        
+        // Every 1000 XP = 1 Level
+        $newLevel = floor($stats->total_points / 1000) + 1;
+        if ($newLevel > $stats->level) {
+            $stats->level = $newLevel;
+            // You could log a level up activity here too if you want!
+        }
+        
+        $stats->save();
+
+        // Save activity log
+        $this->activityLogs()->create([
+            'type' => $type,
+            'title' => $title,
+            'description' => $description,
+            'points_awarded' => $amount,
+        ]);
+
+        $this->checkBadgeUnlocks();
+    }
+
+    public function checkBadgeUnlocks()
+    {
+        $stats = $this->gamificationStat;
+        if (!$stats) return;
+
+        $unlockedBadgeIds = $this->badges()->pluck('badges.id')->toArray();
+
+        $availableBadges = Badge::whereNotIn('id', $unlockedBadgeIds)
+            ->where('points_required', '<=', $stats->total_points)
+            ->get();
+
+        foreach ($availableBadges as $badge) {
+            $this->badges()->attach($badge->id);
+            
+            // Log the badge unlock
+            $this->activityLogs()->create([
+                'type' => 'Badge',
+                'title' => "Unlocked: {$badge->name}",
+                'description' => "Congratulations! You've earned the {$badge->name} badge.",
+                'points_awarded' => 0,
+            ]);
+        }
     }
 }
