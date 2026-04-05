@@ -176,9 +176,9 @@
                         Register
                     </button>
 
-                    <button onclick="toggleCustomModal('loginModal')" class="px-6 py-2 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                    <a href="/login" class="px-6 py-2 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 inline-block">
                         Log In
-                    </button>
+                    </a>
                 </div>
 
                 <div class="md:hidden flex items-center gap-4">
@@ -228,12 +228,12 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <span class="relative z-10">Create Account</span>
                 </button>
-                <button onclick="toggleCustomModal('loginModal'); toggleMobileMenu();" class="relative group w-full py-4 rounded-2xl text-white font-black text-lg transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] overflow-hidden">
+                <a href="/login" class="relative block text-center group w-full py-4 rounded-2xl text-white font-black text-lg transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-r from-brand-600 to-purple-600 group-hover:scale-105 transition-transform duration-500"></div>
                     <span class="relative z-10 flex items-center justify-center gap-2">
                         Log In <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
                     </span>
-                </button>
+                </a>
                 
                 <div class="mt-8 flex items-center justify-center gap-6 text-2xl text-gray-400">
                     <a href="https://www.facebook.com/thesomishere/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>

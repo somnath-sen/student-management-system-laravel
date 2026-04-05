@@ -94,9 +94,8 @@
                 <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
 
                 <form id="studentForm" class="p-8 space-y-8">
+                    @csrf
                     <input type="hidden" name="type" value="Students">
-
-                    <div>
                         <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200/60 pb-2 mb-4">Personal Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -112,6 +111,10 @@
                                 <input type="tel" name="phone" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white/50 transition-all outline-none shadow-sm">
                             </div>
                             <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Roll Number <span class="text-slate-400 font-normal">(Optional)</span></label>
+                                <input type="text" name="roll" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white/50 transition-all outline-none shadow-sm placeholder-slate-300" placeholder="e.g. 2023-CSE-001">
+                            </div>
+                            <div class="md:col-span-2">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Desired Course <span class="text-rose-500">*</span></label>
                                 <select name="course" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white/50 transition-all outline-none shadow-sm cursor-pointer text-sm">
                                     <option value="" disabled selected>Select a program...</option>
@@ -158,20 +161,16 @@
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200/60 pb-2 mb-4">Required Documents</h3>
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200/60 pb-2 mb-4">Parent / Guardian Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="border-2 border-dashed border-slate-300 bg-white/40 rounded-xl p-6 text-center hover:bg-indigo-50/50 hover:border-indigo-300 transition-colors shadow-sm group">
-                                <i class="fa-solid fa-camera text-3xl text-slate-300 group-hover:text-indigo-400 transition-colors mb-3"></i>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">Passport Size Photo <span class="text-rose-500">*</span></label>
-                                <p class="text-xs font-bold text-rose-500 bg-rose-50 inline-block px-2 py-1 rounded mb-3 border border-rose-100">Max Size: 500KB (JPG/PNG)</p>
-                                <input type="file" id="photoFile" accept="image/*" required class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Parent's Full Name <span class="text-rose-500">*</span></label>
+                                <input type="text" name="parent_name" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white/50 transition-all outline-none shadow-sm">
                             </div>
                             
-                            <div class="border-2 border-dashed border-slate-300 bg-white/40 rounded-xl p-6 text-center hover:bg-purple-50/50 hover:border-purple-300 transition-colors shadow-sm group">
-                                <i class="fa-solid fa-signature text-3xl text-slate-300 group-hover:text-purple-400 transition-colors mb-3"></i>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">Digital Signature <span class="text-rose-500">*</span></label>
-                                <p class="text-xs font-bold text-rose-500 bg-rose-50 inline-block px-2 py-1 rounded mb-3 border border-rose-100">Max Size: 500KB (JPG/PNG)</p>
-                                <input type="file" id="signFile" accept="image/*" required class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Parent's Email Address <span class="text-rose-500">*</span></label>
+                                <input type="email" name="parent_email" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white/50 transition-all outline-none shadow-sm">
                             </div>
                         </div>
                     </div>
@@ -210,8 +209,7 @@
     </div>
 
     <script>
-        // SECURE: Fetching the hidden URL from your .env / config files!
-        const scriptURL = "{{ config('services.google.script_url') }}"; 
+        const scriptURL = "{{ route('register.student.store') }}"; 
         
         const form = document.getElementById("studentForm");
         const submitBtn = document.getElementById("submitBtn");
@@ -219,57 +217,39 @@
         const btnLoader = document.getElementById("btnLoader");
         const successMessage = document.getElementById("successMessage");
 
-        const MAX_FILE_SIZE = 500 * 1024; // 500KB in bytes
-
-        const getBase64 = (file) => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve({ data: reader.result.split(',')[1], mimeType: file.type });
-            reader.onerror = error => reject(error);
-        });
-
         form.addEventListener("submit", async function(e) {
             e.preventDefault();
-            
-            const photoFile = document.getElementById("photoFile").files[0];
-            const signFile = document.getElementById("signFile").files[0];
-
-            if (photoFile && photoFile.size > MAX_FILE_SIZE) {
-                alert("Error: Passport photo exceeds the 500KB limit. Please compress your image and try again.");
-                return;
-            }
-            if (signFile && signFile.size > MAX_FILE_SIZE) {
-                alert("Error: Digital signature exceeds the 500KB limit. Please compress your image and try again.");
-                return;
-            }
 
             submitBtn.disabled = true;
             submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-            btnText.innerText = "Processing Files & Uploading...";
+            btnText.innerText = "Submitting Application...";
             btnLoader.classList.remove('hidden');
 
             try {
                 let formData = new FormData(this);
 
-                if (photoFile) {
-                    const photoData = await getBase64(photoFile);
-                    formData.append("photoData", photoData.data);
-                    formData.append("photoMime", photoData.mimeType);
-                }
-                if (signFile) {
-                    const signData = await getBase64(signFile);
-                    formData.append("signData", signData.data);
-                    formData.append("signMime", signData.mimeType);
-                }
-
-                const response = await fetch(scriptURL, { method: "POST", body: formData });
+                const response = await fetch(scriptURL, { 
+                    method: "POST", 
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    }
+                });
                 
-                if(response.ok) {
+                const result = await response.json();
+                
+                if(response.ok && result.success) {
                     form.classList.add('hidden');
                     successMessage.classList.remove('hidden');
                     window.scrollTo({ top: 0, behavior: 'smooth' }); 
                 } else {
-                    throw new Error("Network response was not ok.");
+                    let errorMessage = result.message || "An error occurred during submission.";
+                    if (result.errors) {
+                        const firstError = Object.values(result.errors)[0][0];
+                        errorMessage = firstError;
+                    }
+                    alert("Error: " + errorMessage);
                 }
             } catch (error) {
                 alert("Something went wrong. Please check your internet connection and try again.");

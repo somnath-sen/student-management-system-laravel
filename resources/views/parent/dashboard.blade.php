@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>EdFlow | Parent Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+        }
+        .text-gradient-emerald {
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .blur-blob {
+            position: absolute; border-radius: 50%; filter: blur(100px); z-index: -1; animation: pulseBlob 8s infinite alternate;
+        }
+        @keyframes pulseBlob {
+            0% { transform: scale(1) translateY(0); opacity: 0.3; }
+            100% { transform: scale(1.1) translateY(-20px); opacity: 0.5; }
+        }
+        @keyframes sosFlash {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.005); }
+        }
+        .sos-banner { animation: sosFlash 1.5s ease-in-out infinite; }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="antialiased text-gray-800 relative overflow-x-hidden min-h-screen flex flex-col">
+
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-[-1]">
+        <div class="blur-blob bg-emerald-300 w-[500px] h-[500px] top-[-200px] left-[-100px]"></div>
+        <div class="blur-blob bg-blue-200 w-[600px] h-[600px] bottom-[-200px] right-[-100px]" style="animation-delay: 2s; animation-direction: alternate-reverse;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass-card sticky top-0 z-50 border-b border-gray-100/50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span class="text-xl font-black tracking-tight text-gray-900">EdFlow<span class="text-emerald-500">.</span></span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <span class="text-sm font-bold text-gray-600 hidden md:block">Role: <span class="text-emerald-500">Parent Explorer</span></span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="px-5 py-2.5 rounded-full bg-gray-900 text-white text-sm font-bold hover:bg-gray-800 transition-all hover:scale-105 shadow-md flex items-center gap-2">
+                        <span>Sign Out</span> <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 w-full">
+
+        {{-- ════════════ GLOBAL SOS EMERGENCY BANNER ════════════ --}}
+        @php $anyPanicking = $childrenData->contains('is_panicking', true); @endphp
+        @if($anyPanicking)
+            <div class="sos-banner w-full bg-red-600 text-white px-6 py-6 border-b-4 border-red-800 shadow-[0_8px_40px_rgba(220,38,38,0.6)]">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="flex items-start gap-5">
+                        <div class="flex-shrink-0 w-16 h-16 bg-white/20 border-2 border-white/40 rounded-2xl flex items-center justify-center shadow-inner">
+                            <i class="fa-solid fa-triangle-exclamation text-3xl animate-bounce"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-black uppercase tracking-[0.3em] text-red-100 mb-1">⚠ EMERGENCY S.O.S SIGNAL RECEIVED</p>
+                            @foreach($childrenData as $d)
+                                @if($d['is_panicking'] && $d['panic_data'])
+                                    <h2 class="text-2xl md:text-3xl font-black leading-tight">
+                                        {{ $d['student']->user->name ?? 'Your child' }} has triggered a Panic Alert!
+                                    </h2>
+                                    <p class="text-red-100 font-bold mt-1 text-sm">
+                                        <i class="fa-regular fa-clock"></i> Triggered {{ $d['panic_data']['time_ago'] }} — {{ $d['panic_data']['triggered_at'] }}
+                                    </p>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-3 w-full md:w-auto">
+                        @foreach($childrenData as $d)
+                            @if($d['is_panicking'] && $d['panic_data'] && $d['panic_data']['map_link'])
+                                <a href="{{ $d['panic_data']['map_link'] }}" target="_blank"
+                                   class="flex items-center justify-center gap-3 px-8 py-4 bg-white text-red-700 font-black rounded-2xl shadow-xl hover:bg-red-50 transition-all hover:scale-105 text-base border-2 border-white">
+                                    <i class="fa-solid fa-map-location-dot text-xl"></i>
+                                    Open Emergency Location in Maps
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            @endif
+                        @endforeach
+                        <p class="text-[10px] text-red-200 text-center font-bold">The student's live GPS coordinates are directly embedded in this link.</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
+        <header class="mb-12" style="animation: fadeUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px);">
+            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-black uppercase tracking-widest border border-emerald-100 shadow-sm mb-4 inline-block">Family Overview</span>
+            <h1 class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 leading-tight">
+                Welcome back, <br />
+                <span class="text-gradient-emerald">{{ Auth::user()->name }}</span>
+            </h1>
+            <p class="text-gray-500 font-medium mt-3 text-lg">Monitor attendance, results, and real-time alerts across your connected student profiles.</p>
+        </header>
+
+        @forelse($childrenData as $index => $data)
+            @php
+                $child = $data['student'];
+                // Staggered fade in delay
+                $delay = $index * 0.15;
+            @endphp
+            <div class="glass-card rounded-[2.5rem] overflow-hidden mb-12 border border-white relative group" style="animation: fadeUp 0.6s ease-out forwards; animation-delay: {{ $delay }}s; opacity: 0; transform: translateY(20px);">
+                
+                <style>
+                    @keyframes fadeUp {
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                </style>
+
+                <!-- Student Header Strip -->
+                <div class="bg-gray-900 p-8 flex flex-col md:flex-row justify-between items-start md:items-center text-white relative overflow-hidden">
+                    <!-- Subtle background glow -->
+                    <div class="absolute inset-0 opacity-20 pointer-events-none">
+                        <div class="absolute right-0 top-0 w-64 h-64 bg-emerald-500 rounded-full blur-[80px]"></div>
+                    </div>
+                    
+                    <div class="flex items-center gap-5 relative z-10 w-full md:w-auto mb-6 md:mb-0">
+                        <div class="w-20 h-20 bg-white/10 rounded-[1.5rem] flex items-center justify-center text-3xl font-black shadow-inner border border-white/20 backdrop-blur-md relative">
+                            {{ substr($child->user->name ?? '?', 0, 1) }}
+                            <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-gray-900 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-check text-[10px]"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-black tracking-tight">{{ $child->user->name ?? 'Unknown Student' }}</h2>
+                            <div class="flex flex-wrap items-center gap-3 mt-2">
+                                <span class="bg-white/10 px-3 py-1 rounded-full text-xs font-bold">{{ $child->course->name ?? 'No Course' }}</span>
+                                <span class="text-emerald-400 text-xs font-black uppercase tracking-widest">Roll #{{ $child->roll_number ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 w-full md:w-auto text-left md:text-right">
+                         @if($data['unread_broadcasts'] > 0)
+                            <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-500/20 border border-red-500 text-red-100 rounded-xl text-sm font-black tracking-wide cursor-pointer hover:bg-red-500/30 transition-colors shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+                                <span class="relative flex h-3 w-3">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                </span>
+                                {{ $data['unread_broadcasts'] }} Unread Alerts
+                            </div>
+                        @else
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-gray-300 rounded-xl text-xs font-bold uppercase tracking-widest">
+                                <i class="fa-solid fa-bell-slash text-gray-500"></i> No New Alerts
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Internal Analytics Grid -->
+                <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6 bg-white/50">
+                    
+                    <!-- Analytics 1: ATTENDANCE -->
+                    @php
+                        $attColor = $data['attendance_status'] === 'green' ? 'emerald' : 
+                                   ($data['attendance_status'] === 'yellow' ? 'amber' : 
+                                   ($data['attendance_status'] === 'red' ? 'rose' : 'gray'));
+                    @endphp
+                    <div class="col-span-1 bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                        <!-- BG accent -->
+                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-{{ $attColor }}-50 rounded-full group-hover:scale-150 transition-transform duration-700 ease-out z-0"></div>
+                        
+                        <div class="flex justify-between items-start mb-6 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-{{ $attColor }}-50 text-{{ $attColor }}-500 flex items-center justify-center shadow-inner border border-{{ $attColor }}-100 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fa-solid fa-calendar-check text-2xl"></i>
+                            </div>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest border border-gray-100 px-3 py-1 rounded-full bg-white">Attendance</span>
+                        </div>
+                        <div class="relative z-10 flex-1 flex flex-col justify-end">
+                            <h3 class="text-6xl font-black text-gray-800 tracking-tighter">{{ $data['attendance_percentage'] }}<span class="text-3xl text-gray-300">%</span></h3>
+                            <p class="text-sm font-bold text-gray-500 mt-2 mb-6">Cumulative class presence</p>
+                            
+                            <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
+                                <div class="h-full bg-{{ $attColor }}-500 rounded-full shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1)] relative overflow-hidden" style="width: {{ $data['attendance_percentage'] }}%">
+                                    <div class="absolute inset-0 bg-white/20 animate-[marquee_2s_linear_infinite] w-[200%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics 2: ACADEMICS -->
+                    <div class="col-span-1 bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-indigo-50 rounded-full group-hover:scale-150 transition-transform duration-700 ease-out z-0"></div>
+                        
+                        <div class="flex justify-between items-start mb-6 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center shadow-inner border border-indigo-100 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fa-solid fa-chart-pie text-2xl"></i>
+                            </div>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest border border-gray-100 px-3 py-1 rounded-full bg-white">Results</span>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="text-6xl font-black text-gray-800 tracking-tighter">{{ $data['overall_performance'] }}<span class="text-3xl text-gray-300">%</span></h3>
+                            <p class="text-sm font-bold text-gray-500 mt-2 mb-4">Overall aggregate score</p>
+                            
+                            <div class="mt-4 max-h-[100px] overflow-y-auto custom-scroll pr-2 divide-y divide-gray-50">
+                                @forelse($data['subject_scores'] as $score)
+                                    <div class="py-2 flex justify-between items-center group/item hover:bg-indigo-50/50 px-2 rounded-lg transition-colors">
+                                        <span class="text-xs font-bold text-gray-700 truncate mr-2">{{ $score['name'] }}</span>
+                                        <span class="text-xs font-black {{ $score['percentage'] < 50 ? 'text-rose-500' : 'text-indigo-600' }} bg-white border border-gray-100 px-2 py-0.5 rounded-md shadow-sm">
+                                            {{ $score['percentage'] }}%
+                                        </span>
+                                    </div>
+                                @empty
+                                    <span class="text-xs text-gray-400 italic block mt-2 p-2 bg-gray-50 rounded-lg">No examination marks mapped yet.</span>
+                                @endforelse
+                            </div>
+                            <!-- Custom scrollbar style inline for this block -->
+                            <style>
+                                .custom-scroll::-webkit-scrollbar { width: 4px; }
+                                .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+                                .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+                            </style>
+                        </div>
+                    </div>
+
+                    <!-- Analytics 3: EMERGENCY TRACKER -->
+                    @if($data['is_panicking'])
+                    <div class="col-span-1 bg-red-600 p-8 rounded-[2rem] shadow-2xl shadow-red-600/50 flex flex-col justify-between transition-all duration-300 relative overflow-hidden border-2 border-red-400" style="animation: sosFlash 1.5s ease-in-out infinite;">
+                        <div class="absolute -right-4 -bottom-4 opacity-20 pointer-events-none">
+                            <i class="fa-solid fa-triangle-exclamation text-9xl text-white"></i>
+                        </div>
+                        <div class="flex justify-between items-start mb-6 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shadow-inner">
+                                <i class="fa-solid fa-triangle-exclamation text-2xl animate-bounce"></i>
+                            </div>
+                            <span class="text-[10px] font-black text-white uppercase tracking-widest border border-white/30 px-3 py-1 rounded-full bg-white/20">🚨 SOS ACTIVE</span>
+                        </div>
+                        <div class="relative z-10 flex-1 flex flex-col justify-end">
+                            <h3 class="text-xl font-black text-white mb-1">PANIC ALERT TRIGGERED</h3>
+                            <p class="text-red-100 text-xs font-bold mb-1"><i class="fa-regular fa-clock"></i> {{ $data['panic_data']['time_ago'] }}</p>
+                            <p class="text-red-200 text-[10px] font-semibold mb-4">{{ $data['panic_data']['triggered_at'] }}</p>
+                            @if($data['panic_data']['map_link'])
+                                <a href="{{ $data['panic_data']['map_link'] }}" target="_blank"
+                                   class="block w-full py-4 text-center bg-white text-red-700 font-black text-sm rounded-xl transition-all hover:bg-red-50 hover:-translate-y-0.5 shadow-xl">
+                                    <i class="fa-solid fa-map-location-dot mr-2"></i> Open Emergency Location
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    @else
+                    <div class="col-span-1 bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                        <div class="absolute right-[-10%] bottom-[-10%] opacity-5 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none">
+                            <i class="fa-solid fa-map-location-dot text-9xl text-rose-500"></i>
+                        </div>
+                        <div class="flex justify-between items-start mb-6 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center shadow-inner border border-rose-100 group-hover:rotate-12 transition-transform duration-300">
+                                <i class="fa-solid fa-satellite-dish text-2xl"></i>
+                            </div>
+                            <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest border border-rose-100 px-3 py-1 rounded-full bg-rose-50">Live Tracker</span>
+                        </div>
+                        <div class="relative z-10 flex-1 flex flex-col justify-end">
+                            @if($data['emergency_data'])
+                                <div class="bg-gray-50 p-4 rounded-2xl mb-4 border border-gray-100">
+                                    <h3 class="text-base font-black text-gray-800 mb-1 flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> GPS Linked
+                                    </h3>
+                                    <p class="text-xs font-bold text-gray-500"><i class="fa-regular fa-clock"></i> {{ $data['emergency_data']['updated_at'] }}</p>
+                                </div>
+                                <a href="{{ $data['emergency_data']['map_link'] }}" target="_blank" class="block w-full py-3.5 text-center bg-gray-900 hover:bg-black text-white font-black text-sm rounded-xl transition-all hover:-translate-y-0.5 shadow-[0_10px_20px_rgba(0,0,0,0.15)]">
+                                    Track Live on Maps <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                                </a>
+                            @else
+                                <div class="bg-gray-50 p-4 rounded-2xl mb-4 border border-gray-100 flex flex-col items-center justify-center text-center">
+                                    <i class="fa-solid fa-location-crosshairs text-3xl text-gray-300 mb-2"></i>
+                                    <h3 class="text-sm font-black text-gray-600 mb-1">Signal Offline</h3>
+                                    <p class="text-xs font-medium text-gray-400">Device has not pinged location.</p>
+                                </div>
+                                <button disabled class="w-full py-3 text-center bg-gray-100 text-gray-400 font-black text-sm rounded-xl cursor-not-allowed border border-gray-200">Location Unavailable</button>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        @empty
+            <div class="glass-card p-16 rounded-[3rem] text-center border border-gray-200 mt-12 overflow-hidden relative">
+                <!-- Decorative orbit lines behind empty state -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-dashed border-gray-200 rounded-full animate-[spin_30s_linear_infinite] opacity-50 z-0"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-gray-100 rounded-full animate-[spin_20s_linear_infinite_reverse] opacity-50 z-0"></div>
+
+                <div class="relative z-10 w-28 h-28 bg-white rounded-3xl shadow-xl flex items-center justify-center text-5xl text-gray-300 mx-auto mb-8 border border-gray-50">
+                    <i class="fa-solid fa-children"></i>
+                </div>
+                <h2 class="relative z-10 text-3xl font-black text-gray-900 tracking-tight">No Enrolled Children Found</h2>
+                <p class="relative z-10 text-gray-500 font-medium text-lg mt-4 max-w-lg mx-auto leading-relaxed">Your portal account does not currently have any student profiles linked to it. If this is an error, please coordinate with school administration.</p>
+                <div class="relative z-10 mt-8">
+                    <button class="px-6 py-3 bg-gray-900 text-white rounded-full font-bold shadow-lg hover:scale-105 transition-transform" onclick="location.reload()">
+                        Refresh Portal
+                    </button>
+                </div>
+            </div>
+        @endforelse
+        </div>{{-- /max-w-7xl --}}
+    </main>
+
+    {{-- Auto-refresh every 30s if any panic is active --}}
+    @if($anyPanicking ?? false)
+    <script>
+        // Poll every 10 seconds to update the panic state in real-time
+        setTimeout(() => window.location.reload(), 10000);
+    </script>
+    @endif
+</body>
+</html>

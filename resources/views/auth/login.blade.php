@@ -464,8 +464,8 @@
     /* Role chips */
     .role-chips {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.6rem;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
         margin-bottom: 1.5rem;
     }
     .role-chip {
@@ -490,6 +490,7 @@
     .role-chip.student { --chip-color: #6366f1; }
     .role-chip.teacher { --chip-color: #ec4899; }
     .role-chip.admin   { --chip-color: #f97316; }
+    .role-chip.parent  { --chip-color: #10b981; }
     .role-chip:hover {
         border-color: var(--chip-color);
         color: var(--chip-color);
@@ -641,6 +642,10 @@
                     <i class="fa-solid fa-user-shield" style="color:inherit;"></i>
                     Admin
                 </div>
+                <div class="role-chip parent" onclick="selectRole('parent',this)">
+                    <i class="fa-solid fa-user-group" style="color:inherit;"></i>
+                    Parent
+                </div>
             </div>
 
             <!-- Session status -->
@@ -737,6 +742,7 @@
             student: 'student@edflow.com',
             teacher: 'teacher@edflow.com',
             admin:   'admin@edflow.com',
+            parent:  'parent@edflow.com',
         };
         const emailInput = document.getElementById('email');
         if (emailInput && !emailInput.value) {

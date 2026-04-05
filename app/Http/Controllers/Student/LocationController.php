@@ -32,4 +32,39 @@ class LocationController extends Controller
 
         return back()->with('success', 'Location successfully securely transmitted!');
     }
+
+    public function panic(Request $request)
+    {
+        $request->validate([
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
+        ]);
+
+        $student = Auth::user()->student;
+
+        $student->update([
+            'is_panicking'       => true,
+            'panic_lat'          => $request->lat,
+            'panic_lng'          => $request->lng,
+            'panic_triggered_at' => now(),
+            // Also update regular location so map stays current
+            'last_lat'           => $request->lat,
+            'last_lng'           => $request->lng,
+            'location_updated_at'=> now(),
+        ]);
+
+        return response()->json(['status' => 'panic_activated']);
+    }
+
+    public function cancelPanic()
+    {
+        $student = Auth::user()->student;
+
+        $student->update([
+            'is_panicking'       => false,
+            'panic_triggered_at' => null,
+        ]);
+
+        return response()->json(['status' => 'panic_cancelled']);
+    }
 }

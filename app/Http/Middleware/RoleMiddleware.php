@@ -33,6 +33,7 @@ class RoleMiddleware
             1 => 'admin',
             2 => 'teacher',
             3 => 'student',
+            4 => 'parent',
         ];
 
         $userRoleName = $roleMap[$user->role_id] ?? null;

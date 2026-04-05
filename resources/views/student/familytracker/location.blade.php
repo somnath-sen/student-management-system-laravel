@@ -68,10 +68,49 @@
                     <h3 class="font-bold text-slate-900 text-lg mb-1">Update Coordinates</h3>
                     <p class="text-sm text-slate-500 mb-6">Click the button below to allow your browser to fetch your exact GPS coordinates and update the map.</p>
                     
-                    <button onclick="getLocation()" id="ping-btn" class="w-full py-3.5 bg-slate-900 hover:bg-rose-600 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                    <button onclick="getLocation()" id="ping-btn" class="w-full py-3.5 bg-slate-900 hover:bg-slate-700 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 mb-3">
                         <i class="fa-solid fa-satellite"></i> Ping My Location Now
                     </button>
                     <p id="geo-status" class="text-xs font-bold text-rose-500 mt-3 hidden"></p>
+                </div>
+
+                <!-- SOS PANIC BUTTON SECTION -->
+                <div class="px-6 pb-6">
+                    <div class="border-t border-slate-100 pt-5">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center mb-3">Emergency S.O.S</p>
+                        
+                        @if($student->is_panicking)
+                            <!-- Cancel panic state -->
+                            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-center">
+                                <div class="flex items-center justify-center gap-2 mb-2">
+                                    <span class="relative flex h-3 w-3">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                    </span>
+                                    <span class="text-sm font-black text-red-700">PANIC ALERT ACTIVE</span>
+                                </div>
+                                <p class="text-xs text-red-500 mb-1">Your parents have been notified of your emergency.</p>
+                                <p class="text-[10px] text-red-400">Triggered: {{ $student->panic_triggered_at?->timezone('Asia/Kolkata')->diffForHumans() ?? 'just now' }}</p>
+                            </div>
+                            <button id="cancel-panic-btn" onclick="cancelPanic()" 
+                                class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-shield-check"></i> I Am Safe — Cancel Alert
+                            </button>
+                        @else
+                            <!-- Trigger panic -->
+                            <button id="panic-btn" onclick="triggerPanic()"
+                                class="w-full py-4 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white rounded-xl font-black text-base shadow-xl shadow-red-600/40 transition-all relative overflow-hidden group flex items-center justify-center gap-3"
+                                style="animation: pulsing 2s infinite;">
+                                <span class="relative z-10 flex items-center gap-3">
+                                    <i class="fa-solid fa-exclamation-triangle text-lg"></i>
+                                    <span>PANIC — Send SOS</span>
+                                    <i class="fa-solid fa-bell text-lg"></i>
+                                </span>
+                                <div class="absolute inset-0 bg-white/10 scale-0 group-active:scale-100 transition-transform rounded-xl"></div>
+                            </button>
+                            <p class="text-[10px] text-slate-400 text-center mt-2">Instantly alerts your parent with your GPS location</p>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -239,6 +278,85 @@
             }, 250);
         });
     @endif
+</script>
+
+<script>
+    // ── PANIC / SOS Functions ──────────────────────────────────────
+    function triggerPanic() {
+        const btn = document.getElementById('panic-btn');
+        if (!btn) return;
+
+        // Show a confirmation warning (safety against accidental press)
+        if (!confirm('⚠️ EMERGENCY ALERT\n\nThis will instantly notify your parent with your live GPS location.\n\nPress OK only if you are in a real emergency.')) return;
+
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Acquiring GPS & Alerting...';
+        btn.disabled = true;
+
+        if (!navigator.geolocation) {
+            alert('GPS not available on this device.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-exclamation-triangle text-lg"></i><span>PANIC — Send SOS</span><i class="fa-solid fa-bell text-lg"></i>';
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+            fetch('{{ route("student.location.panic") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'panic_activated') {
+                    // Reload so the page shows "PANIC ACTIVE" + Cancel button
+                    window.location.reload();
+                }
+            })
+            .catch(() => {
+                alert('Failed to send SOS. Please check your internet connection.');
+                btn.disabled = false;
+            });
+        }, function(err) {
+            alert('Could not get GPS location: ' + err.message + '\nPlease allow location access.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-exclamation-triangle text-lg"></i><span>PANIC — Send SOS</span><i class="fa-solid fa-bell text-lg"></i>';
+        }, {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        });
+    }
+
+    function cancelPanic() {
+        const btn = document.getElementById('cancel-panic-btn');
+        if (btn) {
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Cancelling Alert...';
+            btn.disabled = true;
+        }
+
+        fetch('{{ route("student.location.cancel-panic") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'panic_cancelled') {
+                window.location.reload();
+            }
+        })
+        .catch(() => alert('Failed to cancel alert. Please try again.'));
+    }
 </script>
 
 @endsection

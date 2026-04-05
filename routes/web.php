@@ -24,6 +24,8 @@ use App\Http\Controllers\Student\LocationController;
 use App\Http\Controllers\Student\SuggestionController;
 use App\Http\Controllers\Teacher\BroadcastController as TeacherBroadcastController;
 use App\Http\Controllers\Student\BroadcastController as StudentBroadcastController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -43,6 +45,7 @@ Route::get('/', function () {
 Route::get('/register/student', function () {
     return view('register.student');
 });
+Route::post('/register/student', [RegistrationController::class, 'store'])->name('register.student.store');
 Route::get('/register/teacher', function () {
     return view('register.teacher');
 });
@@ -94,6 +97,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     /* Dashboard */
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        
+    /* Student Registrations */
+    Route::get('/admin/registrations', [AdminRegistrationController::class, 'index'])->name('admin.registrations.index');
+    Route::post('/admin/registrations/{id}/approve', [AdminRegistrationController::class, 'approve'])->name('admin.registrations.approve');
+    Route::post('/admin/registrations/{id}/reject', [AdminRegistrationController::class, 'reject'])->name('admin.registrations.reject');
         
     /* Courses CRUD */
     Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses.index');
@@ -257,6 +265,8 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     // Location Tracker Routes
     Route::get('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'index'])->name('student.location');
     Route::post('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'update'])->name('student.location.update');
+    Route::post('/student/location/panic', [\App\Http\Controllers\Student\LocationController::class, 'panic'])->name('student.location.panic');
+    Route::post('/student/location/cancel-panic', [\App\Http\Controllers\Student\LocationController::class, 'cancelPanic'])->name('student.location.cancel-panic');
 
     // Timetable Route
     Route::get('/student/timetable', [\App\Http\Controllers\Student\TimetableController::class, 'index'])->name('student.timetable');
@@ -284,4 +294,14 @@ Route::middleware(['auth', 'role:teacher,student'])->group(function () {
     Route::get('/studyai', [StudyAIController::class, 'index'])->name('studyai.index');
     Route::post('/studyai/send', [StudyAIController::class, 'send'])->name('studyai.send');
 
+});
+
+/*
+|--------------------------------------------------------------------------
+| PARENT ROUTES
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:parent'])->group(function () {
+    Route::get('/parent/dashboard', [\App\Http\Controllers\Parent\DashboardController::class, 'index'])->name('parent.dashboard');
 });

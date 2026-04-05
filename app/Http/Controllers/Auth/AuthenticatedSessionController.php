@@ -40,6 +40,10 @@ class AuthenticatedSessionController extends Controller
         if ($user->role_id == 3) {
             return redirect()->route('student.dashboard');
         }
+        
+        if ($user->role_id == 4) {
+            return redirect()->route('parent.dashboard');
+        }
 
         return redirect('/dashboard');
     }

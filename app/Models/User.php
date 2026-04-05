@@ -62,6 +62,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Teacher::class);
     }
+    
+    /**
+     * User (Parent) → Children (Students)
+     */
+    public function children()
+    {
+        return $this->belongsToMany(Student::class, 'parent_student', 'parent_id', 'student_id');
+    }
 
     /**
      * Gamification Relationships

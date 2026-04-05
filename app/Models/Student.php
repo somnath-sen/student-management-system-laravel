@@ -20,10 +20,16 @@ class Student extends Model
         'last_lat',
         'last_lng',
         'location_updated_at',
+        'is_panicking',
+        'panic_lat',
+        'panic_lng',
+        'panic_triggered_at',
     ];
 
     protected $casts = [
         'location_updated_at' => 'datetime',
+        'panic_triggered_at'  => 'datetime',
+        'is_panicking'        => 'boolean',
     ];
 
     public function user()
@@ -34,6 +40,11 @@ class Student extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+    
+    public function parents()
+    {
+        return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id');
     }
 
     public function messageReads()
