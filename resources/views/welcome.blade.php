@@ -480,6 +480,86 @@
                     </div>
                 </div>
 
+                <!-- Medium Card: Parent Access -->
+                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-indigo-500/40 dark:hover:from-indigo-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-indigo-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shrink-0">
+                            <i class="fa-solid fa-users text-2xl"></i>
+                        </div>
+                        
+                        <div class="relative z-20">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Parent Access</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Empower parents with real-time access to their children's attendance, grades, and fee records securely.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Card: Broadcasting -->
+                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-amber-500/40 dark:hover:from-amber-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-amber-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite_reverse]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-amber-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shrink-0">
+                            <i class="fa-solid fa-bullhorn text-2xl"></i>
+                        </div>
+                        
+                        <div class="relative z-20">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Broadcasting</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instantly deliver subject-specific announcements and urgent institutional notices across all devices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Card: AI Study Coach -->
+                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-fuchsia-500/40 dark:hover:from-fuchsia-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-fuchsia-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-fuchsia-400 to-fuchsia-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-fuchsia-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shrink-0">
+                            <i class="fa-solid fa-brain text-2xl"></i>
+                        </div>
+                        
+                        <div class="relative z-20">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">AI Study Coach</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">An intelligent, Gemini-powered assistant to personalize study plans, solve queries, and provide 24/7 support.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Card: SOS for Emergency -->
+                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-red-500/40 dark:hover:from-red-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-red-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite_reverse]"></div>
+                    </div>
+                    
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-red-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shrink-0">
+                            <i class="fa-solid fa-bell text-2xl animate-pulse"></i>
+                        </div>
+                        
+                        <div class="relative z-20">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">SOS for Emergency</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instant panic alerts triggered by students automatically notify parents with live location data in case of emergencies.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>

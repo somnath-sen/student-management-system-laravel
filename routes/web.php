@@ -56,7 +56,7 @@ Route::post('/register/faculty', [FacultyRegistrationController::class, 'store']
 
 // Put this at the BOTTOM of web.php (Outside Auth middleware!)
 Route::get('/verify/student/{id}', function($id) {
-    $student = \App\Models\Student::with('user')->findOrFail($id);
+    $student = \App\Models\Student::with(['user', 'course'])->findOrFail($id);
     return view('public.verify-student', compact('student'));
 })->name('verify.student');
 

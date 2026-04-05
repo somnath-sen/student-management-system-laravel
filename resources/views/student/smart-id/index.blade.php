@@ -158,7 +158,7 @@
                         </div>
 
                         <div class="id-qr-container">
-                            {!! QrCode::size(110)->color(30, 41, 59)->generate(route('verify.student', $student->id)) !!}
+                            {!! QrCode::size(110)->color(30, 41, 59)->generate($verifyUrl) !!}
                         </div>
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-2">Scan to verify identity</p>
                     </div>
@@ -168,6 +168,15 @@
                     <button type="button" onclick="downloadIDCard()" id="download-btn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-download"></i> Download as Image
                     </button>
+
+                    <!-- Network URL info so user can verify what's in the QR -->
+                    <div class="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
+                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                            <i class="fa-solid fa-wifi mr-1"></i> QR points to:
+                        </p>
+                        <p class="text-[11px] font-mono font-bold text-emerald-800 break-all">{{ $verifyUrl }}</p>
+                        <p class="text-[10px] text-emerald-500 mt-1">Make sure your phone is on the same Wi-Fi network.</p>
+                    </div>
 
                     <p class="text-xs font-medium text-slate-500 text-center">
                         <i class="fa-solid fa-mobile-screen-button text-indigo-500 mr-1"></i> Scan the QR code with any phone camera to view the verified emergency profile.
