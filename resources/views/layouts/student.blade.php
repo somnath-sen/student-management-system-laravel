@@ -137,6 +137,12 @@
                     <span class="text-[9px] text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/50 font-black tracking-wider uppercase group-hover:bg-indigo-500 group-hover:text-white transition-colors">AI</span>
                 </a>
 
+                <a href="{{ route('student.suggestions') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.suggestions*') ? 'bg-gradient-to-r from-purple-600/80 to-rose-600/80 text-white shadow-lg shadow-purple-600/30' : 'text-slate-300 hover:bg-gradient-to-r hover:from-purple-600/10 hover:to-rose-600/10 hover:text-purple-300' }}">
+                    <i class="fa-solid fa-brain w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-bold text-sm flex-1">AI Suggestions</span>
+                    <span class="text-[9px] bg-gradient-to-r from-purple-500 to-rose-500 text-white px-2 py-0.5 rounded font-black tracking-wider uppercase">NEW</span>
+                </a>
+
                 <div class="pt-4 pb-2 px-4">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</p>
                 </div>

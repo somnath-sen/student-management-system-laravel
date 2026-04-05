@@ -50,6 +50,17 @@ class DashboardController extends Controller
         $stats->last_login_date = $today;
         $stats->save();
 
+        // ── Auto-refresh AI suggestions if stale (>24h) ──
+        $cachedSuggestion = \App\Models\Suggestion::where('user_id', $user->id)->first();
+        if (! $cachedSuggestion || ! $cachedSuggestion->generated_at
+            || $cachedSuggestion->generated_at->diffInHours(now()) >= 24) {
+            try {
+                app(\App\Services\SuggestionService::class)->generateSuggestions($user->id);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('Auto-suggestion refresh failed: ' . $e->getMessage());
+            }
+        }
+
         $badges = $user->badges()->latest()->get();
 
         /*

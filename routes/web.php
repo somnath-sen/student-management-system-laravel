@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\FeeController as AdminFeeController;
 use App\Http\Controllers\Student\FeeController as StudentFeeController;
 use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Student\LocationController;
+use App\Http\Controllers\Student\SuggestionController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -254,6 +255,10 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 
     // Admit Card Route
     Route::get('/student/admit-card', [\App\Http\Controllers\Student\AdmitCardController::class, 'show'])->name('student.admit-card.show');
+
+    // AI Suggestion Engine
+    Route::get('/student/suggestions', [SuggestionController::class, 'index'])->name('student.suggestions');
+    Route::post('/student/suggestions/refresh', [SuggestionController::class, 'refresh'])->name('student.suggestions.refresh');
 });
 
 /*

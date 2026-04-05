@@ -271,6 +271,58 @@
             </div>
         </div>
 
+        <!-- 🧠 AI Suggestions Teaser Widget -->
+        <section class="relative overflow-hidden rounded-[2.5rem]"
+                 style="background: linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(229,0,64,0.06) 100%); border: 1px solid rgba(124,58,237,0.15); box-shadow: 0 8px 40px rgba(124,58,237,0.08);">
+            <!-- Blurred orbs -->
+            <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full opacity-20 pointer-events-none" style="background: radial-gradient(circle, #7C3AED, transparent); filter: blur(40px);"></div>
+            <div class="absolute -bottom-8 -left-8 w-40 h-40 rounded-full opacity-15 pointer-events-none" style="background: radial-gradient(circle, #E50040, transparent); filter: blur(40px);"></div>
+
+            <div class="relative z-10 p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
+                <!-- Icon -->
+                <div class="shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg"
+                     style="background: linear-gradient(135deg, #7C3AED, #E50040);">
+                    🧠
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-full">AI-Powered</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-rose-600 bg-rose-50 border border-rose-100 px-2 py-0.5 rounded-full">Personalized</span>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800">Your AI Study Coach is Ready</h2>
+                    <p class="text-gray-500 font-medium text-sm mt-1 max-w-lg">
+                        Get AI-powered study recommendations based on your marks, attendance, and performance trends.
+                    </p>
+
+                    @php
+                        $weakCount = \App\Models\Mark::with('subject')
+                            ->whereHas('student', fn($q) => $q->where('user_id', Auth::id()))
+                            ->get()
+                            ->filter(fn($m) => $m->total_marks > 0 && ($m->marks_obtained / $m->total_marks) * 100 < 50)
+                            ->count();
+                    @endphp
+
+                    @if($weakCount > 0)
+                    <div class="mt-3 inline-flex items-center gap-2 text-xs font-black text-red-600 bg-red-50 border border-red-100 px-3 py-1.5 rounded-full">
+                        <i class="fa-solid fa-triangle-exclamation text-xs"></i>
+                        {{ $weakCount }} subject{{ $weakCount > 1 ? 's' : '' }} need{{ $weakCount === 1 ? 's' : '' }} attention
+                    </div>
+                    @endif
+                </div>
+
+                <!-- CTA -->
+                <a href="{{ route('student.suggestions') }}"
+                   class="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-black text-sm text-white shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 group"
+                   style="background: linear-gradient(135deg, #7C3AED, #E50040); box-shadow: 0 8px 25px rgba(124,58,237,0.35);">
+                    <i class="fa-solid fa-brain"></i>
+                    View My AI Plan
+                    <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+            </div>
+        </section>
+
         <!-- Campus Feed Row -->
         <section class="glass-card rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
             <div class="absolute right-0 top-0 p-12 opacity-5 pointer-events-none">
