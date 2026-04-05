@@ -141,11 +141,17 @@
                 <a href="{{ route('admin.registrations.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.registrations.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-file-signature w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Student Registrations</span>
+                    @if(($pendingStudentRegistrations ?? 0) > 0)
+                        <span class="text-[10px] text-white px-2 py-0.5 rounded-full font-bold bg-amber-500">{{ $pendingStudentRegistrations }}</span>
+                    @endif
                 </a>
 
-                <a href="{{ route('admin.applicants.teachers') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/applicants/teachers') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-briefcase w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Faculty Applications</span>
+                <a href="{{ route('admin.faculty-registrations.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.faculty-registrations.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-chalkboard-teacher w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Faculty Registrations</span>
+                    @if(($pendingFacultyRegistrations ?? 0) > 0)
+                        <span class="text-[10px] text-white px-2 py-0.5 rounded-full font-bold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_8px_rgba(99,102,241,0.4)] animate-pulse">{{ $pendingFacultyRegistrations }}</span>
+                    @endif
                 </a>
 
                 <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Management</p>

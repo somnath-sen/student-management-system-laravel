@@ -26,6 +26,8 @@ use App\Http\Controllers\Teacher\BroadcastController as TeacherBroadcastControll
 use App\Http\Controllers\Student\BroadcastController as StudentBroadcastController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
+use App\Http\Controllers\FacultyRegistrationController;
+use App\Http\Controllers\Admin\FacultyRegistrationController as AdminFacultyRegistrationController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -47,8 +49,10 @@ Route::get('/register/student', function () {
 });
 Route::post('/register/student', [RegistrationController::class, 'store'])->name('register.student.store');
 Route::get('/register/teacher', function () {
-    return view('register.teacher');
+    $subjects = \App\Models\Subject::orderBy('name')->get();
+    return view('register.teacher', compact('subjects'));
 });
+Route::post('/register/faculty', [FacultyRegistrationController::class, 'store'])->name('register.faculty.store');
 
 // Put this at the BOTTOM of web.php (Outside Auth middleware!)
 Route::get('/verify/student/{id}', function($id) {
@@ -102,6 +106,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/registrations', [AdminRegistrationController::class, 'index'])->name('admin.registrations.index');
     Route::post('/admin/registrations/{id}/approve', [AdminRegistrationController::class, 'approve'])->name('admin.registrations.approve');
     Route::post('/admin/registrations/{id}/reject', [AdminRegistrationController::class, 'reject'])->name('admin.registrations.reject');
+
+    /* Faculty Registrations */
+    Route::get('/admin/faculty-registrations', [AdminFacultyRegistrationController::class, 'index'])->name('admin.faculty-registrations.index');
+    Route::post('/admin/faculty-registrations/{id}/approve', [AdminFacultyRegistrationController::class, 'approve'])->name('admin.faculty-registrations.approve');
+    Route::post('/admin/faculty-registrations/{id}/reject', [AdminFacultyRegistrationController::class, 'reject'])->name('admin.faculty-registrations.reject');
+    Route::post('/admin/faculty-registrations/{id}/resend', [AdminFacultyRegistrationController::class, 'resend'])->name('admin.faculty-registrations.resend');
         
     /* Courses CRUD */
     Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses.index');
