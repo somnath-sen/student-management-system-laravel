@@ -25,4 +25,9 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Subject::class);
     }
+
+    public function broadcastMessages()
+    {
+        return $this->hasMany(BroadcastMessage::class);
+    }
 }

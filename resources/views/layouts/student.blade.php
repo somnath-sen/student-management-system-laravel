@@ -143,6 +143,16 @@
                     <span class="text-[9px] bg-gradient-to-r from-purple-500 to-rose-500 text-white px-2 py-0.5 rounded font-black tracking-wider uppercase">NEW</span>
                 </a>
 
+                {{-- Broadcasts Nav Link with unread badge --}}
+                <a href="{{ route('student.dashboard') }}#announcements"
+                   class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                   {{ request()->routeIs('student.broadcast.*') ? 'active' : 'text-slate-400 hover:text-violet-400 hover:bg-violet-500/10' }}">
+                    <i class="fa-solid fa-bullhorn w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Broadcasts</span>
+                    <span id="unread-broadcast-badge"
+                          class="hidden items-center justify-center min-w-[20px] h-5 px-1.5 text-[9px] font-black text-white bg-violet-600 rounded-full shadow">0</span>
+                </a>
+
                 <div class="pt-4 pb-2 px-4">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</p>
                 </div>

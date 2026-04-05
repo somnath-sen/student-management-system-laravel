@@ -29,4 +29,12 @@ class Subject extends Model
     {
         return $this->hasMany(Mark::class);
     }
+
+    /**
+     * Subject has many broadcast messages
+     */
+    public function broadcastMessages()
+    {
+        return $this->hasMany(BroadcastMessage::class);
+    }
 }

@@ -35,4 +35,26 @@ class Student extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function messageReads()
+    {
+        return $this->hasMany(MessageRead::class);
+    }
+
+    /**
+     * Count unread broadcast messages for this student
+     * across all subjects in their course.
+     */
+    public function unreadBroadcastCount(): int
+    {
+        $subjectIds = \App\Models\Subject::where('course_id', $this->course_id)->pluck('id');
+
+        $messageIds = \App\Models\BroadcastMessage::whereIn('subject_id', $subjectIds)->pluck('id');
+
+        $readIds = \App\Models\MessageRead::where('student_id', $this->id)
+            ->where('seen', true)
+            ->pluck('message_id');
+
+        return $messageIds->diff($readIds)->count();
+    }
 }

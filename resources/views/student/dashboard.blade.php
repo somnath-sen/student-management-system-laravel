@@ -182,6 +182,59 @@
                     </div>
                 </div>
 
+                {{-- Subject Announcements Widget --}}
+                @php
+                    $studentRecord = auth()->user()->student;
+                @endphp
+                <div id="announcements" class="glass-card rounded-[2.5rem] overflow-hidden">
+                    <div class="p-6 border-b border-gray-100/80 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600">
+                                <i class="fa-solid fa-bullhorn text-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-black text-gray-800">Announcements</h2>
+                                <p class="text-xs text-gray-400 font-medium">Teacher broadcasts per subject</p>
+                            </div>
+                        </div>
+                        <span id="total-unread-badge" class="hidden items-center justify-center w-7 h-7 text-xs font-black text-white bg-red-500 rounded-full shadow animate-pulse">0</span>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        @forelse($subjects as $subject)
+                            @php
+                                $subjectMsgCount = \App\Models\BroadcastMessage::where('subject_id', $subject->id)->count();
+                                $readCount = $studentRecord ? \App\Models\MessageRead::where('student_id', $studentRecord->id)
+                                    ->whereHas('message', fn($q) => $q->where('subject_id', $subject->id))
+                                    ->where('seen', true)->count() : 0;
+                                $unread = max(0, $subjectMsgCount - $readCount);
+                            @endphp
+                            <a href="{{ route('student.broadcast.index', $subject->id) }}"
+                               class="flex items-center justify-between px-6 py-4 hover:bg-violet-50/50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-sm">
+                                        {{ strtoupper(substr($subject->name, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-gray-800 group-hover:text-violet-700 transition-colors">{{ $subject->name }}</p>
+                                        <p class="text-[10px] text-gray-400 font-medium">{{ $subjectMsgCount }} announcement{{ $subjectMsgCount != 1 ? 's' : '' }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    @if($unread > 0)
+                                        <span class="subject-unread-badge flex items-center justify-center min-w-[22px] h-[22px] px-1.5 text-[10px] font-black text-white bg-violet-600 rounded-full"
+                                              data-subject-id="{{ $subject->id }}">{{ $unread }}</span>
+                                    @else
+                                        <span class="subject-unread-badge text-[10px] font-bold text-gray-300" data-subject-id="{{ $subject->id }}">✓</span>
+                                    @endif
+                                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-violet-500 transition-colors"></i>
+                                </div>
+                            </a>
+                        @empty
+                            <div class="px-6 py-8 text-center text-gray-400 text-sm italic">No subjects enrolled.</div>
+                        @endforelse
+                    </div>
+                </div>
+
                 <!-- Recent Badges -->
                 <div class="glass-card p-8 rounded-[2.5rem] space-y-6">
                     <div class="flex justify-between items-center">
@@ -393,6 +446,29 @@
                 container.appendChild(p);
             }
         });
+
+        // ── Unread Badge Polling every 5s ──────────────────────────
+        function refreshUnreadBadge() {
+            fetch('{{ route("student.broadcast.unread") }}', {
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const badge = document.getElementById('total-unread-badge');
+                const navBadge = document.getElementById('unread-broadcast-badge');
+                if (badge) {
+                    badge.textContent = data.count;
+                    badge.style.display = data.count > 0 ? 'flex' : 'none';
+                }
+                if (navBadge) {
+                    navBadge.textContent = data.count;
+                    navBadge.style.display = data.count > 0 ? 'flex' : 'none';
+                }
+            })
+            .catch(() => {});
+        }
+        refreshUnreadBadge();
+        setInterval(refreshUnreadBadge, 5000);
     </script>
 </div>
 @endsection

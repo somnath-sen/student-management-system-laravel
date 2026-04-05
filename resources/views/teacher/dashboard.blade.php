@@ -140,11 +140,14 @@
                         <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">{{ $subject->name }}</h3>
                         <p class="text-sm text-slate-500 mb-6 leading-relaxed">Manage your curriculum, student records, and grading for this subject.</p>
 
-                        <div class="border-t border-[#F0EBE1] pt-4 mt-auto flex items-center justify-between gap-3">
+                        <div class="border-t border-[#F0EBE1] pt-4 mt-auto flex items-center justify-between gap-2">
                             <a href="{{ route('teacher.marks.edit', $subject->id) }}" class="flex-1 text-center py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-lg transition-colors border border-indigo-100">
                                 Edit Marks
                             </a>
-                            <a href="{{ route('teacher.performance.show', $subject->id) }}" class="p-2 border border-[#F0EBE1] hover:border-slate-300 text-slate-600 rounded-lg transition-colors tooltip" title="View Analysis">
+                            <a href="{{ route('teacher.broadcast.index', $subject->id) }}" class="flex-1 text-center py-2 px-3 bg-violet-50 hover:bg-violet-100 text-violet-700 text-sm font-semibold rounded-lg transition-colors border border-violet-100 flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-bullhorn text-xs"></i> Broadcast
+                            </a>
+                            <a href="{{ route('teacher.performance.show', $subject->id) }}" class="p-2 border border-[#F0EBE1] hover:border-slate-300 text-slate-600 rounded-lg transition-colors" title="View Analysis">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </a>
                         </div>

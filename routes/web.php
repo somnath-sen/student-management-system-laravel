@@ -22,6 +22,8 @@ use App\Http\Controllers\Student\FeeController as StudentFeeController;
 use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Student\LocationController;
 use App\Http\Controllers\Student\SuggestionController;
+use App\Http\Controllers\Teacher\BroadcastController as TeacherBroadcastController;
+use App\Http\Controllers\Student\BroadcastController as StudentBroadcastController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -197,6 +199,12 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     // Teacher Timetable
     Route::get('/teacher/timetable', [\App\Http\Controllers\Teacher\TimetableController::class, 'index'])->name('teacher.timetable');
 
+    // Broadcast Messaging
+    Route::get('/teacher/broadcast/{subject}', [TeacherBroadcastController::class, 'index'])->name('teacher.broadcast.index');
+    Route::post('/teacher/broadcast/{subject}', [TeacherBroadcastController::class, 'store'])->name('teacher.broadcast.store');
+    Route::delete('/teacher/broadcast/message/{message}', [TeacherBroadcastController::class, 'destroy'])->name('teacher.broadcast.destroy');
+    Route::get('/teacher/broadcast/message/{message}/seen-count', [TeacherBroadcastController::class, 'seenCount'])->name('teacher.broadcast.seen-count');
+
 });
 
 /*
@@ -259,6 +267,11 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     // AI Suggestion Engine
     Route::get('/student/suggestions', [SuggestionController::class, 'index'])->name('student.suggestions');
     Route::post('/student/suggestions/refresh', [SuggestionController::class, 'refresh'])->name('student.suggestions.refresh');
+
+    // Broadcast Messaging (Read-only)
+    Route::get('/student/broadcast/unread-count', [StudentBroadcastController::class, 'unreadCount'])->name('student.broadcast.unread');
+    Route::get('/student/broadcast/{subject}', [StudentBroadcastController::class, 'index'])->name('student.broadcast.index');
+    Route::post('/student/broadcast/seen/{message}', [StudentBroadcastController::class, 'markSeen'])->name('student.broadcast.seen');
 });
 
 /*
