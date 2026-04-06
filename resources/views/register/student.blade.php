@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,489 +8,318 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --cream-50:  #FFFDF7;
-            --cream-100: #FEF9EC;
-            --cream-200: #FDF0CC;
-            --cream-300: #FAE4A0;
-            --amber-400: #FBBF24;
-            --amber-500: #F59E0B;
-            --amber-600: #D97706;
-            --warm-700:  #92400E;
-            --warm-800:  #78350F;
-            --brown-900: #451A03;
-            --glass-bg:  rgba(255, 253, 245, 0.72);
-            --glass-border: rgba(251, 191, 36, 0.25);
-            --glass-shine: rgba(255, 255, 255, 0.65);
-        }
-
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #FEF9EC;
-            color: #451A03;
+            background-color: #fafaf9;
+            color: #1c1917;
             min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Background ── */
-        .page-bg {
-            position: fixed; inset: 0; z-index: 0; overflow: hidden;
-            background: radial-gradient(ellipse at 10% 0%, #fde68a55 0%, transparent 50%),
-                        radial-gradient(ellipse at 90% 10%, #fcd34d44 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 100%, #fef3c744 0%, transparent 60%),
-                        #FEF9EC;
-        }
-        .page-bg::before {
-            content: '';
-            position: absolute; inset: 0;
-            background-image: radial-gradient(rgba(245, 158, 11, 0.12) 1px, transparent 1px);
-            background-size: 28px 28px;
+        /* Soft Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes blob {
-            0%   { transform: translate(0,0) scale(1) rotate(0deg); }
-            33%  { transform: translate(40px,-60px) scale(1.12) rotate(5deg); }
-            66%  { transform: translate(-30px,25px) scale(0.9) rotate(-4deg); }
-            100% { transform: translate(0,0) scale(1) rotate(0deg); }
+        /* Light Input Styles */
+        .input-field {
+            background: #ffffff;
+            border: 2px solid #f0fdfa;
+            color: #1c1917;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02) inset;
         }
-        .blob {
-            position: absolute; border-radius: 50%;
-            filter: blur(70px); mix-blend-mode: multiply;
-            animation: blob 18s infinite alternate;
-        }
-        .blob-1 { width: 42vw; height: 42vw; background: #fde68a; opacity: 0.55; top: -12%; left: -8%; animation-delay: 0s; }
-        .blob-2 { width: 36vw; height: 36vw; background: #fcd34d; opacity: 0.45; top: 15%; right: -12%; animation-delay: 3s; }
-        .blob-3 { width: 48vw; height: 48vw; background: #fef3c7; opacity: 0.50; bottom: -20%; left: 15%; animation-delay: 6s; }
-        .blob-4 { width: 32vw; height: 32vw; background: #ffe4b5; opacity: 0.40; bottom: 8%;  right: 5%;  animation-delay: 2s; }
-
-        @keyframes floatUp {
-            0%   { transform: translateY(105vh) scale(0); opacity: 0; }
-            10%  { opacity: 0.7; transform: translateY(85vh) scale(1); }
-            90%  { opacity: 0.5; }
-            100% { transform: translateY(-5vh) scale(0.3); opacity: 0; }
-        }
-        .sparkle {
-            position: absolute; border-radius: 50%;
-            animation: floatUp linear infinite; bottom: -5%;
-        }
-
-        /* ── Layout ── */
-        .page-wrap {
-            position: relative; z-index: 10;
-            min-height: 100vh; padding: 48px 16px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .card-wrap { width: 100%; max-width: 740px; }
-
-        /* ── Header ── */
-        .page-header { text-align: center; margin-bottom: 36px; }
-
-        @keyframes logoPop {
-            0%   { transform: scale(0.7) rotate(-8deg); opacity: 0; }
-            60%  { transform: scale(1.08) rotate(2deg); }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-        .logo-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 72px; height: 72px; border-radius: 50%;
-            background: linear-gradient(145deg, #fff8e1, #fffdf7);
-            border: 2px solid rgba(251,191,36,0.4);
-            color: #D97706; font-size: 28px; margin-bottom: 16px;
-            text-decoration: none;
-            box-shadow:
-                0 8px 24px rgba(245,158,11,0.22),
-                0 0 0 8px rgba(251,191,36,0.08),
-                inset 0 1px 2px rgba(255,255,255,0.9);
-            animation: logoPop 0.7s cubic-bezier(0.2,0.8,0.2,1) forwards;
-            transition: transform 0.25s, box-shadow 0.25s;
-        }
-        .logo-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 14px 36px rgba(245,158,11,0.30), 0 0 0 10px rgba(251,191,36,0.1), inset 0 1px 2px rgba(255,255,255,0.9);
-        }
-
-        .page-title {
-            font-size: clamp(26px, 4vw, 38px);
-            font-weight: 800; color: #451A03;
-            letter-spacing: -0.5px;
-            text-shadow: 0 2px 8px rgba(120,53,15,0.08);
-        }
-        .page-subtitle {
-            margin-top: 10px; font-size: 16px; font-weight: 500;
-            color: #92400E; opacity: 0.82;
-        }
-
-        /* ── Glossy Card ── */
-        @keyframes cardSlide {
-            from { opacity: 0; transform: translateY(40px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(1.4);
-            -webkit-backdrop-filter: blur(20px) saturate(1.4);
-            border: 1.5px solid var(--glass-border);
-            border-radius: 28px;
-            overflow: hidden; position: relative;
-            box-shadow:
-                0 24px 60px rgba(120,53,15,0.12),
-                0 8px 20px rgba(245,158,11,0.08),
-                inset 0 1.5px 0 var(--glass-shine);
-            animation: cardSlide 0.65s cubic-bezier(0.2,0.8,0.2,1) both;
-        }
-
-        /* Glossy shine strip at top */
-        .glass-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #F59E0B, #FBBF24, #FDE68A, #FBBF24, #D97706);
-            z-index: 1;
-        }
-        /* Inner glass sheen */
-        .glass-card::after {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 55%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 100%);
-            pointer-events: none; z-index: 0; border-radius: 28px 28px 0 0;
-        }
-
-        /* ── Form ── */
-        .form-body { padding: 40px 44px; position: relative; z-index: 2; }
-        @media (max-width: 600px) { .form-body { padding: 28px 20px; } }
-
-        .form-section { margin-bottom: 32px; }
-
-        .section-label {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px;
-            text-transform: uppercase; color: #D97706;
-            padding-bottom: 10px;
-            border-bottom: 1.5px solid rgba(251,191,36,0.28);
-            margin-bottom: 20px;
-        }
-        .section-label i { font-size: 13px; color: #F59E0B; }
-
-        .field-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
-        .field-grid-2 .col-span-2 { grid-column: span 2; }
-        @media (max-width: 560px) {
-            .field-grid-2 { grid-template-columns: 1fr; }
-            .field-grid-2 .col-span-2 { grid-column: span 1; }
-        }
-
-        /* ── Field ── */
-        .field-group { display: flex; flex-direction: column; gap: 6px; }
-
-        .field-label {
-            font-size: 12.5px; font-weight: 700;
-            color: #78350F; letter-spacing: 0.1px;
-        }
-        .field-label .req { color: #ef4444; margin-left: 2px; }
-        .field-label .opt { font-weight: 500; color: #a16207; font-size: 11px; margin-left: 4px; }
-
-        .field-input {
-            width: 100%; padding: 13px 16px;
-            border-radius: 14px;
-            border: 1.5px solid rgba(251,191,36,0.35);
-            background: linear-gradient(160deg, rgba(255,255,255,0.85) 0%, rgba(255,252,235,0.70) 100%);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 14px; color: #451A03;
+        .input-field:focus {
+            background: #ffffff;
+            border-color: #2dd4bf;
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(245,158,11,0.06);
-            -webkit-appearance: none; appearance: none;
         }
-        .field-input::placeholder { color: #c49a3c; opacity: 0.7; }
-        .field-input:focus {
-            border-color: #F59E0B;
-            background: linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(255,252,235,0.88) 100%);
-            box-shadow: 0 0 0 4px rgba(245,158,11,0.15), inset 0 1px 2px rgba(0,0,0,0.03);
+        .input-field::placeholder {
+            color: #a8a29e;
         }
-        .field-input:hover:not(:focus) { border-color: rgba(251,191,36,0.6); }
-
-        /* Select */
-        .field-select {
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23D97706' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 40px;
+        
+        select.input-field option {
+            background: #ffffff;
+            color: #1c1917;
         }
-        select optgroup { font-weight: 700; color: #D97706; background: #FEF9EC; }
-        select option   { font-weight: 500; color: #451A03; background: #FFFDF7; }
-        select::-webkit-scrollbar { width: 6px; }
-        select::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 4px; }
-
-        /* ── Terms ── */
-        .terms-box {
-            background: linear-gradient(135deg, rgba(255,252,235,0.9) 0%, rgba(254,243,199,0.75) 100%);
-            border: 1.5px solid rgba(251,191,36,0.35);
-            border-radius: 16px;
-            padding: 18px 20px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 8px rgba(245,158,11,0.07);
-            margin-bottom: 28px;
-        }
-        .terms-label {
-            display: flex; align-items: flex-start; gap: 12px;
-            cursor: pointer;
-        }
-        .terms-check {
-            width: 20px; height: 20px; margin-top: 1px; flex-shrink: 0;
-            accent-color: #D97706; cursor: pointer;
-        }
-        .terms-text {
-            font-size: 13.5px; color: #78350F; line-height: 1.65;
-            font-weight: 500;
+        select.input-field optgroup {
+            background: #fafaf9;
+            color: #57534e;
+            font-weight: 700;
         }
 
-        /* ── Submit Button ── */
-        .submit-btn {
-            width: 100%; padding: 16px;
-            border: none; border-radius: 16px; cursor: pointer;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 16px; font-weight: 800; color: #fff;
-            letter-spacing: 0.3px;
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
-            box-shadow:
-                0 6px 20px rgba(180,83,9,0.35),
-                inset 0 1px 0 rgba(255,255,255,0.25);
-            position: relative; overflow: hidden;
-            transition: transform 0.22s, box-shadow 0.22s, filter 0.22s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .submit-btn::before {
-            content: '';
-            position: absolute; top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
-            transition: left 0.55s ease;
-        }
-        .submit-btn:hover::before { left: 140%; }
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(180,83,9,0.40), inset 0 1px 0 rgba(255,255,255,0.25);
-        }
-        .submit-btn:active { transform: translateY(0); }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
 
-        /* ── Success Panel ── */
-        .success-panel {
-            display: none; padding: 56px 44px; text-align: center;
-            background: linear-gradient(160deg, rgba(255,255,255,0.85), rgba(255,252,235,0.7));
-            position: relative; z-index: 2;
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        @keyframes successPop {
-            0%   { transform: scale(0); opacity: 0; }
-            65%  { transform: scale(1.12); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .success-icon {
-            width: 96px; height: 96px; margin: 0 auto 24px;
-            background: linear-gradient(135deg, #fde68a, #fbbf24);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 44px; color: #78350F;
-            box-shadow: 0 8px 32px rgba(245,158,11,0.35), inset 0 1px 0 rgba(255,255,255,0.6);
-            animation: successPop 0.55s cubic-bezier(0.2,0.8,0.2,1) forwards;
-        }
-        .success-title { font-size: 28px; font-weight: 800; color: #451A03; margin-bottom: 10px; }
-        .success-sub { font-size: 15px; color: #92400E; font-weight: 500; max-width: 380px; margin: 0 auto 28px; line-height: 1.6; }
-        .back-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 12px 28px; border-radius: 50px;
-            background: #451A03; color: #FEF9EC;
-            font-size: 14px; font-weight: 700; text-decoration: none;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 14px rgba(69,26,3,0.28);
-        }
-        .back-btn:hover { background: #78350F; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(69,26,3,0.32); }
 
-        /* ── Bottom Links ── */
-        .bottom-links { text-align: center; margin-top: 28px; }
-        .cancel-link {
-            display: inline-block;
-            padding: 9px 20px; border-radius: 50px;
-            font-size: 13px; font-weight: 700;
-            color: #92400E; text-decoration: none;
-            background: rgba(255,255,255,0.55);
-            border: 1.5px solid rgba(251,191,36,0.35);
-            backdrop-filter: blur(8px);
-            transition: color 0.2s, background 0.2s, border-color 0.2s;
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
         }
-        .cancel-link:hover { color: #D97706; background: rgba(255,255,255,0.80); border-color: rgba(251,191,36,0.7); }
-
-        /* FA spin */
-        .fa-spin { animation: fa-spin 0.8s infinite linear; }
-        @keyframes fa-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(359deg); } }
     </style>
 </head>
-<body>
+<body class="relative overflow-x-hidden antialiased font-sans selection:bg-brand-100 selection:text-brand-900 bg-gradient-to-br from-orange-50 via-rose-50 to-teal-50">
 
-    <!-- Background -->
-    <div class="page-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-        <div class="blob blob-4"></div>
-        <!-- Sparkles -->
-        <div class="sparkle" style="left:8%;  width:18px;height:18px;background:rgba(251,191,36,0.25);animation-duration:13s;animation-delay:0s;"></div>
-        <div class="sparkle" style="left:25%; width:32px;height:32px;background:rgba(245,158,11,0.2); animation-duration:19s;animation-delay:2s;"></div>
-        <div class="sparkle" style="left:55%; width:14px;height:14px;background:rgba(253,230,138,0.3);animation-duration:11s;animation-delay:5s;"></div>
-        <div class="sparkle" style="left:78%; width:26px;height:26px;background:rgba(251,191,36,0.22);animation-duration:23s;animation-delay:1s;"></div>
-        <div class="sparkle" style="left:43%; width:20px;height:20px;background:rgba(245,158,11,0.18);animation-duration:17s;animation-delay:7s;"></div>
-        <div class="sparkle" style="left:88%; width:10px;height:10px;background:rgba(253,230,138,0.35);animation-duration:15s;animation-delay:3s;"></div>
+    <!-- Light & Colorful Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <!-- Pastel Blobs -->
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-pink-200/50 blur-[100px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[450px] h-[450px] rounded-full bg-cyan-200/50 blur-[120px] animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-[-20%] left-[10%] w-[600px] h-[600px] rounded-full bg-yellow-200/50 blur-[120px] animate-blob" style="animation-delay: 4s;"></div>
+        <div class="absolute bottom-[10%] right-[20%] w-[350px] h-[350px] rounded-full bg-violet-200/50 blur-[90px] animate-blob" style="animation-delay: 6s;"></div>
+        
+        <!-- Subtle dot pattern -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wMikiLz48L3N2Zz4=')]"></div>
     </div>
 
-    <div class="page-wrap">
-        <div class="card-wrap">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative z-10">
+        
+        <!-- Header / Nav -->
+        <div class="w-full max-w-5xl flex justify-between items-center mb-8 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center text-brand-500 border border-white/60 group-hover:bg-white transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 shadow-sm">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                </div>
+                <span class="font-bold text-2xl tracking-tight text-gray-800 group-hover:text-brand-600 transition-colors">EdFlow<span class="text-brand-500">.</span></span>
+            </a>
+            
+            <a href="/" class="px-5 py-2.5 rounded-full bg-white/80 hover:bg-white text-gray-700 text-sm font-semibold border border-white/60 backdrop-blur-md transition-all duration-300 hover:shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
 
-            <!-- Header -->
-            <div class="page-header">
-                <a href="/" class="logo-btn">
-                    <i class="fa-solid fa-user-graduate"></i>
-                </a>
-                <h1 class="page-title">Student Application Portal</h1>
-                <p class="page-subtitle">Please fill out all details carefully. Documents must be clear and legible.</p>
+        <!-- Main Form Container -->
+        <div class="w-full max-w-5xl glass-panel rounded-[2.5rem] p-6 sm:p-10 lg:p-14 relative overflow-hidden animate-fade-in-up shadow-2xl shadow-rose-100/50" style="animation-delay: 0.2s;">
+            
+            <!-- Colorful top accent -->
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-400"></div>
+
+            <div class="text-center mb-12 relative z-10">
+                <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white border border-rose-100 text-pink-500 font-bold tracking-widest uppercase text-xs mb-6 shadow-sm animate-float">
+                    <i class="fa-solid fa-sparkles text-yellow-400"></i> New Admission
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-gray-800 mb-5">
+                    Start Your <span class="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 gradient-text">Bright Future</span>
+                </h1>
+                <p class="text-gray-500 text-lg sm:text-xl max-w-2xl mx-auto font-medium">Join our vibrant campus and shape the career of your dreams. Fill out the application below.</p>
             </div>
 
-            <!-- Glass Card -->
-            <div class="glass-card">
+            <!-- Form -->
+            <form id="studentForm" class="relative z-10">
+                @csrf
+                <input type="hidden" name="type" value="Students">
 
-                <form id="studentForm" class="form-body">
-                    @csrf
-                    <input type="hidden" name="type" value="Students">
-
-                    <!-- Section 1: Personal Info -->
-                    <div class="form-section">
-                        <div class="section-label">
-                            <i class="fa-solid fa-user"></i> Personal Information
-                        </div>
-                        <div class="field-grid-2">
-                            <div class="field-group">
-                                <label class="field-label">Full Name <span class="req">*</span></label>
-                                <input type="text" name="name" required placeholder="e.g. Arjun Sharma" class="field-input">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    
+                    <!-- Left Column -->
+                    <div class="space-y-8">
+                        <!-- Personal Details -->
+                        <div class="bg-gradient-to-br from-white to-rose-50/50 p-7 rounded-3xl border border-white/80 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-pink-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                            
+                            <div class="flex items-center gap-4 mb-6 relative">
+                                <div class="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-500 shadow-sm border border-pink-200/50">
+                                    <i class="fa-regular fa-id-card text-xl"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-800">Who are you?</h2>
                             </div>
-                            <div class="field-group">
-                                <label class="field-label">Email Address <span class="req">*</span></label>
-                                <input type="email" name="email" required placeholder="arjun@email.com" class="field-input">
-                            </div>
-                            <div class="field-group">
-                                <label class="field-label">Phone Number <span class="req">*</span></label>
-                                <input type="tel" name="phone" required placeholder="+91 98765 43210" class="field-input">
-                            </div>
-                            <div class="field-group">
-                                <label class="field-label">Roll Number <span class="opt">(Optional)</span></label>
-                                <input type="text" name="roll" placeholder="e.g. 2023-CSE-001" class="field-input">
-                            </div>
-                            <div class="field-group col-span-2">
-                                <label class="field-label">Desired Course <span class="req">*</span></label>
-                                <select name="course" required class="field-input field-select">
-                                    <option value="" disabled selected>Select a program...</option>
 
-                                    <optgroup label="Professional &amp; Management">
-                                        <option value="BCA">Bachelor of Computer Applications (BCA)</option>
-                                        <option value="MCA">Master of Computer Applications (MCA)</option>
-                                        <option value="BBA">Bachelor of Business Administration (BBA)</option>
-                                        <option value="MBA">Master of Business Administration (MBA)</option>
-                                    </optgroup>
+                            <div class="space-y-5 relative">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Full Name <span class="text-pink-500">*</span></label>
+                                    <input type="text" name="name" required placeholder="e.g. Emma Watson" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
+                                </div>
 
-                                    <optgroup label="Engineering (B.Tech / B.E.)">
-                                        <option value="Computer Science and Engineering (CSE)">Computer Science &amp; Engineering (CSE)</option>
-                                        <option value="Information Technology (IT)">Information Technology (IT)</option>
-                                        <option value="Electronics and Communication Engineering (ECE)">Electronics &amp; Communication Engg (ECE)</option>
-                                        <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                        <option value="Civil Engineering">Civil Engineering</option>
-                                        <option value="Electrical Engineering">Electrical Engineering</option>
-                                        <option value="Artificial Intelligence and Data Science">Artificial Intelligence &amp; Data Science</option>
-                                        <option value="Biotechnology Engineering">Biotechnology Engineering</option>
-                                        <option value="Chemical Engineering">Chemical Engineering</option>
-                                        <option value="Aerospace Engineering">Aerospace / Aeronautical Engineering</option>
-                                        <option value="Marine Engineering">Marine Engineering</option>
-                                        <option value="Food Technology">Food Technology</option>
-                                    </optgroup>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Email Address <span class="text-pink-500">*</span></label>
+                                    <input type="email" name="email" required placeholder="emma@example.com" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
+                                </div>
 
-                                    <optgroup label="Bachelor of Science (B.Sc.)">
-                                        <option value="B.Sc. Computer Science">B.Sc. Computer Science</option>
-                                        <option value="B.Sc. Information Technology">B.Sc. Information Technology</option>
-                                        <option value="B.Sc. Data Science">B.Sc. Data Science</option>
-                                        <option value="B.Sc. Mathematics">B.Sc. Mathematics</option>
-                                        <option value="B.Sc. Physics">B.Sc. Physics</option>
-                                        <option value="B.Sc. Chemistry">B.Sc. Chemistry</option>
-                                        <option value="B.Sc. Biotechnology">B.Sc. Biotechnology</option>
-                                        <option value="B.Sc. Microbiology">B.Sc. Microbiology</option>
-                                        <option value="B.Sc. Botany">B.Sc. Botany</option>
-                                        <option value="B.Sc. Zoology">B.Sc. Zoology</option>
-                                        <option value="B.Sc. Statistics">B.Sc. Statistics</option>
-                                        <option value="B.Sc. Electronics">B.Sc. Electronics</option>
-                                    </optgroup>
-                                </select>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Phone Number <span class="text-pink-500">*</span></label>
+                                    <input type="tel" name="phone" required placeholder="+1 (555) 000-0000" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1 flex justify-between">
+                                        <span>Registration No.</span> <span class="text-gray-400 font-medium normal-case tracking-normal">Optional</span>
+                                    </label>
+                                    <input type="text" name="roll" placeholder="e.g. 2026-CS-001" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium bg-gray-50/50">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Section 2: Parent Info -->
-                    <div class="form-section">
-                        <div class="section-label">
-                            <i class="fa-solid fa-heart"></i> Parent / Guardian Information
-                        </div>
-                        <div class="field-grid-2">
-                            <div class="field-group">
-                                <label class="field-label">Parent's Full Name <span class="req">*</span></label>
-                                <input type="text" name="parent_name" required placeholder="e.g. Rajesh Sharma" class="field-input">
+                    <!-- Right Column -->
+                    <div class="space-y-8">
+                        <!-- Program Selection -->
+                        <div class="bg-gradient-to-br from-white to-cyan-50/50 p-7 rounded-3xl border border-white/80 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                            
+                            <div class="flex items-center gap-4 mb-6 relative">
+                                <div class="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 shadow-sm border border-cyan-200/50">
+                                    <i class="fa-solid fa-laptop-code text-xl"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-800">What will you study?</h2>
                             </div>
-                            <div class="field-group">
-                                <label class="field-label">Parent's Email Address <span class="req">*</span></label>
-                                <input type="email" name="parent_email" required placeholder="rajesh@email.com" class="field-input">
+
+                            <div class="relative">
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Desired Program <span class="text-cyan-500">*</span></label>
+                                <div class="relative">
+                                    <select name="course" required class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium appearance-none cursor-pointer pr-10">
+                                        <option value="" disabled selected>Select an awesome program...</option>
+                                        <optgroup label="Professional & Management">
+                                            <option value="BCA">Bachelor of Computer Applications (BCA)</option>
+                                            <option value="MCA">Master of Computer Applications (MCA)</option>
+                                            <option value="BBA">Bachelor of Business Administration (BBA)</option>
+                                            <option value="MBA">Master of Business Administration (MBA)</option>
+                                        </optgroup>
+                                        <optgroup label="Engineering (B.Tech / B.E.)">
+                                            <option value="Computer Science and Engineering (CSE)">Computer Science & Engineering (CSE)</option>
+                                            <option value="Information Technology (IT)">Information Technology (IT)</option>
+                                            <option value="Electronics and Communication Engineering (ECE)">Electronics & Comm Engg (ECE)</option>
+                                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                            <option value="Civil Engineering">Civil Engineering</option>
+                                            <option value="Electrical Engineering">Electrical Engineering</option>
+                                            <option value="Artificial Intelligence and Data Science">AI & Data Science</option>
+                                        </optgroup>
+                                        <optgroup label="Sciences (B.Sc.)">
+                                            <option value="B.Sc. Computer Science">B.Sc. Computer Science</option>
+                                            <option value="B.Sc. Mathematics">B.Sc. Mathematics</option>
+                                            <option value="B.Sc. Physics">B.Sc. Physics</option>
+                                        </optgroup>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-500">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parent Details -->
+                        <div class="bg-gradient-to-br from-white to-amber-50/50 p-7 rounded-3xl border border-white/80 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                            
+                            <div class="flex items-center gap-4 mb-6 relative">
+                                <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 shadow-sm border border-amber-200/50">
+                                    <i class="fa-solid fa-people-roof text-xl"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-800">Guardian Details</h2>
+                            </div>
+
+                            <div class="space-y-5 relative">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Parent's Full Name <span class="text-amber-500">*</span></label>
+                                    <input type="text" name="parent_name" required placeholder="e.g. Richard Watson" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Parent's Email <span class="text-amber-500">*</span></label>
+                                    <input type="email" name="parent_email" required placeholder="richard@example.com" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Terms -->
-                    <div class="terms-box">
-                        <label class="terms-label">
-                            <input type="checkbox" required class="terms-check">
-                            <span class="terms-text">
-                                I hereby declare that all the information and documents provided are true and correct to the best of my knowledge. I understand that my application may be rejected if any information is found to be false.
-                            </span>
-                        </label>
-                    </div>
-
-                    <!-- Submit -->
-                    <button type="submit" id="submitBtn" class="submit-btn">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span id="btnText">Submit Application</span>
-                        <i class="fa-solid fa-spinner fa-spin" id="btnLoader" style="display:none;"></i>
-                    </button>
-                </form>
-
-                <!-- Success State -->
-                <div id="successMessage" class="success-panel">
-                    <div class="success-icon">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <h2 class="success-title">Application Received!</h2>
-                    <p class="success-sub">Your application has been securely sent to the administration for review. We will contact you via email shortly.</p>
-                    <a href="/" class="back-btn">
-                        <i class="fa-solid fa-arrow-left"></i> Return to Home
-                    </a>
                 </div>
 
-            </div><!-- /.glass-card -->
+                <!-- Terms & Submit -->
+                <div class="mt-12 pt-8 border-t border-gray-100 max-w-3xl mx-auto flex flex-col items-center gap-8">
+                    <label class="flex items-start gap-4 cursor-pointer group bg-white p-5 rounded-2xl border border-rose-100 hover:border-brand-300 hover:bg-brand-50/30 transition-all w-full shadow-sm">
+                        <div class="relative flex items-center justify-center mt-0.5 shrink-0">
+                            <input type="checkbox" required class="peer appearance-none w-6 h-6 border-2 border-gray-200 rounded-lg checked:bg-brand-500 checked:border-brand-500 transition-all cursor-pointer bg-gray-50">
+                            <i class="fa-solid fa-check absolute text-white text-sm opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></i>
+                        </div>
+                        <span class="text-base text-gray-600 group-hover:text-gray-800 transition-colors leading-relaxed font-medium">
+                            I verify that all information provided is completely accurate. I understand that my journey at EdFlow begins with this commitment to truth.
+                        </span>
+                    </label>
 
-            <!-- Bottom Link -->
-            <div class="bottom-links">
-                <a href="/" class="cancel-link">
-                    <i class="fa-solid fa-xmark" style="margin-right:6px;"></i>Cancel and return to home
+                    <button type="submit" id="submitBtn" class="w-full sm:w-auto min-w-[300px] relative group/btn inline-flex items-center justify-center px-10 py-5 font-bold text-white rounded-full overflow-hidden shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all hover:-translate-y-1 focus:outline-none">
+                        <div class="absolute inset-0 bg-gradient-to-r from-brand-400 via-cyan-400 to-brand-500 transition-all duration-300 group-hover/btn:scale-105"></div>
+                        <span class="relative z-10 flex items-center gap-3 text-lg">
+                            <span id="btnText">Submit Application</span>
+                            <i id="btnIcon" class="fa-solid fa-rocket text-base transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform"></i>
+                            <i id="btnLoader" class="fa-solid fa-circle-notch animate-spin text-base hidden"></i>
+                        </span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Success State Panel (Hidden by default) -->
+            <div id="successMessage" class="hidden absolute inset-0 z-50 glass-panel bg-white/95 backdrop-blur-3xl flex flex-col items-center justify-center p-8 text-center border-none">
+                <div class="relative w-28 h-28 mb-8">
+                    <div class="absolute inset-0 bg-brand-200 rounded-full animate-ping opacity-60"></div>
+                    <div class="relative w-full h-full bg-gradient-to-br from-brand-400 to-cyan-500 rounded-full flex items-center justify-center text-white text-5xl shadow-xl shadow-brand-500/30 transform scale-0 animate-[scaleIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                </div>
+                
+                <h2 class="text-4xl sm:text-5xl font-black text-gray-800 mb-5 transform translate-y-4 opacity-0 animate-[fadeInUp_0.5s_0.2s_forwards]">You're on the list!</h2>
+                <p class="text-gray-500 text-xl max-w-lg mx-auto mb-10 transform translate-y-4 opacity-0 animate-[fadeInUp_0.5s_0.3s_forwards] leading-relaxed font-medium">
+                    We've received your application. Get ready for an amazing journey! Check your inbox soon for the next steps.
+                </p>
+                
+                <a href="/" class="px-8 py-4 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold shadow-sm transition-all hover:-translate-y-1 transform translate-y-4 opacity-0 animate-[fadeInUp_0.5s_0.4s_forwards] flex items-center gap-2">
+                    <i class="fa-solid fa-home"></i> Back to Homepage
                 </a>
             </div>
 
@@ -503,6 +332,7 @@
         const form          = document.getElementById("studentForm");
         const submitBtn     = document.getElementById("submitBtn");
         const btnText       = document.getElementById("btnText");
+        const btnIcon       = document.getElementById("btnIcon");
         const btnLoader     = document.getElementById("btnLoader");
         const successPanel  = document.getElementById("successMessage");
 
@@ -510,8 +340,10 @@
             e.preventDefault();
 
             submitBtn.disabled = true;
-            btnText.innerText  = "Submitting...";
-            btnLoader.style.display = 'inline-block';
+            btnText.innerText  = "Sending Magic...";
+            btnIcon.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+            submitBtn.classList.add('opacity-90', 'cursor-not-allowed', 'scale-95');
 
             try {
                 const formData = new FormData(this);
@@ -527,21 +359,27 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    form.style.display   = 'none';
-                    successPanel.style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    form.style.opacity = '0';
+                    form.style.transition = 'opacity 0.4s ease';
+                    setTimeout(() => {
+                        successPanel.classList.remove('hidden');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 400);
                 } else {
                     let msg = result.message || "An error occurred during submission.";
                     if (result.errors) { msg = Object.values(result.errors)[0][0]; }
-                    alert("Error: " + msg);
+                    alert("Oops: " + msg);
                 }
             } catch (err) {
-                alert("Something went wrong. Please check your connection and try again.");
+                alert("Network error. Please check your connection and try again.");
                 console.error(err);
             } finally {
                 submitBtn.disabled = false;
                 btnText.innerText  = "Submit Application";
-                btnLoader.style.display = 'none';
+                btnIcon.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+                submitBtn.classList.remove('opacity-90', 'cursor-not-allowed', 'scale-95');
+                form.style.opacity = '1';
             }
         });
     </script>
