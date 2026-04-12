@@ -22,12 +22,18 @@ class CourseFactory extends Factory
             'Graphic Design & Animation',
             'Electrical Engineering',
             'Modern Literature',
+            'Mechanical Engineering',
+            'Civil Engineering',
+            'Data Science & AI',
+            'Nursing & Health Sciences',
+            'Psychology',
         ];
 
         return [
-            'name' => $this->faker->unique()->randomElement($courses),
-            'description' => $this->faker->paragraph(),
-            'admit_cards_published' => $this->faker->boolean(70),
+            // Use the modern fake() helper instead of $this->faker
+            'name' => fake()->unique()->randomElement($courses),
+            'description' => fake()->paragraph(),
+            'admit_cards_published' => fake()->boolean(70),
         ];
     }
 }
