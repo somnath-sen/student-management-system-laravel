@@ -45,7 +45,8 @@ Route::get('/', function () {
 
 // Registration Routes
 Route::get('/register/student', function () {
-    return view('register.student');
+    $courses = \App\Models\Course::orderBy('name')->get();
+    return view('register.student', compact('courses'));
 });
 Route::post('/register/student', [RegistrationController::class, 'store'])->name('register.student.store');
 Route::get('/register/teacher', function () {

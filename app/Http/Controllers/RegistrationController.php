@@ -28,6 +28,7 @@ class RegistrationController extends Controller
         StudentRegistration::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'course' => $request->course,
             'roll' => $request->roll,
             'parent_name' => $request->parent_name,

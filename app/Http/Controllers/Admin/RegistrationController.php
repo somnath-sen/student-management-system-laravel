@@ -91,6 +91,7 @@ class RegistrationController extends Controller
                 'user_id' => $studentUser->id,
                 'course_id' => $courseId,
                 'roll_number' => $registration->roll,
+                'phone' => $registration->phone,
                 'parent_name' => $registration->parent_name,
             ]);
 

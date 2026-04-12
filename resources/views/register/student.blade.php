@@ -227,26 +227,13 @@
                                 <div class="relative">
                                     <select name="course" required class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium appearance-none cursor-pointer pr-10">
                                         <option value="" disabled selected>Select an awesome program...</option>
-                                        <optgroup label="Professional & Management">
-                                            <option value="BCA">Bachelor of Computer Applications (BCA)</option>
-                                            <option value="MCA">Master of Computer Applications (MCA)</option>
-                                            <option value="BBA">Bachelor of Business Administration (BBA)</option>
-                                            <option value="MBA">Master of Business Administration (MBA)</option>
-                                        </optgroup>
-                                        <optgroup label="Engineering (B.Tech / B.E.)">
-                                            <option value="Computer Science and Engineering (CSE)">Computer Science & Engineering (CSE)</option>
-                                            <option value="Information Technology (IT)">Information Technology (IT)</option>
-                                            <option value="Electronics and Communication Engineering (ECE)">Electronics & Comm Engg (ECE)</option>
-                                            <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                            <option value="Civil Engineering">Civil Engineering</option>
-                                            <option value="Electrical Engineering">Electrical Engineering</option>
-                                            <option value="Artificial Intelligence and Data Science">AI & Data Science</option>
-                                        </optgroup>
-                                        <optgroup label="Sciences (B.Sc.)">
-                                            <option value="B.Sc. Computer Science">B.Sc. Computer Science</option>
-                                            <option value="B.Sc. Mathematics">B.Sc. Mathematics</option>
-                                            <option value="B.Sc. Physics">B.Sc. Physics</option>
-                                        </optgroup>
+                                        @if(isset($courses) && $courses->count() > 0)
+                                            @foreach($courses as $course)
+                                                <option value="{{ $course->name }}">{{ $course->name }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="" disabled>No programs available at the moment</option>
+                                        @endif
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-500">
                                         <i class="fa-solid fa-chevron-down"></i>

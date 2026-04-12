@@ -66,6 +66,7 @@
                 <thead>
                     <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
                         <th class="px-6 py-4">Applicant</th>
+                        <th class="px-6 py-4">Phone Number</th>
                         <th class="px-6 py-4">Course Details</th>
                         <th class="px-6 py-4">Parent Details</th>
                         <th class="px-6 py-4">Status</th>
@@ -79,6 +80,10 @@
                             <td class="px-6 py-4">
                                 <div class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ $reg->name }}</div>
                                 <div class="text-xs text-gray-500">{{ $reg->email }}</div>
+                            </td>
+                            
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-gray-800">{{ $reg->phone ?? 'N/A' }}</div>
                             </td>
 
                             <td class="px-6 py-4">
@@ -133,7 +138,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                                 No registrations found.
                             </td>
                         </tr>
