@@ -13,6 +13,10 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
+        if (!\App\Models\Setting::get('student_registration_enabled', true)) {
+            return response()->json(['success' => false, 'message' => 'Student registrations are currently closed.'], 403);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:student_registrations,email|unique:users,email',

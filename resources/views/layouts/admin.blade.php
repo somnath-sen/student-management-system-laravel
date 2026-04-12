@@ -166,6 +166,11 @@
                     <span class="font-semibold text-sm">Teachers</span>
                 </a>
 
+                <a href="{{ route('admin.settings.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/settings*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-gear w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm">System Settings</span>
+                </a>
+
                 <a href="{{ route('admin.fees.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/fees*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Fees Management</span>

@@ -11,6 +11,10 @@ class FacultyRegistrationController extends Controller
 {
     public function store(Request $request)
     {
+        if (!\App\Models\Setting::get('faculty_registration_enabled', true)) {
+            return back()->withErrors(['email' => 'Faculty registrations are currently closed.']);
+        }
+
         $validated = $request->validate([
             'name'          => 'required|string|max:255',
             'email'         => 'required|email|max:255',

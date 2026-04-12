@@ -45,11 +45,18 @@ Route::get('/', function () {
 
 // Registration Routes
 Route::get('/register/student', function () {
+    if (!\App\Models\Setting::get('student_registration_enabled', true)) {
+        return view('register.closed', ['type' => 'Student']);
+    }
     $courses = \App\Models\Course::orderBy('name')->get();
     return view('register.student', compact('courses'));
 });
 Route::post('/register/student', [RegistrationController::class, 'store'])->name('register.student.store');
+
 Route::get('/register/teacher', function () {
+    if (!\App\Models\Setting::get('faculty_registration_enabled', true)) {
+        return view('register.closed', ['type' => 'Faculty']);
+    }
     $subjects = \App\Models\Subject::orderBy('name')->get();
     return view('register.teacher', compact('subjects'));
 });
@@ -113,6 +120,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/faculty-registrations/{id}/approve', [AdminFacultyRegistrationController::class, 'approve'])->name('admin.faculty-registrations.approve');
     Route::post('/admin/faculty-registrations/{id}/reject', [AdminFacultyRegistrationController::class, 'reject'])->name('admin.faculty-registrations.reject');
     Route::post('/admin/faculty-registrations/{id}/resend', [AdminFacultyRegistrationController::class, 'resend'])->name('admin.faculty-registrations.resend');
+
+    /* System Settings */
+    Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings.index');
+    Route::post('/admin/settings/update', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
         
     /* Courses CRUD */
     Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses.index');
