@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmergencySOSMail;
 class LocationController extends Controller
 {
     public function index()
@@ -52,6 +53,11 @@ class LocationController extends Controller
             'last_lng'           => $request->lng,
             'location_updated_at'=> now(),
         ]);
+
+        // Send panic email to parents
+        foreach ($student->parents as $parent) {
+            Mail::to($parent->email)->send(new EmergencySOSMail($student));
+        }
 
         return response()->json(['status' => 'panic_activated']);
     }
