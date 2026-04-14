@@ -14,16 +14,22 @@ class FeeController extends Controller
 {
     public function index()
     {
-        $student = Auth::user();
+        $user = Auth::user();
         
-        $fees = Fee::where('course_id', $student->course_id)
-                   ->orWhereNull('course_id')
-                   ->latest()
-                   ->get();
+        $fees = Fee::where(function($query) use ($user) {
+            if ($user->student) {
+                $query->where('course_id', $user->student->course_id);
+            } else {
+                $query->where('course_id', -1); // No student profile
+            }
+        })
+        ->orWhereNull('course_id')
+        ->latest()
+        ->get();
 
-        $paidFeeIds = FeePayment::where('user_id', $student->id)->where('status', 'completed')->pluck('fee_id')->toArray();
+        $paidFeeIds = FeePayment::where('user_id', $user->id)->where('status', 'completed')->pluck('fee_id')->toArray();
         // ADD THIS: Track pending payments
-        $pendingFeeIds = FeePayment::where('user_id', $student->id)->where('status', 'pending')->pluck('fee_id')->toArray();
+        $pendingFeeIds = FeePayment::where('user_id', $user->id)->where('status', 'pending')->pluck('fee_id')->toArray();
 
         return view('student.fees.index', compact('fees', 'paidFeeIds', 'pendingFeeIds'));
     }
@@ -55,28 +61,32 @@ class FeeController extends Controller
         return back()->with('success', 'Offline payment details submitted! Waiting for Admin verification.');
     }
 
-    // This creates a secure order with Razorpay's servers
     public function createOrder(Request $request)
     {
-        $fee = Fee::findOrFail($request->fee_id);
-        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+        try {
+            $fee = Fee::findOrFail($request->fee_id);
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
 
-        $orderData = [
-            'receipt'         => 'rcptid_' . $fee->id . '_' . Auth::id(),
-            'amount'          => $fee->amount * 100, // Razorpay needs the amount in Paise/Cents
-            'currency'        => 'INR',
-            'payment_capture' => 1 // Auto-capture the payment
-        ];
+            $orderData = [
+                'receipt'         => 'rcptid_' . $fee->id . '_' . Auth::id(),
+                'amount'          => $fee->amount * 100, // Razorpay needs the amount in Paise/Cents
+                'currency'        => 'INR',
+                'payment_capture' => 1 // Auto-capture the payment
+            ];
 
-        $razorpayOrder = $api->order->create($orderData);
+            $razorpayOrder = $api->order->create($orderData);
 
-        return response()->json([
-            'order_id' => $razorpayOrder['id'],
-            'amount' => $orderData['amount'],
-            'key' => config('services.razorpay.key'),
-            'user_name' => Auth::user()->name,
-            'user_email' => Auth::user()->email,
-        ]);
+            return response()->json([
+                'order_id' => $razorpayOrder['id'],
+                'amount' => $orderData['amount'],
+                'key' => config('services.razorpay.key'),
+                'user_name' => Auth::user()->name,
+                'user_email' => Auth::user()->email,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Razorpay Order Creation Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     // This verifies the payment was real and saves it to your database

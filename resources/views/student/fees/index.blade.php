@@ -190,6 +190,10 @@
             });
 
             const orderData = await orderResponse.json();
+            
+            if (!orderResponse.ok) {
+                throw new Error(orderData.error || "Failed to initialize payment gateway.");
+            }
 
             var options = {
                 "key": orderData.key, 
@@ -240,7 +244,7 @@
             rzp1.open();
 
         } catch (error) {
-            alert("Something went wrong. Please try again.");
+            alert("Payment Request Failed: " + error.message);
             console.error(error);
         } finally {
             btn.innerHTML = originalHtml;

@@ -191,7 +191,7 @@
                 </div>
 
                 <!-- Internal Analytics Grid -->
-                <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6 bg-white/50">
+                <div class="p-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 bg-white/50">
                     
                     <!-- Analytics 1: ATTENDANCE -->
                     @php
@@ -313,6 +313,46 @@
                         </div>
                     </div>
                     @endif
+
+                    <!-- Analytics 4: FEES TRACK -->
+                    <div class="col-span-1 bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-amber-50 rounded-full group-hover:scale-150 transition-transform duration-700 ease-out z-0"></div>
+                        
+                        <div class="flex justify-between items-start mb-6 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center shadow-inner border border-amber-100 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fa-solid fa-indian-rupee-sign text-2xl"></i>
+                            </div>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest border border-gray-100 px-3 py-1 rounded-full bg-white">Fees Track</span>
+                        </div>
+                        <div class="relative z-10 flex-1 flex flex-col justify-end">
+                            <h3 class="text-3xl font-black text-gray-800 tracking-tighter truncate" title="₹{{ number_format($data['total_paid']) }} / ₹{{ number_format($data['total_fees']) }}">
+                                ₹{{ number_format($data['total_paid']) }}<span class="text-lg text-gray-400 font-bold"> / ₹{{ number_format($data['total_fees']) }}</span>
+                            </h3>
+                            
+                            @if($data['total_due'] > 0)
+                                <p class="text-sm font-bold text-rose-500 mt-2 mb-6"><i class="fa-solid fa-circle-exclamation mr-1"></i> Due: ₹{{ number_format($data['total_due']) }}</p>
+                            @else
+                                <p class="text-sm font-bold text-emerald-500 mt-2 mb-6"><i class="fa-regular fa-circle-check mr-1"></i> Fully Paid</p>
+                            @endif
+                            
+                            @php
+                                $feePercentage = $data['total_fees'] > 0 ? min(100, round(($data['total_paid'] / $data['total_fees']) * 100)) : 100;
+                                $feeColor = $feePercentage == 100 ? 'emerald' : 'amber';
+                                if ($data['total_fees'] == 0 && $data['total_paid'] == 0) {
+                                    $feePercentage = 0;
+                                    $feeColor = 'gray';
+                                }
+                            @endphp
+                            
+                            <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
+                                <div class="h-full bg-{{ $feeColor }}-500 rounded-full shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1)] relative overflow-hidden transition-all duration-1000" style="width: {{ $feePercentage }}%">
+                                    @if($feePercentage > 0 && $feePercentage < 100)
+                                    <div class="absolute inset-0 bg-white/20 animate-[marquee_2s_linear_infinite] w-[200%]"></div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>

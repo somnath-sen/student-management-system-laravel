@@ -104,6 +104,22 @@ class DashboardController extends Controller
                 ];
             }
 
+            // 4. Fees Track
+            $totalFees = \App\Models\Fee::where(function($query) use ($child) {
+                if ($child->course_id) {
+                    $query->where('course_id', $child->course_id);
+                } else {
+                    $query->where('course_id', -1);
+                }
+                $query->orWhereNull('course_id');
+            })->sum('amount');
+            
+            $totalPaid = \App\Models\FeePayment::where('user_id', $child->user_id)
+                                               ->where('status', 'completed')
+                                               ->sum('amount_paid');
+            
+            $totalDue = max(0, $totalFees - $totalPaid);
+
             return [
                 'student'             => $child,
                 'attendance_percentage'=> $attendancePercentage,
@@ -114,6 +130,9 @@ class DashboardController extends Controller
                 'emergency_data'      => $emergencyData,
                 'is_panicking'        => $child->is_panicking,
                 'panic_data'          => $panicData,
+                'total_fees'          => $totalFees,
+                'total_paid'          => $totalPaid,
+                'total_due'           => $totalDue,
             ];
         });
 
