@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Fee>
@@ -16,11 +17,13 @@ class FeeFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = Faker::create();
+
         return [
             'course_id' => \App\Models\Course::factory(),
-            'title' => $this->faker->randomElement(['Annual Tuition', 'Library Fee', 'Lab Charges', 'Exam Fee']),
-            'amount' => $this->faker->numberBetween(500, 5000),
-            'due_date' => $this->faker->dateTimeBetween('now', '+6 months'),
+            'title' => $faker->randomElement(['Annual Tuition', 'Library Fee', 'Lab Charges', 'Exam Fee']),
+            'amount' => $faker->numberBetween(500, 5000),
+            'due_date' => $faker->dateTimeBetween('now', '+6 months'),
         ];
     }
 }

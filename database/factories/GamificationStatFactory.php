@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\GamificationStat>
@@ -16,13 +17,15 @@ class GamificationStatFactory extends Factory
      */
     public function definition(): array
     {
-        $xp = $this->faker->numberBetween(100, 5000);
+        $faker = Faker::create();
+
+        $xp = $faker->numberBetween(100, 5000);
         return [
             'user_id' => \App\Models\User::factory(),
             'total_points' => $xp,
             'level' => floor($xp / 1000) + 1,
-            'current_streak' => $this->faker->numberBetween(0, 20),
-            'last_login_date' => $this->faker->dateTimeThisMonth(),
+            'current_streak' => $faker->numberBetween(0, 20),
+            'last_login_date' => $faker->dateTimeThisMonth(),
         ];
     }
 }

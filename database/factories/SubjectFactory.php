@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Subject>
@@ -16,6 +17,8 @@ class SubjectFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = Faker::create();
+
         $subjects = [
             'Algorithms', 'Database Systems', 'Mobile Dev', 'AI & ML',
             'Financial Accounting', 'Marketing 101', 'Logistics',
@@ -25,7 +28,7 @@ class SubjectFactory extends Factory
         ];
 
         return [
-            'name' => $this->faker->unique()->randomElement($subjects),
+            'name' => $faker->unique()->randomElement($subjects),
             'course_id' => \App\Models\Course::factory(),
         ];
     }

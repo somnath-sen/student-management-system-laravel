@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Teacher>
@@ -16,11 +17,13 @@ class TeacherFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = Faker::create();
+
         return [
             'user_id' => \App\Models\User::factory(),
-            'phone' => $this->faker->phoneNumber(),
-            'qualification' => $this->faker->randomElement(['Ph.D', 'M.Sc', 'M.Tech', 'MBA']),
-            'experience' => $this->faker->numberBetween(2, 20) . ' Years',
+            'phone' => $faker->phoneNumber(),
+            'qualification' => $faker->randomElement(['Ph.D', 'M.Sc', 'M.Tech', 'MBA']),
+            'experience' => $faker->numberBetween(2, 20) . ' Years',
         ];
     }
 }

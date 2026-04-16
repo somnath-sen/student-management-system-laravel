@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Notice>
@@ -16,11 +17,13 @@ class NoticeFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = Faker::create();
+
         return [
             'user_id' => \App\Models\User::factory(),
-            'title' => $this->faker->sentence(),
-            'content' => $this->faker->paragraphs(2, true),
-            'category' => $this->faker->randomElement(['Urgent', 'Exam', 'Holiday', 'General']),
+            'title' => $faker->sentence(),
+            'content' => $faker->paragraphs(2, true),
+            'category' => $faker->randomElement(['Urgent', 'Exam', 'Holiday', 'General']),
         ];
     }
 }
