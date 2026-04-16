@@ -27,6 +27,9 @@ class BroadcastController extends Controller
             abort(403, 'This subject is not part of your course.');
         }
 
+        // All subjects for the student's current course only (for the subject switcher)
+        $courseSubjects = Subject::where('course_id', $student->course_id)->get();
+
         // Fetch all messages latest first
         $messages = BroadcastMessage::with(['teacher.user'])
             ->where('subject_id', $subject->id)
@@ -50,7 +53,8 @@ class BroadcastController extends Controller
             'student',
             'subject',
             'messages',
-            'readMap'
+            'readMap',
+            'courseSubjects'
         ));
     }
 

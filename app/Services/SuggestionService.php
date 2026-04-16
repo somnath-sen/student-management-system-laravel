@@ -38,11 +38,17 @@ class SuggestionService
         // -- Marks (one row per subject) --
         $marks = Mark::with('subject')
             ->where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->get()
             ->keyBy('subject_id');
 
         // -- Attendance grouped by subject --
         $attendanceRows = Attendance::where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->selectRaw('subject_id, COUNT(*) as total, SUM(present) as present')
             ->groupBy('subject_id')
             ->get()

@@ -19,6 +19,9 @@ class MarksheetController extends Controller
 
         $marks = Mark::with('subject')
             ->where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->where('is_locked', true)
             ->get();
 
@@ -34,6 +37,9 @@ class MarksheetController extends Controller
         }
 
         $hasMarks = Mark::where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->where('is_locked', true)
             ->exists();
 
@@ -44,6 +50,9 @@ class MarksheetController extends Controller
         }
 
         $marks = Mark::where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->where('is_locked', true)
             ->with('subject')
             ->get();

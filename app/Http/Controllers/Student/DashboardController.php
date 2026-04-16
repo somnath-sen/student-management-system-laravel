@@ -80,9 +80,16 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $totalClasses = Attendance::where('student_id', $student->id)->count();
+        $totalClasses = Attendance::where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
+            ->count();
 
         $presentCount = Attendance::where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->where('present', 1)
             ->count();
 
@@ -100,6 +107,9 @@ class DashboardController extends Controller
 
         $subjectAttendance = Attendance::with('subject')
             ->where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
             ->selectRaw('
                 subject_id,
                 COUNT(*) as total_classes,

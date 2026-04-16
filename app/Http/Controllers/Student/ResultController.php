@@ -18,6 +18,10 @@ class ResultController extends Controller
 
         $marks = Mark::with(['subject', 'teacher.user'])
             ->where('student_id', $student->id)
+            ->whereHas('subject', function ($q) use ($student) {
+                $q->where('course_id', $student->course_id);
+            })
+            ->where('is_locked', true) // Ensure they are officially published
             ->get();
 
         $totalObtained = $marks->sum('marks_obtained');

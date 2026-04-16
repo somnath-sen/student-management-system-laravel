@@ -16,14 +16,20 @@ class AdmitCardController extends Controller
             return view('student.admit-card.pending');
         }
 
-        // Mock upcoming exam schedule for the presentation
-        $exams = [
-            ['date' => '15 May 2026', 'time' => '10:00 AM - 01:00 PM', 'subject' => 'Data Structures & Algorithms', 'code' => 'MCA-401'],
-            ['date' => '18 May 2026', 'time' => '10:00 AM - 01:00 PM', 'subject' => 'Advanced Web Technologies', 'code' => 'MCA-402'],
-            ['date' => '21 May 2026', 'time' => '10:00 AM - 01:00 PM', 'subject' => 'Artificial Intelligence & ML', 'code' => 'MCA-403'],
-            ['date' => '24 May 2026', 'time' => '10:00 AM - 01:00 PM', 'subject' => 'Cloud Computing', 'code' => 'MCA-404'],
-            ['date' => '27 May 2026', 'time' => '10:00 AM - 01:00 PM', 'subject' => 'Software Engineering', 'code' => 'MCA-405'],
-        ];
+        // Dynamically build the exam schedule based on the student's actual course subjects
+        $subjects = $student->course->subjects;
+        $exams = [];
+        $startDate = \Carbon\Carbon::parse('15 May 2026');
+
+        foreach ($subjects as $index => $subject) {
+            $codePrefix = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $subject->name), 0, 3));
+            $exams[] = [
+                'date'    => $startDate->copy()->addDays($index * 3)->format('d M Y'),
+                'time'    => '10:00 AM - 01:00 PM',
+                'subject' => $subject->name,
+                'code'    => $codePrefix . '-40' . ($index + 1),
+            ];
+        }
 
         return view('student.admit-card.show', compact('student', 'exams'));
     }
