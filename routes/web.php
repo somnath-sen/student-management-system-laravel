@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\StudentAnalysisController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\StudentController;
@@ -169,6 +170,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     /* Analytics */
     Route::get('/admin/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
     Route::get('/admin/analytics/export', [\App\Http\Controllers\Admin\AnalyticsController::class, 'export'])->name('admin.analytics.export');
+
+    /* Student Analysis (New Feature) */
+    Route::get('/admin/student-analysis', [StudentAnalysisController::class, 'index'])->name('admin.student-analysis.index');
+    Route::post('/admin/student-analysis/{student}/status', [StudentAnalysisController::class, 'updateStatus'])->name('admin.student-analysis.update-status');
     
     // Fee Management Routes
     Route::get('/admin/fees', [AdminFeeController::class, 'index'])->name('admin.fees.index');
@@ -176,9 +181,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/fees/approve/{payment}', [AdminFeeController::class, 'approvePayment'])->name('admin.fees.approve');
 
     // Notice Board Routes
-    Route::get('/admin/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'index'])->name('admin.notices.index');
-    Route::post('/admin/notices', [\App\Http\Controllers\Admin\NoticeController::class, 'store'])->name('admin.notices.store');
-    Route::delete('/admin/notices/{notice}', [\App\Http\Controllers\Admin\NoticeController::class, 'destroy'])->name('admin.notices.destroy');
+    Route::get('/admin/notices', [NoticeController::class, 'index'])->name('admin.notices.index');
+    Route::post('/admin/notices', [NoticeController::class, 'store'])->name('admin.notices.store');
+    Route::delete('/admin/notices/{notice}', [NoticeController::class, 'destroy'])->name('admin.notices.destroy');
 
     // Admin Timetable Builder
     Route::get('/admin/timetable', [\App\Http\Controllers\Admin\TimetableController::class, 'index'])->name('admin.timetable.index');
@@ -203,19 +208,19 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/teacher/dashboard', [\App\Http\Controllers\Teacher\DashboardController::class, 'index'])->name('teacher.dashboard');
 
     // Attendance
-    Route::get('/teacher/attendance/create', [\App\Http\Controllers\Teacher\AttendanceController::class, 'create'])->name('teacher.attendance.create');
-    Route::post('/teacher/attendance/store', [\App\Http\Controllers\Teacher\AttendanceController::class, 'store'])->name('teacher.attendance.store');
+    Route::get('/teacher/attendance/create', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance.create');
+    Route::post('/teacher/attendance/store', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
     
     // Details
-    Route::get('/teacher/details', [\App\Http\Controllers\Teacher\DetailsController::class, 'index'])->name('teacher.details');
+    Route::get('/teacher/details', [DetailsController::class, 'index'])->name('teacher.details');
 
     // Marks
-    Route::get('/teacher/marks/create', [\App\Http\Controllers\Teacher\MarkController::class, 'create'])->name('teacher.marks.create');
-    Route::post('/teacher/marks', [\App\Http\Controllers\Teacher\MarkController::class, 'store'])->name('teacher.marks.store');
-    Route::get('/teacher/marks', [\App\Http\Controllers\Teacher\MarkController::class, 'index'])->name('teacher.marks.index');
-    Route::get('/teacher/marks/{subject}', [\App\Http\Controllers\Teacher\MarkController::class, 'edit'])->name('teacher.marks.edit');
-    Route::put('/teacher/marks/{subject}', [\App\Http\Controllers\Teacher\MarkController::class, 'update'])->name('teacher.marks.update');
-    Route::post('/teacher/marks/{subject}/lock', [\App\Http\Controllers\Teacher\MarkController::class, 'lock'])->name('teacher.marks.lock');
+    Route::get('/teacher/marks/create', [MarkController::class, 'create'])->name('teacher.marks.create');
+    Route::post('/teacher/marks', [MarkController::class, 'store'])->name('teacher.marks.store');
+    Route::get('/teacher/marks', [MarkController::class, 'index'])->name('teacher.marks.index');
+    Route::get('/teacher/marks/{subject}', [MarkController::class, 'edit'])->name('teacher.marks.edit');
+    Route::put('/teacher/marks/{subject}', [MarkController::class, 'update'])->name('teacher.marks.update');
+    Route::post('/teacher/marks/{subject}/lock', [MarkController::class, 'lock'])->name('teacher.marks.lock');
 
     /* Performance Analysis */
     Route::get('/teacher/performance', [\App\Http\Controllers\Teacher\PerformanceController::class, 'index'])->name('teacher.performance.index');
@@ -248,12 +253,12 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
 
     /* Attendance (Read-only) */
-    Route::get('/student/attendance', [\App\Http\Controllers\Student\AttendanceController::class, 'index'])->name('student.attendance.index');
+    Route::get('/student/attendance', [StudentAttendanceController::class, 'index'])->name('student.attendance.index');
 
     Route::get('/student/details', [\App\Http\Controllers\Student\DetailsController::class, 'index'])->name('student.details');
 
     // Results
-    Route::get('/student/results', [\App\Http\Controllers\Student\ResultController::class, 'index'])->name('student.results.index');
+    Route::get('/student/results', [ResultController::class, 'index'])->name('student.results.index');
 
     // Marksheet PDF
     Route::get('/student/marksheet', [MarksheetController::class, 'show'])->name('student.marksheet.show');
@@ -277,7 +282,7 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::post('/student/fees/offline', [StudentFeeController::class, 'submitOfflinePayment'])->name('student.fees.offline');
 
     //Notice
-    Route::get('/student/notices/{notice}', [\App\Http\Controllers\Student\DashboardController::class, 'showNotice'])->name('student.notices.show');
+    Route::get('/student/notices/{notice}', [StudentDashboardController::class, 'showNotice'])->name('student.notices.show');
 
     
     // Digital Smart ID Card Routes
@@ -285,10 +290,10 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::post('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'update'])->name('student.smart-id.update');
     
     // Location Tracker Routes
-    Route::get('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'index'])->name('student.location');
-    Route::post('/student/location', [\App\Http\Controllers\Student\LocationController::class, 'update'])->name('student.location.update');
-    Route::post('/student/location/panic', [\App\Http\Controllers\Student\LocationController::class, 'panic'])->name('student.location.panic');
-    Route::post('/student/location/cancel-panic', [\App\Http\Controllers\Student\LocationController::class, 'cancelPanic'])->name('student.location.cancel-panic');
+    Route::get('/student/location', [LocationController::class, 'index'])->name('student.location');
+    Route::post('/student/location', [LocationController::class, 'update'])->name('student.location.update');
+    Route::post('/student/location/panic', [LocationController::class, 'panic'])->name('student.location.panic');
+    Route::post('/student/location/cancel-panic', [LocationController::class, 'cancelPanic'])->name('student.location.cancel-panic');
 
     // Timetable Route
     Route::get('/student/timetable', [\App\Http\Controllers\Student\TimetableController::class, 'index'])->name('student.timetable');

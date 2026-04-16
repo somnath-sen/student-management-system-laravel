@@ -130,6 +130,19 @@
                             </select>
                         </div>
                     </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Student Status</label>
+                        <div class="relative">
+                            <select name="status" 
+                                    class="input-field w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700 bg-white cursor-pointer" 
+                                    required>
+                                <option value="active" {{ old('status', $student->status) == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="dropped" {{ old('status', $student->status) == 'dropped' ? 'selected' : '' }}>Dropped</option>
+                                <option value="completed" {{ old('status', $student->status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
             </div>

@@ -110,6 +110,7 @@ class StudentController extends Controller
             'email'       => 'required|email|unique:users,email,' . $student->user_id,
             'roll_number' => 'required|string|unique:students,roll_number,' . $student->id,
             'course_id'   => 'required|exists:courses,id',
+            'status'      => 'required|in:active,dropped,completed',
         ]);
 
         // Update User Model
@@ -122,6 +123,7 @@ class StudentController extends Controller
         $student->update([
             'roll_number' => $request->roll_number,
             'course_id'   => $request->course_id,
+            'status'      => $request->status,
         ]);
 
         return redirect()->route('admin.students.index')

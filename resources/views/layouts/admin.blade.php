@@ -120,6 +120,11 @@
                     <span class="font-semibold text-sm flex-1">Analytics</span>
                 </a>
 
+                <a href="{{ route('admin.student-analysis.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.student-analysis.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-chart-simple w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Student Analysis</span>
+                </a>
+
                 <a href="{{ route('admin.notices.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/notices*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-bullhorn w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Notice Board</span>
