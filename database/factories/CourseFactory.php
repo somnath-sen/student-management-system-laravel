@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Faker\Factory as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Course>
@@ -17,7 +16,7 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
-        $faker = Faker::create();
+        static $index = 0;
 
         $courses = [
             'B.Sc Computer Science',
@@ -32,11 +31,14 @@ class CourseFactory extends Factory
             'Psychology',
         ];
 
+        // Ensure unique selection simply by iterating
+        $name = $courses[$index];
+        $index = ($index + 1) % count($courses);
+
         return [
-            // Use $this->faker instead of the modern fake() helper for compatibility
-            'name' => $faker->unique()->randomElement($courses),
-            'description' => $faker->paragraph(),
-            'admit_cards_published' => $faker->boolean(70),
+            'name' => $name,
+            'description' => 'A rigorous academic curriculum focusing on advanced topics in ' . $name . '.',
+            'admit_cards_published' => rand(1, 100) <= 70, // 70% chance of true
         ];
     }
 }
