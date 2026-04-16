@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FacultyRegistration;
 use App\Models\Subject;
 use App\Models\User;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 
 class FacultyRegistrationController extends Controller
@@ -24,6 +25,7 @@ class FacultyRegistrationController extends Controller
             'qualification' => 'required|string|max:255',
             'experience'    => 'nullable|string|max:255',
             'department'    => 'nullable|string|max:255',
+            'g-recaptcha-response' => ['required', new Recaptcha],
         ]);
 
         // Prevent duplicate registrations

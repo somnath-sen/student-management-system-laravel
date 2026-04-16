@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -246,6 +247,14 @@
                                 I confirm that all provided information is accurate and authentic. I understand that false information may result in rejection or account termination. I consent to EdFlow verifying my credentials.
                             </span>
                         </label>
+                    </div>
+
+                    {{-- Google reCAPTCHA --}}
+                    <div class="flex flex-col items-center">
+                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                        @error('g-recaptcha-response')
+                            <p class="text-rose-500 text-xs font-bold mt-2">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Submit --}}

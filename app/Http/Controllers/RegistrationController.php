@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\StudentRegistration;
 use App\Models\User;
+use App\Rules\Recaptcha;
 
 class RegistrationController extends Controller
 {
@@ -25,6 +26,7 @@ class RegistrationController extends Controller
             'roll' => 'nullable|string|max:50',
             'parent_name' => 'required|string|max:255',
             'parent_email' => 'required|email|max:255',
+            'g-recaptcha-response' => ['required', new Recaptcha],
         ], [
             'email.unique' => 'This email is already registered or an application is already pending.',
         ]);

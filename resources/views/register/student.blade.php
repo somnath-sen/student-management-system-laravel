@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -269,7 +270,15 @@
                 </div>
 
                 <!-- Terms & Submit -->
-                <div class="mt-12 pt-8 border-t border-gray-100 max-w-3xl mx-auto flex flex-col items-center gap-8">
+                <div class="mt-12 pt-8 border-t border-gray-100 max-w-3xl mx-auto flex flex-col items-center gap-6">
+
+                    <!-- Google reCAPTCHA -->
+                    <div class="w-full flex flex-col items-center">
+                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                        @error('g-recaptcha-response')
+                            <p class="text-rose-500 text-xs font-bold mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <label class="flex items-start gap-4 cursor-pointer group bg-white p-5 rounded-2xl border border-rose-100 hover:border-brand-300 hover:bg-brand-50/30 transition-all w-full shadow-sm">
                         <div class="relative flex items-center justify-center mt-0.5 shrink-0">
                             <input type="checkbox" required class="peer appearance-none w-6 h-6 border-2 border-gray-200 rounded-lg checked:bg-brand-500 checked:border-brand-500 transition-all cursor-pointer bg-gray-50">
