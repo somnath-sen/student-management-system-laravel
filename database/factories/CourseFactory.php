@@ -30,10 +30,10 @@ class CourseFactory extends Factory
         ];
 
         return [
-            // Use the modern fake() helper instead of $this->faker
-            'name' => fake()->unique()->randomElement($courses),
-            'description' => fake()->paragraph(),
-            'admit_cards_published' => fake()->boolean(70),
+            // Use $this->faker instead of the modern fake() helper for compatibility
+            'name' => $this->faker->unique()->randomElement($courses),
+            'description' => $this->faker->paragraph(),
+            'admit_cards_published' => $this->faker->boolean(70),
         ];
     }
 }
