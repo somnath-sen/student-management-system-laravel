@@ -134,7 +134,7 @@ class DatabaseSeeder extends Seeder
      */
     private function seedStudentActivity(
         \App\Models\Student $student,
-        \App\Models\User    $user,
+        User                $user,
         \App\Models\Course  $course,
         \Illuminate\Support\Collection $subjects,
         \Illuminate\Support\Collection $teachers
