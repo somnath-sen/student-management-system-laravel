@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChatMessage;
+use App\Services\AIStudyMentorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class StudyAIController extends Controller
 {
+    private AIStudyMentorService $aiService;
+
+    public function __construct(AIStudyMentorService $aiService)
+    {
+        $this->aiService = $aiService;
+    }
+
     public function index()
     {
         $messages = ChatMessage::where('user_id', Auth::id())
@@ -18,11 +25,17 @@ class StudyAIController extends Controller
             ->get()
             ->reverse();
 
+        $todayChatsCount = ChatMessage::where('user_id', Auth::id())
+            ->whereDate('created_at', \Carbon\Carbon::today())
+            ->count();
+            
+        $chatLimit = 20; // Daily generic limit indicator matching free tier bursts
+
         $layout = Auth::user()->role_id == 2
             ? 'layouts.teacher'
             : 'layouts.student';
 
-        return view('studyai.index', compact('messages', 'layout'));
+        return view('studyai.index', compact('messages', 'layout', 'todayChatsCount', 'chatLimit'));
     }
 
     public function send(Request $request)
@@ -32,51 +45,19 @@ class StudyAIController extends Controller
         ]);
 
         $user = Auth::user();
-        
-        // 1. Get API Key Securely from config (which reads from .env)
-        $apiKey = config('services.gemini.api_key');
-
-        // Fail gracefully if the API key is missing
-        if (empty($apiKey)) {
-            Log::error('Gemini API Error: API Key is missing from .env file.');
-            return response()->json(['error' => 'Server configuration error. API key missing.'], 500);
-        }
 
         try {
-            // 2. Call Gemini API
-            $response = Http::withoutVerifying() 
-                ->withHeaders(['Content-Type' => 'application/json'])
-                ->post(
-                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}",
-                    [
-                        "contents" => [
-                            [
-                                "parts" => [
-                                    [
-                                        "text" => "You are a helpful academic assistant for a student named {$user->name}. Keep answers clear and concise. Question: " . $request->message
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                );
+            // Build Contextual Prompt
+            $prompt = $this->aiService->buildPrompt($user, $request->message);
 
-            // 3. Debugging: Log if it fails
-            if ($response->failed()) {
-                Log::error('Gemini API Error: ' . $response->body());
-                return response()->json(['error' => 'API Error: ' . $response->status() . ' - ' . $response->body()], 500);
+            // Fetch AI Response
+            $aiText = $this->aiService->getAIResponse($prompt);
+
+            if (!$aiText) {
+                return response()->json(['error' => 'No response generated.'], 500);
             }
 
-            $data = $response->json();
-            
-            // Check if candidates exist
-            if (empty($data['candidates'])) {
-                return response()->json(['error' => 'No response from AI. Try a different question.'], 500);
-            }
-
-            $aiText = $data['candidates'][0]['content']['parts'][0]['text'];
-
-            // 4. Save to Database
+            // Save to Database
             $chat = ChatMessage::create([
                 'user_id' => $user->id,
                 'message' => $request->message,
@@ -89,8 +70,8 @@ class StudyAIController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Controller Error: ' . $e->getMessage());
-            return response()->json(['error' => 'Server Error: ' . $e->getMessage()], 500);
+            Log::error('StudyAIController Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }
