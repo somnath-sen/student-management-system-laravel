@@ -28,11 +28,27 @@ class DatabaseSeeder extends Seeder
         );
 
         // 3. Courses & Subjects
-        $courses = \App\Models\Course::factory(3)->create();
+        $courseNames = ['B.Sc Computer Science', 'Business Administration', 'Graphic Design'];
+        $subjectNames = ['Algorithms', 'Database Systems', 'Mobile Dev', 'AI & ML', 'Cyber Security'];
+        
+        $courses = collect();
         $subjects = collect();
-        foreach ($courses as $course) {
-            $courseSubjects = \App\Models\Subject::factory(5)->create(['course_id' => $course->id]);
-            $subjects = $subjects->merge($courseSubjects);
+
+        foreach ($courseNames as $name) {
+            $course = \App\Models\Course::create([
+                'name' => $name,
+                'description' => 'A comprehensive curriculum for ' . $name,
+                'admit_cards_published' => true,
+            ]);
+            $courses->push($course);
+
+            foreach ($subjectNames as $subName) {
+                $subject = \App\Models\Subject::create([
+                    'course_id' => $course->id,
+                    'name' => $subName . ' (' . explode(' ', $name)[0] . ')',
+                ]);
+                $subjects->push($subject);
+            }
         }
 
         // 4. Teachers
@@ -192,7 +208,21 @@ class DatabaseSeeder extends Seeder
      */
     private function seedNotices(): void
     {
-        $adminId = User::where('role_id', 1)->first()->id;
-        \App\Models\Notice::factory(12)->create(['user_id' => $adminId]);
+        $adminId = User::where('role_id', 1)->first()->id ?? 1;
+        $notices = [
+            ['title' => 'Welcome to EdFlow', 'category' => 'General', 'content' => 'We are glad to have you here. Please explore the dashboard to see your classes, subjects, and analytics tracking in real-time.'],
+            ['title' => 'Upcoming Examinations', 'category' => 'Exam', 'content' => 'Please check your portal for the exam schedule. Admit cards will be available for download one week before the exams.'],
+            ['title' => 'Campus Holiday', 'category' => 'Holiday', 'content' => 'Campus will remain closed this Friday due to public holiday.'],
+            ['title' => 'Urgent Server Maintenance', 'category' => 'Urgent', 'content' => 'System will be down for 2 hours tonight for scheduled maintenance. Save your work.'],
+        ];
+
+        foreach ($notices as $notice) {
+            \App\Models\Notice::create([
+                'user_id' => $adminId,
+                'title' => $notice['title'],
+                'category' => $notice['category'],
+                'content' => $notice['content']
+            ]);
+        }
     }
 }
