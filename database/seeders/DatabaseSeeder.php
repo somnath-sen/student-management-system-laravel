@@ -35,18 +35,24 @@ class DatabaseSeeder extends Seeder
         $subjects = collect();
 
         foreach ($courseNames as $name) {
-            $course = \App\Models\Course::create([
-                'name' => $name,
-                'description' => 'A comprehensive curriculum for ' . $name,
-                'admit_cards_published' => true,
-            ]);
+            $course = \App\Models\Course::updateOrCreate(
+                ['name' => $name],
+                [
+                    'description' => 'A comprehensive curriculum for ' . $name,
+                    'admit_cards_published' => true,
+                ]
+            );
             $courses->push($course);
 
             foreach ($subjectNames as $subName) {
-                $subject = \App\Models\Subject::create([
-                    'course_id' => $course->id,
-                    'name' => $subName . ' (' . explode(' ', $name)[0] . ')',
-                ]);
+                $subjectNameFull = $subName . ' (' . explode(' ', $name)[0] . ')';
+                $subject = \App\Models\Subject::updateOrCreate(
+                    [
+                        'course_id' => $course->id,
+                        'name' => $subjectNameFull,
+                    ],
+                    []
+                );
                 $subjects->push($subject);
             }
         }
@@ -68,25 +74,29 @@ class DatabaseSeeder extends Seeder
     {
         $teachers = collect();
         for ($i = 1; $i <= 10; $i++) {
-            $user = User::create([
-                'name'     => "Teacher $i",
-                'email'    => "teacher$i@edflow.com",
-                'password' => Hash::make('password'),
-                'role_id'  => 2,
-            ]);
-            $teacher = \App\Models\Teacher::create([
-                'user_id'       => $user->id,
-                'employee_id'   => 'TCH-' . (1000 + $i),
-                'phone'         => '123456789' . $i,
-                'qualification' => 'M.Sc Computer Science',
-                'experience'    => ($i + 2) . ' Years',
-            ]);
+            $user = User::updateOrCreate(
+                ['email' => "teacher$i@edflow.com"],
+                [
+                    'name'     => "Teacher $i",
+                    'password' => Hash::make('password'),
+                    'role_id'  => 2,
+                ]
+            );
+            $teacher = \App\Models\Teacher::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'employee_id'   => 'TCH-' . (1000 + $i),
+                    'phone'         => '123456789' . $i,
+                    'qualification' => 'M.Sc Computer Science',
+                    'experience'    => ($i + 2) . ' Years',
+                ]
+            );
             $teachers->push($teacher);
 
             // Assign to random subjects
             $assignedSubjects = $subjects->random(rand(2, 4));
             foreach ($assignedSubjects as $sub) {
-                \DB::table('subject_teacher')->insert([
+                \DB::table('subject_teacher')->updateOrInsert([
                     'subject_id' => $sub->id,
                     'teacher_id' => $teacher->id,
                 ]);
@@ -105,25 +115,29 @@ class DatabaseSeeder extends Seeder
     ): void {
         for ($i = 1; $i <= 50; $i++) {
             $course = $courses->random();
-            $user = User::create([
-                'name'     => "Student $i",
-                'email'    => "student$i@edflow.com",
-                'password' => Hash::make('password'),
-                'role_id'  => 3,
-            ]);
+            $user = User::updateOrCreate(
+                ['email' => "student$i@edflow.com"],
+                [
+                    'name'     => "Student $i",
+                    'password' => Hash::make('password'),
+                    'role_id'  => 3,
+                ]
+            );
 
-            $student = \App\Models\Student::create([
-                'user_id'             => $user->id,
-                'course_id'           => $course->id,
-                'roll_number'         => 'ED-' . (1000 + $i),
-                'parent_name'         => 'Parent ' . $i,
-                'emergency_phone'     => '987654321' . $i,
-                'blood_group'         => 'O+',
-                'home_address'        => 'Fake Street ' . $i,
-                'last_lat'            => 22.5726,
-                'last_lng'            => 88.3639,
-                'location_updated_at' => now(),
-            ]);
+            $student = \App\Models\Student::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'course_id'           => $course->id,
+                    'roll_number'         => 'ED-' . (1000 + $i),
+                    'parent_name'         => 'Parent ' . $i,
+                    'emergency_phone'     => '987654321' . $i,
+                    'blood_group'         => 'O+',
+                    'home_address'        => 'Fake Street ' . $i,
+                    'last_lat'            => 22.5726,
+                    'last_lng'            => 88.3639,
+                    'location_updated_at' => now(),
+                ]
+            );
 
             $this->seedStudentActivity($student, $user, $course, $subjects, $teachers);
         }
@@ -147,59 +161,77 @@ class DatabaseSeeder extends Seeder
                 $date = now()->subDays($d);
                 if ($date->isWeekend()) continue;
 
-                \App\Models\Attendance::create([
-                    'student_id' => $student->id,
-                    'subject_id' => $sub->id,
-                    'teacher_id' => $teachers->random()->id,
-                    'date'       => $date->format('Y-m-d'),
-                    'present'    => rand(0, 10) > 1, // 90% attendance
-                ]);
+                \App\Models\Attendance::updateOrCreate(
+                    [
+                        'student_id' => $student->id,
+                        'subject_id' => $sub->id,
+                        'date'       => $date->format('Y-m-d'),
+                    ],
+                    [
+                        'teacher_id' => $teachers->random()->id,
+                        'present'    => rand(0, 10) > 1, // 90% attendance
+                    ]
+                );
             }
 
             // Marks
-            \App\Models\Mark::create([
-                'student_id'     => $student->id,
-                'subject_id'     => $sub->id,
-                'teacher_id'     => $teachers->random()->id,
-                'marks_obtained' => rand(40, 100),
-                'total_marks'    => 100,
-                'is_locked'      => true,
-            ]);
+            \App\Models\Mark::updateOrCreate(
+                [
+                    'student_id' => $student->id,
+                    'subject_id' => $sub->id,
+                ],
+                [
+                    'teacher_id'     => $teachers->random()->id,
+                    'marks_obtained' => rand(40, 100),
+                    'total_marks'    => 100,
+                    'is_locked'      => true,
+                ]
+            );
         }
 
         // Fees
-        $fee = \App\Models\Fee::create([
-            'course_id' => $course->id,
-            'title'     => 'Semester Fee - ' . now()->format('Y'),
-            'amount'    => rand(2000, 5000),
-            'due_date'  => now()->addMonths(2),
-        ]);
+        $fee = \App\Models\Fee::updateOrCreate(
+            [
+                'course_id' => $course->id,
+                'title'     => 'Semester Fee - ' . now()->format('Y'),
+            ],
+            [
+                'amount'    => rand(2000, 5000),
+                'due_date'  => now()->addMonths(2),
+            ]
+        );
 
         if (rand(0, 1)) {
-            \App\Models\FeePayment::create([
-                'user_id'        => $user->id,
-                'fee_id'         => $fee->id,
-                'amount_paid'    => $fee->amount,
-                'payment_method' => 'UPI',
-                'transaction_id' => 'TXN-' . Str::upper(Str::random(10)),
-                'status'         => 'Paid',
-            ]);
+            \App\Models\FeePayment::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'fee_id'  => $fee->id,
+                ],
+                [
+                    'amount_paid'    => $fee->amount,
+                    'payment_method' => 'UPI',
+                    'transaction_id' => 'TXN-' . Str::upper(Str::random(10)),
+                    'status'         => 'Paid',
+                ]
+            );
         }
 
         // Gamification
         $xp = rand(200, 4800);
-        \App\Models\GamificationStat::create([
-            'user_id'         => $user->id,
-            'total_points'    => $xp,
-            'level'           => floor($xp / 1000) + 1,
-            'current_streak'  => rand(1, 15),
-            'last_login_date' => now()->subDays(rand(0, 2)),
-        ]);
+        \App\Models\GamificationStat::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'total_points'    => $xp,
+                'level'           => floor($xp / 1000) + 1,
+                'current_streak'  => rand(1, 15),
+                'last_login_date' => now()->subDays(rand(0, 2)),
+            ]
+        );
 
         // Random Badges
         $randomBadges = \App\Models\Badge::where('points_required', '<=', $xp)->get();
         if ($randomBadges->count() > 0) {
-            $user->badges()->attach($randomBadges->pluck('id'));
+            $user->badges()->syncWithoutDetaching($randomBadges->pluck('id'));
         }
     }
 
@@ -217,12 +249,16 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($notices as $notice) {
-            \App\Models\Notice::create([
-                'user_id' => $adminId,
-                'title' => $notice['title'],
-                'category' => $notice['category'],
-                'content' => $notice['content']
-            ]);
+            \App\Models\Notice::updateOrCreate(
+                [
+                    'title' => $notice['title'],
+                ],
+                [
+                    'user_id' => $adminId,
+                    'category' => $notice['category'],
+                    'content' => $notice['content']
+                ]
+            );
         }
     }
 }
