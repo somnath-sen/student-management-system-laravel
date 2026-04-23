@@ -398,24 +398,37 @@
                 
                 <!-- Large Card: Analytics -->
                 <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-brand-500/40 dark:hover:from-brand-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-brand-500/50 rounded-full blur-[80px] animate-[spin_8s_linear_infinite]"></div>
                         <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-purple-600/50 rounded-full blur-[80px] animate-[spin_12s_linear_infinite_reverse]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
                     <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-brand-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-xl shadow-brand-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
                             <i class="fa-solid fa-chart-line text-2xl"></i>
                         </div>
-                        
+                        <!-- Mini bar chart mock-UI -->
+                        <div class="flex items-end gap-2 h-20 mb-6">
+                            <div class="flex-1 bg-brand-500/20 rounded-t-lg group-hover:bg-brand-500/60 transition-all duration-[800ms] ease-out" style="height:40%"></div>
+                            <div class="flex-1 bg-brand-500/20 rounded-t-lg group-hover:bg-brand-500/60 transition-all duration-[900ms] ease-out delay-75" style="height:65%"></div>
+                            <div class="flex-1 bg-brand-500/20 rounded-t-lg group-hover:bg-brand-500/60 transition-all duration-[1000ms] ease-out delay-100" style="height:50%"></div>
+                            <div class="flex-1 bg-purple-500/20 rounded-t-lg group-hover:bg-purple-500/70 transition-all duration-[1100ms] ease-out delay-150" style="height:85%"></div>
+                            <div class="flex-1 bg-purple-500/20 rounded-t-lg group-hover:bg-purple-500/70 transition-all duration-[1200ms] ease-out delay-200" style="height:72%"></div>
+                            <div class="flex-1 bg-brand-500/30 rounded-t-lg group-hover:bg-brand-500/80 shadow-[0_0_12px_rgba(59,130,246,0.5)] transition-all duration-[1300ms] ease-out delay-250" style="height:95%"></div>
+                        </div>
+                        <div class="flex gap-3 mb-4">
+                            <div class="flex-1 rounded-xl bg-brand-50 dark:bg-brand-500/10 border border-brand-100 dark:border-brand-500/20 px-3 py-2 text-center">
+                                <div class="text-lg font-black text-brand-600 dark:text-brand-400">94%</div>
+                                <div class="text-[10px] text-brand-500 font-bold uppercase tracking-wider">Efficiency</div>
+                            </div>
+                            <div class="flex-1 rounded-xl bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 px-3 py-2 text-center">
+                                <div class="text-lg font-black text-purple-600 dark:text-purple-400">+18%</div>
+                                <div class="text-[10px] text-purple-500 font-bold uppercase tracking-wider">Growth</div>
+                            </div>
+                        </div>
                         <div class="mt-auto relative z-20">
                             <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">Performance Analytics</h3>
                             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Deep, actionable insights into student performance, attendance patterns, and institutional health across the entire ecosystem.</p>
                         </div>
-
-                        <!-- Abstract decorative rings -->
                         <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-brand-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
                             <div class="w-48 h-48 border border-purple-500/30 rounded-full animate-ping" style="animation-duration: 3s;"></div>
                         </div>
@@ -424,18 +437,23 @@
 
                 <!-- Medium Card: QR Identity -->
                 <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-blue-500/40 dark:hover:from-blue-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-blue-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shrink-0">
-                            <i class="fa-solid fa-id-card-clip text-2xl"></i>
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <!-- QR mock visual -->
+                        <div class="shrink-0 w-20 h-20 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-blue-100 dark:border-blue-500/20 p-2 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                            <div class="grid grid-cols-3 gap-0.5 w-full h-full">
+                                <div class="bg-gray-900 dark:bg-white rounded-sm"></div><div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div><div class="bg-gray-900 dark:bg-white rounded-sm"></div>
+                                <div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div><div class="bg-blue-500 rounded-sm animate-pulse"></div><div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div>
+                                <div class="bg-gray-900 dark:bg-white rounded-sm"></div><div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div><div class="bg-gray-900 dark:bg-white rounded-sm"></div>
+                            </div>
                         </div>
-                        
-                        <div class="relative z-20">
+                        <div class="relative z-20 flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                                <span class="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">Instant Scan</span>
+                            </div>
                             <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Smart QR Identity</h3>
                             <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instantly generate scannable digital ID cards for dynamic & highly secure campus access control.</p>
                         </div>
@@ -444,15 +462,19 @@
 
                 <!-- Small Card: Tracker -->
                 <div class="md:col-span-1 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-emerald-500/40 dark:hover:from-emerald-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute bottom-0 right-0 w-[200px] h-[200px] bg-emerald-500/50 rounded-full blur-[60px] animate-pulse"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-col justify-between border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden text-center items-center">
-                        <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-emerald-500/20 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500">
-                            <i class="fa-solid fa-satellite-dish text-xl animate-[pulse_2s_infinite]"></i>
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-6 flex flex-col justify-between border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden items-center text-center">
+                        <!-- Radar mock-UI -->
+                        <div class="relative w-16 h-16 flex items-center justify-center">
+                            <div class="absolute inset-0 rounded-full border border-emerald-200 dark:border-emerald-500/20 group-hover:scale-150 transition-all duration-700 opacity-0 group-hover:opacity-100"></div>
+                            <div class="absolute inset-2 rounded-full border border-emerald-300 dark:border-emerald-500/30 group-hover:scale-125 transition-all duration-500 opacity-0 group-hover:opacity-60"></div>
+                            <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500">
+                                <i class="fa-solid fa-satellite-dish text-xl animate-[pulse_2s_infinite]"></i>
+                            </div>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping"></span>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
                         </div>
                         <div>
                             <h3 class="text-xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Live Tracker</h3>
@@ -463,15 +485,17 @@
 
                 <!-- Small Card: AI Agent -->
                 <div class="md:col-span-1 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-rose-500/40 dark:hover:from-rose-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-gradient-to-r from-rose-500/60 to-orange-500/60 rounded-full blur-[60px] animate-[spin_5s_linear_infinite]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-gray-900 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-col justify-between border border-transparent dark:border-white/5 group-hover:bg-black transition-colors duration-700 overflow-hidden text-center items-center">
-                        <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-rose-500/30 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 border border-white/20">
+                    <div class="relative z-10 w-full h-full bg-gray-900 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-6 flex flex-col justify-between border border-transparent dark:border-white/5 group-hover:bg-black transition-colors duration-700 overflow-hidden text-center items-center">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl flex items-center justify-center text-white mb-2 shadow-lg shadow-rose-500/30 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 border border-white/20">
                             <i class="fa-solid fa-robot text-xl"></i>
+                        </div>
+                        <!-- AI chat bubble mock -->
+                        <div class="w-full space-y-1.5 mb-1">
+                            <div class="flex justify-end"><div class="text-[10px] bg-rose-500/30 text-rose-200 rounded-xl px-2 py-1 max-w-[80%] text-right">Explain photosynthesis</div></div>
+                            <div class="flex justify-start"><div class="text-[10px] bg-white/10 text-gray-300 rounded-xl px-2 py-1 max-w-[80%] opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-300">Sure! It's the process...</div></div>
                         </div>
                         <div>
                             <h3 class="text-xl font-black tracking-tight text-white mb-1">StudyAI Agent</h3>
@@ -482,80 +506,232 @@
 
                 <!-- Medium Card: Parent Access -->
                 <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-indigo-500/40 dark:hover:from-indigo-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-indigo-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
                         <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shrink-0">
                             <i class="fa-solid fa-users text-2xl"></i>
                         </div>
-                        
-                        <div class="relative z-20">
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Parent Access</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Empower parents with real-time access to their children's attendance, grades, and fee records securely.</p>
+                        <div class="relative z-20 flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                                <span class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Live Updates</span>
+                            </div>
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Parent Access</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">Empower parents with real-time access to their children's attendance, grades, and fee records securely.</p>
+                            <!-- Mini notification feed -->
+                            <div class="mt-3 space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                                <div class="flex items-center gap-2 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+                                    <i class="fa-solid fa-circle-check text-emerald-500"></i> Attendance: 91% — On Track
+                                </div>
+                                <div class="flex items-center gap-2 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+                                    <i class="fa-solid fa-indian-rupee-sign text-amber-500"></i> Fee Status: Paid ✓
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Medium Card: Broadcasting -->
                 <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-amber-500/40 dark:hover:from-amber-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-amber-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite_reverse]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-amber-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shrink-0">
-                            <i class="fa-solid fa-bullhorn text-2xl"></i>
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <!-- Signal wave icon -->
+                        <div class="relative shrink-0 w-16 flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-amber-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                                <i class="fa-solid fa-bullhorn text-2xl"></i>
+                            </div>
+                            <!-- Signal rings -->
+                            <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-400 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></div>
                         </div>
-                        
-                        <div class="relative z-20">
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Broadcasting</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instantly deliver subject-specific announcements and urgent institutional notices across all devices.</p>
+                        <div class="relative z-20 flex-1">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Broadcasting</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">Instantly deliver subject-specific announcements and urgent institutional notices across all devices.</p>
+                            <!-- Notice feed mock -->
+                            <div class="mt-3 space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                                <div class="flex items-center gap-2 text-[11px] text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2 py-1">
+                                    <i class="fa-solid fa-circle text-[6px] text-amber-500 animate-pulse"></i> Exam schedule updated — Math, 2nd Floor
+                                </div>
+                                <div class="flex items-center gap-2 text-[11px] text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2 py-1">
+                                    <i class="fa-solid fa-circle text-[6px] text-amber-500"></i> Holiday notice: 15th April
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Medium Card: AI Study Coach -->
                 <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-fuchsia-500/40 dark:hover:from-fuchsia-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-fuchsia-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
                         <div class="w-16 h-16 bg-gradient-to-br from-fuchsia-400 to-fuchsia-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-fuchsia-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shrink-0">
                             <i class="fa-solid fa-brain text-2xl"></i>
                         </div>
-                        
-                        <div class="relative z-20">
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">AI Study Coach</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">An intelligent, Gemini-powered assistant to personalize study plans, solve queries, and provide 24/7 support.</p>
+                        <div class="relative z-20 flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-fuchsia-50 dark:bg-fuchsia-500/10 border border-fuchsia-100 dark:border-fuchsia-500/20 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-pulse"></span>
+                                <span class="text-[10px] font-black text-fuchsia-600 dark:text-fuchsia-400 uppercase tracking-widest">Gemini Powered</span>
+                            </div>
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">AI Study Coach</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">An intelligent assistant to personalize study plans, solve queries, and provide 24/7 support.</p>
+                            <!-- Study plan mock -->
+                            <div class="mt-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-fuchsia-100 dark:bg-fuchsia-500/20 text-fuchsia-700 dark:text-fuchsia-300">Math Plan ✓</span>
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300">Physics Quiz</span>
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">+ 5 more</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Medium Card: SOS for Emergency -->
                 <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-red-500/40 dark:hover:from-red-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
                     <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-red-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite_reverse]"></div>
                     </div>
-                    
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-8 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-red-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shrink-0">
-                            <i class="fa-solid fa-bell text-2xl animate-pulse"></i>
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <!-- SOS pulsing icon -->
+                        <div class="relative shrink-0">
+                            <div class="absolute inset-0 rounded-2xl bg-red-500/30 group-hover:animate-ping"></div>
+                            <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-red-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 relative">
+                                <i class="fa-solid fa-bell text-2xl animate-pulse"></i>
+                            </div>
                         </div>
-                        
-                        <div class="relative z-20">
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">SOS for Emergency</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instant panic alerts triggered by students automatically notify parents with live location data in case of emergencies.</p>
+                        <div class="relative z-20 flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                <span class="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-widest">Panic Alert Active</span>
+                            </div>
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">SOS for Emergency</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">Instant panic alerts triggered by students automatically notify parents with live location data in case of emergencies.</p>
+                            <!-- Alert status mock -->
+                            <div class="mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                                <div class="flex items-center gap-2 text-[11px] text-red-700 dark:text-red-400 font-bold bg-red-50 dark:bg-red-500/10 rounded-lg px-2 py-1">
+                                    <i class="fa-solid fa-location-dot text-red-500"></i> GPS signal acquired — Parent notified in 0.3s
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Large Card: AI Attendance Prediction -->
+                <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-cyan-500/40 dark:hover:from-cyan-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-cyan-500/50 rounded-full blur-[80px] animate-[spin_8s_linear_infinite]"></div>
+                        <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-sky-600/50 rounded-full blur-[80px] animate-[spin_12s_linear_infinite_reverse]"></div>
+                    </div>
+
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-sky-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-cyan-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
+                            <i class="fa-solid fa-chart-simple text-2xl"></i>
+                        </div>
+
+                        <!-- Animated prediction bar chart mock-UI -->
+                        <div class="mb-6 space-y-3">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Week 1</span>
+                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.6)] group-hover:w-[88%] w-[50%] transition-all duration-[1200ms] ease-out"></div>
+                                </div>
+                                <span class="text-xs font-black text-cyan-500 w-10 text-right">88%</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Week 2</span>
+                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.5)] group-hover:w-[61%] w-[30%] transition-all duration-[1400ms] ease-out"></div>
+                                </div>
+                                <span class="text-xs font-black text-amber-500 w-10 text-right">61%</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Week 3</span>
+                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-rose-400 to-red-500 rounded-full shadow-[0_0_8px_rgba(251,113,133,0.5)] group-hover:w-[42%] w-[20%] transition-all duration-[1600ms] ease-out"></div>
+                                </div>
+                                <span class="text-xs font-black text-rose-500 w-10 text-right">42%</span>
+                            </div>
+                            <div class="flex items-center gap-3 mt-1">
+                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Predicted</span>
+                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-violet-500 to-purple-600 rounded-full shadow-[0_0_12px_rgba(139,92,246,0.6)] group-hover:w-[38%] w-[15%] transition-all duration-[1800ms] ease-out animate-pulse"></div>
+                                </div>
+                                <span class="text-xs font-black text-violet-500 w-10 text-right">~38%</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto relative z-20">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 mb-3">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                                <span class="text-[10px] font-black text-cyan-600 dark:text-cyan-400 uppercase tracking-widest">AI Powered</span>
+                            </div>
+                            <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">AI Attendance Prediction</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Analyzes historical attendance trends to predict future eligibility risk. Automatically triggers smart alerts for at-risk students before it's too late.</p>
+                        </div>
+
+                        <!-- Decorative rings -->
+                        <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-cyan-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
+                            <div class="w-48 h-48 border border-sky-500/30 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Large Card: Dropout Risk Detection -->
+                <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-rose-500/40 dark:hover:from-rose-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
+                    <!-- Animated Background Layers -->
+                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
+                        <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-rose-500/50 rounded-full blur-[80px] animate-[spin_10s_linear_infinite]"></div>
+                        <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-orange-500/40 rounded-full blur-[80px] animate-[spin_14s_linear_infinite_reverse]"></div>
+                    </div>
+
+                    <!-- Content Canvas -->
+                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-orange-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-rose-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                            <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                        </div>
+
+                        <!-- Risk score mock-UI cards -->
+                        <div class="grid grid-cols-3 gap-3 mb-6">
+                            <div class="rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 p-3 text-center group-hover:scale-105 transition-transform duration-500 delay-100">
+                                <div class="text-xl font-black text-emerald-600 dark:text-emerald-400">Safe</div>
+                                <div class="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold uppercase tracking-wider mt-1">Score &lt; 30</div>
+                                <div class="mt-2 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto">
+                                    <i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>
+                                </div>
+                            </div>
+                            <div class="rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 p-3 text-center group-hover:scale-105 transition-transform duration-500 delay-200">
+                                <div class="text-xl font-black text-amber-600 dark:text-amber-400">At Risk</div>
+                                <div class="text-[10px] text-amber-600 dark:text-amber-500 font-bold uppercase tracking-wider mt-1">Score 30–59</div>
+                                <div class="mt-2 w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto">
+                                    <i class="fa-solid fa-circle-exclamation text-amber-500 text-sm animate-pulse"></i>
+                                </div>
+                            </div>
+                            <div class="rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 p-3 text-center group-hover:scale-105 transition-transform duration-500 delay-300">
+                                <div class="text-xl font-black text-rose-600 dark:text-rose-400">High Risk</div>
+                                <div class="text-[10px] text-rose-600 dark:text-rose-500 font-bold uppercase tracking-wider mt-1">Score ≥ 60</div>
+                                <div class="mt-2 w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center mx-auto">
+                                    <i class="fa-solid fa-skull-crossbones text-rose-500 text-sm animate-pulse"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto relative z-20">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 mb-3">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                                <span class="text-[10px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-widest">Early Warning System</span>
+                            </div>
+                            <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">Dropout Risk Detection</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Intelligently scores each student's dropout likelihood by fusing attendance, academic performance, and platform engagement data into a single actionable risk index.</p>
+                        </div>
+
+                        <!-- Decorative rings -->
+                        <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-rose-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
+                            <div class="w-48 h-48 border border-orange-500/30 rounded-full animate-ping" style="animation-duration: 2.5s;"></div>
                         </div>
                     </div>
                 </div>
@@ -1706,4 +1882,253 @@
     </div>
 
 </body>
+
+<!-- ====================================================
+     GSAP MICRO ANIMATION SYSTEM – EdFlow Welcome Page
+     ==================================================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+    /* Cursor glow element */
+    #cursor-glow {
+        width: 300px; height: 300px;
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s ease;
+        will-change: transform;
+    }
+    /* Magnetic button base */
+    .magnetic-btn { display: inline-block; will-change: transform; }
+    /* Ensure hero elements start invisible for GSAP entry */
+    .gsap-hero-badge,
+    .gsap-hero-h1,
+    .gsap-hero-p,
+    .gsap-hero-btns,
+    .gsap-hero-visual { opacity: 0; }
+</style>
+
+<!-- Cursor Glow -->
+<div id="cursor-glow"></div>
+
+<script>
+(function() {
+    // ── Guard ──────────────────────────────────────────────────────────
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ── 1. CURSOR GLOW ──────────────────────────────────────────────────
+    const glow = document.getElementById('cursor-glow');
+    let glowX = 0, glowY = 0, mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+    function animateGlow() {
+        glowX += (mouseX - glowX) * 0.08;
+        glowY += (mouseY - glowY) * 0.08;
+        if (glow) { glow.style.left = glowX + 'px'; glow.style.top = glowY + 'px'; }
+        requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+
+    // ── 2. HERO SECTION – add classes then animate ──────────────────────
+    const heroSection = document.querySelector('section');
+    if (heroSection) {
+        const badge  = heroSection.querySelector('.inline-flex');
+        const h1     = heroSection.querySelector('h1');
+        const heroP  = heroSection.querySelector('p');
+        const btns   = heroSection.querySelector('.flex.flex-col.sm\\:flex-row');
+        const visual = heroSection.querySelector('.mt-20');
+
+        // Wait for loader to clear (the page has its own #edflow-loader)
+        const loaderEl = document.getElementById('edflow-loader');
+        const startDelay = loaderEl ? 0.8 : 0.1;
+
+        const heroTl = gsap.timeline({ delay: startDelay });
+
+        if (badge)  heroTl.fromTo(badge,  { opacity:0, y:-20, scale:0.9 }, { opacity:1, y:0, scale:1, duration:0.5, ease:'back.out(1.7)' });
+        if (h1)     heroTl.fromTo(h1,     { opacity:0, y:40  }, { opacity:1, y:0, duration:0.7, ease:'power3.out' }, '-=0.2');
+        if (heroP)  heroTl.fromTo(heroP,  { opacity:0, y:20  }, { opacity:1, y:0, duration:0.5, ease:'power2.out' }, '-=0.3');
+        if (btns)   heroTl.fromTo(btns,   { opacity:0, y:20, scale:0.97 }, { opacity:1, y:0, scale:1, duration:0.5, ease:'power2.out' }, '-=0.2');
+        if (visual) heroTl.fromTo(visual, { opacity:0, y:40  }, { opacity:1, y:0, duration:0.8, ease:'power3.out' }, '-=0.2');
+    }
+
+    // ── 3. NAVBAR SLIDE DOWN ────────────────────────────────────────────
+    const nav = document.getElementById('navbar');
+    if (nav) {
+        gsap.fromTo(nav, { y:-80, opacity:0 }, { y:0, opacity:1, duration:0.6, ease:'power3.out', delay:0.2 });
+    }
+
+    // ── 4. FEATURES SECTION – bento cards stagger ──────────────────────
+    const featureCards = document.querySelectorAll('#features .grid > div');
+    if (featureCards.length) {
+        gsap.fromTo(featureCards,
+            { opacity:0, y:50, scale:0.96 },
+            {
+                opacity:1, y:0, scale:1,
+                duration:0.7, ease:'power3.out',
+                stagger:0.12,
+                scrollTrigger: {
+                    trigger: '#features',
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                }
+            }
+        );
+    }
+
+    // ── 5. FEATURES HEADING ──────────────────────────────────────────────
+    const featuresHeading = document.querySelector('#features .text-center');
+    if (featuresHeading) {
+        gsap.fromTo(featuresHeading,
+            { opacity:0, y:30 },
+            { opacity:1, y:0, duration:0.6, ease:'power2.out',
+              scrollTrigger: { trigger: featuresHeading, start:'top 85%' }
+            }
+        );
+    }
+
+    // ── 6. STATS SECTION – counter + fade in ────────────────────────────
+    const statsSection = document.getElementById('stats');
+    if (statsSection) {
+        // Section heading
+        gsap.fromTo(statsSection.querySelector('.text-center'),
+            { opacity:0, y:30 },
+            { opacity:1, y:0, duration:0.6, ease:'power2.out',
+              scrollTrigger: { trigger: statsSection, start:'top 80%' }
+            }
+        );
+
+        // Stat cards
+        const statCards = statsSection.querySelectorAll('.grid > div');
+        gsap.fromTo(statCards,
+            { opacity:0, y:40, scale:0.9 },
+            { opacity:1, y:0, scale:1, duration:0.6, stagger:0.1, ease:'back.out(1.5)',
+              scrollTrigger: { trigger: statsSection, start:'top 75%', toggleActions:'play none none none' }
+            }
+        );
+
+        // Animated counters
+        const counters = statsSection.querySelectorAll('.count-up');
+        counters.forEach(el => {
+            const target = parseFloat(el.dataset.target);
+            const isDecimal = target % 1 !== 0;
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top 85%',
+                once: true,
+                onEnter: () => {
+                    gsap.fromTo({ val: 0 }, { val: target, duration: 2, ease:'power2.out',
+                        onUpdate: function() {
+                            el.textContent = isDecimal
+                                ? this.targets()[0].val.toFixed(1)
+                                : Math.round(this.targets()[0].val);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // ── 7. TESTIMONIALS ──────────────────────────────────────────────────
+    const testimonialsSection = document.getElementById('testimonials');
+    if (testimonialsSection) {
+        const textSide = testimonialsSection.querySelector('.grid > div:first-child');
+        const cardSide = testimonialsSection.querySelector('.grid > div:last-child');
+
+        if (textSide) {
+            gsap.fromTo(textSide,
+                { opacity:0, x:-50 },
+                { opacity:1, x:0, duration:0.8, ease:'power3.out',
+                  scrollTrigger: { trigger: testimonialsSection, start:'top 75%' }
+                }
+            );
+        }
+        if (cardSide) {
+            gsap.fromTo(cardSide,
+                { opacity:0, x:50 },
+                { opacity:1, x:0, duration:0.8, ease:'power3.out',
+                  scrollTrigger: { trigger: testimonialsSection, start:'top 75%' }
+                }
+            );
+        }
+    }
+
+    // ── 8. GENERIC SCROLL-REVEAL for sections not yet targeted ───────────
+    const genericRevealEls = document.querySelectorAll(
+        '#faq .space-y-4 > div, footer > div > div'
+    );
+    if (genericRevealEls.length) {
+        gsap.fromTo(genericRevealEls,
+            { opacity:0, y:30 },
+            { opacity:1, y:0, duration:0.5, stagger:0.08, ease:'power2.out',
+              scrollTrigger: { trigger: genericRevealEls[0], start:'top 85%', toggleActions:'play none none none' }
+            }
+        );
+    }
+
+    // ── 9. PARALLAX BLOBS ────────────────────────────────────────────────
+    const blobs = document.querySelectorAll('.fixed.inset-0.-z-10 > div');
+    blobs.forEach((blob, i) => {
+        const speed = (i + 1) * 0.15;
+        ScrollTrigger.create({
+            trigger: document.body,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: true,
+            onUpdate: self => {
+                const yMove = self.progress * window.innerHeight * speed;
+                gsap.set(blob, { y: yMove, overwrite: 'auto' });
+            }
+        });
+    });
+
+    // ── 10. MAGNETIC BUTTONS (desktop only) ──────────────────────────────
+    if (window.innerWidth >= 768) {
+        document.querySelectorAll('nav a, nav button, section > div > div > .flex > button, section > div > div > .flex > a').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const dx = (e.clientX - cx) * 0.25;
+                const dy = (e.clientY - cy) * 0.25;
+                gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease:'power2.out', overwrite:'auto' });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { x:0, y:0, duration:0.5, ease:'elastic.out(1,0.5)', overwrite:'auto' });
+            });
+        });
+    }
+
+    // ── 11. 3D CARD TILT on Feature Bento cards ──────────────────────────
+    document.querySelectorAll('#features .grid > div').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const rotX = ((e.clientY - cy) / rect.height) * -8;
+            const rotY = ((e.clientX - cx) / rect.width) * 8;
+            gsap.to(card, { rotationX: rotX, rotationY: rotY, transformPerspective: 800, duration:0.4, ease:'power2.out', overwrite:'auto' });
+        });
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, { rotationX:0, rotationY:0, duration:0.6, ease:'elastic.out(1,0.4)', overwrite:'auto' });
+        });
+    });
+
+    // ── 12. SCROLL PROGRESS INDICATOR (thin line on top) ─────────────────
+    const progressBar = document.createElement('div');
+    progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#3b82f6,#a855f7);z-index:9998;width:0%;will-change:width;pointer-events:none;';
+    document.body.appendChild(progressBar);
+    ScrollTrigger.create({
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.3,
+        onUpdate: self => { progressBar.style.width = (self.progress * 100) + '%'; }
+    });
+
+})();
+</script>
 </html>
