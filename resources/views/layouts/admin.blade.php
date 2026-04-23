@@ -201,7 +201,7 @@
 
         <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#FDFBF7]">
 
-            <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 shadow-sm">
+            <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 z-30 sticky top-0 shadow-sm overflow-visible">
                 
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = true" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors lg:hidden focus:outline-none">
@@ -233,7 +233,7 @@
                              x-transition:leave="transition ease-in duration-150"
                              x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                              x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-                             class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-50 overflow-hidden">
+                             class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-[9999] overflow-hidden">
                             
                             <div class="px-5 py-4 border-b border-[#F0EBE1] bg-[#FDFBF7] flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800">System Alerts</h3>
@@ -277,7 +277,7 @@
                              x-transition:leave="transition ease-in duration-150"
                              x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                              x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-                             class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-50 overflow-hidden py-2">
+                             class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-[9999] overflow-hidden py-2">
                             
                             <div class="px-5 py-3 border-b border-[#F0EBE1] mb-2">
                                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Signed in as</p>
