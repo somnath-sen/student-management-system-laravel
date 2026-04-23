@@ -28,6 +28,12 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = auth()->user();
+        
+        // Track Login Activity
+        $user->forceFill([
+            'last_login_at' => now(),
+            'last_seen_at' => now()
+        ])->save();
 
         if ($user->role_id == 1) {
             return redirect()->route('admin.dashboard');

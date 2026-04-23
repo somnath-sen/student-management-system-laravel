@@ -147,20 +147,27 @@
                                 <i class="fa-solid fa-face-smile text-4xl sm:text-5xl text-blue-500/80 dark:text-blue-400 group-hover:text-blue-600 transition-colors duration-300"></i>
                             </div>
                             <!-- Online Status Dot -->
-                            <div class="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-400 border-4 border-white dark:border-slate-800 shadow-sm"></div>
+                            <div class="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full {{ auth()->user()->activity_color }} border-4 border-white dark:border-zinc-800 shadow-sm transition-colors duration-500"></div>
                         </div>
                         
                         <div>
-                            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 mb-3 transition-colors">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Online</span>
+                            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full {{ auth()->user()->activity_status === 'Online' ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-100 dark:border-emerald-500/20' : (auth()->user()->activity_status === 'Recently Active' ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-100 dark:border-amber-500/20' : 'bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-500/20') }} border mb-3 transition-colors">
+                                <span class="w-2 h-2 rounded-full {{ auth()->user()->activity_color }} {{ auth()->user()->activity_status === 'Online' ? 'animate-pulse' : '' }}"></span>
+                                <span class="text-[11px] font-bold {{ auth()->user()->activity_status === 'Online' ? 'text-emerald-600 dark:text-emerald-400' : (auth()->user()->activity_status === 'Recently Active' ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400') }} uppercase tracking-widest">{{ auth()->user()->activity_status }}</span>
                             </div>
                             <h3 class="text-3xl sm:text-4xl font-extrabold text-gray-800 dark:text-white tracking-tight mb-2 transition-colors">
                                 Hello, {{ Auth::user()->name }}
                             </h3>
-                            <p class="text-gray-500 dark:text-gray-400 font-medium text-[15px] sm:text-lg leading-relaxed transition-colors max-w-md">
-                                Manage your classes, view your progress, and edit your profile settings here.
-                            </p>
+                            <div class="flex flex-col gap-1 mt-3">
+                                <p class="text-gray-500 dark:text-gray-400 font-medium text-[13px] sm:text-sm leading-relaxed transition-colors flex items-center gap-2">
+                                    <i class="fa-solid fa-right-to-bracket text-indigo-400 w-4"></i>
+                                    Last Login: <span class="text-gray-700 dark:text-gray-300">{{ auth()->user()->last_login_at ? auth()->user()->last_login_at->diffForHumans() : 'Never' }}</span>
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 font-medium text-[13px] sm:text-sm leading-relaxed transition-colors flex items-center gap-2">
+                                    <i class="fa-solid fa-bolt text-amber-400 w-4"></i>
+                                    Last Active: <span class="text-gray-700 dark:text-gray-300">{{ auth()->user()->last_seen_at ? auth()->user()->last_seen_at->diffForHumans() : 'Never' }}</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                     

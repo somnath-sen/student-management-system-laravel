@@ -16,9 +16,19 @@ use Exception;
 class TeacherController extends Controller
 {
     // List teachers
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teacher::with(['user', 'subjects'])->latest()->get();
+        $query = Teacher::with(['user', 'subjects'])->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            })->orWhere('employee_id', 'like', "%{$search}%");
+        }
+
+        $teachers = $query->get();
         return view('admin.teachers.index', compact('teachers'));
     }
 

@@ -36,6 +36,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_login_at' => 'datetime',
+            'last_seen_at' => 'datetime',
         ];
     }
 
@@ -148,5 +150,29 @@ class User extends Authenticatable
                 'points_awarded' => 0,
             ]);
         }
+    }
+
+    /**
+     * Activity Tracking Helpers
+     */
+    public function getActivityStatusAttribute()
+    {
+        if (!$this->last_seen_at) return 'Offline';
+        
+        $minutes = $this->last_seen_at->diffInMinutes(now());
+        
+        if ($minutes < 5) return 'Online';
+        if ($minutes < 120) return 'Recently Active';
+        
+        return 'Offline';
+    }
+
+    public function getActivityColorAttribute()
+    {
+        return match($this->activity_status) {
+            'Online' => 'bg-emerald-500',
+            'Recently Active' => 'bg-amber-500',
+            default => 'bg-rose-500',
+        };
     }
 }

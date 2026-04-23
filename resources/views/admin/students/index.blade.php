@@ -41,12 +41,12 @@
         </div>
         
         <div class="flex gap-3">
-            <div class="relative hidden md:block">
-                <input type="text" placeholder="Search students..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm w-64">
+            <form action="{{ route('admin.students.index') }}" method="GET" class="relative hidden md:block">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search students..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm w-64">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-            </div>
+            </form>
 
             <a href="{{ route('admin.students.create') }}" class="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
@@ -64,7 +64,9 @@
                         <th class="px-6 py-4">Student Profile</th>
                         <th class="px-6 py-4">Phone Number</th>
                         <th class="px-6 py-4">Academic Info</th>
+                        <th class="px-6 py-4">Parent Details</th>
                         <th class="px-6 py-4">Enrolled Course</th>
+                        <th class="px-6 py-4">Activity Status</th>
                         <th class="px-6 py-4 text-center">Actions</th>
                     </tr>
                 </thead>
@@ -98,9 +100,38 @@
                             </td>
 
                             <td class="px-6 py-4">
+                                <div class="flex flex-col gap-1">
+                                    <div class="font-semibold text-gray-800 text-sm flex items-center gap-2">
+                                        <i class="fa-solid fa-user-tie text-indigo-400"></i>
+                                        {{ $student->parents->first()?->name ?? $student->parent_name ?? 'Not Assigned' }}
+                                    </div>
+                                    <div class="text-xs text-gray-500 flex items-center gap-2">
+                                        <i class="fa-solid fa-envelope text-gray-400"></i>
+                                        {{ $student->parents->first()?->email ?? 'N/A' }}
+                                    </div>
+                                    <div class="text-xs text-gray-500 flex items-center gap-2">
+                                        <i class="fa-solid fa-phone text-gray-400"></i>
+                                        {{ $student->emergency_phone ?? 'N/A' }}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
                                     {{ $student->course->name }}
                                 </span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full {{ $student->user->activity_color }} {{ $student->user->activity_status === 'Online' ? 'animate-pulse' : '' }}"></span>
+                                    <span class="text-sm font-medium {{ $student->user->activity_status === 'Online' ? 'text-emerald-700' : ($student->user->activity_status === 'Recently Active' ? 'text-amber-700' : 'text-gray-500') }}">
+                                        {{ $student->user->activity_status }}
+                                    </span>
+                                </div>
+                                <div class="text-xs text-gray-400 mt-0.5">
+                                    {{ $student->user->last_seen_at ? $student->user->last_seen_at->diffForHumans() : 'Never logged in' }}
+                                </div>
                             </td>
 
                             <td class="px-6 py-4 text-center">

@@ -18,9 +18,19 @@ class StudentController extends Controller
     /**
      * Display a listing of the students.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with(['user', 'course'])->latest()->get();
+        $query = Student::with(['user', 'course'])->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            })->orWhere('roll_number', 'like', "%{$search}%");
+        }
+
+        $students = $query->get();
         return view('admin.students.index', compact('students'));
     }
 
