@@ -39,7 +39,25 @@
             font-weight: 700;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
+        /* Skeleton Shimmer Animation */
+        .shimmer {
+            background: #f1f5f9;
+            background-image: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.6) 20%,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-repeat: no-repeat;
+            background-size: 800px 100%;
+            animation: shimmer 1.5s infinite linear forwards;
+        }
+        @keyframes shimmer {
+            0% { background-position: -468px 0; }
+            100% { background-position: 468px 0; }
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -48,25 +66,7 @@
 
 <body class="text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ sidebarOpen: false }">
 
-    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-[#FDFBF7] flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
-        <div class="relative w-32 h-32 flex items-center justify-center mb-4">
-            <div class="absolute inset-0 border-4 border-transparent border-t-indigo-600 border-r-indigo-600 rounded-full animate-spin shadow-[0_0_15px_rgba(79,70,229,0.4)]"></div>
-            <div class="absolute inset-2 border-4 border-transparent border-l-purple-600 border-b-purple-600 rounded-full animate-[spin_1.5s_linear_infinite_reverse] shadow-[0_0_15px_rgba(147,51,234,0.4)]"></div>
-            
-            <div class="relative w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center border border-slate-200 animate-pulse">
-                <i class="fa-solid fa-graduation-cap text-3xl text-indigo-600"></i>
-            </div>
-        </div>
-        
-        <h2 class="text-xs font-black tracking-[0.3em] text-slate-500 uppercase flex items-center gap-2">
-            Student Portal 
-            <span class="flex gap-1">
-                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
-                <span class="w-1.5 h-1.5 bg-purple-600 rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
-                <span class="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
-            </span>
-        </h2>
-    </div>
+
     
     <div class="flex h-screen overflow-hidden">
 
@@ -287,8 +287,39 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto">
-                <div class="animate-content w-full h-full">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto relative">
+                <!-- Skeleton UI (Shown by default) -->
+                <div id="skeleton-loader" class="w-full h-full p-4 md:p-8 absolute inset-0 z-10 bg-[#FAFAF7] overflow-hidden">
+                    <div class="max-w-7xl mx-auto space-y-8">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div class="w-1/2">
+                                <x-skeleton.text lines="2" />
+                            </div>
+                            <div class="shimmer h-14 w-40 rounded-2xl"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <x-skeleton.card />
+                            <x-skeleton.card />
+                            <x-skeleton.card />
+                            <x-skeleton.card />
+                        </div>
+
+                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                            <div class="xl:col-span-2 space-y-8">
+                                <x-skeleton.card class="h-48" />
+                                <x-skeleton.table rows="4" />
+                            </div>
+                            <div class="xl:col-span-1 space-y-8">
+                                <x-skeleton.card class="h-64" />
+                                <x-skeleton.table rows="3" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actual Content (Hidden by default) -->
+                <div id="actual-content" style="opacity: 0; visibility: hidden;" class="animate-content w-full h-full relative z-20">
                     @yield('content')
                 </div>
             </main>
@@ -297,17 +328,26 @@
     </div>
 
     <script>
-        // Page Loader Logic
+        // Skeleton Loader Logic
         window.addEventListener('load', function () {
-            const loader = document.getElementById('edflow-loader');
-            if (loader) {
+            const skeleton = document.getElementById('skeleton-loader');
+            const content = document.getElementById('actual-content');
+            
+            if (skeleton && content) {
+                // Short delay to ensure a smooth transition
                 setTimeout(() => {
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden';
+                    skeleton.style.opacity = '0';
+                    skeleton.style.visibility = 'hidden';
+                    skeleton.style.transition = 'opacity 0.4s ease-in-out';
+                    
+                    content.style.visibility = 'visible';
+                    content.style.opacity = '1';
+                    content.style.transition = 'opacity 0.4s ease-in-out';
+                    
                     setTimeout(() => {
-                        loader.remove();
-                    }, 700); 
-                }, 500); 
+                        skeleton.remove();
+                    }, 400); 
+                }, 300); // minimal delay for better UX
             }
         });
     </script>

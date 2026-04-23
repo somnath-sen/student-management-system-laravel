@@ -42,7 +42,25 @@
         }
 
         /* Premium Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        /* Skeleton Shimmer Animation */
+        .shimmer {
+            background: #f1f5f9;
+            background-image: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.6) 20%,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-repeat: no-repeat;
+            background-size: 800px 100%;
+            animation: shimmer 1.5s infinite linear forwards;
+        }
+        @keyframes shimmer {
+            0% { background-position: -468px 0; }
+            100% { background-position: 468px 0; }
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -51,43 +69,7 @@
 
 <body class="text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ sidebarOpen: false }">
 
-    <div id="edflow-loader" class="fixed inset-0 z-[99999] bg-[#FDFBF7] flex flex-col items-center justify-center transition-all duration-700 ease-in-out overflow-hidden">
-        <!-- Floating Animated Background Orbs for Premium Vibe -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center">
-            <div class="absolute w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[80px] animate-[pulse_4s_ease-in-out_infinite]"></div>
-            <div class="absolute w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[80px] animate-[pulse_3s_ease-in-out_infinite_reverse] translate-x-32"></div>
-        </div>
 
-        <div class="relative z-10 flex flex-col items-center">
-            <!-- Sleek Glassmorphic Icon Container -->
-            <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
-                <!-- Inner Shield Icon with Glass Effect -->
-                <div class="relative z-10 w-16 h-16 bg-white/70 backdrop-blur-2xl border border-white shadow-xl rounded-2xl flex items-center justify-center group">
-                    <i class="fa-solid fa-shield-halved text-2xl bg-clip-text text-transparent bg-gradient-to-br from-indigo-600 to-purple-600 drop-shadow-sm group-hover:scale-110 transition-transform duration-500"></i>
-                </div>
-                
-                <!-- Rotating Loading Ring -->
-                <div class="absolute inset-0 rounded-[28px] border-2 border-transparent border-t-indigo-500 border-r-purple-500 animate-[spin_1.5s_cubic-bezier(0.68,-0.55,0.265,1.55)_infinite]"></div>
-                <!-- Second Reverse Ring -->
-                <div class="absolute inset-[-6px] rounded-[32px] border-2 border-transparent border-b-purple-500 border-l-indigo-500 animate-[spin_1.5s_cubic-bezier(0.68,-0.55,0.265,1.55)_infinite_reverse] opacity-60"></div>
-            </div>
-
-            <!-- Typography & Loading Dots -->
-            <div class="flex flex-col items-center gap-3">
-                <h2 class="text-xs font-black tracking-[0.4em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">
-                    EduAdmin
-                </h2>
-                <div class="flex items-center gap-2 px-5 py-2 bg-white/50 border border-white/80 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.03)] backdrop-blur-lg">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase ml-1 relative top-[1px]">Authenticating</span>
-                    <span class="flex gap-1.5 items-center h-full">
-                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(99,102,241,0.6)]" style="animation-delay: 0ms;"></span>
-                        <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(168,85,247,0.6)]" style="animation-delay: 150ms;"></span>
-                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce shadow-[0_0_8px_rgba(99,102,241,0.6)]" style="animation-delay: 300ms;"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="flex h-screen overflow-hidden">
 
@@ -315,29 +297,69 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto">
-                <div class="animate-content w-full h-full p-4 sm:p-6 lg:p-8">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto relative">
+                <!-- Skeleton UI (Shown by default) -->
+                <div id="skeleton-loader" class="w-full h-full p-4 sm:p-6 lg:p-8 absolute inset-0 z-10 bg-[#FAFAF7] overflow-hidden">
+                    <div class="max-w-7xl mx-auto space-y-8">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div class="w-1/2">
+                                <x-skeleton.text lines="2" />
+                            </div>
+                            <div class="shimmer h-14 w-40 rounded-2xl"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <x-skeleton.card />
+                            <x-skeleton.card />
+                            <x-skeleton.card />
+                            <x-skeleton.card />
+                        </div>
+
+                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                            <div class="xl:col-span-2 space-y-8">
+                                <x-skeleton.card class="h-48" />
+                                <x-skeleton.table rows="4" />
+                            </div>
+                            <div class="xl:col-span-1 space-y-8">
+                                <x-skeleton.card class="h-64" />
+                                <x-skeleton.table rows="3" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actual Content (Hidden by default) -->
+                <div id="actual-content" style="opacity: 0; visibility: hidden;" class="animate-content w-full h-full p-4 sm:p-6 lg:p-8 relative z-20">
                     @yield('content')
                 </div>
             </main>
 
         </div>
     </div>
+
     <script>
-        // Page Loader Logic
+        // Skeleton Loader Logic
         window.addEventListener('load', function () {
-            const loader = document.getElementById('edflow-loader');
-            if (loader) {
+            const skeleton = document.getElementById('skeleton-loader');
+            const content = document.getElementById('actual-content');
+            
+            if (skeleton && content) {
+                // Short delay to ensure a smooth transition
                 setTimeout(() => {
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden';
+                    skeleton.style.opacity = '0';
+                    skeleton.style.visibility = 'hidden';
+                    skeleton.style.transition = 'opacity 0.4s ease-in-out';
+                    
+                    content.style.visibility = 'visible';
+                    content.style.opacity = '1';
+                    content.style.transition = 'opacity 0.4s ease-in-out';
+                    
                     setTimeout(() => {
-                        loader.remove();
-                    }, 700); 
-                }, 500); 
+                        skeleton.remove();
+                    }, 400); 
+                }, 300); // minimal delay for better UX
             }
         });
     </script>
-
 </body>
 </html>

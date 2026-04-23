@@ -104,8 +104,18 @@
                 </div>
             @endif
 
-            <main class="flex-1 animate-enter">
-                <div class="py-8">
+            <main class="flex-1 relative animate-enter">
+                <!-- Skeleton UI (Shown by default) -->
+                <div id="skeleton-loader" class="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <x-skeleton.card />
+                        <x-skeleton.card class="h-64" />
+                        <x-skeleton.table rows="5" />
+                    </div>
+                </div>
+
+                <!-- Actual Content (Hidden by default) -->
+                <div id="actual-content" style="opacity: 0; visibility: hidden;" class="py-8 relative z-20">
                     {{ $slot }}
                 </div>
             </main>
@@ -142,6 +152,28 @@
                     body: JSON.stringify({ theme: newTheme })
                 }).catch(err => console.error('Failed to save theme preference', err));
             }
+
+            // Skeleton Loader Logic
+            window.addEventListener('load', function () {
+                const skeleton = document.getElementById('skeleton-loader');
+                const content = document.getElementById('actual-content');
+                
+                if (skeleton && content) {
+                    setTimeout(() => {
+                        skeleton.style.opacity = '0';
+                        skeleton.style.visibility = 'hidden';
+                        skeleton.style.transition = 'opacity 0.4s ease-in-out';
+                        
+                        content.style.visibility = 'visible';
+                        content.style.opacity = '1';
+                        content.style.transition = 'opacity 0.4s ease-in-out';
+                        
+                        setTimeout(() => {
+                            skeleton.remove();
+                        }, 400); 
+                    }, 300); // Minimal delay
+                }
+            });
         </script>
     </body>
 </html>

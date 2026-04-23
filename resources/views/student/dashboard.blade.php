@@ -74,15 +74,95 @@
                 </h1>
                 <p class="text-gray-500 font-medium mt-1">Ready to level up your learning journey today?</p>
             </div>
-            <div class="glass-card px-6 py-3 rounded-2xl flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 shadow-inner">
-                    <i class="fa-solid fa-fire-flame-curved text-xl animate-bounce"></i>
+            <!-- Digital Clock + Active Status Widget -->
+            <div class="glass-card px-5 py-3 rounded-2xl flex items-center gap-4 min-w-[220px]">
+                <!-- Status Dot -->
+                <div class="relative flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shadow-inner">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+                    </div>
+                    <!-- Ping ring -->
+                    <span class="absolute inset-0 rounded-full animate-ping bg-emerald-400 opacity-20"></span>
                 </div>
-                <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Login Streak</p>
-                    <p class="text-xl font-black text-gray-800">{{ $stats->current_streak ?? 0 }} Days</p>
+
+                <div class="flex flex-col leading-tight">
+                    <!-- Active label -->
+                    <p class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">● Active Now</p>
+
+                    <!-- Digital Clock -->
+                    <div id="dashboard-clock" class="flex items-baseline gap-[2px] mt-0.5">
+                        <span id="clock-hours"   class="clock-digit text-2xl font-black text-gray-800 tabular-nums">00</span>
+                        <span class="text-xl font-black text-gray-400 clock-colon select-none">:</span>
+                        <span id="clock-minutes" class="clock-digit text-2xl font-black text-gray-800 tabular-nums">00</span>
+                        <span class="text-xl font-black text-gray-400 clock-colon select-none">:</span>
+                        <span id="clock-seconds" class="clock-digit text-lg font-black text-gray-400 tabular-nums">00</span>
+                        <span id="clock-ampm"    class="text-[10px] font-black text-gray-400 uppercase ml-1 self-start mt-1 tracking-wider">AM</span>
+                    </div>
+
+                    <!-- Date -->
+                    <p id="clock-date" class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5"></p>
                 </div>
             </div>
+
+            <style>
+                .clock-digit {
+                    display: inline-block;
+                    transition: opacity 0.15s ease, transform 0.15s ease;
+                }
+                .clock-digit.flip {
+                    opacity: 0;
+                    transform: translateY(-4px);
+                }
+                .clock-colon {
+                    animation: colonBlink 1s step-end infinite;
+                }
+                @keyframes colonBlink {
+                    0%, 100% { opacity: 1; }
+                    50%       { opacity: 0.2; }
+                }
+            </style>
+
+            <script>
+                (function () {
+                    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+                    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+                    function setDigit(el, val) {
+                        if (el.textContent !== val) {
+                            el.classList.add('flip');
+                            setTimeout(() => {
+                                el.textContent = val;
+                                el.classList.remove('flip');
+                            }, 150);
+                        }
+                    }
+
+                    function pad(n) { return String(n).padStart(2, '0'); }
+
+                    function tick() {
+                        const now  = new Date();
+                        let   hrs  = now.getHours();
+                        const min  = now.getMinutes();
+                        const sec  = now.getSeconds();
+                        const ampm = hrs >= 12 ? 'PM' : 'AM';
+                        hrs = hrs % 12 || 12;
+
+                        setDigit(document.getElementById('clock-hours'),   pad(hrs));
+                        setDigit(document.getElementById('clock-minutes'), pad(min));
+                        setDigit(document.getElementById('clock-seconds'), pad(sec));
+
+                        const ampmEl = document.getElementById('clock-ampm');
+                        if (ampmEl.textContent !== ampm) ampmEl.textContent = ampm;
+
+                        const dateEl = document.getElementById('clock-date');
+                        const dateStr = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+                        if (dateEl.textContent !== dateStr) dateEl.textContent = dateStr;
+                    }
+
+                    tick();
+                    setInterval(tick, 1000);
+                })();
+            </script>
         </header>
 
         <!-- Stats Grid (Top Row) -->

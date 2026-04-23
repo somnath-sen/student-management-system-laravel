@@ -411,41 +411,47 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             
             <!-- Specs Column -->
-            <div class="space-y-6 lg:gap-8 lg:col-span-1">
+            <div class="space-y-6 lg:col-span-1">
                 
                 <!-- Course Card -->
-                <div class="glass-card p-8 animate-enter stagger-2 h-full flex flex-col">
-                    <div class="flex items-center justify-between border-b border-black/5 pb-4 mb-5">
-                        <h2 class="text-[13px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-indigo-500 text-lg"></i> Academic Track
-                        </h2>
+                <div class="glass-card animate-enter stagger-2 overflow-hidden flex flex-col">
+                    <!-- Gradient Banner Header -->
+                    <div class="relative h-24 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center px-6">
+                        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                        <div class="relative z-10 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                                <i class="fa-solid fa-graduation-cap text-white text-lg"></i>
+                            </div>
+                            <h2 class="text-[11px] font-black text-white/90 uppercase tracking-[0.25em]">Academic Track</h2>
+                        </div>
+                        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
                     </div>
-                    
-                    <div class="flex-1 flex flex-col justify-between">
+
+                    <div class="p-6 flex-1 flex flex-col justify-between">
                         @if(isset($course))
                             <div>
-                                <h3 class="text-3xl font-black text-slate-800 leading-tight mb-3 text-blue-glow">{{ $course->name }}</h3>
+                                <h3 class="text-xl font-black text-slate-800 leading-tight mb-2 text-blue-glow">{{ $course->name }}</h3>
                                 @if($course->course_code)
-                                    <div class="inline-flex items-center gap-2 mb-3 px-3 py-1.5 bg-indigo-50 border border-indigo-200 rounded-xl">
-                                        <i class="fa-solid fa-hashtag text-indigo-400 text-xs"></i>
-                                        <span class="text-xs font-black text-indigo-600 uppercase tracking-widest">Course ID: {{ $course->course_code }}</span>
+                                    <div class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 bg-indigo-50 border border-indigo-200 rounded-full">
+                                        <i class="fa-solid fa-hashtag text-indigo-400 text-[10px]"></i>
+                                        <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ $course->course_code }}</span>
                                     </div>
                                 @endif
-                                <p class="text-[15px] text-slate-500 leading-relaxed font-medium bg-white/40 p-4 rounded-xl border border-white shadow-inner min-h-[50px]">{{ $course->description ?? 'No specific parameters defined.' }}</p>
+                                <p class="text-[13px] text-slate-500 leading-relaxed font-medium bg-white/40 px-4 py-3 rounded-xl border border-white shadow-inner">{{ $course->description ?? 'No specific parameters defined.' }}</p>
                             </div>
                             
-                            <div class="mt-6 pt-5 flex justify-between items-center">
-                                <span class="text-[12px] font-black text-slate-400 uppercase tracking-widest">Current Status</span>
-                                <span class="px-4 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30">
-                                    Enrolled
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Enrollment</span>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-emerald-400 to-teal-500 text-white rounded-full text-[10px] font-black uppercase tracking-wider shadow-md shadow-emerald-500/30">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Active
                                 </span>
                             </div>
                         @else
                             <div class="text-center py-8">
-                                <div class="w-20 h-20 bg-white shadow-xl rounded-[2rem] rotate-12 flex items-center justify-center mx-auto mb-6">
-                                    <i class="fa-solid fa-book-open text-3xl text-pink-400 -rotate-12"></i>
+                                <div class="w-16 h-16 bg-white shadow-xl rounded-[1.5rem] rotate-12 flex items-center justify-center mx-auto mb-4">
+                                    <i class="fa-solid fa-book-open text-2xl text-pink-400 -rotate-12"></i>
                                 </div>
-                                <h3 class="text-xl font-bold text-slate-800 mb-2">No Course Yet</h3>
+                                <h3 class="text-base font-bold text-slate-800 mb-1">No Course Yet</h3>
                                 <p class="text-sm text-slate-500 font-medium">Please wait for admin assignment.</p>
                             </div>
                         @endif
@@ -453,18 +459,24 @@
                 </div>
 
                 <!-- Metrics Card -->
-                <div class="glass-card p-6 animate-enter stagger-3">
-                    <h2 class="text-[12px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5 px-2">Account Metrics</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center p-5 bg-white/60 rounded-3xl border border-white shadow-sm hover:shadow-md hover:bg-white transition-all">
-                            <div class="w-12 h-12 bg-indigo-100 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-cubes-stacked"></i></div>
-                            <div class="text-3xl font-black text-slate-800 mb-1">{{ isset($subjects) ? $subjects->count() : 0 }}</div>
-                            <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Subjects</div>
+                <div class="glass-card p-5 animate-enter stagger-3">
+                    <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Account Metrics</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="relative overflow-hidden text-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                            <div class="absolute -right-3 -top-3 w-14 h-14 rounded-full bg-indigo-200/30 blur-xl pointer-events-none"></div>
+                            <div class="w-10 h-10 bg-indigo-100 text-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-2 text-base group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-cubes-stacked"></i>
+                            </div>
+                            <div class="text-2xl font-black text-slate-800 mb-0.5">{{ isset($subjects) ? $subjects->count() : 0 }}</div>
+                            <div class="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Subjects</div>
                         </div>
-                        <div class="text-center p-5 bg-white/60 rounded-3xl border border-white shadow-sm hover:shadow-md hover:bg-white transition-all">
-                            <div class="w-12 h-12 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-heart-circle-check"></i></div>
-                            <div class="text-3xl font-black text-slate-800 mb-1">On</div>
-                            <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</div>
+                        <div class="relative overflow-hidden text-center p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                            <div class="absolute -right-3 -top-3 w-14 h-14 rounded-full bg-emerald-200/30 blur-xl pointer-events-none"></div>
+                            <div class="w-10 h-10 bg-emerald-100 text-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-2 text-base group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="text-2xl font-black text-slate-800 mb-0.5">Active</div>
+                            <div class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Status</div>
                         </div>
                     </div>
                 </div>
@@ -473,54 +485,82 @@
 
             <!-- Subject Grid Column -->
             <div class="lg:col-span-2 animate-enter stagger-2">
-                <div class="glass-card overflow-hidden h-full flex flex-col relative p-2">
+                <div class="glass-card overflow-hidden h-full flex flex-col">
                     
-                    <div class="p-6 md:px-8 bg-white/40 rounded-[1.5rem] flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-white shadow-sm mb-2">
+                    <!-- Section Header -->
+                    <div class="px-6 py-5 bg-white/50 border-b border-white/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
-                            <h2 class="text-2xl font-black text-slate-800 flex items-center gap-3">
-                                <i class="fa-solid fa-layer-group text-pink-500"></i> My Subjects
+                            <h2 class="text-lg font-black text-slate-800 flex items-center gap-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-md shadow-pink-500/30">
+                                    <i class="fa-solid fa-layer-group text-white text-sm"></i>
+                                </span>
+                                My Subjects
                             </h2>
-                            <p class="text-[14px] text-slate-500 mt-1 font-medium">Knowledge areas you are currently exploring.</p>
+                            <p class="text-[12px] text-slate-400 mt-1 font-medium pl-10">Knowledge areas you're currently exploring</p>
                         </div>
-                        <div class="bg-indigo-600 text-white text-xs px-4 py-2 rounded-xl font-bold border border-indigo-400 shadow-lg shadow-indigo-500/30">
-                            {{ isset($subjects) ? $subjects->count() : 0 }} Total Let's Go! 🚀
+                        <div class="inline-flex items-center gap-1.5 bg-indigo-600 text-white text-[10px] px-3 py-1.5 rounded-full font-black border border-indigo-400 shadow-lg shadow-indigo-500/30 self-start sm:self-auto">
+                            <i class="fa-solid fa-rocket text-[9px]"></i>
+                            {{ isset($subjects) ? $subjects->count() : 0 }} Enrolled
                         </div>
                     </div>
 
-                    <div class="p-4 flex-1">
+                    <div class="p-5 flex-1">
                         @if(isset($subjects) && $subjects->count() > 0)
+                            @php
+                                $palettes = [
+                                    ['from-violet-500 to-indigo-500',   'bg-violet-50',  'text-violet-600',  'border-violet-100'],
+                                    ['from-pink-500 to-rose-500',        'bg-pink-50',    'text-pink-600',    'border-pink-100'],
+                                    ['from-cyan-500 to-blue-500',        'bg-cyan-50',    'text-cyan-600',    'border-cyan-100'],
+                                    ['from-emerald-500 to-teal-500',     'bg-emerald-50', 'text-emerald-600', 'border-emerald-100'],
+                                    ['from-orange-500 to-amber-500',     'bg-orange-50',  'text-orange-600',  'border-orange-100'],
+                                    ['from-purple-500 to-fuchsia-500',   'bg-purple-50',  'text-purple-600',  'border-purple-100'],
+                                ];
+                                $pi = 0;
+                            @endphp
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 @foreach($subjects as $subject)
-                                    <!-- Playful Subject Card -->
-                                    <div class="group flex items-center p-4 bg-white/60 border border-white/80 rounded-[1.5rem] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:bg-white transition-all duration-300">
-                                        
-                                        <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-2xl shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                                            {{ substr($subject->name, 0, 1) }}
-                                        </div>
-                                        
-                                        <div class="ml-5 flex-1">
-                                            <h3 class="text-[16px] font-black text-slate-800 group-hover:text-vibrant transition-colors">{{ $subject->name }}</h3>
-                                            <div class="inline-block mt-1.5 px-2.5 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 tracking-widest uppercase rounded-lg border border-slate-200">
-                                                {{ $subject->subject_code ?? 'Code N/A' }}
+                                    @php
+                                        $pal = $palettes[$pi % count($palettes)];
+                                        $pi++;
+                                    @endphp
+                                    <!-- Premium Subject Card -->
+                                    <div class="group relative overflow-hidden flex flex-col p-5 bg-white/70 border border-white/90 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                        <!-- Glow orb behind card on hover -->
+                                        <div class="absolute -inset-1 opacity-0 group-hover:opacity-30 transition-opacity duration-500 bg-gradient-to-br {{ $pal[0] }} blur-2xl rounded-3xl -z-10"></div>
+
+                                        <!-- Top: Icon + Arrow -->
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="w-12 h-12 bg-gradient-to-br {{ $pal[0] }} rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                                                {{ strtoupper(substr($subject->name, 0, 1)) }}
+                                            </div>
+                                            <div class="w-8 h-8 rounded-full {{ $pal[1] }} border {{ $pal[3] }} flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                                                <i class="fa-solid fa-arrow-up-right text-xs {{ $pal[2] }}"></i>
                                             </div>
                                         </div>
 
-                                        <div class="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all shadow-sm">
-                                            <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                                        <!-- Subject Name -->
+                                        <h3 class="text-[15px] font-black text-slate-800 leading-tight mb-1 line-clamp-2">{{ $subject->name }}</h3>
+
+                                        <!-- Subject Code chip -->
+                                        <div class="mt-auto pt-3 border-t border-slate-100/80">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 {{ $pal[1] }} {{ $pal[2] }} border {{ $pal[3] }} text-[9px] font-black uppercase tracking-widest rounded-full">
+                                                <i class="fa-solid fa-barcode text-[8px]"></i>
+                                                {{ $subject->subject_code ?? 'Code N/A' }}
+                                            </span>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                         @else
                             <div class="flex flex-col items-center justify-center h-full py-16 text-center">
-                                <div class="relative w-32 h-32 mb-6">
-                                    <div class="absolute inset-0 bg-pink-200 rounded-full animate-ping opacity-50"></div>
-                                    <div class="relative w-full h-full bg-white/80 backdrop-blur-sm border-2 border-white rounded-[2rem] shadow-xl rotate-12 flex items-center justify-center">
-                                        <i class="fa-solid fa-folder-tree text-5xl text-slate-300 -rotate-12"></i>
+                                <div class="relative w-24 h-24 mb-6">
+                                    <div class="absolute inset-0 bg-pink-200 rounded-full animate-ping opacity-40"></div>
+                                    <div class="relative w-full h-full bg-white/80 backdrop-blur-sm border-2 border-white rounded-[1.5rem] shadow-xl rotate-12 flex items-center justify-center">
+                                        <i class="fa-solid fa-folder-tree text-4xl text-slate-300 -rotate-12"></i>
                                     </div>
                                 </div>
-                                <p class="text-slate-800 font-black text-2xl mb-2">No subjects found</p>
-                                <p class="text-[15px] text-slate-500 font-medium max-w-sm">Looks like your backpack is empty right now. Admin will load it up soon!</p>
+                                <p class="text-slate-800 font-black text-xl mb-2">No subjects found</p>
+                                <p class="text-sm text-slate-500 font-medium max-w-sm">Looks like your backpack is empty right now. Admin will load it up soon!</p>
                             </div>
                         @endif
                     </div>
