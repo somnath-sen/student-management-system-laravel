@@ -1,5 +1,8 @@
+@php
+    $theme = request()->cookie('theme', 'light');
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth {{ $theme === 'dark' ? 'dark' : '' }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,7 +45,7 @@
             }
         </style>
     </head>
-    <body class="font-sans antialiased text-gray-800 bg-gray-50 selection:bg-indigo-500 selection:text-white">
+    <body class="font-sans antialiased text-gray-800 bg-gray-50 dark:bg-gray-900 dark:text-gray-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
         
         <div class="fixed inset-0 -z-10 pointer-events-none">
             <div class="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-indigo-50/50 to-transparent"></div>
@@ -83,5 +86,33 @@
             </footer>
 
         </div>
+
+        <script>
+            function toggleTheme() {
+                const html = document.documentElement;
+                const isDark = html.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+
+                if (newTheme === 'dark') {
+                    html.classList.add('dark');
+                    document.getElementById('theme-icon-light')?.classList.remove('hidden');
+                    document.getElementById('theme-icon-dark')?.classList.add('hidden');
+                } else {
+                    html.classList.remove('dark');
+                    document.getElementById('theme-icon-light')?.classList.add('hidden');
+                    document.getElementById('theme-icon-dark')?.classList.remove('hidden');
+                }
+
+                fetch('{{ route("preferences.theme") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ theme: newTheme })
+                }).catch(err => console.error('Failed to save theme preference', err));
+            }
+        </script>
     </body>
 </html>

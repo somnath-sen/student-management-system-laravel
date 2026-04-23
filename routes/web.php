@@ -42,6 +42,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Preference Routes (Cookies)
+Route::post('/preferences/theme', [\App\Http\Controllers\PreferenceController::class, 'updateTheme'])->name('preferences.theme');
+Route::post('/preferences/language', [\App\Http\Controllers\PreferenceController::class, 'updateLanguage'])->name('preferences.language');
+Route::post('/preferences/clear', [\App\Http\Controllers\PreferenceController::class, 'clearPreferences'])->name('preferences.clear');
+
 
 
 // Registration Routes
