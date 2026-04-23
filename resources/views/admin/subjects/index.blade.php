@@ -81,6 +81,7 @@
                 <thead>
                     <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
                         <th class="px-6 py-4">#</th>
+                        <th class="px-6 py-4">Subject Code</th>
                         <th class="px-6 py-4">Subject Name</th>
                         <th class="px-6 py-4">Associated Course</th>
                         <th class="px-6 py-4 text-center">Actions</th>
@@ -91,6 +92,11 @@
                         <tr class="table-row group">
                             <td class="px-6 py-4 text-sm text-gray-400">
                                 {{ $loop->iteration }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded bg-gray-100 text-gray-700 font-mono text-xs border border-gray-200 font-semibold tracking-wide">
+                                    {{ $subject->subject_code ?? 'N/A' }}
+                                </span>
                             </td>
 
                             <td class="px-6 py-4">

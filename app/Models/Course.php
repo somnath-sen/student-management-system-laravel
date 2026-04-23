@@ -10,6 +10,7 @@ class Course extends Model
     use HasFactory;
     // Merged safely: kept your original fields and added the new one
     protected $fillable = [
+        'course_code',
         'name',
         'description',
         'admit_cards_published', 

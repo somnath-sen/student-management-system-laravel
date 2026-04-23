@@ -25,11 +25,12 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'course_code' => 'required|string|max:50|unique:courses,course_code',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
-        Course::create($request->only('name', 'description'));
+        Course::create($request->only('course_code', 'name', 'description'));
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course created successfully!');
@@ -44,11 +45,12 @@ class CourseController extends Controller
     public function update(Request $request, Course $course)
     {
         $request->validate([
+            'course_code' => 'required|string|max:50|unique:courses,course_code,' . $course->id,
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
-        $course->update($request->only('name', 'description'));
+        $course->update($request->only('course_code', 'name', 'description'));
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course updated successfully!');

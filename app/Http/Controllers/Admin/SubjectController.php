@@ -33,13 +33,15 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'name'      => 'required|string|max:255',
+            'course_id'    => 'required|exists:courses,id',
+            'subject_code' => 'required|string|max:50|unique:subjects,subject_code',
+            'name'         => 'required|string|max:255',
         ]);
 
         Subject::create([
-            'course_id' => $request->course_id,
-            'name'      => $request->name,
+            'course_id'    => $request->course_id,
+            'subject_code' => $request->subject_code,
+            'name'         => $request->name,
         ]);
 
         return redirect()
@@ -62,13 +64,15 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject)
     {
         $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'name'      => 'required|string|max:255',
+            'course_id'    => 'required|exists:courses,id',
+            'subject_code' => 'required|string|max:50|unique:subjects,subject_code,' . $subject->id,
+            'name'         => 'required|string|max:255',
         ]);
 
         $subject->update([
-            'course_id' => $request->course_id,
-            'name'      => $request->name,
+            'course_id'    => $request->course_id,
+            'subject_code' => $request->subject_code,
+            'name'         => $request->name,
         ]);
 
         return redirect()

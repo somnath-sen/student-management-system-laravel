@@ -81,7 +81,8 @@
             <table class="w-full whitespace-nowrap">
                 <thead>
                     <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
-                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">#</th>
+                        <th class="px-6 py-4">Course ID</th>
                         <th class="px-6 py-4">Course Name</th>
                         <th class="px-6 py-4">Description</th>
                         <th class="px-6 py-4 text-center">Actions</th>
@@ -91,9 +92,13 @@
                     @forelse($courses as $course)
                         <tr class="table-row">
                             <td class="px-6 py-4 text-sm text-gray-500">
-                                #{{ $loop->iteration }}
+                                {{ $loop->iteration }}
                             </td>
-                            
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded bg-gray-100 text-gray-700 font-mono text-xs border border-gray-200 font-semibold tracking-wide">
+                                    {{ $course->course_code ?? 'N/A' }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
