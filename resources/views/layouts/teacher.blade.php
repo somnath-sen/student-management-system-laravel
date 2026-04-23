@@ -163,7 +163,10 @@
                     <button @click="sidebarOpen = true" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors lg:hidden focus:outline-none">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
-                    <h2 class="text-xl font-extrabold text-slate-900 tracking-tight hidden sm:block">@yield('title')</h2>
+                    <div class="hidden sm:flex flex-col justify-center">
+                        <x-breadcrumb />
+                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight leading-none">@yield('title')</h2>
+                    </div>
                 </div>
 
                 <div class="flex items-center gap-4 md:gap-6">
