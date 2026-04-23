@@ -23,6 +23,7 @@
             }
         }
     </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
@@ -84,7 +85,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-1 w-full">
+    <main class="flex-1 w-full pb-24 lg:pb-0">
 
         {{-- ════════════ GLOBAL SOS EMERGENCY BANNER ════════════ --}}
         @php $anyPanicking = $childrenData->contains('is_panicking', true); @endphp
@@ -384,5 +385,106 @@
         setTimeout(() => window.location.reload(), 10000);
     </script>
     @endif
+
+    <!-- Mobile Bottom Navigation (Parent) -->
+    <div x-data="{ moreDrawerOpen: false }" class="lg:hidden">
+        <!-- Bottom Nav Bar -->
+        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-md bg-white/80 backdrop-blur-3xl border border-white/60 rounded-[2rem] z-[60] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
+            <div class="flex justify-around items-center px-2 py-2">
+                <a href="#" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 text-blue-500">
+                    <i class="fa-solid fa-chart-pie text-xl mb-1 transition-transform scale-110 drop-shadow-md"></i>
+                    <span class="text-[10px] font-bold">Dashboard</span>
+                </a>
+                
+                <a href="#" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 text-slate-400 hover:text-emerald-500">
+                    <i class="fa-solid fa-calendar-check text-xl mb-1 transition-transform"></i>
+                    <span class="text-[10px] font-bold">Attendance</span>
+                </a>
+
+                <a href="#" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 text-slate-400 hover:text-amber-500">
+                    <i class="fa-solid fa-chart-line text-xl mb-1 transition-transform"></i>
+                    <span class="text-[10px] font-bold">Marks</span>
+                </a>
+
+                <a href="#" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 text-slate-400 hover:text-rose-500">
+                    <div class="relative">
+                        <i class="fa-solid fa-bell text-xl mb-1 transition-transform"></i>
+                        @if($childrenData->contains('unread_broadcasts', '>', 0))
+                            <span class="absolute -top-1 -right-2 w-2 h-2 bg-rose-500 rounded-full animate-pulse border border-white"></span>
+                        @endif
+                    </div>
+                    <span class="text-[10px] font-bold">Alerts</span>
+                </a>
+
+                <button type="button" @click="moreDrawerOpen = true" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] text-slate-400 hover:text-purple-500 transition-all active:scale-90 active:opacity-70">
+                    <i class="fa-solid fa-layer-group text-xl mb-1"></i>
+                    <span class="text-[10px] font-bold">More</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Slide-up Drawer Overlay -->
+        <div x-show="moreDrawerOpen" style="display: none;" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="moreDrawerOpen = false"
+             class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70]"></div>
+
+        <!-- Slide-up Drawer Content -->
+        <div x-show="moreDrawerOpen" style="display: none;"
+             x-transition:enter="transition transform ease-[cubic-bezier(0.2,0.8,0.2,1)] duration-500"
+             x-transition:enter-start="translate-y-full"
+             x-transition:enter-end="translate-y-0"
+             x-transition:leave="transition transform ease-in duration-300"
+             x-transition:leave-start="translate-y-0"
+             x-transition:leave-end="translate-y-full"
+             class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-3xl rounded-t-[2.5rem] z-[80] shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col max-h-[85vh] border-t border-white/50">
+            
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center sticky top-0 z-10 bg-white/50 backdrop-blur-xl">
+                <div class="absolute top-2.5 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 rounded-full"></div>
+                <h3 class="font-bold text-slate-800 text-lg mt-3">More Options</h3>
+                <button type="button" @click="moreDrawerOpen = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors active:scale-90">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="overflow-y-auto flex-1 px-4 py-4 space-y-2 pb-8">
+                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Academics</p>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-purple-50 text-slate-700 hover:text-purple-700 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-purple-500"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <span class="font-bold text-sm flex-1">Performance Analytics</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-indigo-500"><i class="fa-solid fa-calendar-days"></i></div>
+                    <span class="font-bold text-sm flex-1">Exam Schedule</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-amber-50 text-slate-700 hover:text-amber-700 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-500"><i class="fa-solid fa-file-pdf"></i></div>
+                    <span class="font-bold text-sm flex-1">Report Card</span>
+                </a>
+
+                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">Security & Account</p>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all active:scale-95 border border-rose-100">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-rose-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <span class="font-bold text-sm flex-1">Emergency Alerts</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-500"><i class="fa-solid fa-gear"></i></div>
+                    <span class="font-bold text-sm flex-1">Settings</span>
+                </a>
+
+                <form method="POST" action="{{ route('logout') }}" class="mt-4 mb-4">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-gray-900 text-white font-bold text-sm hover:bg-gray-800 transition-all active:scale-95 shadow-lg">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

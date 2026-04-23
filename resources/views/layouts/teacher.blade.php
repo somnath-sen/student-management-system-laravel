@@ -74,10 +74,10 @@
     <div class="flex h-screen overflow-hidden">
 
         <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity 
-             class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm lg:hidden"></div>
+             class="hidden lg:hidden fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm"></div>
 
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-               class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-2xl flex flex-col border-r border-slate-800">
+               class="hidden lg:flex fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-2xl flex-col border-r border-slate-800">
             
             <div class="flex items-center justify-center h-20 border-b border-slate-800/60 bg-slate-900/50 backdrop-blur-md px-6">
                 <div class="flex items-center gap-3 font-extrabold text-xl tracking-wide w-full">
@@ -160,7 +160,7 @@
             <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 shadow-sm">
                 
                 <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = true" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors lg:hidden focus:outline-none">
+                    <button @click="sidebarOpen = true" class="hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors lg:hidden focus:outline-none">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                     <div class="hidden sm:flex flex-col justify-center">
@@ -224,7 +224,7 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto relative">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto relative pb-24 lg:pb-0">
                 <!-- Skeleton UI (Shown by default) -->
                 <div id="skeleton-loader" class="w-full h-full p-4 md:p-8 absolute inset-0 z-10 bg-[#FAFAF7] overflow-hidden">
                     <div class="max-w-7xl mx-auto space-y-8">
@@ -271,7 +271,6 @@
             const content = document.getElementById('actual-content');
             
             if (skeleton && content) {
-                // Short delay to ensure a smooth transition
                 setTimeout(() => {
                     skeleton.style.opacity = '0';
                     skeleton.style.visibility = 'hidden';
@@ -281,12 +280,103 @@
                     content.style.opacity = '1';
                     content.style.transition = 'opacity 0.4s ease-in-out';
                     
-                    setTimeout(() => {
-                        skeleton.remove();
-                    }, 400); 
-                }, 300); // minimal delay for better UX
+                    setTimeout(() => skeleton.remove(), 400); 
+                }, 300);
             }
         });
     </script>
+
+    <!-- Mobile Bottom Navigation (Teacher) -->
+    <div x-data="{ moreDrawerOpen: false }" class="lg:hidden">
+        <!-- Bottom Nav Bar -->
+        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-md bg-white/80 backdrop-blur-3xl border border-white/60 rounded-[2rem] z-[60] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
+            <div class="flex justify-around items-center px-2 py-2">
+                <a href="{{ route('teacher.dashboard') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.dashboard') ? 'text-blue-500' : 'text-slate-400 hover:text-blue-400' }}">
+                    <i class="fa-solid fa-chart-pie text-xl mb-1 transition-transform {{ request()->routeIs('teacher.dashboard') ? 'scale-110 drop-shadow-md' : '' }}"></i>
+                    <span class="text-[10px] font-bold">Dashboard</span>
+                </a>
+                
+                <a href="{{ route('teacher.attendance.create') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.attendance.*') ? 'text-emerald-500' : 'text-slate-400 hover:text-emerald-400' }}">
+                    <i class="fa-solid fa-clipboard-user text-xl mb-1 transition-transform {{ request()->routeIs('teacher.attendance.*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
+                    <span class="text-[10px] font-bold">Attendance</span>
+                </a>
+
+                <a href="{{ route('teacher.marks.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.marks.*') ? 'text-amber-500' : 'text-slate-400 hover:text-amber-400' }}">
+                    <i class="fa-solid fa-file-pen text-xl mb-1 transition-transform {{ request()->routeIs('teacher.marks.*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
+                    <span class="text-[10px] font-bold">Marks</span>
+                </a>
+
+                <a href="{{ route('teacher.performance.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.performance.*') ? 'text-purple-500' : 'text-slate-400 hover:text-purple-400' }}">
+                    <i class="fa-solid fa-chart-line text-xl mb-1 transition-transform {{ request()->routeIs('teacher.performance.*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
+                    <span class="text-[10px] font-bold">Performance</span>
+                </a>
+
+                <button type="button" @click="moreDrawerOpen = true" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] text-slate-400 hover:text-rose-500 transition-all active:scale-90 active:opacity-70">
+                    <i class="fa-solid fa-layer-group text-xl mb-1"></i>
+                    <span class="text-[10px] font-bold">More</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Slide-up Drawer Overlay -->
+        <div x-show="moreDrawerOpen" style="display: none;" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="moreDrawerOpen = false"
+             class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70]"></div>
+
+        <!-- Slide-up Drawer Content -->
+        <div x-show="moreDrawerOpen" style="display: none;"
+             x-transition:enter="transition transform ease-[cubic-bezier(0.2,0.8,0.2,1)] duration-500"
+             x-transition:enter-start="translate-y-full"
+             x-transition:enter-end="translate-y-0"
+             x-transition:leave="transition transform ease-in duration-300"
+             x-transition:leave-start="translate-y-0"
+             x-transition:leave-end="translate-y-full"
+             class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-3xl rounded-t-[2.5rem] z-[80] shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col max-h-[85vh] border-t border-white/50">
+            
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center sticky top-0 z-10 bg-white/50 backdrop-blur-xl">
+                <div class="absolute top-2.5 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 rounded-full"></div>
+                <h3 class="font-bold text-slate-800 text-lg mt-3">More Options</h3>
+                <button type="button" @click="moreDrawerOpen = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors active:scale-90">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="overflow-y-auto flex-1 px-4 py-4 space-y-2 pb-8">
+                <a href="{{ route('teacher.timetable') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-blue-500"><i class="fa-solid fa-calendar-days"></i></div>
+                    <span class="font-bold text-sm flex-1">My Schedule</span>
+                </a>
+
+                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">Tools & AI</p>
+                <a href="{{ route('studyai.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-purple-50 text-slate-700 hover:text-purple-700 transition-all active:scale-95 border border-purple-100/50">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500 shadow-sm flex items-center justify-center text-white"><i class="fa-solid fa-robot"></i></div>
+                    <span class="font-bold text-sm flex-1">StudyAI Assistant</span>
+                </a>
+
+                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">Settings</p>
+                <a href="{{ route('teacher.emergency') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all active:scale-95 border border-rose-100">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-red-500"><i class="fa-solid fa-shield-halved"></i></div>
+                    <span class="font-bold text-sm flex-1">Emergency Info</span>
+                </a>
+                <a href="{{ route('teacher.details') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-500"><i class="fa-solid fa-user"></i></div>
+                    <span class="font-bold text-sm flex-1">My Profile</span>
+                </a>
+
+                <form method="POST" action="{{ route('logout') }}" class="mt-4 mb-4">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-gray-900 text-white font-bold text-sm hover:bg-gray-800 transition-all active:scale-95 shadow-lg">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
