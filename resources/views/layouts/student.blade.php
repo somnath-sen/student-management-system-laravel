@@ -197,7 +197,7 @@
 
         <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#FDFBF7]">
 
-            <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 shadow-sm">
+            <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 sticky top-0 shadow-sm z-30 overflow-visible">
                 
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = true" class="p-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition-colors lg:hidden">
@@ -226,7 +226,7 @@
                              x-transition:leave="transition ease-in duration-150"
                              x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                              x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-                             class="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-50 overflow-hidden">
+                             class="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-[9999] overflow-hidden">
                             
                             <div class="px-5 py-4 border-b border-[#F0EBE1] bg-[#FDFBF7] flex justify-between items-center">
                                 <h3 class="font-bold text-slate-800">Campus Alerts</h3>
@@ -289,7 +289,7 @@
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto relative">
                 <!-- Skeleton UI (Shown by default) -->
-                <div id="skeleton-loader" class="w-full h-full p-4 md:p-8 absolute inset-0 z-10 bg-[#FAFAF7] overflow-hidden">
+                <div id="skeleton-loader" class="w-full h-full p-4 md:p-8 absolute inset-0 z-[5] bg-[#FAFAF7] overflow-hidden">
                     <div class="max-w-7xl mx-auto space-y-8">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div class="w-1/2">
