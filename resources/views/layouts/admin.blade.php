@@ -118,6 +118,11 @@
                     <span class="font-semibold text-sm">Routine Builder</span>
                 </a>
 
+                <a href="{{ route('admin.exams.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.exams.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-calendar-check w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm">Exam Calendar</span>
+                </a>
+
                 <a href="{{ route('admin.admit-card.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.admit-card.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-file-export w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Admit Cards</span>

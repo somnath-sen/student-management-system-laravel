@@ -156,10 +156,10 @@
                         <tbody class="text-sm font-medium text-slate-800">
                             @foreach($exams as $exam)
                                 <tr class="border-b border-slate-100 hover:bg-indigo-50/50 transition-colors">
-                                    <td class="px-4 py-3 font-bold text-slate-900">{{ $exam['date'] }}</td>
-                                    <td class="px-4 py-3 text-slate-600">{{ $exam['time'] }}</td>
-                                    <td class="px-4 py-3 font-mono text-indigo-600">{{ $exam['code'] }}</td>
-                                    <td class="px-4 py-3">{{ $exam['subject'] }}</td>
+                                    <td class="px-4 py-3 font-bold text-slate-900">{{ $exam->exam_date->format('d M Y') }}</td>
+                                    <td class="px-4 py-3 text-slate-600">{{ $exam->exam_time }}</td>
+                                    <td class="px-4 py-3 font-mono text-indigo-600">{{ $exam->subject_code ?? 'N/A' }}</td>
+                                    <td class="px-4 py-3">{{ $exam->subject_name }}</td>
                                     <td class="px-4 py-3 border-l border-slate-100"></td>
                                 </tr>
                             @endforeach

@@ -163,6 +163,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/teachers/{teacher}', [TeacherController::class, 'update'])->name('admin.teachers.update');
     Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])->name('admin.teachers.destroy');
 
+    /* Exams */
+    Route::resource('admin/exams', \App\Http\Controllers\Admin\ExamController::class)->names('admin.exams')->except(['show']);
+    Route::patch('admin/exams/{exam}/toggle', [\App\Http\Controllers\Admin\ExamController::class, 'toggle'])->name('admin.exams.toggle');
+    Route::post('/admin/teachers', [TeacherController::class, 'store'])->name('admin.teachers.store');
+    Route::get('/admin/teachers/{teacher}/edit', [TeacherController::class, 'edit'])->name('admin.teachers.edit');
+    Route::put('/admin/teachers/{teacher}', [TeacherController::class, 'update'])->name('admin.teachers.update');
+    Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])->name('admin.teachers.destroy');
+
     /* Applications (Secured inside Admin Middleware) */
     Route::get('/admin/applicants/students', [ApplicantController::class, 'students'])->name('admin.applicants.students');
     Route::get('/admin/applicants/teachers', [ApplicantController::class, 'teachers'])->name('admin.applicants.teachers');
@@ -302,6 +310,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 
     // Timetable Route
     Route::get('/student/timetable', [\App\Http\Controllers\Student\TimetableController::class, 'index'])->name('student.timetable');
+
+    // Exam Schedule Route
+    Route::get('/student/exams', [\App\Http\Controllers\Student\ExamScheduleController::class, 'index'])->name('student.exams.index');
 
     // Admit Card Route
     Route::get('/student/admit-card', [\App\Http\Controllers\Student\AdmitCardController::class, 'show'])->name('student.admit-card.show');

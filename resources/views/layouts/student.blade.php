@@ -101,6 +101,11 @@
                     <span class="font-semibold text-sm">Attendance</span>
                 </a>
 
+                <a href="{{ route('student.exams.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.exams.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-calendar-days w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm">Exam Schedule</span>
+                </a>
+
                 <a href="{{ route('student.admit-card.show') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.admit-card.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-id-card w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Admit Card</span>
