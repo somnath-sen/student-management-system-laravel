@@ -121,6 +121,14 @@
                     <span class="font-semibold text-sm">Marksheet</span>
                 </a>
 
+                <a href="{{ route('student.report-card.download') }}"
+                   id="sidebar-report-card-link"
+                   class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-amber-400 hover:text-white hover:bg-amber-600/20">
+                    <i class="fa-solid fa-file-pdf w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Report Card</span>
+                    <span class="text-[9px] text-amber-400 px-2 py-0.5 rounded border border-amber-600/50 font-black tracking-wider uppercase group-hover:bg-amber-500 group-hover:text-white transition-colors">PDF</span>
+                </a>
+
                 <a href="{{ route('student.performance.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.performance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-arrow-trend-up w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Performance</span>

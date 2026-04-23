@@ -240,6 +240,44 @@
             <!-- Main Content Area (Left) -->
             <div class="xl:col-span-2 flex flex-col space-y-8">
                 
+                <!-- 📄 Report Card Quick-Download Banner -->
+                <section class="relative overflow-hidden rounded-[2.5rem] group hover:shadow-2xl transition-shadow duration-500"
+                         style="background: linear-gradient(135deg, rgba(251,191,36,0.07) 0%, rgba(245,158,11,0.04) 100%); border: 1px solid rgba(251,191,36,0.2); box-shadow: 0 8px 32px rgba(245,158,11,0.06);">
+                    <!-- Blurred orbs -->
+                    <div class="absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-700" style="background: radial-gradient(circle, #F59E0B, transparent); filter: blur(40px);"></div>
+                    <div class="absolute -bottom-8 -left-8 w-32 h-32 rounded-full opacity-10 pointer-events-none" style="background: radial-gradient(circle, #FBBF24, transparent); filter: blur(30px);"></div>
+
+                    <div class="relative z-10 p-7 flex flex-col md:flex-row items-start md:items-center gap-5">
+                        <!-- Icon -->
+                        <div class="shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shadow-lg ring-4 ring-white"
+                             style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                            <i class="fa-solid fa-file-pdf text-white text-2xl"></i>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shadow-sm">Official Document</span>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shadow-sm">Auto-Generated</span>
+                            </div>
+                            <h2 class="text-2xl font-black text-gray-800 tracking-tight">Your Report Card is Ready</h2>
+                            <p class="text-gray-500 font-medium text-sm mt-1 max-w-lg leading-relaxed">
+                                Download your official PDF report card with subject-wise marks, grades, attendance summary, class rank, and teacher remarks.
+                            </p>
+                        </div>
+
+                        <!-- CTA -->
+                        <a href="{{ route('student.report-card.download') }}"
+                           id="btn-download-report-card"
+                           class="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-black text-sm text-white shadow-xl hover:scale-105 hover:-translate-y-1 active:scale-95 transition-all duration-300 group/cta"
+                           style="background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 10px 25px -5px rgba(245,158,11,0.45);">
+                            <i class="fa-solid fa-download group-hover/cta:animate-bounce"></i>
+                            Download Report Card
+                            <i class="fa-solid fa-arrow-right transition-transform group-hover/cta:translate-x-1"></i>
+                        </a>
+                    </div>
+                </section>
+
                 <!-- 🧠 AI Suggestions Teaser Widget -->
                 <section class="relative overflow-hidden rounded-[2.5rem] group hover:shadow-2xl transition-shadow duration-500"
                          style="background: linear-gradient(135deg, rgba(124,58,237,0.05) 0%, rgba(229,0,64,0.03) 100%); border: 1px solid rgba(124,58,237,0.1); box-shadow: 0 8px 32px rgba(31,38,135,0.04);">
