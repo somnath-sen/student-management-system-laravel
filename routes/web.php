@@ -32,6 +32,8 @@ use App\Http\Controllers\Admin\FacultyRegistrationController as AdminFacultyRegi
 use App\Http\Controllers\Admin\ReportCardController as AdminReportCardController;
 use App\Http\Controllers\Student\ReportCardController as StudentReportCardController;
 use App\Http\Controllers\Admin\DropoutRiskController;
+use App\Http\Controllers\Admin\AttendanceRiskController;
+use App\Http\Controllers\Student\AttendanceInsightsController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -224,6 +226,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/dropout-risk/{student}/reevaluate', [DropoutRiskController::class, 'reevaluate'])->name('admin.dropout-risk.reevaluate');
     Route::post('/admin/dropout-risk/reevaluate-all', [DropoutRiskController::class, 'reevaluateAll'])->name('admin.dropout-risk.reevaluate-all');
 
+    // Attendance Prediction & Risk
+    Route::get('/admin/attendance-risk', [AttendanceRiskController::class, 'index'])->name('admin.attendance-risk.index');
+    Route::get('/admin/attendance-risk/{student}', [AttendanceRiskController::class, 'show'])->name('admin.attendance-risk.show');
+
 });
 
 /*
@@ -295,6 +301,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 
     // Report Card PDF
     Route::get('/student/report-card/download', [StudentReportCardController::class, 'download'])->name('student.report-card.download');
+
+    // Attendance Prediction & Insights
+    Route::get('/student/attendance/insights', [AttendanceInsightsController::class, 'index'])->name('student.attendance.insights');
 
     /* Performance Analysis */
     Route::get('/student/performance', [\App\Http\Controllers\Student\PerformanceController::class, 'index'])->name('student.performance.index');

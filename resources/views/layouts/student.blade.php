@@ -96,9 +96,15 @@
                     <span class="font-semibold text-sm">Class Routine</span>
                 </a>
 
-                <a href="{{ route('student.attendance.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.attendance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                <a href="{{ route('student.attendance.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.attendance.index') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-calendar-check w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm">Attendance</span>
+                </a>
+
+                <a href="{{ route('student.attendance.insights') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.attendance.insights') ? 'active' : 'text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10' }}">
+                    <i class="fa-solid fa-brain w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Attendance Insights</span>
+                    <span class="text-[9px] text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/30 font-black tracking-wider uppercase group-hover:bg-indigo-500 group-hover:text-white transition-colors">AI</span>
                 </a>
 
                 <a href="{{ route('student.exams.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.exams.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">

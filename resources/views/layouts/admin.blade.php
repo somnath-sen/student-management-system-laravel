@@ -197,6 +197,12 @@
                     <span class="text-[9px] text-rose-400 px-2 py-0.5 rounded border border-rose-500/30 font-black tracking-wider uppercase group-hover:bg-rose-500 group-hover:text-white transition-colors">AI</span>
                 </a>
 
+                <a href="{{ route('admin.attendance-risk.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/attendance-risk*') ? 'active' : 'text-slate-400 hover:text-amber-400 hover:bg-amber-500/10' }}">
+                    <i class="fa-solid fa-chart-line w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Attendance Risk</span>
+                    <span class="text-[9px] text-amber-400 px-2 py-0.5 rounded border border-amber-500/30 font-black tracking-wider uppercase group-hover:bg-amber-500 group-hover:text-white transition-colors">NEW</span>
+                </a>
+
             </nav>
 
             <div class="p-4 border-t border-slate-800 bg-slate-900/80">
