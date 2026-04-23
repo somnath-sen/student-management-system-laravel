@@ -188,59 +188,88 @@
                 </div>
             </div>
 
-            <!-- Simple Grid Configuration -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Demonstration of Skeleton Loading System -->
+            <div x-data="{ isLoading: true }" x-init="setTimeout(() => isLoading = false, 2500)" class="w-full">
                 
-                <!-- Action Card: Profile -->
-                <a href="{{ route('profile.edit') }}" class="glass-card block rounded-[2.5rem] p-8 fade-in-up stagger-2 group outline-none">
-                    <div class="flex flex-col h-full justify-between gap-10">
-                        <div class="flex items-start justify-between">
-                            <div class="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-inner group-hover:shadow-[0_10px_20px_rgba(59,130,246,0.3)] group-hover:scale-110">
-                                <i class="fa-solid fa-user-pen text-2xl"></i>
-                            </div>
-                            <div class="w-10 h-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center text-gray-400 shadow-sm group-hover:bg-blue-50 group-hover:text-blue-600 transition-all">
-                                <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">My Profile</h3>
-                            <p class="text-gray-500 dark:text-gray-400 font-medium text-[15px] leading-relaxed transition-colors">Update your personal information and adjust your account settings.</p>
-                        </div>
+                <!-- Skeleton UI (Shown while loading) -->
+                <div x-show="isLoading" class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                    <!-- Profile Card Skeleton -->
+                    <x-skeleton.card class="h-[280px]" />
+                    
+                    <!-- Notice Card Skeleton -->
+                    <div class="md:col-span-2">
+                        <x-skeleton.card class="h-[280px]" />
                     </div>
-                </a>
-
-                <!-- Notice Card -->
-                <div class="md:col-span-2 glass-card rounded-[2.5rem] p-8 sm:p-10 fade-in-up stagger-3 flex flex-col justify-center relative overflow-hidden group">
-                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10 text-center md:text-left">
-                        
-                        <!-- Simple Icon -->
-                        <div class="shrink-0 w-24 h-24 rounded-full bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-500 shadow-inner relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute w-full h-full bg-amber-400/20 rounded-full animate-ping opacity-30"></div>
-                            <i class="fa-solid fa-clock text-4xl"></i>
+                    
+                    <!-- Recent Activity Table Skeleton -->
+                    <div class="md:col-span-3 mt-4">
+                        <div class="mb-6 px-4">
+                            <x-skeleton.text lines="1" class="w-1/4 mb-2" />
+                            <x-skeleton.text lines="1" class="w-1/3 opacity-60" />
                         </div>
-                        
-                        <div class="flex-1">
-                            <div class="flex items-center justify-center md:justify-start gap-2 mb-3">
-                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                                <h4 class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">Pending</h4>
-                            </div>
-                            
-                            <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-4 tracking-tight transition-colors">
-                                Account Review
-                            </h3>
-                            
-                            <p class="text-[16px] text-gray-500 dark:text-gray-300 font-medium leading-relaxed max-w-xl mb-8 transition-colors">
-                                Your account is currently under review by our team. Once you are approved, your classes and dashboard features will appear right here.
-                            </p>
-
-                            <div class="inline-flex items-center gap-3 px-6 py-4 rounded-full bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 shadow-sm transition-colors w-full sm:w-auto justify-center md:justify-start hover:bg-gray-50 dark:hover:bg-white/10">
-                                <i class="fa-solid fa-circle-info text-blue-500"></i>
-                                <span class="text-sm font-semibold text-gray-600 dark:text-gray-300">Check back soon or contact support.</span>
-                            </div>
-                        </div>
+                        <x-skeleton.table rows="4" />
                     </div>
                 </div>
 
+                <!-- Actual Content (Shown after loading) -->
+                <div x-show="!isLoading" 
+                     x-transition:enter="transition ease-out duration-700 delay-100"
+                     x-transition:enter-start="opacity-0 transform translate-y-8"
+                     x-transition:enter-end="opacity-100 transform translate-y-0"
+                     style="display: none;"
+                     class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Action Card: Profile -->
+                    <a href="{{ route('profile.edit') }}" class="glass-card block rounded-[2.5rem] p-8 group outline-none h-full min-h-[280px]">
+                        <div class="flex flex-col h-full justify-between gap-10">
+                            <div class="flex items-start justify-between">
+                                <div class="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 shadow-inner group-hover:shadow-[0_10px_20px_rgba(59,130,246,0.3)] group-hover:scale-110">
+                                    <i class="fa-solid fa-user-pen text-2xl"></i>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center text-gray-400 shadow-sm group-hover:bg-blue-50 group-hover:text-blue-600 transition-all">
+                                    <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">My Profile</h3>
+                                <p class="text-gray-500 dark:text-gray-400 font-medium text-[15px] leading-relaxed transition-colors">Update your personal information and adjust your account settings.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Notice Card -->
+                    <div class="md:col-span-2 glass-card rounded-[2.5rem] p-8 sm:p-10 flex flex-col justify-center relative overflow-hidden group min-h-[280px]">
+                        <div class="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10 text-center md:text-left">
+                            
+                            <!-- Simple Icon -->
+                            <div class="shrink-0 w-24 h-24 rounded-full bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-500 shadow-inner relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute w-full h-full bg-amber-400/20 rounded-full animate-ping opacity-30"></div>
+                                <i class="fa-solid fa-clock text-4xl"></i>
+                            </div>
+                            
+                            <div class="flex-1">
+                                <div class="flex items-center justify-center md:justify-start gap-2 mb-3">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                    <h4 class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">Pending</h4>
+                                </div>
+                                
+                                <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-4 tracking-tight transition-colors">
+                                    Account Review
+                                </h3>
+                                
+                                <p class="text-[16px] text-gray-500 dark:text-gray-300 font-medium leading-relaxed max-w-xl mb-8 transition-colors">
+                                    Your account is currently under review by our team. Once you are approved, your classes and dashboard features will appear right here.
+                                </p>
+
+                                <div class="inline-flex items-center gap-3 px-6 py-4 rounded-full bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 shadow-sm transition-colors w-full sm:w-auto justify-center md:justify-start hover:bg-gray-50 dark:hover:bg-white/10">
+                                    <i class="fa-solid fa-circle-info text-blue-500"></i>
+                                    <span class="text-sm font-semibold text-gray-600 dark:text-gray-300">Check back soon or contact support.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>

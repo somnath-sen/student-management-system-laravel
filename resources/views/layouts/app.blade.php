@@ -43,6 +43,35 @@
                 -webkit-backdrop-filter: blur(12px);
                 border-bottom: 1px solid rgba(226, 232, 240, 0.6);
             }
+
+            /* Skeleton Shimmer Animation */
+            .shimmer {
+                background: #f1f5f9;
+                background-image: linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0) 0,
+                    rgba(255, 255, 255, 0.6) 20%,
+                    rgba(255, 255, 255, 0) 40%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+                background-repeat: no-repeat;
+                background-size: 800px 100%;
+                animation: shimmer 1.5s infinite linear forwards;
+            }
+            .dark .shimmer {
+                background: #1e293b;
+                background-image: linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0) 0,
+                    rgba(255, 255, 255, 0.05) 20%,
+                    rgba(255, 255, 255, 0) 40%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+            }
+            @keyframes shimmer {
+                0% { background-position: -468px 0; }
+                100% { background-position: 468px 0; }
+            }
         </style>
     </head>
     <body class="font-sans antialiased text-gray-800 bg-gray-50 dark:bg-gray-900 dark:text-gray-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
