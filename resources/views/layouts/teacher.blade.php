@@ -378,5 +378,6 @@
             </div>
         </div>
     </div>
+    <x-page-transition />
 </body>
 </html>
