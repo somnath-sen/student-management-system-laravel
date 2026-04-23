@@ -31,6 +31,7 @@ use App\Http\Controllers\FacultyRegistrationController;
 use App\Http\Controllers\Admin\FacultyRegistrationController as AdminFacultyRegistrationController;
 use App\Http\Controllers\Admin\ReportCardController as AdminReportCardController;
 use App\Http\Controllers\Student\ReportCardController as StudentReportCardController;
+use App\Http\Controllers\Admin\DropoutRiskController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -216,6 +217,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/report-cards/{student}/remark', [AdminReportCardController::class, 'updateRemark'])->name('admin.report-cards.remark');
     Route::get('/admin/report-cards/{student}/generate', [AdminReportCardController::class, 'generatePDF'])->name('admin.report-cards.generate');
     Route::post('/admin/report-cards/{student}/send', [AdminReportCardController::class, 'sendToParent'])->name('admin.report-cards.send');
+
+    // Dropout Risk Detection
+    Route::get('/admin/dropout-risk', [DropoutRiskController::class, 'index'])->name('admin.dropout-risk.index');
+    Route::get('/admin/dropout-risk/{student}', [DropoutRiskController::class, 'show'])->name('admin.dropout-risk.show');
+    Route::post('/admin/dropout-risk/{student}/reevaluate', [DropoutRiskController::class, 'reevaluate'])->name('admin.dropout-risk.reevaluate');
+    Route::post('/admin/dropout-risk/reevaluate-all', [DropoutRiskController::class, 'reevaluateAll'])->name('admin.dropout-risk.reevaluate-all');
 
 });
 

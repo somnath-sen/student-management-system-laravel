@@ -191,6 +191,12 @@
                     <span class="font-semibold text-sm">Report Cards</span>
                 </a>
 
+                <a href="{{ route('admin.dropout-risk.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/dropout-risk*') ? 'active' : 'text-slate-400 hover:text-rose-400 hover:bg-rose-500/10' }}">
+                    <i class="fa-solid fa-triangle-exclamation w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Dropout Risk</span>
+                    <span class="text-[9px] text-rose-400 px-2 py-0.5 rounded border border-rose-500/30 font-black tracking-wider uppercase group-hover:bg-rose-500 group-hover:text-white transition-colors">AI</span>
+                </a>
+
             </nav>
 
             <div class="p-4 border-t border-slate-800 bg-slate-900/80">
