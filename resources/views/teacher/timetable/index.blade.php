@@ -73,6 +73,9 @@
                                     <h4 class="font-black text-lg leading-tight mb-1">{{ $class->subject_name }}</h4>
                                     <p class="text-xs font-bold uppercase tracking-wider opacity-75 mb-4 border-b border-current/10 pb-2 inline-block">
                                         <i class="fa-solid fa-graduation-cap"></i> {{ $class->course->name ?? 'General' }}
+                                        @if($class->course && $class->course->course_code)
+                                            <span class="ml-1 opacity-75">({{ $class->course->course_code }})</span>
+                                        @endif
                                     </p>
                                     
                                     <div class="flex items-center gap-4 text-xs font-bold mt-auto pt-1">

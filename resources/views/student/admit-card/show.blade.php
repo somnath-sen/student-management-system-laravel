@@ -124,6 +124,9 @@
                     <div>
                         <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Course / Programme</p>
                         <p class="font-bold text-slate-800">{{ $student->course->name ?? 'Master of Computer Applications' }}</p>
+                        @if($student->course && $student->course->course_code)
+                            <p class="text-xs font-bold text-indigo-600 uppercase">{{ $student->course->course_code }}</p>
+                        @endif
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Examination Center</p>

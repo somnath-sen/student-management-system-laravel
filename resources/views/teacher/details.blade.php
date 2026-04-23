@@ -272,7 +272,7 @@
                                         <div class="ml-5 flex-1">
                                             <h3 class="text-[16px] font-black text-slate-800 group-hover:text-vibrant transition-colors">{{ $subject->name }}</h3>
                                             <div class="inline-block mt-1.5 px-2.5 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 tracking-widest uppercase rounded-lg border border-slate-200">
-                                                Code: {{ strtoupper(substr($subject->name, 0, 3)) }}-10{{ $loop->iteration }}
+                                                Code: {{ $subject->subject_code ?? strtoupper(substr($subject->name, 0, 3)) . '-10' . $loop->iteration }}
                                             </div>
                                         </div>
 

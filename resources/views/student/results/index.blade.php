@@ -48,6 +48,9 @@
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">Academic Results</h1>
                 <p class="text-gray-500 mt-1">Performance summary and grade report.</p>
+                @if(auth()->user()->student->course && auth()->user()->student->course->course_code)
+                    <p class="text-blue-600 mt-1 font-medium text-sm">Course ID: {{ auth()->user()->student->course->course_code }}</p>
+                @endif
             </div>
             <div class="mt-4 md:mt-0">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200">
@@ -142,7 +145,7 @@
                             <tr class="table-row-anim hover:bg-gray-50 transition-colors group">
                                 <td class="p-5">
                                     <div class="font-semibold text-gray-900">{{ $mark->subject->name }}</div>
-                                    <div class="text-xs text-gray-400 mt-0.5">Code: {{ substr(strtoupper($mark->subject->name), 0, 3) }}-101</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Code: {{ $mark->subject->subject_code ?? substr(strtoupper($mark->subject->name), 0, 3) . '-101' }}</div>
                                 </td>
 
                                 <td class="p-5 align-middle">

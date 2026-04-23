@@ -74,6 +74,16 @@
                         <td class="label">Roll Number:</td>
                         <td>{{ $student->roll_number ?? 'N/A' }}</td>
                     </tr>
+                    <tr>
+                        <td class="label">Course:</td>
+                        <td>{{ $student->course->name ?? 'N/A' }}</td>
+                    </tr>
+                    @if($student->course && $student->course->course_code)
+                    <tr>
+                        <td class="label">Course ID:</td>
+                        <td><strong>{{ $student->course->course_code }}</strong></td>
+                    </tr>
+                    @endif
                 </table>
             </td>
             <td width="50%">
@@ -94,11 +104,12 @@
     <table class="marks-table">
         <thead>
             <tr>
-                <th width="10%">Sr. No.</th>
-                <th width="50%">Subject Name</th>
+                <th width="8%">Sr. No.</th>
+                <th width="15%">Code</th>
+                <th width="42%">Subject Name</th>
                 <th width="15%">Max Marks</th>
-                <th width="15%">Obtained</th>
-                <th width="10%">Grade</th>
+                <th width="12%">Obtained</th>
+                <th width="8%">Grade</th>
             </tr>
         </thead>
         <tbody>
@@ -116,6 +127,7 @@
                 @endphp
                 <tr>
                     <td>{{ $count++ }}</td>
+                    <td style="font-weight:bold; font-size:10px;">{{ $mark->subject->subject_code ?? 'N/A' }}</td>
                     <td class="subject-name">{{ $mark->subject->name }}</td>
                     <td>{{ $mark->total_marks }}</td>
                     <td>{{ $mark->marks_obtained }}</td>
@@ -126,6 +138,7 @@
             @for($i = $count; $i <= 8; $i++)
                 <tr>
                     <td style="color:transparent;">.</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

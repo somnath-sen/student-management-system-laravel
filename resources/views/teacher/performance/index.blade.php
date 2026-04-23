@@ -78,6 +78,9 @@
                             </h3>
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600 mt-1">
                                 {{ $subject->course->name ?? 'General' }}
+                                @if($subject->course && $subject->course->course_code)
+                                    <span class="ml-1 text-indigo-600 font-bold">({{ $subject->course->course_code }})</span>
+                                @endif
                             </span>
                         </div>
                     </div>

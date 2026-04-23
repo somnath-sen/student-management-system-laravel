@@ -80,7 +80,7 @@
 
                         <h2 class="text-xl font-bold text-gray-900 mb-1 relative z-10">{{ $subject->name }}</h2>
                         <p class="text-sm text-gray-500 mb-6 relative z-10">
-                            Subject Code: {{ strtoupper(substr($subject->name, 0, 3)) }}-10{{ $loop->iteration }}
+                            Subject Code: {{ $subject->subject_code ?? strtoupper(substr($subject->name, 0, 3)) . '-10' . $loop->iteration }}
                         </p>
                     </div>
 

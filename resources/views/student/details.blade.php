@@ -425,6 +425,12 @@
                         @if(isset($course))
                             <div>
                                 <h3 class="text-3xl font-black text-slate-800 leading-tight mb-3 text-blue-glow">{{ $course->name }}</h3>
+                                @if($course->course_code)
+                                    <div class="inline-flex items-center gap-2 mb-3 px-3 py-1.5 bg-indigo-50 border border-indigo-200 rounded-xl">
+                                        <i class="fa-solid fa-hashtag text-indigo-400 text-xs"></i>
+                                        <span class="text-xs font-black text-indigo-600 uppercase tracking-widest">Course ID: {{ $course->course_code }}</span>
+                                    </div>
+                                @endif
                                 <p class="text-[15px] text-slate-500 leading-relaxed font-medium bg-white/40 p-4 rounded-xl border border-white shadow-inner min-h-[50px]">{{ $course->description ?? 'No specific parameters defined.' }}</p>
                             </div>
                             
@@ -495,7 +501,7 @@
                                         <div class="ml-5 flex-1">
                                             <h3 class="text-[16px] font-black text-slate-800 group-hover:text-vibrant transition-colors">{{ $subject->name }}</h3>
                                             <div class="inline-block mt-1.5 px-2.5 py-1 bg-slate-100 text-[10px] font-bold text-slate-500 tracking-widest uppercase rounded-lg border border-slate-200">
-                                                ID-{{ rand(100,200) }}
+                                                {{ $subject->subject_code ?? 'Code N/A' }}
                                             </div>
                                         </div>
 

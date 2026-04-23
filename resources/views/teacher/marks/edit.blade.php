@@ -62,7 +62,12 @@
                         {{ $isLocked ? 'Finalized' : 'Editing Mode' }}
                     </span>
                 </div>
-                <p class="text-slate-500 font-medium mt-1">Course: <span class="text-slate-700 font-bold">{{ $subject->name }}</span></p>
+                <p class="text-slate-500 font-medium mt-1">
+                    Course: <span class="text-slate-700 font-bold">{{ $subject->course->name ?? 'General' }}</span>
+                    @if($subject->course && $subject->course->course_code)
+                        <span class="text-indigo-600 font-bold text-sm ml-2">({{ $subject->course->course_code }})</span>
+                    @endif
+                </p>
             </div>
 
             @if(! $isLocked)

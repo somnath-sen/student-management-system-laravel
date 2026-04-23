@@ -27,7 +27,7 @@ class AdmitCardController extends Controller
                 'date'    => $startDate->copy()->addDays($index * 3)->format('d M Y'),
                 'time'    => '10:00 AM - 01:00 PM',
                 'subject' => $subject->name,
-                'code'    => $codePrefix . '-40' . ($index + 1),
+                'code'    => $subject->subject_code ?? ($codePrefix . '-40' . ($index + 1)),
             ];
         }
 

@@ -54,6 +54,9 @@
             <div>
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight">Official Transcript</h1>
                 <p class="text-slate-500 mt-1 font-medium"><i class="fa-regular fa-calendar mr-1"></i> Academic Session: {{ date('Y') }}</p>
+                @if($student->course && $student->course->course_code)
+                    <p class="text-indigo-600 mt-1 font-bold text-sm uppercase"><i class="fa-solid fa-graduation-cap mr-1"></i> Course ID: {{ $student->course->course_code }}</p>
+                @endif
             </div>
 
             <div>
@@ -114,7 +117,7 @@
                             <tr class="table-row-anim hover:bg-slate-50 transition-colors group">
                                 <td class="py-4 px-6">
                                     <div class="font-bold text-slate-900 text-lg">{{ $mark->subject->name }}</div>
-                                    <div class="text-xs font-bold text-slate-400 mt-0.5">SUB-{{ $mark->subject->id }}</div>
+                                    <div class="text-xs font-bold text-slate-400 mt-0.5">{{ $mark->subject->subject_code ?? 'SUB-'.$mark->subject->id }}</div>
                                 </td>
                                 
                                 <td class="py-4 px-6 text-center">
