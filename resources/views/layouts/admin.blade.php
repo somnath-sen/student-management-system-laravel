@@ -186,6 +186,11 @@
                     <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-50"></i>
                 </a>
 
+                <a href="{{ route('admin.report-cards.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/report-cards*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                    <i class="fa-solid fa-file-pdf w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm">Report Cards</span>
+                </a>
+
             </nav>
 
             <div class="p-4 border-t border-slate-800 bg-slate-900/80">

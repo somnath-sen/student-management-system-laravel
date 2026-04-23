@@ -29,6 +29,8 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\FacultyRegistrationController;
 use App\Http\Controllers\Admin\FacultyRegistrationController as AdminFacultyRegistrationController;
+use App\Http\Controllers\Admin\ReportCardController as AdminReportCardController;
+use App\Http\Controllers\Student\ReportCardController as StudentReportCardController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -208,6 +210,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/admit-cards', [\App\Http\Controllers\Admin\AdmitCardController::class, 'index'])->name('admin.admit-card.index');
     Route::post('/admin/admit-cards/{course}/toggle', [\App\Http\Controllers\Admin\AdmitCardController::class, 'togglePublish'])->name('admin.admit-card.toggle');
 
+    // Admin Report Cards
+    Route::get('/admin/report-cards', [AdminReportCardController::class, 'index'])->name('admin.report-cards.index');
+    Route::get('/admin/report-cards/{student}', [AdminReportCardController::class, 'show'])->name('admin.report-cards.show');
+    Route::post('/admin/report-cards/{student}/remark', [AdminReportCardController::class, 'updateRemark'])->name('admin.report-cards.remark');
+    Route::get('/admin/report-cards/{student}/generate', [AdminReportCardController::class, 'generatePDF'])->name('admin.report-cards.generate');
+    Route::post('/admin/report-cards/{student}/send', [AdminReportCardController::class, 'sendToParent'])->name('admin.report-cards.send');
+
 });
 
 /*
@@ -276,6 +285,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     // Marksheet PDF
     Route::get('/student/marksheet', [MarksheetController::class, 'show'])->name('student.marksheet.show');
     Route::get('/student/marksheet/pdf', [MarksheetController::class, 'download'])->name('student.marksheet.pdf');
+
+    // Report Card PDF
+    Route::get('/student/report-card/download', [StudentReportCardController::class, 'download'])->name('student.report-card.download');
 
     /* Performance Analysis */
     Route::get('/student/performance', [\App\Http\Controllers\Student\PerformanceController::class, 'index'])->name('student.performance.index');

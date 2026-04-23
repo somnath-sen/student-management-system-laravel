@@ -61,9 +61,14 @@
 
             <div>
                 @if($hasPublished)
-                    <a href="{{ route('student.marksheet.pdf') }}" target="_blank" class="group inline-flex items-center gap-2 bg-slate-900 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-file-pdf group-hover:scale-110 transition-transform"></i> Download PDF
-                    </a>
+                    <div class="flex gap-2">
+                        <a href="{{ route('student.marksheet.pdf') }}" target="_blank" class="group inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 px-5 py-2.5 rounded-xl font-bold shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-file-pdf text-rose-500 group-hover:scale-110 transition-transform"></i> Marksheet
+                        </a>
+                        <a href="{{ route('student.report-card.download') }}" target="_blank" class="group inline-flex items-center gap-2 bg-slate-900 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-certificate group-hover:scale-110 transition-transform"></i> Report Card
+                        </a>
+                    </div>
                 @else
                     <button disabled class="inline-flex items-center gap-2 bg-slate-100 text-slate-400 px-6 py-3 rounded-xl font-bold cursor-not-allowed border border-slate-200">
                         <i class="fa-solid fa-clock"></i> Pending Publication

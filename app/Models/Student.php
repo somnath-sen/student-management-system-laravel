@@ -26,6 +26,7 @@ class Student extends Model
         'panic_lat',
         'panic_lng',
         'panic_triggered_at',
+        'report_card_remark',
     ];
 
     protected $casts = [
