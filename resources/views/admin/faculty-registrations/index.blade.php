@@ -214,7 +214,7 @@
                                     </div>
                                 @elseif($reg->status === 'approved')
                                     <form method="POST" action="{{ route('admin.faculty-registrations.resend', $reg->id) }}"
-                                        onsubmit="return confirm('This will generate a NEW password and send it to {{ addslashes($reg->email) }}. Continue?');">
+                                        data-confirm="This will generate a NEW password and send it to {{ addslashes($reg->email) }}. Continue?">
                                         @csrf
                                         <button type="submit"
                                             class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold rounded-lg text-xs transition border border-indigo-200 flex items-center gap-1 mx-auto">

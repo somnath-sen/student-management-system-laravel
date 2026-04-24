@@ -85,7 +85,7 @@
 
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow relative group">
                         
-                        <form action="{{ route('admin.notices.destroy', $notice) }}" method="POST" class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity" onsubmit="return confirm('Delete this notice permanently?');">
+                        <form action="{{ route('admin.notices.destroy', $notice) }}" method="POST" class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity" data-confirm="Delete this notice permanently?">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white flex items-center justify-center transition-colors">

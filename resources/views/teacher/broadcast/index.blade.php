@@ -225,7 +225,7 @@
                             @endif
 
                             {{-- Delete button --}}
-                            <form action="{{ route('teacher.broadcast.destroy', $msg->id) }}" method="POST" class="delete-btn absolute bottom-4 right-4" onsubmit="return confirm('Recall this message? Students will no longer see it.');">
+                            <form action="{{ route('teacher.broadcast.destroy', $msg->id) }}" method="POST" class="delete-btn absolute bottom-4 right-4" data-confirm="Recall this message? Students will no longer see it.">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors" title="Recall Message">

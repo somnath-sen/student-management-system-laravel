@@ -131,7 +131,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </a>
 
-                                    <form method="POST" action="{{ route('admin.teachers.destroy', $teacher) }}" onsubmit="return confirm('⚠️ Are you sure you want to delete this teacher? Access will be revoked immediately.');">
+                                    <form method="POST" action="{{ route('admin.teachers.destroy', $teacher) }}" data-confirm="⚠️ Are you sure you want to delete this teacher? Access will be revoked immediately.">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-red-600 hover:border-red-300 transition-all shadow-sm" title="Delete Teacher">

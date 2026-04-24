@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="p-4 border-t border-slate-100 bg-slate-50">
-                    <form action="{{ route('admin.admit-card.toggle', $course) }}" method="POST" onsubmit="return confirm('Are you sure you want to change the publication status for this course?');">
+                    <form action="{{ route('admin.admit-card.toggle', $course) }}" method="POST" data-confirm="Are you sure you want to change the publication status for this course?">
                         @csrf
                         @if($course->admit_cards_published)
                             <button type="submit" class="w-full py-2.5 bg-white border-2 border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 font-bold rounded-xl transition-colors flex items-center justify-center gap-2">

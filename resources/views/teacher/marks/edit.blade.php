@@ -71,7 +71,7 @@
             </div>
 
             @if(! $isLocked)
-                <form method="POST" action="{{ route('teacher.marks.lock', $subject) }}" onsubmit="return confirm('⚠️ ARE YOU SURE?\n\nLocking this result will prevent any further changes. This allows the Admin to publish the grades. This action cannot be undone by you.')" class="mt-4 md:mt-0">
+                <form method="POST" action="{{ route('teacher.marks.lock', $subject) }}" data-confirm="⚠️ ARE YOU SURE?\n\nLocking this result will prevent any further changes. This allows the Admin to publish the grades. This action cannot be undone by you." class="mt-4 md:mt-0">
                     @csrf
                     <button type="submit" class="group flex items-center gap-2 px-5 py-2.5 bg-white border border-rose-200 text-rose-600 rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-all shadow-sm font-bold text-sm">
                         <i class="fa-solid fa-lock group-hover:animate-pulse"></i> Lock Results

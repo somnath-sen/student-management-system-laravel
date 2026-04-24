@@ -116,7 +116,7 @@
                             <td class="px-6 py-4 text-center">
                                 @if($reg->status === 'pending')
                                     <div class="flex items-center justify-center gap-2">
-                                        <form method="POST" action="{{ route('admin.registrations.approve', $reg->id) }}" onsubmit="return confirm('Approve this student? Login credentials will be generated and emailed automatically.');" class="flex flex-col gap-1.5 items-center">
+                                        <form method="POST" action="{{ route('admin.registrations.approve', $reg->id) }}" data-confirm="Approve this student? Login credentials will be generated and emailed automatically." class="flex flex-col gap-1.5 items-center">
                                             @csrf
                                             <input type="text" name="roll" value="{{ $reg->roll }}" placeholder="Roll No" class="w-full text-xs px-2 py-1 border border-gray-300 rounded text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 text-center">
                                             <button type="submit" class="w-full px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-semibold rounded text-xs transition border border-emerald-200">
@@ -124,7 +124,7 @@
                                             </button>
                                         </form>
 
-                                        <form method="POST" action="{{ route('admin.registrations.reject', $reg->id) }}" onsubmit="return confirm('Reject this student?');">
+                                        <form method="POST" action="{{ route('admin.registrations.reject', $reg->id) }}" data-confirm="Reject this student?">
                                             @csrf
                                             <button type="submit" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 font-semibold rounded text-xs transition border border-red-200">
                                                 Reject

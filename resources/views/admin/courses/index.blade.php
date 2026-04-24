@@ -124,7 +124,7 @@
                                     </a>
 
                                     <form method="POST" action="{{ route('admin.courses.destroy', $course) }}" 
-                                          onsubmit="return confirm('⚠️ Are you sure you want to delete this course? This action cannot be undone.');">
+                                          data-confirm="⚠️ Are you sure you want to delete this course? This action cannot be undone.">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors" title="Delete">

@@ -100,7 +100,7 @@
                                             <button onclick="openEditModal({{ $exam->toJson() }})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center justify-center transition-colors tooltip-btn" data-tippy-content="Edit">
                                                 <i class="fa-solid fa-pen text-xs"></i>
                                             </button>
-                                            <form action="{{ route('admin.exams.destroy', $exam) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this exam?');">
+                                            <form action="{{ route('admin.exams.destroy', $exam) }}" method="POST" class="inline-block" data-confirm="Are you sure you want to delete this exam?">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center transition-colors tooltip-btn" data-tippy-content="Delete">
@@ -166,7 +166,7 @@
                                         <button onclick="openEditModal({{ $exam->toJson() }})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center justify-center transition-colors tooltip-btn" data-tippy-content="Edit">
                                             <i class="fa-solid fa-pen text-xs"></i>
                                         </button>
-                                        <form action="{{ route('admin.exams.destroy', $exam) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this exam?');">
+                                        <form action="{{ route('admin.exams.destroy', $exam) }}" method="POST" class="inline-block" data-confirm="Are you sure you want to delete this exam?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center transition-colors tooltip-btn" data-tippy-content="Delete">

@@ -139,7 +139,7 @@
                                             <p class="text-sm font-medium opacity-80">{{ $class->teacher_name ?? 'Instructor TBA' }}</p>
                                         </div>
                                         
-                                        <form action="{{ route('admin.timetable.destroy', $class) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this class from the routine?');">
+                                        <form action="{{ route('admin.timetable.destroy', $class) }}" method="POST" data-confirm="Are you sure you want to remove this class from the routine?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="w-10 h-10 rounded-full bg-white text-rose-500 hover:bg-rose-500 hover:text-white transition-colors shadow-sm flex items-center justify-center">

@@ -496,5 +496,6 @@
         </div>
     </div>
     <x-page-transition />
+    <x-sweetalert />
 </body>
 </html>
