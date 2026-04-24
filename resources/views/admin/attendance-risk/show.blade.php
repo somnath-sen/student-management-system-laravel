@@ -9,7 +9,8 @@
         'at_risk'  => ['ring' => 'ring-amber-200',   'text' => '#F59E0B', 'badge' => 'bg-amber-100 text-amber-700 border-amber-200',   'label' => '🟡 At Risk — Needs Improvement'],
         'critical' => ['ring' => 'ring-rose-200',    'text' => '#EF4444', 'badge' => 'bg-rose-100 text-rose-700 border-rose-200',    'label' => '🔴 Critical — Immediate Action Required'],
     ];
-    $rc = $riskColors[$risk];
+    $risk = (string) ($risk ?? 'safe');
+    $rc   = $riskColors[$risk] ?? $riskColors['safe'];
 @endphp
 
 <div class="max-w-5xl mx-auto space-y-8">

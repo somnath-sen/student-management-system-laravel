@@ -10,7 +10,8 @@
         'at_risk'  => ['color' => '#F59E0B', 'bg' => 'from-amber-500 to-orange-400', 'soft' => 'bg-amber-50 border-amber-200',   'text' => 'text-amber-700',   'label' => '🟡 At Risk',   'desc' => 'You are below the required threshold. Act now.'],
         'critical' => ['color' => '#EF4444', 'bg' => 'from-rose-500 to-red-600',     'soft' => 'bg-rose-50 border-rose-200',     'text' => 'text-rose-700',    'label' => '🔴 Critical',  'desc' => 'Immediate action required to avoid exam disqualification.'],
     ];
-    $rm = $riskMeta[$risk];
+    $risk = (string) ($risk ?? 'safe');
+    $rm   = $riskMeta[$risk] ?? $riskMeta['safe'];
 @endphp
 
 <style>
