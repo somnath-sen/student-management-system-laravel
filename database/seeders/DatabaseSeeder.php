@@ -101,9 +101,27 @@ class DatabaseSeeder extends Seeder
             $user = User::where('email', $email)->first();
             if (!$user) continue;
 
-            // Remove related data via DB queries (FK checks are off)
-            DB::table('students')->where('user_id', $user->id)->delete();
-            DB::table('teachers')->where('user_id', $user->id)->delete();
+            $student = DB::table('students')->where('user_id', $user->id)->first();
+            $teacher = DB::table('teachers')->where('user_id', $user->id)->first();
+
+            // Remove related academic data if they were a student
+            if ($student) {
+                DB::table('attendances')->where('student_id', $student->id)->delete();
+                DB::table('marks')->where('student_id', $student->id)->delete();
+                DB::table('risk_logs')->where('student_id', $student->id)->delete();
+                DB::table('students')->where('id', $student->id)->delete();
+            }
+
+            // Remove related academic data if they were a teacher
+            if ($teacher) {
+                DB::table('attendances')->where('teacher_id', $teacher->id)->delete();
+                DB::table('marks')->where('teacher_id', $teacher->id)->delete();
+                DB::table('subject_teacher')->where('teacher_id', $teacher->id)->delete();
+                DB::table('teachers')->where('id', $teacher->id)->delete();
+            }
+
+            // Remove direct user relations
+            DB::table('fee_payments')->where('user_id', $user->id)->delete();
             DB::table('parent_student')->where('parent_id', $user->id)->delete();
             DB::table('gamification_stats')->where('user_id', $user->id)->delete();
             DB::table('badge_user')->where('user_id', $user->id)->delete();

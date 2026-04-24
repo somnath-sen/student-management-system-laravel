@@ -242,10 +242,10 @@
                     </div>
                     <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm group-hover:border-emerald-200 transition-colors">
                         <div class="flex items-center justify-between mb-1">
-                            <div class="font-bold text-slate-900 text-sm truncate">{{ $payment->student->name }}</div>
+                            <div class="font-bold text-slate-900 text-sm truncate">{{ $payment->student->name ?? 'Unknown Student' }}</div>
                             <div class="text-xs font-bold text-emerald-600">+₹{{ number_format($payment->amount_paid) }}</div>
                         </div>
-                        <div class="text-xs text-slate-500 truncate">{{ $payment->fee->title }}</div>
+                        <div class="text-xs text-slate-500 truncate">{{ $payment->fee->title ?? 'General Fee' }}</div>
                         <div class="text-[10px] font-bold text-slate-400 mt-2">{{ $payment->created_at->diffForHumans() }}</div>
                     </div>
                 </div>
