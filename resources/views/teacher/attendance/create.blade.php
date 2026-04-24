@@ -143,10 +143,12 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Select Subject</label>
                         <div class="relative">
-                            <select name="subject_id" class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow appearance-none bg-white" required>
-                                <option value="" disabled selected>-- Choose Subject --</option>
+                            <select name="subject_id" id="subjectSelect" class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow appearance-none bg-white" required>
+                                <option value="" disabled {{ !$selectedSubject ? 'selected' : '' }}>-- Choose Subject --</option>
                                 @foreach($subjects as $subject)
-                                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                    <option value="{{ $subject->id }}" {{ $selectedSubject && $selectedSubject->id == $subject->id ? 'selected' : '' }}>
+                                        {{ $subject->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -157,85 +159,137 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Attendance Date</label>
-                        <input type="date" name="date" 
-                               value="{{ date('Y-m-d') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow" 
+                        <input type="date" name="date" id="dateSelect"
+                               value="{{ $date }}"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                                required>
                     </div>
                 </div>
+
+                {{-- Load button appears only when no subject is selected yet --}}
+                @if(!$selectedSubject)
+                <div class="mt-4">
+                    <button type="button" id="loadStudentsBtn"
+                        class="w-full py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Load Students for Selected Subject
+                    </button>
+                </div>
+                @endif
             </div>
 
             <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden animate-enter stagger-2">
                 <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                    <h2 class="font-bold text-gray-800">Student List</h2>
-                    <span class="text-xs font-medium text-gray-500">Ensure all students are marked</span>
+                    <h2 class="font-bold text-gray-800">
+                        Student List
+                        @if($selectedSubject)
+                            <span class="ml-2 text-sm font-normal text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+                                {{ $selectedSubject->name }}
+                            </span>
+                        @endif
+                    </h2>
+                    <span class="text-xs font-medium text-gray-500">
+                        @if($students->count() > 0)
+                            {{ $students->count() }} student(s) found
+                        @else
+                            Select a subject to load students
+                        @endif
+                    </span>
                 </div>
-
-                @php
-                    $students = \App\Models\Student::all(); 
-                @endphp
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
-                            <tr>
-                                <th class="px-6 py-3 font-semibold">Student Name</th>
-                                <th class="px-6 py-3 font-semibold text-center w-64">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100" id="studentTableBody">
-                            @foreach($students as $student)
-                                <tr class="transition-colors hover:bg-gray-50 group" id="row-{{ $student->id }}">
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
-                                                {{ substr($student->user->name, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-gray-900">{{ $student->user->name }}</p>
-                                                <p class="text-xs text-gray-400">ID: {{ $student->roll_number ?? $student->id }}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-6 py-4">
-                                        <div class="flex justify-center bg-gray-100 rounded-lg p-1 gap-1">
-                                            <label class="flex-1">
-                                                <input type="radio" 
-                                                       name="attendance[{{ $student->id }}]" 
-                                                       value="1" 
-                                                       class="toggle-radio" 
-                                                       onchange="highlightRow({{ $student->id }}, 1)"
-                                                       required>
-                                                <div class="toggle-label w-full text-center py-2 rounded-md text-sm font-semibold border border-transparent select-none">
-                                                    Present
-                                                </div>
-                                            </label>
-
-                                            <label class="flex-1">
-                                                <input type="radio" 
-                                                       name="attendance[{{ $student->id }}]" 
-                                                       value="0" 
-                                                       class="toggle-radio"
-                                                       onchange="highlightRow({{ $student->id }}, 0)"
-                                                       required>
-                                                <div class="toggle-label w-full text-center py-2 rounded-md text-sm font-semibold border border-transparent select-none">
-                                                    Absent
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </td>
+                    @if(!$selectedSubject)
+                        {{-- No subject selected state --}}
+                        <div class="flex flex-col items-center justify-center py-20 text-center px-6">
+                            <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            </div>
+                            <p class="text-gray-600 font-semibold">Please select a subject above</p>
+                            <p class="text-gray-400 text-sm mt-1">The student list will load based on the subject's enrolled course.</p>
+                        </div>
+                    @elseif($students->isEmpty())
+                        {{-- Subject selected but no students enrolled --}}
+                        <div class="flex flex-col items-center justify-center py-20 text-center px-6">
+                            <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            </div>
+                            <p class="text-gray-600 font-semibold">No students enrolled in this course</p>
+                            <p class="text-gray-400 text-sm mt-1">No students are currently enrolled in the course associated with <strong>{{ $selectedSubject->name }}</strong>.</p>
+                        </div>
+                    @else
+                        {{-- Student attendance table --}}
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-3 font-semibold">Student Name</th>
+                                    <th class="px-6 py-3 font-semibold">Roll No.</th>
+                                    <th class="px-6 py-3 font-semibold text-center w-64">Status</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100" id="studentTableBody">
+                                @foreach($students as $student)
+                                    @php
+                                        $existing = $existingAttendance[$student->id] ?? null;
+                                    @endphp
+                                    <tr class="transition-colors hover:bg-gray-50 group {{ $existing ? ($existing->present ? 'row-present' : 'row-absent') : '' }}" id="row-{{ $student->id }}">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                                                    {{ substr($student->user->name ?? '?', 0, 1) }}
+                                                </div>
+                                                <div>
+                                                    <p class="font-semibold text-gray-900">{{ $student->user->name ?? 'Unknown' }}</p>
+                                                    <p class="text-xs text-gray-400">{{ $student->user->email ?? '' }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="text-sm font-semibold text-gray-600 bg-gray-100 px-2 py-1 rounded-md">
+                                                {{ $student->roll_number ?? 'N/A' }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex justify-center bg-gray-100 rounded-lg p-1 gap-1">
+                                                <label class="flex-1">
+                                                    <input type="radio"
+                                                           name="attendance[{{ $student->id }}]"
+                                                           value="1"
+                                                           class="toggle-radio"
+                                                           onchange="highlightRow({{ $student->id }}, 1)"
+                                                           {{ $existing && $existing->present ? 'checked' : '' }}
+                                                           required>
+                                                    <div class="toggle-label w-full text-center py-2 rounded-md text-sm font-semibold border border-transparent select-none">
+                                                        Present
+                                                    </div>
+                                                </label>
+
+                                                <label class="flex-1">
+                                                    <input type="radio"
+                                                           name="attendance[{{ $student->id }}]"
+                                                           value="0"
+                                                           class="toggle-radio"
+                                                           onchange="highlightRow({{ $student->id }}, 0)"
+                                                           {{ $existing && !$existing->present ? 'checked' : '' }}>
+                                                    <div class="toggle-label w-full text-center py-2 rounded-md text-sm font-semibold border border-transparent select-none">
+                                                        Absent
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
-                
+
+                @if($selectedSubject && $students->isNotEmpty())
                 <div class="p-6 bg-gray-50 border-t border-gray-200 flex justify-end">
                     <button type="submit" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         Save Attendance Record
                     </button>
                 </div>
+                @endif
             </div>
 
         </form>
@@ -263,7 +317,31 @@
 </div>
 
 <script>
-    // 1. Highlight Row Logic
+    // ── Filter: Redirect to load correct students ──────────────────────────
+    function reloadStudents() {
+        const subjectId = document.getElementById('subjectSelect').value;
+        const date      = document.getElementById('dateSelect').value;
+        if (subjectId) {
+            window.location.href = '{{ route("teacher.attendance.create") }}?subject_id=' + subjectId + '&date=' + date;
+        }
+    }
+
+    // Load button click
+    const loadBtn = document.getElementById('loadStudentsBtn');
+    if (loadBtn) {
+        loadBtn.addEventListener('click', reloadStudents);
+    }
+
+    // Auto-reload when subject changes
+    document.getElementById('subjectSelect').addEventListener('change', reloadStudents);
+
+    // Auto-reload when date changes (only if subject is already selected)
+    document.getElementById('dateSelect').addEventListener('change', function() {
+        const subjectId = document.getElementById('subjectSelect').value;
+        if (subjectId) reloadStudents();
+    });
+
+    // ── Row highlight ──────────────────────────────────────────────────────
     function highlightRow(id, status) {
         const row = document.getElementById('row-' + id);
         row.classList.remove('row-present', 'row-absent');
@@ -274,7 +352,7 @@
         }
     }
 
-    // 2. Mark All Logic
+    // ── Mark All ──────────────────────────────────────────────────────────
     function markAll(status) {
         const radios = document.querySelectorAll(`input[type="radio"][value="${status}"]`);
         radios.forEach(radio => {
@@ -283,35 +361,34 @@
         });
     }
 
-    // 3. Form Submission Interception & Animation
-    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Stop immediate submission
+    // ── Form Submit Animation ─────────────────────────────────────────────
+    const form = document.getElementById('attendanceForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        // Check if form is valid (HTML5 validation)
-        if (!this.checkValidity()) {
-            this.reportValidity();
-            return;
-        }
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                return;
+            }
 
-        const modal = document.getElementById('successModal');
-        const backdrop = document.getElementById('modalBackdrop');
-        const form = this;
+            const modal    = document.getElementById('successModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const f        = this;
 
-        // Show Modal
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        
-        // Trigger Animations (small timeout to allow display:flex to render)
-        setTimeout(() => {
-            backdrop.classList.remove('opacity-0');
-            modal.classList.add('modal-active');
-        }, 10);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
 
-        // Wait 2 seconds for animation, then submit real form
-        setTimeout(() => {
-            form.submit();
-        }, 2200);
-    });
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                modal.classList.add('modal-active');
+            }, 10);
+
+            setTimeout(() => {
+                f.submit();
+            }, 2200);
+        });
+    }
 </script>
 
 @endsection

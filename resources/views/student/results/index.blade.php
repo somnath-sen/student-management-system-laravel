@@ -101,11 +101,15 @@
             </div>
 
             @php
-                $grade = '';
-                $gradeColor = '';
-                $gradeBg = '';
-                
-                if($percentage >= 90) { $grade = 'A+'; $gradeColor = 'text-green-600'; $gradeBg = 'bg-green-50'; }
+                $hasFailSubject = false;
+                foreach($marks as $_m) {
+                    $sp = $_m->total_marks > 0 ? ($_m->marks_obtained / $_m->total_marks) * 100 : 0;
+                    if ($sp < 40) { $hasFailSubject = true; break; }
+                }
+                $isPassed = $percentage >= 40 && !$hasFailSubject;
+
+                if (!$isPassed) { $grade = 'F'; $gradeColor = 'text-rose-600'; $gradeBg = 'bg-rose-50'; }
+                elseif($percentage >= 90) { $grade = 'A+'; $gradeColor = 'text-green-600'; $gradeBg = 'bg-green-50'; }
                 elseif($percentage >= 80) { $grade = 'A'; $gradeColor = 'text-emerald-600'; $gradeBg = 'bg-emerald-50'; }
                 elseif($percentage >= 70) { $grade = 'B'; $gradeColor = 'text-blue-600'; $gradeBg = 'bg-blue-50'; }
                 elseif($percentage >= 60) { $grade = 'C'; $gradeColor = 'text-orange-600'; $gradeBg = 'bg-orange-50'; }
@@ -121,7 +125,7 @@
                     <div>
                         <p class="text-sm text-gray-500">Performance Status:</p>
                         <p class="font-semibold {{ $gradeColor }}">
-                            @if($percentage >= 60) Satisfactory @else Needs Improvement @endif
+                            @if($isPassed) Satisfactory @else Failed @endif
                         </p>
                     </div>
                 </div>

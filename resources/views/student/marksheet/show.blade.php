@@ -14,6 +14,13 @@
     $totalObtained = $publishedMarks->sum('marks_obtained');
     $percentage = $totalMax > 0 ? round(($totalObtained / $totalMax) * 100, 2) : 0;
 
+    // FAIL if overall < 40% OR if any single subject scored < 40%
+    $hasFailSubject = $publishedMarks->contains(function($m) {
+        $p = $m->total_marks > 0 ? ($m->marks_obtained / $m->total_marks) * 100 : 0;
+        return $p < 40;
+    });
+    $isPassed = $percentage >= 40 && !$hasFailSubject;
+
     // ✅ FIXED: Using an anonymous function (Closure) prevents PHP Redeclaration Errors
     $getGrade = function($percent) {
         if($percent >= 90) return ['grade' => 'A+', 'color' => 'text-emerald-600', 'bg' => 'bg-emerald-100'];
@@ -96,10 +103,13 @@
                 </div>
                 <div class="p-6 text-center hover:bg-slate-50 transition-colors flex flex-col justify-center items-center">
                     <p class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Status</p>
-                    @if($percentage >= 40)
+                    @if($isPassed)
                         <span class="px-4 py-1.5 rounded-lg text-sm font-bold bg-emerald-500 text-white shadow-sm flex items-center gap-1"><i class="fa-solid fa-check"></i> PASSED</span>
                     @else
                         <span class="px-4 py-1.5 rounded-lg text-sm font-bold bg-rose-500 text-white shadow-sm flex items-center gap-1"><i class="fa-solid fa-xmark"></i> FAILED</span>
+                        @if($hasFailSubject)
+                            <p class="text-[10px] text-rose-400 mt-1 font-semibold">Failed in 1 or more subjects</p>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -118,15 +128,19 @@
                             @php
                                 $rowPercent = $mark->total_marks > 0 ? ($mark->marks_obtained / $mark->total_marks) * 100 : 0;
                                 $rowGrade = $getGrade($rowPercent);
+                                $rowFailed = $rowPercent < 40;
                             @endphp
-                            <tr class="table-row-anim hover:bg-slate-50 transition-colors group">
+                            <tr class="table-row-anim {{ $rowFailed ? 'bg-rose-50' : 'hover:bg-slate-50' }} transition-colors group">
                                 <td class="py-4 px-6">
-                                    <div class="font-bold text-slate-900 text-lg">{{ $mark->subject->name }}</div>
+                                    <div class="font-bold {{ $rowFailed ? 'text-rose-700' : 'text-slate-900' }} text-lg flex items-center gap-2">
+                                        @if($rowFailed)<i class="fa-solid fa-circle-xmark text-rose-500 text-sm"></i>@endif
+                                        {{ $mark->subject->name }}
+                                    </div>
                                     <div class="text-xs font-bold text-slate-400 mt-0.5">{{ $mark->subject->subject_code ?? 'SUB-'.$mark->subject->id }}</div>
                                 </td>
                                 
                                 <td class="py-4 px-6 text-center">
-                                    <div class="font-black text-slate-800 text-xl">{{ number_format($mark->marks_obtained, 0) }}</div>
+                                    <div class="font-black {{ $rowFailed ? 'text-rose-700' : 'text-slate-800' }} text-xl">{{ number_format($mark->marks_obtained, 0) }}</div>
                                     <div class="text-xs text-slate-400 font-medium">out of {{ number_format($mark->total_marks, 0) }}</div>
                                 </td>
 

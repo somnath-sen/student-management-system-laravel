@@ -125,13 +125,14 @@
                     $totalMax += $mark->total_marks;
                     $rowPercent = $mark->total_marks > 0 ? ($mark->marks_obtained / $mark->total_marks) * 100 : 0;
                 @endphp
-                <tr>
+                @php $isFailed = $rowPercent < 40; @endphp
+                <tr style="{{ $isFailed ? 'background:#fff1f2;' : '' }}">
                     <td>{{ $count++ }}</td>
                     <td style="font-weight:bold; font-size:10px;">{{ $mark->subject->subject_code ?? 'N/A' }}</td>
-                    <td class="subject-name">{{ $mark->subject->name }}</td>
+                    <td class="subject-name" style="{{ $isFailed ? 'color:#dc2626;' : '' }}">{{ $mark->subject->name }}</td>
                     <td>{{ $mark->total_marks }}</td>
-                    <td>{{ $mark->marks_obtained }}</td>
-                    <td>{{ $getLetter($rowPercent) }}</td>
+                    <td style="{{ $isFailed ? 'color:#dc2626; font-weight:bold;' : '' }}">{{ $mark->marks_obtained }}</td>
+                    <td style="{{ $isFailed ? 'color:#dc2626; font-weight:bold;' : '' }}">{{ $getLetter($rowPercent) }}</td>
                 </tr>
             @endforeach
             
@@ -150,7 +151,13 @@
 
     @php
         $percentage = $totalMax > 0 ? round(($totalObtained / $totalMax) * 100, 2) : 0;
-        $result = $percentage >= 40 ? "PASS" : "FAIL";
+        // FAIL if overall < 40% OR if any single subject < 40%
+        $hasFailSubject = false;
+        foreach($publishedMarks as $_m) {
+            $sp = $_m->total_marks > 0 ? ($_m->marks_obtained / $_m->total_marks) * 100 : 0;
+            if ($sp < 40) { $hasFailSubject = true; break; }
+        }
+        $result = ($percentage >= 40 && !$hasFailSubject) ? "PASS" : "FAIL";
     @endphp
 
     <div class="summary-box">

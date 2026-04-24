@@ -330,7 +330,8 @@
             </header>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto relative pb-24 lg:pb-0">
-                <div class="w-full p-4 sm:p-6 lg:p-8 page-content-fade">
+                <x-skeleton-ui />
+                <div id="main-page-content" class="w-full p-4 sm:p-6 lg:p-8">
                     @yield('content')
                 </div>
             </main>
@@ -439,7 +440,7 @@
             </div>
         </div>
     </div>
-    <x-page-transition />
+
     <x-sweetalert />
 </body>
 </html>

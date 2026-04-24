@@ -32,10 +32,10 @@ class AttendanceController extends Controller
         // ONLY load students if a subject is selected
         if ($selectedSubject) {
             
-            // Note: If your students are linked to specific courses/subjects, 
-            // you can filter them here like: Student::where('course_id', $selectedSubject->course_id)->with('user')->get();
-            // For now, we load all students, but safely deferred until after a subject is chosen.
-            $students = Student::with('user')->get(); 
+            // Only load students enrolled in the course associated with this subject
+            $students = Student::with('user')
+                ->where('course_id', $selectedSubject->course_id)
+                ->get(); 
 
             // Fetch existing attendance to pre-fill the toggles if they already took attendance today
             $existingAttendance = Attendance::where('subject_id', $selectedSubject->id)
