@@ -3,49 +3,113 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     /**
+     * Old demo emails from previous seeder versions that must be
+     * cleaned up before re-seeding to avoid unique-key conflicts.
+     * These are ONLY the old auto-generated test accounts — never real user data.
+     */
+    private array $legacyDemoEmails = [
+        // Old numbered teacher accounts (previous seeder format)
+        'teacher1@edflow.com',
+        'teacher2@edflow.com',
+        'teacher3@edflow.com',
+        'teacher4@edflow.com',
+        'teacher5@edflow.com',
+        // Old numbered student accounts
+        'student1@edflow.com',
+        'student2@edflow.com',
+        'student3@edflow.com',
+        'student4@edflow.com',
+        'student5@edflow.com',
+        'student6@edflow.com',
+        'student7@edflow.com',
+        'student8@edflow.com',
+        'student9@edflow.com',
+        'student10@edflow.com',
+        // Old parent accounts
+        'parent1@edflow.com',
+        'parent2@edflow.com',
+        'parent3@edflow.com',
+        // Old generic demo accounts
+        'demo@teacher.com',
+        'demo@student.com',
+        'demo@parent.com',
+        'admin@admin.com',
+        'teacher@teacher.com',
+        'student@student.com',
+    ];
+
+    /**
      * Seed the application's database.
+     * Safe to re-run on existing production databases.
      */
     public function run(): void
     {
-        // 1. Roles & Badges
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+        // ── Clean up old demo accounts from previous seeder versions ──────
+        $this->cleanupLegacyAccounts();
+
+        // ── 1. Foundation ─────────────────────────────────────────────────
         $this->call([
             RoleSeeder::class,
             BadgeSeeder::class,
         ]);
 
-        // 2. Core Users
+        // ── 2. Admin users ────────────────────────────────────────────────
         $this->call([
             AdminSeeder::class,
         ]);
 
-        // 3. Academic Structure (Courses & Subjects)
+        // ── 3. Academic Structure ─────────────────────────────────────────
         $this->call([
             AcademicStructureSeeder::class,
         ]);
 
-        // 4. Faculty & Students
+        // ── 4. People ─────────────────────────────────────────────────────
         $this->call([
             TeacherSeeder::class,
             StudentSeeder::class,
             ParentSeeder::class,
         ]);
 
-        // 5. Academic Data (Attendance, Marks, Fees, Exams)
+        // ── 5. Academic Data ──────────────────────────────────────────────
         $this->call([
             AcademicDataSeeder::class,
         ]);
 
-        // 6. Communications
+        // ── 6. Communications & Settings ──────────────────────────────────
         $this->call([
             NoticeSeeder::class,
         ]);
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+    }
+
+    /**
+     * Remove old numbered/legacy demo accounts so the new named
+     * demo accounts can be seeded cleanly without key conflicts.
+     */
+    private function cleanupLegacyAccounts(): void
+    {
+        foreach ($this->legacyDemoEmails as $email) {
+            $user = User::where('email', $email)->first();
+            if (!$user) continue;
+
+            // Remove related data via DB queries (FK checks are off)
+            DB::table('students')->where('user_id', $user->id)->delete();
+            DB::table('teachers')->where('user_id', $user->id)->delete();
+            DB::table('parent_student')->where('parent_id', $user->id)->delete();
+            DB::table('gamification_stats')->where('user_id', $user->id)->delete();
+            DB::table('badge_user')->where('user_id', $user->id)->delete();
+            DB::table('suggestions')->where('user_id', $user->id)->delete();
+
+            $user->delete();
+        }
     }
 }
