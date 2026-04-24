@@ -102,11 +102,11 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
-                                        {{ substr($course->name, 0, 2) }}
+                                        {{ substr($course->name ?? 'C', 0, 2) }}
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-bold text-gray-900">{{ $course->name }}</div>
-                                        <div class="text-xs text-gray-500">Created: {{ $course->created_at->format('M d, Y') }}</div>
+                                        <div class="text-xs text-gray-500">Created: {{ $course->created_at ? $course->created_at->format('M d, Y') : 'N/A' }}</div>
                                     </div>
                                 </div>
                             </td>
