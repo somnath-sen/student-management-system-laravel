@@ -28,6 +28,16 @@
             transform: translateY(15px);
         }
 
+        /* Page fade-in on load (replaces skeleton loader) */
+        .page-content-fade {
+            animation: pageFadeIn 0.4s ease forwards;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
         }
@@ -127,6 +137,16 @@
                     <span class="font-semibold text-sm">Marksheet</span>
                 </a>
 
+                @php
+                    $reportCardStudent = auth()->user()->student ?? null;
+                    $reportCardPublished = $reportCardStudent
+                        ? \App\Models\Mark::where('student_id', $reportCardStudent->id)
+                            ->where('is_locked', true)
+                            ->whereHas('subject', fn($q) => $q->where('course_id', $reportCardStudent->course_id))
+                            ->exists()
+                        : false;
+                @endphp
+                @if($reportCardPublished)
                 <a href="{{ route('student.report-card.download') }}"
                    id="sidebar-report-card-link"
                    class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group text-amber-400 hover:text-white hover:bg-amber-600/20">
@@ -134,6 +154,13 @@
                     <span class="font-semibold text-sm flex-1">Report Card</span>
                     <span class="text-[9px] text-amber-400 px-2 py-0.5 rounded border border-amber-600/50 font-black tracking-wider uppercase group-hover:bg-amber-500 group-hover:text-white transition-colors">PDF</span>
                 </a>
+                @else
+                <div class="flex items-center gap-3 px-4 py-3 rounded-xl opacity-40 cursor-not-allowed">
+                    <i class="fa-solid fa-file-pdf w-5 text-center text-slate-500"></i>
+                    <span class="font-semibold text-sm flex-1 text-slate-500">Report Card</span>
+                    <span class="text-[9px] text-slate-500 px-2 py-0.5 rounded border border-slate-600 font-black tracking-wider uppercase">Soon</span>
+                </div>
+                @endif
 
                 <a href="{{ route('student.performance.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('student.performance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-arrow-trend-up w-5 text-center transition-transform group-hover:scale-110"></i>
@@ -307,66 +334,13 @@
             </header>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto relative pb-24 lg:pb-0">
-                <!-- Skeleton UI (Shown by default) -->
-                <div id="skeleton-loader" class="w-full h-full p-4 md:p-8 absolute inset-0 z-[5] bg-[#FAFAF7] overflow-hidden">
-                    <div class="max-w-7xl mx-auto space-y-8">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                            <div class="w-1/2">
-                                <x-skeleton.text lines="2" />
-                            </div>
-                            <div class="shimmer h-14 w-40 rounded-2xl"></div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <x-skeleton.card />
-                            <x-skeleton.card />
-                            <x-skeleton.card />
-                            <x-skeleton.card />
-                        </div>
-
-                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                            <div class="xl:col-span-2 space-y-8">
-                                <x-skeleton.card class="h-48" />
-                                <x-skeleton.table rows="4" />
-                            </div>
-                            <div class="xl:col-span-1 space-y-8">
-                                <x-skeleton.card class="h-64" />
-                                <x-skeleton.table rows="3" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actual Content (Hidden by default) -->
-                <div id="actual-content" style="opacity: 0; visibility: hidden;" class="animate-content w-full h-full relative z-20">
+                <div class="w-full page-content-fade">
                     @yield('content')
                 </div>
             </main>
 
         </div>
     </div>
-
-    <script>
-        // Skeleton Loader Logic
-        window.addEventListener('load', function () {
-            const skeleton = document.getElementById('skeleton-loader');
-            const content = document.getElementById('actual-content');
-            
-            if (skeleton && content) {
-                setTimeout(() => {
-                    skeleton.style.opacity = '0';
-                    skeleton.style.visibility = 'hidden';
-                    skeleton.style.transition = 'opacity 0.4s ease-in-out';
-                    
-                    content.style.visibility = 'visible';
-                    content.style.opacity = '1';
-                    content.style.transition = 'opacity 0.4s ease-in-out';
-                    
-                    setTimeout(() => skeleton.remove(), 400); 
-                }, 300); 
-            }
-        });
-    </script>
 
     <!-- Mobile Bottom Navigation (Student) -->
     <div x-data="{ moreDrawerOpen: false }" class="lg:hidden">
@@ -455,10 +429,19 @@
                     <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-orange-500"><i class="fa-solid fa-file-lines"></i></div>
                     <span class="font-bold text-sm flex-1">Marksheet</span>
                 </a>
+                @if($reportCardPublished)
                 <a href="{{ route('student.report-card.download') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-amber-50 text-slate-700 hover:text-amber-700 transition-all active:scale-95">
                     <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-500"><i class="fa-solid fa-file-pdf"></i></div>
                     <span class="font-bold text-sm flex-1">Report Card</span>
+                    <span class="text-[9px] text-amber-500 px-2 py-0.5 rounded border border-amber-500/30 font-black tracking-wider uppercase">PDF</span>
                 </a>
+                @else
+                <div class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 opacity-40 cursor-not-allowed">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-400"><i class="fa-solid fa-file-pdf"></i></div>
+                    <span class="font-bold text-sm flex-1 text-slate-400">Report Card</span>
+                    <span class="text-[9px] text-slate-400 px-2 py-0.5 rounded border border-slate-400/30 font-black tracking-wider uppercase">Soon</span>
+                </div>
+                @endif
 
                 <!-- AI & Analytics -->
                 <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">AI & Analytics</p>

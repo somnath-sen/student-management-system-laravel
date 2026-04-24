@@ -44,6 +44,13 @@
     
     <div class="max-w-7xl mx-auto animate-enter">
 
+        @if(session('error'))
+            <div class="mb-6 p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl flex items-center gap-3 shadow-sm">
+                <i class="fa-solid fa-circle-exclamation text-rose-500 text-lg flex-shrink-0"></i>
+                <p class="text-rose-700 font-semibold text-sm">{{ session('error') }}</p>
+            </div>
+        @endif
+
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-gray-200">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">Academic Results</h1>

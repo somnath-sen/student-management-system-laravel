@@ -31,6 +31,7 @@ use App\Http\Controllers\FacultyRegistrationController;
 use App\Http\Controllers\Admin\FacultyRegistrationController as AdminFacultyRegistrationController;
 use App\Http\Controllers\Admin\ReportCardController as AdminReportCardController;
 use App\Http\Controllers\Student\ReportCardController as StudentReportCardController;
+use App\Http\Controllers\Parent\ReportCardController as ParentReportCardController;
 use App\Http\Controllers\Admin\DropoutRiskController;
 use App\Http\Controllers\Admin\AttendanceRiskController;
 use App\Http\Controllers\Student\AttendanceInsightsController;
@@ -375,4 +376,5 @@ Route::middleware(['auth', 'role:teacher,student'])->group(function () {
 
 Route::middleware(['auth', 'role:parent'])->group(function () {
     Route::get('/parent/dashboard', [\App\Http\Controllers\Parent\DashboardController::class, 'index'])->name('parent.dashboard');
+    Route::get('/parent/report-card/{student}/download', [ParentReportCardController::class, 'download'])->name('parent.report-card.download');
 });

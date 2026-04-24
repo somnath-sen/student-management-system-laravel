@@ -128,6 +128,21 @@
         @endif
 
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
+        
+        @if(session('error'))
+            <div class="mb-6 p-4 bg-rose-50 border-l-4 border-rose-500 rounded-xl flex items-center gap-3 shadow-sm">
+                <i class="fa-solid fa-circle-exclamation text-rose-500 text-lg flex-shrink-0"></i>
+                <p class="text-rose-700 font-semibold text-sm">{{ session('error') }}</p>
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-xl flex items-center gap-3 shadow-sm">
+                <i class="fa-solid fa-circle-check text-emerald-500 text-lg flex-shrink-0"></i>
+                <p class="text-emerald-700 font-semibold text-sm">{{ session('success') }}</p>
+            </div>
+        @endif
+
         <header class="mb-12" style="animation: fadeUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px);">
             <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-black uppercase tracking-widest border border-emerald-100 shadow-sm mb-4 inline-block">Family Overview</span>
             <h1 class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 leading-tight">
@@ -174,7 +189,7 @@
                         </div>
                     </div>
 
-                    <div class="relative z-10 w-full md:w-auto text-left md:text-right">
+                    <div class="relative z-10 w-full md:w-auto text-left md:text-right flex flex-col gap-3">
                          @if($data['unread_broadcasts'] > 0)
                             <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-500/20 border border-red-500 text-red-100 rounded-xl text-sm font-black tracking-wide cursor-pointer hover:bg-red-500/30 transition-colors shadow-[0_0_20px_rgba(239,68,68,0.3)]">
                                 <span class="relative flex h-3 w-3">
@@ -186,6 +201,20 @@
                         @else
                             <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-gray-300 rounded-xl text-xs font-bold uppercase tracking-widest">
                                 <i class="fa-solid fa-bell-slash text-gray-500"></i> No New Alerts
+                            </div>
+                        @endif
+
+                        {{-- Report Card Download Button --}}
+                        @if($data['is_results_published'])
+                            <a href="{{ route('parent.report-card.download', $child->id) }}"
+                               class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-sm font-black tracking-wide transition-all hover:scale-105 shadow-[0_0_20px_rgba(251,191,36,0.4)] border border-amber-400/30">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                Download Report Card
+                            </a>
+                        @else
+                            <div class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 text-gray-500 rounded-xl text-sm font-bold tracking-wide cursor-not-allowed">
+                                <i class="fa-solid fa-clock"></i>
+                                Report Card Not Published
                             </div>
                         @endif
                     </div>
@@ -462,10 +491,22 @@
                     <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-indigo-500"><i class="fa-solid fa-calendar-days"></i></div>
                     <span class="font-bold text-sm flex-1">Exam Schedule</span>
                 </a>
-                <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-amber-50 text-slate-700 hover:text-amber-700 transition-all active:scale-95">
+                @php
+                    $publishedChild = $childrenData->first(fn($d) => $d['is_results_published'] ?? false);
+                @endphp
+                @if($publishedChild)
+                <a href="{{ route('parent.report-card.download', $publishedChild['student']->id) }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-700 transition-all active:scale-95 border border-amber-100">
                     <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-500"><i class="fa-solid fa-file-pdf"></i></div>
-                    <span class="font-bold text-sm flex-1">Report Card</span>
+                    <span class="font-bold text-sm flex-1">Download Report Card</span>
+                    <span class="text-[9px] text-amber-500 px-2 py-0.5 rounded border border-amber-500/30 font-black tracking-wider uppercase">PDF</span>
                 </a>
+                @else
+                <div class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 opacity-40 cursor-not-allowed">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-400"><i class="fa-solid fa-file-pdf"></i></div>
+                    <span class="font-bold text-sm flex-1 text-slate-400">Report Card</span>
+                    <span class="text-[9px] text-slate-400 px-2 py-0.5 rounded border border-slate-400/30 font-black tracking-wider uppercase">Not Yet</span>
+                </div>
+                @endif
 
                 <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">Security & Account</p>
                 <a href="#" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all active:scale-95 border border-rose-100">

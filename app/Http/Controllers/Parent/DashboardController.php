@@ -120,19 +120,28 @@ class DashboardController extends Controller
             
             $totalDue = max(0, $totalFees - $totalPaid);
 
+            // 5. Check if results are published for this child
+            $resultsPublished = Mark::where('student_id', $child->id)
+                ->where('is_locked', true)
+                ->whereHas('subject', function ($q) use ($child) {
+                    $q->where('course_id', $child->course_id);
+                })
+                ->exists();
+
             return [
-                'student'             => $child,
-                'attendance_percentage'=> $attendancePercentage,
-                'attendance_status'   => $attendanceStatus,
-                'subject_scores'      => $computedScores,
-                'overall_performance' => $overallPerformance,
-                'unread_broadcasts'   => $unreadCount,
-                'emergency_data'      => $emergencyData,
-                'is_panicking'        => $child->is_panicking,
-                'panic_data'          => $panicData,
-                'total_fees'          => $totalFees,
-                'total_paid'          => $totalPaid,
-                'total_due'           => $totalDue,
+                'student'               => $child,
+                'attendance_percentage' => $attendancePercentage,
+                'attendance_status'     => $attendanceStatus,
+                'subject_scores'        => $computedScores,
+                'overall_performance'   => $overallPerformance,
+                'unread_broadcasts'     => $unreadCount,
+                'emergency_data'        => $emergencyData,
+                'is_panicking'          => $child->is_panicking,
+                'panic_data'            => $panicData,
+                'total_fees'            => $totalFees,
+                'total_paid'            => $totalPaid,
+                'total_due'             => $totalDue,
+                'is_results_published'  => $resultsPublished,
             ];
         });
 
