@@ -14,7 +14,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::with('course')->latest()->get();
+        $subjects = Subject::with('course')->latest()->paginate(15);
         return view('admin.subjects.index', compact('subjects'));
     }
 
@@ -23,7 +23,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        $courses = Course::all();
+        $courses = Course::orderBy('name')->limit(500)->get();
         return view('admin.subjects.create', compact('courses'));
     }
 
@@ -54,7 +54,7 @@ class SubjectController extends Controller
      */
     public function edit(Subject $subject)
     {
-        $courses = Course::all();
+        $courses = Course::orderBy('name')->limit(500)->get();
         return view('admin.subjects.edit', compact('subject', 'courses'));
     }
 

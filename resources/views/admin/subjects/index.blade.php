@@ -110,7 +110,7 @@
 
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-                                    {{ $subject->course->name }}
+                                    {{ $subject->course->name ?? 'Unassigned Course' }}
                                 </span>
                             </td>
 
@@ -151,9 +151,8 @@
             </table>
         </div>
         
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
-            <span>Showing {{ count($subjects) }} entries</span>
-            <span>Admin Control Panel</span>
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            {{ $subjects->links() }}
         </div>
     </div>
 </div>
