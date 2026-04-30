@@ -91,4 +91,43 @@ class SubjectController extends Controller
             ->route('admin.subjects.index')
             ->with('success', 'Subject deleted successfully.');
     }
+
+    /**
+     * Bulk Delete Subjects
+     */
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'subject_ids' => 'required|array',
+            'subject_ids.*' => 'exists:subjects,id',
+        ]);
+
+        $deletedCount = 0;
+        $skippedCount = 0;
+
+        foreach ($request->subject_ids as $id) {
+            $subject = Subject::find($id);
+            if ($subject) {
+                // Dependency check: Cannot delete if subject has marks or attendance
+                $hasMarks = $subject->marks()->exists();
+                $hasAttendance = \App\Models\Attendance::where('subject_id', $subject->id)->exists();
+                
+                if ($hasMarks || $hasAttendance) {
+                    $skippedCount++;
+                } else {
+                    $subject->delete();
+                    $deletedCount++;
+                }
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'deleted' => $deletedCount,
+            'skipped' => $skippedCount,
+            'message' => $skippedCount > 0 
+                ? "{$deletedCount} deleted, {$skippedCount} skipped due to existing records." 
+                : "{$deletedCount} subjects deleted successfully."
+        ]);
+    }
 }

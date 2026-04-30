@@ -138,6 +138,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/settings/update', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
         
     /* Courses CRUD */
+    Route::post('/admin/courses/bulk-delete', [CourseController::class, 'bulkDelete'])->name('admin.courses.bulk-delete');
     Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::get('/admin/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
     Route::post('/admin/courses', [CourseController::class, 'store'])->name('admin.courses.store');
@@ -146,6 +147,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     /* Subjects CRUD */
+    Route::post('/admin/subjects/bulk-delete', [SubjectController::class, 'bulkDelete'])->name('admin.subjects.bulk-delete');
     Route::get('/admin/subjects', [SubjectController::class, 'index'])->name('admin.subjects.index');
     Route::get('/admin/subjects/create', [SubjectController::class, 'create'])->name('admin.subjects.create');
     Route::post('/admin/subjects', [SubjectController::class, 'store'])->name('admin.subjects.store');

@@ -65,4 +65,37 @@ class CourseController extends Controller
             ->with('success', 'Course deleted successfully!');
     }
 
+    // Bulk Delete Courses
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'course_ids' => 'required|array',
+            'course_ids.*' => 'exists:courses,id',
+        ]);
+
+        $deletedCount = 0;
+        $skippedCount = 0;
+
+        foreach ($request->course_ids as $id) {
+            $course = Course::find($id);
+            if ($course) {
+                // Dependency check: Cannot delete if course has enrolled students
+                if ($course->students()->exists()) {
+                    $skippedCount++;
+                } else {
+                    $course->delete();
+                    $deletedCount++;
+                }
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'deleted' => $deletedCount,
+            'skipped' => $skippedCount,
+            'message' => $skippedCount > 0 
+                ? "{$deletedCount} deleted, {$skippedCount} skipped due to enrolled students." 
+                : "{$deletedCount} courses deleted successfully."
+        ]);
+    }
 }

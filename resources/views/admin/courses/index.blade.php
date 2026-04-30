@@ -56,6 +56,24 @@
         </div>
     </div>
 
+    <!-- Bulk Actions Bar -->
+    <div id="bulk-actions" class="hidden mb-4 p-4 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-between animate-enter stagger-1">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-md">
+                <span id="selected-count">0</span>
+            </div>
+            <span class="text-indigo-900 font-semibold text-sm">Courses Selected</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <button type="button" onclick="clearSelection()" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                Cancel
+            </button>
+            <button type="button" onclick="confirmBulkDelete()" class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:ring ring-red-300 transition ease-in-out duration-150 shadow-md hover:shadow-lg">
+                <i class="fa-solid fa-trash-can mr-2"></i> Delete Selected
+            </button>
+        </div>
+    </div>
+
     @if(session('success'))
         <div class="mb-6 animate-enter stagger-1">
             <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r shadow-sm flex justify-between items-center">
@@ -81,6 +99,9 @@
             <table class="w-full whitespace-nowrap">
                 <thead>
                     <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                        <th class="px-6 py-4 w-12">
+                            <input type="checkbox" id="select-all" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer">
+                        </th>
                         <th class="px-6 py-4">#</th>
                         <th class="px-6 py-4">Course ID</th>
                         <th class="px-6 py-4">Course Name</th>
@@ -91,6 +112,9 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse($courses as $course)
                         <tr class="table-row">
+                            <td class="px-6 py-4">
+                                <input type="checkbox" class="course-checkbox w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer" value="{{ $course->id }}">
+                            </td>
                             <td class="px-6 py-4 text-sm text-gray-500">
                                 {{ $loop->iteration }}
                             </td>
@@ -136,7 +160,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center">
+                            <td colspan="6" class="px-6 py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
@@ -157,4 +181,123 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectAll = document.getElementById('select-all');
+        const checkboxes = document.querySelectorAll('.course-checkbox');
+        const bulkActions = document.getElementById('bulk-actions');
+        const selectedCountEl = document.getElementById('selected-count');
+
+        // Update bulk actions visibility
+        function updateBulkActions() {
+            const selectedCount = document.querySelectorAll('.course-checkbox:checked').length;
+            selectedCountEl.textContent = selectedCount;
+            
+            if (selectedCount > 0) {
+                bulkActions.classList.remove('hidden');
+            } else {
+                bulkActions.classList.add('hidden');
+                if (selectAll) selectAll.checked = false;
+            }
+            
+            // Highlight rows
+            checkboxes.forEach(cb => {
+                const row = cb.closest('.table-row');
+                if (cb.checked) {
+                    row.classList.add('bg-indigo-50/50');
+                } else {
+                    row.classList.remove('bg-indigo-50/50');
+                }
+            });
+        }
+
+        // Select All toggle
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                checkboxes.forEach(cb => {
+                    cb.checked = this.checked;
+                });
+                updateBulkActions();
+            });
+        }
+
+        // Individual checkbox toggle
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (!this.checked && selectAll) {
+                    selectAll.checked = false;
+                } else if (document.querySelectorAll('.course-checkbox:checked').length === checkboxes.length) {
+                    if (selectAll) selectAll.checked = true;
+                }
+                updateBulkActions();
+            });
+        });
+
+        // Expose functions globally for inline onclick handlers
+        window.clearSelection = function () {
+            if (selectAll) selectAll.checked = false;
+            checkboxes.forEach(cb => cb.checked = false);
+            updateBulkActions();
+        };
+
+        window.confirmBulkDelete = function () {
+            const selectedIds = Array.from(document.querySelectorAll('.course-checkbox:checked')).map(cb => cb.value);
+            
+            if (selectedIds.length === 0) return;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You are about to delete ${selectedIds.length} selected course(s). This action cannot be undone.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, Delete Selected',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return fetch('{{ route('admin.courses.bulk-delete') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ course_ids: selectedIds })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText)
+                        }
+                        return response.json()
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`)
+                    })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const data = result.value;
+                    if (data.success) {
+                        // Show toast notification
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: data.skipped > 0 ? 'warning' : 'success',
+                            title: data.message,
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                }
+            });
+        };
+    });
+</script>
 @endsection
