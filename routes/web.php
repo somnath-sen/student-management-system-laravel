@@ -136,6 +136,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     /* System Settings */
     Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings.index');
     Route::post('/admin/settings/update', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
+
+    // Emergency Database Deduplication Route (Temp)
+    Route::get('/admin/deduplicate-database-now', function() {
+        set_time_limit(300); // Allow 5 minutes for processing
+        \Illuminate\Support\Facades\Artisan::call('edflow:deduplicate');
+        return "<pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre><br><a href='/admin/dashboard'>Go back to Dashboard</a>";
+    });
         
     /* Courses CRUD */
     Route::post('/admin/courses/bulk-delete', [CourseController::class, 'bulkDelete'])->name('admin.courses.bulk-delete');
