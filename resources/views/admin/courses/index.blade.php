@@ -151,9 +151,8 @@
                 </tbody>
             </table>
         </div>
-        
-        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
-            <span class="text-sm text-gray-500">Showing all {{ count($courses) }} entries</span>
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            {{ $courses->links() }}
         </div>
     </div>
 </div>

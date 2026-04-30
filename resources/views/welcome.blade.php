@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Three.js for 3D preloader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -127,22 +130,435 @@
 </head>
 <body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-black dark:text-gray-100 selection:bg-gray-900 selection:text-white dark:selection:bg-white dark:selection:text-gray-900">
 
-    <!-- Premium Initial Loader -->
-    <div id="edflow-loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white dark:bg-black transition-opacity duration-700 ease-in-out">
-        <div class="relative flex items-center justify-center w-16 h-16">
-            <!-- Outer smooth spinning ring -->
-            <div class="absolute inset-0 rounded-full border border-gray-100 dark:border-white/5"></div>
-            <div class="absolute inset-0 rounded-full border-t border-brand-500 animate-[spin_1s_cubic-bezier(0.8,_0,_0.2,_1)_infinite]"></div>
-            
-            <!-- Inner pulsing brand logo -->
-            <div class="w-10 h-10 bg-brand-50 dark:bg-brand-900/20 rounded-xl flex items-center justify-center text-brand-600 animate-[pulseGlow_2s_infinite]">
-                <i class="fa-solid fa-graduation-cap text-lg"></i>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CINEMATIC 3D PRELOADER  |  Three.js + GSAP  |  Cyberpunk Theme
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div id="edflow-loader" style="
+        position:fixed;inset:0;z-index:99999;
+        background:#000000;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        overflow:hidden;
+    ">
+
+        <!-- Three.js canvas will be injected here -->
+        <canvas id="preloader-canvas" style="
+            position:absolute;inset:0;width:100%;height:100%;
+            display:block;
+        "></canvas>
+
+        <!-- UI Overlay -->
+        <div id="preloader-ui" style="
+            position:relative;z-index:10;
+            display:flex;flex-direction:column;align-items:center;gap:28px;
+            pointer-events:none;
+        ">
+            <!-- Brand -->
+            <div id="preloader-brand" style="opacity:0;transform:translateY(-20px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);">
+                <span style="
+                    font-family:'Plus Jakarta Sans',sans-serif;
+                    font-size:13px;font-weight:800;
+                    letter-spacing:0.35em;text-transform:uppercase;
+                    color:rgba(255,255,255,0.3);
+                ">EdFlow</span>
+            </div>
+
+            <!-- Percentage -->
+            <div style="text-align:center;">
+                <div id="preloader-pct" style="
+                    font-family:'Plus Jakarta Sans',sans-serif;
+                    font-size:clamp(52px,8vw,88px);
+                    font-weight:900;
+                    letter-spacing:-0.03em;
+                    color:#ffffff;
+                    line-height:1;
+                    opacity:0;
+                    text-shadow:0 0 40px rgba(220,38,38,0.6),0 0 80px rgba(147,51,234,0.3);
+                    transition:opacity 0.6s ease;
+                ">0</div>
+                <div style="
+                    font-family:'Plus Jakarta Sans',sans-serif;
+                    font-size:13px;font-weight:600;
+                    letter-spacing:0.2em;text-transform:uppercase;
+                    color:rgba(255,255,255,0.25);
+                    margin-top:6px;
+                ">%</div>
+            </div>
+
+            <!-- Subtitle -->
+            <div id="preloader-sub" style="
+                font-family:'Plus Jakarta Sans',sans-serif;
+                font-size:11px;font-weight:600;
+                letter-spacing:0.3em;text-transform:uppercase;
+                color:rgba(255,255,255,0.2);
+                opacity:0;transition:opacity 0.8s ease 0.4s;
+            ">Loading Experience&thinsp;&hellip;</div>
+
+            <!-- Progress bar -->
+            <div style="width:clamp(160px,25vw,280px);">
+                <div style="
+                    width:100%;height:1px;
+                    background:rgba(255,255,255,0.06);
+                    border-radius:999px;overflow:hidden;
+                ">
+                    <div id="preloader-bar" style="
+                        height:100%;width:0%;
+                        background:linear-gradient(90deg,#dc2626,#9333ea);
+                        border-radius:999px;
+                        box-shadow:0 0 8px rgba(220,38,38,0.8),0 0 20px rgba(147,51,234,0.4);
+                        transition:width 0.4s cubic-bezier(0.4,0,0.2,1);
+                    "></div>
+                </div>
             </div>
         </div>
-        <div class="mt-8 flex flex-col items-center">
-            <span class="font-bold tracking-[0.2em] text-[10px] uppercase text-gray-400 dark:text-gray-500 animate-pulse">Initializing System</span>
-        </div>
+
+        <!-- Skip button (fallback for slow devices) -->
+        <button id="preloader-skip" onclick="window.__skipPreloader&&window.__skipPreloader()" style="
+            position:absolute;bottom:32px;right:32px;
+            font-family:'Plus Jakarta Sans',sans-serif;
+            font-size:10px;font-weight:700;
+            letter-spacing:0.25em;text-transform:uppercase;
+            color:rgba(255,255,255,0.15);
+            background:none;border:none;cursor:pointer;
+            padding:8px 12px;
+            transition:color 0.3s ease;
+            opacity:0;
+        " onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">
+            Skip &rsaquo;
+        </button>
     </div>
+
+    <!-- ─── Preloader Script ───────────────────────────────────────────── -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ── Bail if Three.js failed to load ──────────────────────────────
+        if (typeof THREE === 'undefined') {
+            document.getElementById('edflow-loader').style.display = 'none';
+            return;
+        }
+
+        // ── DOM refs ─────────────────────────────────────────────────────
+        const loader    = document.getElementById('edflow-loader');
+        const canvas    = document.getElementById('preloader-canvas');
+        const pctEl     = document.getElementById('preloader-pct');
+        const barEl     = document.getElementById('preloader-bar');
+        const brandEl   = document.getElementById('preloader-brand');
+        const subEl     = document.getElementById('preloader-sub');
+        const skipBtn   = document.getElementById('preloader-skip');
+
+        // ── State ────────────────────────────────────────────────────────
+        let currentPct  = 0;
+        let targetPct   = 0;
+        let rafId       = null;
+        let dismissed   = false;
+        let orbReady    = false;
+
+        // ── Three.js Setup ───────────────────────────────────────────────
+        const W = window.innerWidth, H = window.innerHeight;
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(W, H);
+        renderer.setClearColor(0x000000, 1);
+
+        const scene  = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 100);
+        camera.position.set(0, 0, 5);
+
+        // ── Mouse parallax ───────────────────────────────────────────────
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', e => {
+            mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        // ── Orb (energy sphere) ──────────────────────────────────────────
+        const orbGeo  = new THREE.SphereGeometry(1, 64, 64);
+        const orbMat  = new THREE.MeshStandardMaterial({
+            color: 0x1a0000,
+            emissive: new THREE.Color(0xdc2626),
+            emissiveIntensity: 0.0,
+            roughness: 0.1,
+            metalness: 0.9,
+            transparent: true,
+            opacity: 0,
+        });
+        const orb = new THREE.Mesh(orbGeo, orbMat);
+        scene.add(orb);
+
+        // ── Wireframe shell ──────────────────────────────────────────────
+        const shellGeo  = new THREE.SphereGeometry(1.02, 24, 24);
+        const shellMat  = new THREE.MeshBasicMaterial({
+            color: 0xdc2626, wireframe: true,
+            transparent: true, opacity: 0,
+        });
+        const shell = new THREE.Mesh(shellGeo, shellMat);
+        scene.add(shell);
+
+        // ── Inner glow (additive sphere) ─────────────────────────────────
+        const glowGeo = new THREE.SphereGeometry(1.3, 32, 32);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: 0x9333ea,
+            transparent: true, opacity: 0,
+            side: THREE.BackSide,
+        });
+        const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+        scene.add(glowMesh);
+
+        // ── Particles ────────────────────────────────────────────────────
+        const PARTICLE_COUNT = 280;
+        const pPositions = new Float32Array(PARTICLE_COUNT * 3);
+        const pSpeeds    = [];
+        const pRadii     = [];
+        const pAngles    = [];
+        const pTilts     = [];
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            const ring   = Math.floor(i / (PARTICLE_COUNT / 4));
+            const radius = 1.6 + ring * 0.35 + Math.random() * 0.3;
+            const angle  = Math.random() * Math.PI * 2;
+            const tilt   = (Math.random() - 0.5) * 0.6;
+            pRadii.push(radius);
+            pAngles.push(angle);
+            pTilts.push(tilt);
+            pSpeeds.push((0.003 + Math.random() * 0.004) * (Math.random() < 0.5 ? 1 : -1));
+            pPositions[i * 3]     = Math.cos(angle) * radius;
+            pPositions[i * 3 + 1] = Math.sin(tilt) * radius;
+            pPositions[i * 3 + 2] = Math.sin(angle) * radius;
+        }
+
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+        const pMat = new THREE.PointsMaterial({
+            color: 0xdc2626,
+            size: 0.025,
+            transparent: true,
+            opacity: 0,
+            sizeAttenuation: true,
+        });
+        const particles = new THREE.Points(pGeo, pMat);
+        scene.add(particles);
+
+        // ── Lights ───────────────────────────────────────────────────────
+        scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+        const redLight    = new THREE.PointLight(0xdc2626, 4, 8);
+        redLight.position.set(0, 0, 2);
+        scene.add(redLight);
+        const purpleLight = new THREE.PointLight(0x9333ea, 2, 8);
+        purpleLight.position.set(2, 1, -1);
+        scene.add(purpleLight);
+
+        // ── Resize ───────────────────────────────────────────────────────
+        window.addEventListener('resize', () => {
+            const w = window.innerWidth, h = window.innerHeight;
+            renderer.setSize(w, h);
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+        });
+
+        // ── Three.js LoadingManager (real progress) ───────────────────────
+        const manager = new THREE.LoadingManager();
+        window.__THREE_LOADING_MANAGER__ = manager;
+
+        // Simulate page asset progress: combine DOMContentLoaded + images + fonts
+        let domLoaded    = false;
+        let imagesLoaded = 0;
+        let totalImages  = 0;
+        let fontsLoaded  = false;
+
+        function calcProgress() {
+            // DOM:40%, Images:40%, Fonts:20%
+            let p = 0;
+            if (domLoaded)   p += 40;
+            if (totalImages) p += Math.round((imagesLoaded / totalImages) * 40);
+            else             p += 40; // no images → full credit
+            if (fontsLoaded) p += 20;
+            setTarget(Math.min(p, 99)); // hold at 99 until forceDone
+        }
+
+        function setTarget(v) {
+            if (v > targetPct) targetPct = v;
+        }
+
+        // DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => { domLoaded = true; calcProgress(); });
+        } else {
+            domLoaded = true;
+        }
+
+        // Images
+        function trackImages() {
+            const imgs = Array.from(document.images);
+            totalImages = imgs.length;
+            if (!totalImages) { calcProgress(); return; }
+            imgs.forEach(img => {
+                if (img.complete) { imagesLoaded++; calcProgress(); }
+                else {
+                    img.addEventListener('load',  () => { imagesLoaded++; calcProgress(); });
+                    img.addEventListener('error', () => { imagesLoaded++; calcProgress(); });
+                }
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', trackImages);
+        } else {
+            trackImages();
+        }
+
+        // Fonts
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => { fontsLoaded = true; calcProgress(); });
+        } else {
+            fontsLoaded = true;
+        }
+
+        // Full-page load → push to 100
+        window.addEventListener('load', () => {
+            domLoaded = true; fontsLoaded = true;
+            imagesLoaded = totalImages || 0;
+            calcProgress();
+            setTimeout(() => forceDone(), 300);
+        });
+
+        // Safety timeout (slow devices) – max 8s
+        setTimeout(() => forceDone(), 8000);
+
+        function forceDone() {
+            setTarget(100);
+        }
+
+        // ── Skip handler ─────────────────────────────────────────────────
+        window.__skipPreloader = function() { forceDone(); };
+
+        // ── Dismiss preloader (called when progress hits 100) ─────────────
+        function dismiss() {
+            if (dismissed) return;
+            dismissed = true;
+
+            // 1. Flash surge
+            const surgeTl = window.gsap
+                ? gsap.timeline()
+                : null;
+
+            if (surgeTl) {
+                surgeTl
+                  .to(orbMat,   { emissiveIntensity: 3.5, duration: 0.4, ease: 'power2.in' })
+                  .to(glowMat,  { opacity: 0.5,           duration: 0.3, ease: 'power2.in' }, '<')
+                  .to(pMat,     { opacity: 1.0,           duration: 0.2             }, '<')
+                  // 2. Explode / dissolve
+                  .to(orbMat,   { emissiveIntensity: 0, opacity: 0, duration: 0.5, ease: 'power3.out' })
+                  .to(shellMat, { opacity: 0,             duration: 0.4             }, '<')
+                  .to(glowMat,  { opacity: 0,             duration: 0.4             }, '<')
+                  .to(pMat,     { opacity: 0,             duration: 0.6, ease: 'power3.out' }, '<0.1')
+                  .to([pctEl, barEl.parentElement.parentElement, brandEl, subEl, skipBtn], {
+                        opacity: 0, y: -15, duration: 0.5, stagger: 0.05, ease: 'power2.in'
+                  }, '<')
+                  // 3. Fade out loader
+                  .to(loader, {
+                        opacity: 0, duration: 0.7, ease: 'power2.inOut',
+                        onComplete: () => {
+                            loader.style.display = 'none';
+                            cancelAnimationFrame(rafId);
+                            renderer.dispose();
+                        }
+                  });
+            } else {
+                // Fallback without GSAP
+                loader.style.transition = 'opacity 0.7s ease';
+                loader.style.opacity    = '0';
+                setTimeout(() => { loader.style.display = 'none'; cancelAnimationFrame(rafId); }, 800);
+            }
+        }
+
+        // ── Intro animation (runs once orb is visible) ────────────────────
+        function introAnimate() {
+            if (window.gsap) {
+                const tl = gsap.timeline({
+                    onComplete: () => { orbReady = true; }
+                });
+                tl
+                  .to(orbMat,  { opacity: 0.95, duration: 1.2, ease: 'power2.out' })
+                  .to(orbMat,  { emissiveIntensity: 0.8, duration: 1.0, ease: 'power2.out' }, '<0.3')
+                  .to(shellMat,{ opacity: 0.08, duration: 0.8, ease: 'power2.out' }, '<0.2')
+                  .to(glowMat, { opacity: 0.12, duration: 0.8, ease: 'power2.out' }, '<')
+                  .to(pMat,    { opacity: 0.7,  duration: 1.0, ease: 'power2.out' }, '<0.2')
+                  .call(() => {
+                        // Reveal UI text
+                        if (pctEl)   { pctEl.style.opacity = '1'; }
+                        if (brandEl) { brandEl.style.opacity = '1'; brandEl.style.transform = 'translateY(0)'; }
+                        if (subEl)   { subEl.style.opacity  = '1'; }
+                        if (skipBtn) { setTimeout(() => { skipBtn.style.opacity = '1'; }, 1500); }
+                  });
+            } else {
+                // Fallback: instant show
+                orbMat.opacity  = 0.95;
+                orbMat.emissiveIntensity = 0.8;
+                pMat.opacity    = 0.7;
+                orbReady = true;
+            }
+        }
+
+        // ── Render loop ───────────────────────────────────────────────────
+        const clock = new THREE.Clock();
+        let introStarted = false;
+
+        function animate() {
+            rafId = requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            // Start intro after 1 frame
+            if (!introStarted) { introStarted = true; introAnimate(); }
+
+            // ── Smooth progress interpolation ─────────────────────────
+            if (currentPct < targetPct) {
+                currentPct += (targetPct - currentPct) * 0.04;
+                if (targetPct - currentPct < 0.15) currentPct = targetPct;
+                const d = Math.round(currentPct);
+                if (pctEl)  pctEl.textContent = d;
+                if (barEl)  barEl.style.width  = currentPct + '%';
+
+                // Trigger dismiss when we hit 100
+                if (d >= 100 && !dismissed) dismiss();
+            }
+
+            // ── Orb rotation + pulsing ────────────────────────────────
+            if (orbReady) {
+                orb.rotation.y   = t * 0.18;
+                orb.rotation.x   = Math.sin(t * 0.3) * 0.15;
+                shell.rotation.y = -t * 0.12;
+                shell.rotation.z =  t * 0.06;
+
+                // Pulsing glow
+                const pulse = 0.7 + Math.sin(t * 1.8) * 0.3;
+                orbMat.emissiveIntensity = 0.8 * pulse;
+                glowMat.opacity          = 0.12 * pulse;
+                redLight.intensity       = 4  * pulse;
+
+                // Camera parallax (subtle)
+                camera.position.x += (mouseX * 0.4 - camera.position.x) * 0.03;
+                camera.position.y += (-mouseY * 0.3 - camera.position.y) * 0.03;
+                camera.lookAt(0, 0, 0);
+            }
+
+            // ── Particle orbit ────────────────────────────────────────
+            const pos = particles.geometry.attributes.position;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                pAngles[i] += pSpeeds[i];
+                const a = pAngles[i];
+                const r = pRadii[i];
+                pos.array[i * 3]     = Math.cos(a) * r;
+                pos.array[i * 3 + 1] = Math.sin(pTilts[i] + t * 0.1) * r * 0.3;
+                pos.array[i * 3 + 2] = Math.sin(a) * r;
+            }
+            pos.needsUpdate = true;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    })();
+    </script>
 
     <!-- Elegant animated background effect -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 via-gray-50 to-white dark:from-gray-900 dark:via-black dark:to-black">
@@ -1942,9 +2358,9 @@
         const btns   = heroSection.querySelector('.flex.flex-col.sm\\:flex-row');
         const visual = heroSection.querySelector('.mt-20');
 
-        // Wait for loader to clear (the page has its own #edflow-loader)
+        // Wait for 3D preloader to fully clear before hero animation
         const loaderEl = document.getElementById('edflow-loader');
-        const startDelay = loaderEl ? 0.8 : 0.1;
+        const startDelay = loaderEl ? 1.2 : 0.1;
 
         const heroTl = gsap.timeline({ delay: startDelay });
 
