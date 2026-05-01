@@ -1332,7 +1332,7 @@
                         
                         <!-- Video iframe container -->
                         <div class="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100 dark:bg-black drop-shadow-xl border border-gray-200/50 dark:border-white/5 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-shadow duration-500">
-                            <iframe class="absolute inset-0 w-full h-full object-cover" src="https://www.youtube.com/embed/hxMNYkLN7tI?autoplay=0&controls=1&rel=0&showinfo=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe class="absolute inset-0 w-full h-full object-cover" src="https://www.youtube.com/embed/OFDIXIPKN3c?autoplay=0&controls=1&rel=0&showinfo=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
