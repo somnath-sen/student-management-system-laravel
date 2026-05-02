@@ -35,8 +35,10 @@ class AuthenticatedSessionController extends Controller
             'last_seen_at'  => now(),
         ])->save();
 
-        // Look up role name from the roles table to avoid hardcoded ID mismatch
-        $roleName = \DB::table('roles')->where('id', $user->role_id)->value('name');
+        // Look up role name via Eloquent relationship, fall back to raw DB query
+        // This is environment-agnostic and survives any role ID ordering in the DB
+        $roleName = $user->role?->name
+            ?? \DB::table('roles')->where('id', $user->role_id)->value('name');
 
         return match ($roleName) {
             'admin'   => redirect()->route('admin.dashboard'),
