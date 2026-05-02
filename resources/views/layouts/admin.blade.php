@@ -173,6 +173,12 @@
                     <span class="font-semibold text-sm">System Settings</span>
                 </a>
 
+                <a href="{{ route('admin.telegram.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/telegram*') ? 'active' : 'text-slate-400 hover:text-[#2AABEE] hover:bg-[#2AABEE]/10' }}">
+                    <i class="fa-brands fa-telegram w-5 text-center transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold text-sm flex-1">Telegram Alerts</span>
+                    <span class="text-[9px] text-[#2AABEE] px-2 py-0.5 rounded border border-[#2AABEE]/30 font-black tracking-wider uppercase group-hover:bg-[#2AABEE] group-hover:text-white transition-colors">BOT</span>
+                </a>
+
                 <a href="{{ route('admin.fees.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/fees*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold text-sm flex-1">Fees Management</span>
@@ -429,6 +435,11 @@
                 <a href="{{ route('admin.notices.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all active:scale-95">
                     <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-500"><i class="fa-solid fa-bullhorn"></i></div>
                     <span class="font-bold text-sm flex-1">Notice Board</span>
+                </a>
+                <a href="{{ route('admin.telegram.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-sky-50 hover:bg-sky-100 text-sky-700 transition-all active:scale-95 border border-sky-100">
+                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-sky-500"><i class="fa-brands fa-telegram"></i></div>
+                    <span class="font-bold text-sm flex-1">Telegram Alerts</span>
+                    <span class="text-[9px] text-sky-500 px-1.5 py-0.5 rounded border border-sky-400/30 font-black tracking-wider uppercase">BOT</span>
                 </a>
 
                 <form method="POST" action="{{ route('logout') }}" class="mt-4 mb-4">
