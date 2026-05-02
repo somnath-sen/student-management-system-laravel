@@ -24,10 +24,12 @@ class TelegramNotificationController extends Controller
      */
     public function index()
     {
-        $totalStudents        = User::where('role_id', 3)->count(); // student role
-        $connectedStudents    = User::where('role_id', 3)->whereNotNull('telegram_chat_id')->count();
-        $totalParents         = User::where('role_id', 4)->count(); // parent role
-        $connectedParents     = User::where('role_id', 4)->whereNotNull('telegram_chat_id')->count();
+        $studentRoleId        = \DB::table('roles')->where('name', 'student')->value('id');
+        $parentRoleId         = \DB::table('roles')->where('name', 'parent')->value('id');
+        $totalStudents        = User::where('role_id', $studentRoleId)->count();
+        $connectedStudents    = User::where('role_id', $studentRoleId)->whereNotNull('telegram_chat_id')->count();
+        $totalParents         = User::where('role_id', $parentRoleId)->count();
+        $connectedParents     = User::where('role_id', $parentRoleId)->whereNotNull('telegram_chat_id')->count();
 
         $sentToday    = NotificationLog::where('status', 'sent')
             ->whereDate('sent_at', today())
@@ -87,8 +89,11 @@ class TelegramNotificationController extends Controller
 
         $recipients = [];
 
+        $studentRoleId = \DB::table('roles')->where('name', 'student')->value('id');
+        $parentRoleId  = \DB::table('roles')->where('name', 'parent')->value('id');
+
         if (in_array($target, ['students', 'all'])) {
-            User::where('role_id', 3)
+            User::where('role_id', $studentRoleId)
                 ->whereNotNull('telegram_chat_id')
                 ->each(function ($user) use (&$recipients) {
                     $recipients[] = [
@@ -100,7 +105,7 @@ class TelegramNotificationController extends Controller
         }
 
         if (in_array($target, ['parents', 'all'])) {
-            User::where('role_id', 4)
+            User::where('role_id', $parentRoleId)
                 ->whereNotNull('telegram_chat_id')
                 ->each(function ($user) use (&$recipients) {
                     $recipients[] = [

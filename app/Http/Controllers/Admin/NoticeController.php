@@ -37,11 +37,13 @@ class NoticeController extends Controller
 
         // ── Telegram Notifications ───────────────────────────────────────────
         try {
-            $telegram = app(TelegramService::class);
-            $title    = $request->title;
+            $telegram      = app(TelegramService::class);
+            $title         = $request->title;
+            $studentRoleId = \DB::table('roles')->where('name', 'student')->value('id');
+            $parentRoleId  = \DB::table('roles')->where('name', 'parent')->value('id');
 
             // Notify all connected students
-            User::where('role_id', 3)->whereNotNull('telegram_chat_id')->each(function ($user) use ($telegram, $title) {
+            User::where('role_id', $studentRoleId)->whereNotNull('telegram_chat_id')->each(function ($user) use ($telegram, $title) {
                 $telegram->sendMessage(
                     $user->telegram_chat_id,
                     "📢 *New Academic Notice*\n\n*{$title}*\n\nA new notice has been posted by the administration. Log in to EdFlow to read the full details.",
@@ -52,7 +54,7 @@ class NoticeController extends Controller
             });
 
             // Notify all connected parents
-            User::where('role_id', 4)->whereNotNull('telegram_chat_id')->each(function ($user) use ($telegram, $title) {
+            User::where('role_id', $parentRoleId)->whereNotNull('telegram_chat_id')->each(function ($user) use ($telegram, $title) {
                 $telegram->sendMessage(
                     $user->telegram_chat_id,
                     "📢 *Institution Notice*\n\n*{$title}*\n\nA new notice has been posted by the administration regarding your child. Log in to EdFlow for details.",

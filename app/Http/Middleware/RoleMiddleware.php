@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RoleMiddleware
 {
@@ -16,34 +17,27 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        // 1. Check if the user is logged in
+        // 1. Must be logged in
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
 
-        // 2. Safely check if the user has a role_id assigned in the database
+        // 2. Must have a role assigned
         if (empty($user->role_id)) {
-            abort(403, 'Access Denied: Role ID is not assigned to this user account.');
+            abort(403, 'Access Denied: No role assigned to this account.');
         }
 
-        // 3. Map the database integer to the string role names used in web.php
-        $roleMap = [
-            1 => 'admin',
-            2 => 'teacher',
-            3 => 'student',
-            4 => 'parent',
-        ];
+        // 3. Look up the actual role name from the DB (avoids hardcoded ID mismatch)
+        $userRoleName = DB::table('roles')->where('id', $user->role_id)->value('name');
 
-        $userRoleName = $roleMap[$user->role_id] ?? null;
-
-        // 4. Check if the user's mapped role exists in the allowed $roles array
+        // 4. Allow if the user's role is in the allowed list
         if ($userRoleName && in_array($userRoleName, $roles)) {
             return $next($request);
         }
 
-        // 5. If they don't match, block access
+        // 5. Block access — wrong role
         abort(403, '403 Forbidden: You do not have the required permissions.');
     }
 }
