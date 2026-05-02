@@ -176,6 +176,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/students/{student}/edit', [StudentController::class, 'edit'])->name('admin.students.edit');
     Route::put('/admin/students/{student}', [StudentController::class, 'update'])->name('admin.students.update');
     Route::delete('/admin/students/{student}', [StudentController::class, 'destroy'])->name('admin.students.destroy');
+    // Parent ↔ Student linking
+    Route::post('/admin/students/{student}/link-parent', [StudentController::class, 'linkParent'])->name('admin.students.link-parent');
+    Route::post('/admin/students/{student}/unlink-parent', [StudentController::class, 'unlinkParent'])->name('admin.students.unlink-parent');
 
     /* Teachers */
     Route::get('/admin/teachers', [TeacherController::class, 'index'])->name('admin.teachers.index');

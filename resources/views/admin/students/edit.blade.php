@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('title', 'Edit Student')
 
@@ -162,6 +162,61 @@
 
         </form>
     </div>
+</div>
+    {{-- Linked Parents --}}
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8 mt-6 animate-enter stagger-1">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                <i class="fa-solid fa-user-group text-blue-600"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-bold text-gray-900">Linked Parents / Guardians</h2>
+                <p class="text-xs text-gray-500 mt-0.5">Link parent accounts to enable SOS, attendance, results and fee Telegram notifications.</p>
+            </div>
+        </div>
+        @if(session('success'))<div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700 font-medium">{{ session('success') }}</div>@endif
+        @if(session('warning'))<div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700 font-medium">{{ session('warning') }}</div>@endif
+        @php $student->load('parents'); @endphp
+        @if($student->parents->count() > 0)
+            <div class="mb-6 space-y-2">
+                @foreach($student->parents as $lp)
+                <div class="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-emerald-200 flex items-center justify-center"><i class="fa-solid fa-user text-emerald-700 text-sm"></i></div>
+                        <div><p class="text-sm font-bold text-gray-800">{{ $lp->name }}</p><p class="text-[10px] text-gray-500">{{ $lp->email }}</p></div>
+                        @if($lp->telegram_chat_id)<span class="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full"><i class="fa-brands fa-telegram text-xs"></i> Telegram Connected</span>@else<span class="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-full">No Telegram</span>@endif
+                    </div>
+                    <form method="POST" action="{{ route('admin.students.unlink-parent', $student) }}" onsubmit="return confirm('Remove this parent?')">
+                        @csrf<input type="hidden" name="parent_id" value="{{ $lp->id }}">
+                        <button type="submit" class="text-xs font-bold text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors"><i class="fa-solid fa-link-slash mr-1"></i> Unlink</button>
+                    </form>
+                </div>
+                @endforeach
+            </div>
+        @else
+            <div class="mb-6 p-4 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3">
+                <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i>
+                <div><p class="text-sm font-bold text-amber-700">No parent linked yet</p><p class="text-xs text-amber-600 mt-0.5">SOS alerts and all Telegram notifications will NOT reach any parent without a link.</p></div>
+            </div>
+        @endif
+        @php $availableParents = $allParents->whereNotIn('id', $linkedParentIds); @endphp
+        @if($availableParents->count() > 0)
+        <form method="POST" action="{{ route('admin.students.link-parent', $student) }}" class="flex flex-wrap items-end gap-3">
+            @csrf
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Link a Parent Account</label>
+                <select name="parent_id" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                    <option value="">Select parent to link</option>
+                    @foreach($availableParents as $p)<option value="{{ $p->id }}">{{ $p->name }} ({{ $p->email }}){{ $p->telegram_chat_id ? ' Telegram Connected' : '' }}</option>@endforeach
+                </select>
+            </div>
+            <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 shadow transition-all"><i class="fa-solid fa-link mr-1.5"></i> Link Parent</button>
+        </form>
+        @else
+            <p class="text-xs text-gray-400 text-center py-2">@if($allParents->count() === 0)No parent accounts exist yet.@else All parents already linked.@endif</p>
+        @endif
+    </div>
+
 </div>
 
 @endsection

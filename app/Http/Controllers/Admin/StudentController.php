@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Course;
 use App\Mail\StudentWelcomeMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str; 
@@ -107,8 +108,56 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        $courses = Course::all();
-        return view('admin.students.edit', compact('student', 'courses'));
+        $courses     = Course::all();
+        $parentRoleId = Role::where('name', 'parent')->value('id');
+        $allParents  = User::where('role_id', $parentRoleId)->orderBy('name')->get();
+        $linkedParentIds = $student->parents()->pluck('users.id')->toArray();
+        return view('admin.students.edit', compact('student', 'courses', 'allParents', 'linkedParentIds'));
+    }
+
+    /**
+     * Link a parent user to this student.
+     */
+    public function linkParent(Request $request, Student $student)
+    {
+        $request->validate(['parent_id' => 'required|exists:users,id']);
+
+        $parentId = $request->parent_id;
+
+        // Avoid duplicate link
+        $already = DB::table('parent_student')
+            ->where('student_id', $student->id)
+            ->where('parent_id', $parentId)
+            ->exists();
+
+        if ($already) {
+            return back()->with('warning', 'This parent is already linked to the student.');
+        }
+
+        DB::table('parent_student')->insert([
+            'student_id' => $student->id,
+            'parent_id'  => $parentId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $parent = User::find($parentId);
+        return back()->with('success', "✅ Parent '{$parent->name}' linked to student successfully!");
+    }
+
+    /**
+     * Unlink a parent user from this student.
+     */
+    public function unlinkParent(Request $request, Student $student)
+    {
+        $request->validate(['parent_id' => 'required|exists:users,id']);
+
+        DB::table('parent_student')
+            ->where('student_id', $student->id)
+            ->where('parent_id', $request->parent_id)
+            ->delete();
+
+        return back()->with('success', '🔗 Parent unlinked from student.');
     }
 
     /**
