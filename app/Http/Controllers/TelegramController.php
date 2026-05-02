@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -33,6 +34,8 @@ class TelegramController extends Controller
             'telegram_connect_token' => $token,
         ]);
 
+        Log::info("[Telegram] Token generated for user {$user->id} ({$user->name}): {$token}");
+
         $botUsername = config('services.telegram.username', 'YourBotUsername');
         $botUrl      = "https://t.me/{$botUsername}?start={$token}";
 
@@ -47,19 +50,20 @@ class TelegramController extends Controller
     {
         $update = $request->all();
 
-        // We only handle messages containing /start <token>
+        Log::info('[Telegram Webhook] Received update', $update);
+
+        // We only handle messages
         $message = $update['message'] ?? null;
         if (! $message) {
             return response()->json(['ok' => true]);
         }
 
-        $text   = $message['text'] ?? '';
+        $text   = trim($message['text'] ?? '');
         $chatId = (string) ($message['chat']['id'] ?? '');
         $from   = $message['from'] ?? [];
 
         // Must start with /start
         if (! str_starts_with($text, '/start')) {
-            // Optionally send a welcome message
             if (! empty($chatId)) {
                 $this->telegram->sendMessage(
                     $chatId,
@@ -71,29 +75,47 @@ class TelegramController extends Controller
         }
 
         // Extract token from: /start <token>
+        // Telegram sometimes sends "/start" with no token, or "/start TOKEN"
         $parts = explode(' ', $text, 2);
-        $token = $parts[1] ?? null;
+        $token = isset($parts[1]) ? trim($parts[1]) : null;
+
+        Log::info("[Telegram Webhook] /start received. chatId={$chatId}, token=" . ($token ?? 'NULL'));
 
         if (empty($token)) {
             $this->telegram->sendMessage(
                 $chatId,
-                "⚠️ Invalid connect link. Please generate a new one from your EdFlow dashboard.",
+                "⚠️ No connect token found. Please go to your *EdFlow dashboard* and click *Connect Telegram* to get a fresh link.",
                 'error'
             );
             return response()->json(['ok' => true]);
         }
 
-        // Find the user with this token
+        // Find the user with this token (exact match)
         $user = User::where('telegram_connect_token', $token)->first();
 
         if (! $user) {
+            Log::warning("[Telegram Webhook] No user found for token: {$token}");
+
+            // Log all current tokens for debugging
+            $allTokens = DB::table('users')
+                ->whereNotNull('telegram_connect_token')
+                ->select('id', 'name', 'telegram_connect_token')
+                ->get();
+            Log::warning('[Telegram Webhook] Current tokens in DB:', $allTokens->toArray());
+
             $this->telegram->sendMessage(
                 $chatId,
-                "❌ This connect link has expired or is invalid. Please generate a new one from your dashboard.",
+                "❌ This connect link has expired or is invalid.\n\nPlease go to your *EdFlow dashboard* and click *Connect Telegram* again to get a fresh link.",
                 'error'
             );
             return response()->json(['ok' => true]);
         }
+
+        // Determine recipient type from role name (avoids hasRole() which doesn't exist)
+        $roleName      = $user->role?->name
+            ?? DB::table('roles')->where('id', $user->role_id)->value('name')
+            ?? 'student';
+        $recipientType = in_array($roleName, ['parent']) ? 'parent' : 'student';
 
         // Save chat_id and clear the token
         $user->update([
@@ -102,16 +124,16 @@ class TelegramController extends Controller
             'telegram_connected_at'  => now(),
         ]);
 
+        Log::info("[Telegram Webhook] User {$user->id} ({$user->name}) connected. chatId={$chatId}, role={$roleName}");
+
         // Welcome message
         $this->telegram->sendMessage(
             $chatId,
             "✅ *Connected Successfully!*\n\nHello {$user->name}! Your EdFlow account is now linked to Telegram.\n\nYou'll receive notifications for:\n📊 Attendance updates\n🎉 Results published\n📢 Admin notices\n💰 Fee reminders\n🚨 Emergency alerts",
             'connect',
-            $user->hasRole('parent') ? 'parent' : 'student',
+            $recipientType,
             $user->id
         );
-
-        Log::info("[TelegramController] User {$user->id} ({$user->name}) connected Telegram. Chat ID: {$chatId}");
 
         return response()->json(['ok' => true]);
     }
