@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Services\TelegramService;
 use App\Mail\EmergencySOSMail;
+
 class LocationController extends Controller
 {
     public function index()
@@ -59,7 +61,32 @@ class LocationController extends Controller
             Mail::to($parent->email)->send(new EmergencySOSMail($student));
         }
 
+        // ── Telegram Emergency Alert ───────────────────────────────────────────
+        try {
+            $telegram  = app(TelegramService::class);
+            $name      = $student->user->name ?? 'Unknown';
+            $time      = now()->format('d M Y, h:i A');
+            $lat       = $request->lat;
+            $lng       = $request->lng;
+            $mapsUrl   = "https://maps.google.com/?q={$lat},{$lng}";
+
+            foreach ($student->parents as $parent) {
+                if ($parent->telegram_chat_id) {
+                    $telegram->sendMessage(
+                        $parent->telegram_chat_id,
+                        "🚨 *EMERGENCY SOS ALERT!*🚨\n\n*{$name}* has triggered an emergency SOS request.\n\n⏰ Time: *{$time}*\n📍 Location: [{$lat}, {$lng}]({$mapsUrl})\n\n*Please check immediately!*",
+                        'sos',
+                        'parent',
+                        $parent->id
+                    );
+                }
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::warning('[SOS] Telegram dispatch failed: ' . $e->getMessage());
+        }
+
         return response()->json(['status' => 'panic_activated']);
+
     }
 
     public function cancelPanic()

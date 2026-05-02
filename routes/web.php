@@ -35,6 +35,8 @@ use App\Http\Controllers\Parent\ReportCardController as ParentReportCardControll
 use App\Http\Controllers\Admin\DropoutRiskController;
 use App\Http\Controllers\Admin\AttendanceRiskController;
 use App\Http\Controllers\Student\AttendanceInsightsController;
+use App\Http\Controllers\Admin\TelegramNotificationController;
+use App\Http\Controllers\TelegramController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -47,6 +49,11 @@ use App\Http\Controllers\Student\AttendanceInsightsController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// ── Public Telegram Webhook (no CSRF, no auth) ─────────────────────────────
+// IMPORTANT: Exclude this from CSRF in App\Http\Middleware\VerifyCsrfToken
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook'])->name('telegram.webhook');
+
 
 // Preference Routes (Cookies)
 Route::post('/preferences/theme', [\App\Http\Controllers\PreferenceController::class, 'updateTheme'])->name('preferences.theme');
@@ -240,7 +247,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/attendance-risk', [AttendanceRiskController::class, 'index'])->name('admin.attendance-risk.index');
     Route::get('/admin/attendance-risk/{student}', [AttendanceRiskController::class, 'show'])->name('admin.attendance-risk.show');
 
+    // ── Telegram Notification Panel ───────────────────────────────────────────
+    Route::get('/admin/telegram', [TelegramNotificationController::class, 'index'])->name('admin.telegram.index');
+    Route::post('/admin/telegram/toggle', [TelegramNotificationController::class, 'toggle'])->name('admin.telegram.toggle');
+    Route::post('/admin/telegram/broadcast', [TelegramNotificationController::class, 'broadcast'])->name('admin.telegram.broadcast');
+    Route::post('/admin/telegram/test', [TelegramNotificationController::class, 'sendTest'])->name('admin.telegram.test');
+    Route::get('/admin/telegram/logs', [TelegramNotificationController::class, 'logs'])->name('admin.telegram.logs');
+
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -363,7 +378,12 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/broadcast/unread-count', [StudentBroadcastController::class, 'unreadCount'])->name('student.broadcast.unread');
     Route::get('/student/broadcast/{subject}', [StudentBroadcastController::class, 'index'])->name('student.broadcast.index');
     Route::post('/student/broadcast/seen/{message}', [StudentBroadcastController::class, 'markSeen'])->name('student.broadcast.seen');
+
+    // ── Telegram Connect ───────────────────────────────────────────
+    Route::get('/student/telegram/connect', [TelegramController::class, 'generateToken'])->name('student.telegram.connect');
+    Route::post('/student/telegram/disconnect', [TelegramController::class, 'disconnect'])->name('student.telegram.disconnect');
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -386,4 +406,8 @@ Route::middleware(['auth', 'role:teacher,student'])->group(function () {
 Route::middleware(['auth', 'role:parent'])->group(function () {
     Route::get('/parent/dashboard', [\App\Http\Controllers\Parent\DashboardController::class, 'index'])->name('parent.dashboard');
     Route::get('/parent/report-card/{student}/download', [ParentReportCardController::class, 'download'])->name('parent.report-card.download');
+
+    // ── Telegram Connect ───────────────────────────────────────────
+    Route::get('/parent/telegram/connect', [TelegramController::class, 'generateToken'])->name('parent.telegram.connect');
+    Route::post('/parent/telegram/disconnect', [TelegramController::class, 'disconnect'])->name('parent.telegram.disconnect');
 });

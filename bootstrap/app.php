@@ -18,7 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
+
+        // Exempt Telegram webhook from CSRF (Telegram posts without session tokens)
+        $middleware->validateCsrfTokens(except: [
+            'telegram/webhook',
+        ]);
     })
+
 
     ->withExceptions(function (Exceptions $exceptions): void {
         //

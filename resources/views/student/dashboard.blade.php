@@ -592,8 +592,108 @@
                     </div>
                     @endif
                 </div>
+
+                {{-- ─── Telegram Connect Card ────────────────────────────── --}}
+                @php
+                    $isTelegramConnected = auth()->user()->hasTelegramConnected();
+                    $lastTelegramAlert   = $isTelegramConnected
+                        ? \App\Models\NotificationLog::where('recipient_id', auth()->id())
+                            ->where('status', 'sent')
+                            ->latest('sent_at')
+                            ->first()
+                        : null;
+                @endphp
+                <div class="glass-card rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    {{-- Header gradient --}}
+                    <div class="p-6 relative overflow-hidden"
+                         style="background: {{ $isTelegramConnected
+                            ? 'linear-gradient(135deg, #2AABEE 0%, #229ED9 100%)'
+                            : 'linear-gradient(135deg, #64748b 0%, #475569 100%)' }}">
+                        <div class="absolute -right-4 -top-4 opacity-10">
+                            <i class="fa-brands fa-telegram text-[8rem] text-white"></i>
+                        </div>
+                        <div class="relative z-10 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm border border-white/30">
+                                <i class="fa-brands fa-telegram text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-white/70">Notifications</p>
+                                <h3 class="text-lg font-black text-white leading-tight">Telegram</h3>
+                            </div>
+                            <div class="ml-auto">
+                                @if($isTelegramConnected)
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-xl text-[10px] font-black text-white border border-white/30">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        Connected
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-xl text-[10px] font-black text-white border border-white/30">
+                                        <span class="w-2 h-2 rounded-full bg-white/40"></span>
+                                        Not Connected
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Body --}}
+                    <div class="p-6 space-y-4 bg-white">
+                        @if($isTelegramConnected)
+                            {{-- Connected State --}}
+                            <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                <i class="fa-solid fa-circle-check text-emerald-500 text-lg mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-black text-emerald-700">Telegram Connected ✅</p>
+                                    <p class="text-[10px] text-emerald-600 mt-0.5">You'll receive real-time alerts for attendance, results, fees, and more.</p>
+                                </div>
+                            </div>
+                            @if($lastTelegramAlert)
+                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                <i class="fa-solid fa-clock text-slate-400 text-sm"></i>
+                                <div>
+                                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-wider">Last Alert Sent</p>
+                                    <p class="text-xs font-bold text-slate-700">{{ $lastTelegramAlert->sent_at?->diffForHumans() }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            <form method="POST" action="{{ route('student.telegram.disconnect') }}">
+                                @csrf
+                                <button type="submit"
+                                        onclick="return confirm('Disconnect your Telegram account? You will stop receiving notifications.')"
+                                        class="w-full py-3 rounded-2xl text-sm font-black text-red-500 border-2 border-red-100 hover:bg-red-50 transition-colors">
+                                    <i class="fa-solid fa-link-slash mr-2"></i> Disconnect Telegram
+                                </button>
+                            </form>
+                        @else
+                            {{-- Not Connected State --}}
+                            <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-100">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-black text-amber-700">Not Connected</p>
+                                    <p class="text-[10px] text-amber-600 mt-0.5">Connect your Telegram to receive instant alerts for attendance, results, fees & emergencies.</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2.5 text-[10px] text-slate-500 font-bold">
+                                <p class="flex items-center gap-2"><span class="text-blue-500">📊</span> Attendance marked alerts</p>
+                                <p class="flex items-center gap-2"><span class="text-amber-500">⚠️</span> Low attendance warnings</p>
+                                <p class="flex items-center gap-2"><span class="text-violet-500">🎉</span> Result published alerts</p>
+                                <p class="flex items-center gap-2"><span class="text-emerald-500">💰</span> Fee reminders</p>
+                                <p class="flex items-center gap-2"><span class="text-red-500">🚨</span> Emergency SOS alerts</p>
+                            </div>
+                            <a href="{{ route('student.telegram.connect') }}"
+                               id="btn-connect-telegram"
+                               class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-sm text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all"
+                               style="background: linear-gradient(135deg, #2AABEE, #229ED9); box-shadow: 0 10px 25px -5px rgba(42,171,238,0.4);">
+                                <i class="fa-brands fa-telegram text-lg"></i>
+                                Connect Telegram
+                            </a>
+                            <p class="text-[9px] text-center text-slate-400">You'll be redirected to Telegram. Click "Start" in the bot chat.</p>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
+
 
     </div>
 

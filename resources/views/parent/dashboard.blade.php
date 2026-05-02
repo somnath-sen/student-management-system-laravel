@@ -404,8 +404,160 @@
                 </div>
             </div>
         @endforelse
+
+        {{-- ─── Telegram Connect Widget ────────────────────────────────── --}}
+        @php
+            $parentUser             = auth()->user();
+            $isParentTelegramLinked = $parentUser->hasTelegramConnected();
+            $lastParentAlert        = $isParentTelegramLinked
+                ? \App\Models\NotificationLog::where('recipient_id', $parentUser->id)
+                    ->where('status', 'sent')
+                    ->latest('sent_at')
+                    ->first()
+                : null;
+        @endphp
+        <div class="glass-card rounded-[2.5rem] overflow-hidden mt-10 border border-white"
+             style="animation: fadeUp 0.6s ease-out forwards; animation-delay: 0.3s; opacity: 0; transform: translateY(20px);">
+            {{-- Blue gradient header --}}
+            <div class="p-8 relative overflow-hidden"
+                 style="background: {{ $isParentTelegramLinked ? 'linear-gradient(135deg, #2AABEE 0%, #229ED9 100%)' : 'linear-gradient(135deg, #475569, #334155)' }}">
+                <div class="absolute -right-6 -top-6 opacity-10">
+                    <i class="fa-brands fa-telegram text-[10rem] text-white"></i>
+                </div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
+                    <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm border border-white/30 flex-shrink-0">
+                        <i class="fa-brands fa-telegram text-white text-3xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-white/70 mb-1">Instant Alerts</p>
+                        <h2 class="text-2xl font-black text-white leading-tight">Telegram Notifications</h2>
+                        <p class="text-white/70 text-sm font-medium mt-1">
+                            {{ $isParentTelegramLinked
+                                ? 'Your account is connected. You will receive instant alerts for your child\'s attendance, results, fees, and emergency SOS.'
+                                : 'Connect your Telegram to receive real-time alerts about attendance, results, fees, and emergency SOS events.' }}
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        @if($isParentTelegramLinked)
+                            <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 rounded-2xl text-sm font-black text-white border border-white/30">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Connected ✅
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 rounded-2xl text-sm font-black text-white border border-white/30">
+                                <span class="w-2.5 h-2.5 rounded-full bg-white/50"></span>
+                                Not Connected
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- Body --}}
+            <div class="p-8 bg-white grid md:grid-cols-2 gap-6">
+                @if($isParentTelegramLinked)
+                    {{-- Connected State --}}
+                    <div>
+                        <h3 class="text-sm font-black text-gray-700 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-blue-500"></i> Active Alert Types
+                        </h3>
+                        <div class="space-y-2">
+                            @foreach([
+                                ['📊', 'Attendance Marked', 'Every time your child\'s attendance is recorded'],
+                                ['⚠️', 'Low Attendance Warning', 'When attendance drops below 75%'],
+                                ['🎉', 'Results Published', 'When exam results are released'],
+                                ['💰', 'Fee Reminders', 'When fees are due or added'],
+                                ['📢', 'Admin Notices', 'When administration posts a notice'],
+                                ['🚨', 'Emergency SOS', 'Instant alert when child triggers panic button'],
+                            ] as [$icon, $title, $desc])
+                            <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl hover:bg-blue-50 transition-colors">
+                                <span class="text-base">{{ $icon }}</span>
+                                <div>
+                                    <p class="text-xs font-black text-slate-700">{{ $title }}</p>
+                                    <p class="text-[10px] text-slate-400">{{ $desc }}</p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        @if($lastParentAlert)
+                        <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                            <p class="text-[10px] font-black text-blue-500 uppercase tracking-wider mb-1">Last Alert</p>
+                            <p class="text-sm font-bold text-slate-700">{{ $lastParentAlert->sent_at?->diffForHumans() }}</p>
+                            <p class="text-[10px] text-slate-400 mt-1 line-clamp-2">{{ Str::limit($lastParentAlert->message, 80) }}</p>
+                        </div>
+                        @endif
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-500 text-xl mt-0.5"></i>
+                            <div>
+                                <p class="text-sm font-black text-emerald-700">Telegram is Active</p>
+                                <p class="text-[10px] text-emerald-600 mt-0.5">All notifications are being sent to your Telegram account.</p>
+                            </div>
+                        </div>
+                        <form method="POST" action="{{ route('parent.telegram.disconnect') }}">
+                            @csrf
+                            <button type="submit"
+                                    onclick="return confirm('Disconnect Telegram? You will stop receiving notifications.')"
+                                    class="w-full py-3 rounded-2xl text-sm font-black text-red-500 border-2 border-red-100 hover:bg-red-50 transition-colors">
+                                <i class="fa-solid fa-link-slash mr-2"></i> Disconnect Telegram
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    {{-- Not Connected State --}}
+                    <div>
+                        <h3 class="text-sm font-black text-gray-700 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-amber-500"></i> You will receive alerts for:
+                        </h3>
+                        <div class="space-y-2">
+                            @foreach([
+                                ['📊', 'Attendance Updates'],
+                                ['⚠️', 'Low Attendance Warnings'],
+                                ['🎉', 'Exam Results Published'],
+                                ['💰', 'Fee Payment Reminders'],
+                                ['📢', 'Admin Notices'],
+                                ['🚨', 'Emergency SOS (Instant!)'],
+                            ] as [$icon, $title])
+                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                                <span>{{ $icon }}</span>
+                                <p class="text-xs font-bold text-slate-600">{{ $title }}</p>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center gap-5">
+                        <div class="p-5 bg-amber-50 rounded-2xl border border-amber-100">
+                            <p class="text-sm font-black text-amber-700 flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Not Connected
+                            </p>
+                            <p class="text-xs text-amber-600 leading-relaxed">
+                                Connect your Telegram account to receive real-time notifications directly on your phone, even when you're offline from EdFlow.
+                            </p>
+                        </div>
+                        <div class="space-y-2 text-[10px] text-slate-500 font-bold bg-slate-50 rounded-xl p-4">
+                            <p class="font-black text-slate-600 text-xs mb-2">How it works:</p>
+                            <p>1️⃣ Click "Connect Telegram" below</p>
+                            <p>2️⃣ Telegram opens with our bot</p>
+                            <p>3️⃣ Click "Start" in the bot</p>
+                            <p>4️⃣ You're connected! ✅</p>
+                        </div>
+                        <a href="{{ route('parent.telegram.connect') }}"
+                           id="btn-parent-connect-telegram"
+                           class="flex items-center justify-center gap-3 py-4 rounded-2xl font-black text-base text-white shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all"
+                           style="background: linear-gradient(135deg, #2AABEE, #229ED9); box-shadow: 0 15px 30px -8px rgba(42,171,238,0.5);">
+                            <i class="fa-brands fa-telegram text-2xl"></i>
+                            Connect Parent Telegram
+                        </a>
+                        <p class="text-[9px] text-center text-slate-400">No phone number required. Works with Telegram account only.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+
         </div>{{-- /max-w-7xl --}}
     </main>
+
 
     {{-- Auto-refresh every 30s if any panic is active --}}
     @if($anyPanicking ?? false)

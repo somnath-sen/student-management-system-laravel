@@ -50,7 +50,13 @@ return [
 
     'recaptcha' => [
         'site_key' => env('RECAPTCHA_SITE_KEY'),
-        'secret' => env('RECAPTCHA_SECRET'),
+        'secret'   => env('RECAPTCHA_SECRET'),
+    ],
+
+    'telegram' => [
+        'token'    => env('TELEGRAM_BOT_TOKEN'),
+        'username' => env('TELEGRAM_BOT_USERNAME', 'YourBotUsername'),
     ],
 
 ];
+

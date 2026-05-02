@@ -18,7 +18,11 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'telegram_chat_id',
+        'telegram_connect_token',
+        'telegram_connected_at',
     ];
+
 
     /**
      * Hidden attributes
@@ -34,12 +38,22 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'last_login_at' => 'datetime',
-            'last_seen_at' => 'datetime',
+            'email_verified_at'      => 'datetime',
+            'password'               => 'hashed',
+            'last_login_at'          => 'datetime',
+            'last_seen_at'           => 'datetime',
+            'telegram_connected_at'  => 'datetime',
         ];
     }
+
+    /**
+     * Check if Telegram is connected
+     */
+    public function hasTelegramConnected(): bool
+    {
+        return ! empty($this->telegram_chat_id);
+    }
+
 
     /**
      * User → Role relationship
