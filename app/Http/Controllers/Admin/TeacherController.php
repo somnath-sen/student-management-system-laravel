@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\Subject;
@@ -54,12 +55,12 @@ class TeacherController extends Controller
         // 2. Auto-Generate a secure randomized password
         $generatedPassword = Str::random(10);
 
-        // 3. Create the User (Role 2 is typically Teacher)
+        // 3. Create the User (Role: Teacher)
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($generatedPassword),
-            'role_id'  => 2, // teacher role
+            'role_id'  => Role::where('name', 'teacher')->value('id'), // dynamic lookup
         ]);
 
         // 4. Create the Teacher Profile

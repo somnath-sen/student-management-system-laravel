@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,6 +11,8 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
+        $adminRoleId = Role::where('name', 'admin')->value('id') ?? 1;
+
         $admins = [
             // Primary demo admin
             [
@@ -29,7 +32,7 @@ class AdminSeeder extends Seeder
                 [
                     'name'     => $data['name'],
                     'password' => Hash::make('password'),
-                    'role_id'  => 1,
+                    'role_id'  => $adminRoleId,
                 ]
             );
         }

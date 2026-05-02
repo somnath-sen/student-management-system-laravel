@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Course;
@@ -64,7 +65,7 @@ class StudentController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($generatedPassword), // Securely Hashed
-            'role_id'  => 3, // student role
+            'role_id'  => Role::where('name', 'student')->value('id'), // dynamic lookup
         ]);
 
         // 4. Create the Student Profile (Academic Level)
