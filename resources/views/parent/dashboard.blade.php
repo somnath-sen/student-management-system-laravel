@@ -485,7 +485,7 @@
                         <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
                             <p class="text-[10px] font-black text-blue-500 uppercase tracking-wider mb-1">Last Alert</p>
                             <p class="text-sm font-bold text-slate-700">{{ $lastParentAlert->sent_at?->diffForHumans() }}</p>
-                            <p class="text-[10px] text-slate-400 mt-1 line-clamp-2">{{ Str::limit($lastParentAlert->message, 80) }}</p>
+                            <p class="text-[10px] text-slate-400 mt-1 line-clamp-2">{{ \Illuminate\Support\Str::limit($lastParentAlert->message, 80) }}</p>
                         </div>
                         @endif
                         <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-start gap-3">
