@@ -8,14 +8,17 @@ use Illuminate\Support\Facades\Log;
 
 class TelegramService
 {
-    protected string $apiUrl;
-    protected string $token;
+    protected string $apiUrl = '';
+    protected string $token  = '';
 
     public function __construct()
     {
-        $this->token  = config('services.telegram.token', '');
-        $this->apiUrl = "https://api.telegram.org/bot{$this->token}";
+        // config() returns null when env var is absent (e.g. during Docker build).
+        // Use ?? '' to coerce null → '' so the strict string type is satisfied.
+        $this->token  = config('services.telegram.token') ?? '';
+        $this->apiUrl = 'https://api.telegram.org/bot' . $this->token;
     }
+
 
     /**
      * Send a Telegram message to a chat ID.
