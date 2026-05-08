@@ -602,63 +602,19 @@
                         <i class="fa-solid fa-moon text-lg dark:hidden"></i>
                         <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i>
                     </button>
-                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-none p-1">
-                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-2xl transition-transform duration-300"></i>
+                    <button id="mobile-menu-btn" class="w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 shadow-sm">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-base transition-transform duration-300"></i>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div id="mobileMenu" class="fixed inset-0 z-40 bg-white/95 dark:bg-black/95 backdrop-blur-2xl transform translate-x-full transition-transform duration-500 ease-in-out md:hidden flex flex-col overflow-hidden">
-        <!-- Ambient Colorful Glowing Orbs inside Mobile Menu -->
-        <div class="absolute inset-0 z-0 pointer-events-none opacity-60">
-            <div class="absolute top-[10%] -left-[20%] w-[300px] h-[300px] bg-brand-500/30 rounded-full blur-[80px] mix-blend-screen animate-[pulse_6s_infinite]"></div>
-            <div class="absolute bottom-[20%] -right-[20%] w-[350px] h-[350px] bg-purple-600/30 rounded-full blur-[80px] mix-blend-screen animate-[pulse_8s_infinite_reverse]"></div>
-        </div>
 
-        <div class="relative z-10 flex flex-col h-full pt-32 px-8 pb-10 overflow-y-auto hide-scrollbar">
-            <!-- Navigation Links -->
-            <div class="flex flex-col space-y-8 flex-1 text-center mt-4">
-                <a href="#features" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
-                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Features</span>
-                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">Features</span>
-                </a>
-                <a href="#testimonials" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
-                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Testimonials</span>
-                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">Testimonials</span>
-                </a>
-                <a href="#stats" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
-                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Analytics</span>
-                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">Analytics</span>
-                </a>
-                <a href="#faq" class="mobile-link group relative inline-block text-4xl font-black text-gray-900 dark:text-white tracking-tight hover:scale-105 transition-transform duration-300">
-                    <span class="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">FAQ</span>
-                    <span class="relative group-hover:opacity-0 transition-opacity duration-300">FAQ</span>
-                </a>
-            </div>
-            
-            <!-- Bottom Auth Buttons & Footer -->
-            <div class="mt-auto pt-10 flex flex-col gap-4">
-                <button onclick="toggleRegisterModal(); toggleMobileMenu();" class="relative group w-full py-4 rounded-2xl bg-white dark:bg-white/5 text-gray-900 dark:text-white font-black text-lg transition-all border border-gray-200 dark:border-white/10 hover:border-brand-500 shadow-sm overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <span class="relative z-10">Create Account</span>
-                </button>
-                <a href="/login" class="relative block text-center group w-full py-4 rounded-2xl text-white font-black text-lg transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-brand-600 to-purple-600 group-hover:scale-105 transition-transform duration-500"></div>
-                    <span class="relative z-10 flex items-center justify-center gap-2">
-                        Log In <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
-                    </span>
-                </a>
-                
-                <div class="mt-8 flex items-center justify-center gap-6 text-2xl text-gray-400">
-                    <a href="https://www.facebook.com/thesomishere/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://github.com/somnath-sen/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/thesomishere/" target="_blank" class="hover:text-brand-500 transition-colors"><i class="fa-brands fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+
+
 
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -749,6 +705,152 @@
             </div>
         </div>
     </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         FIXED MOBILE BOTTOM NAVIGATION BAR
+         Only on mobile (< 768 px). Stays fixed at bottom of viewport.
+         Page content scrolls freely above it.
+    ═══════════════════════════════════════════════════════════════ -->
+    <style>
+        /* ── Fixed bottom bar: mobile only ── */
+        #mob-bottom-bar {
+            display: none;
+        }
+        @media (max-width: 767px) {
+            #mob-bottom-bar {
+                display: block;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 9990;
+            }
+            /* Push page content above bar so nothing hides behind it */
+            body { padding-bottom: 160px; }
+        }
+
+        /* Wave SVG shape at top of bar */
+        #mob-bottom-bar .mbb-wave {
+            display: block;
+            width: 100%;
+            line-height: 0;
+            filter: drop-shadow(0 -4px 16px rgba(99,102,241,0.15));
+        }
+
+        /* Body of the bar */
+        #mob-bottom-bar .mbb-body {
+            background: linear-gradient(160deg,#eef2ff 0%,#ede9fe 45%,#dbeafe 100%);
+            padding: 4px 12px 12px;
+        }
+        .dark #mob-bottom-bar .mbb-body {
+            background: linear-gradient(160deg,#0f172a 0%,#1e1b4b 50%,#0c1a3a 100%);
+        }
+
+        /* Grid layouts */
+        #mob-bottom-bar .mbb-row1 {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 7px;
+            margin-bottom: 7px;
+        }
+        #mob-bottom-bar .mbb-row2 {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 7px;
+        }
+
+        /* Each card */
+        .mbb-card {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(255,255,255,0.95);
+            border-radius: 14px;
+            padding: 9px 6px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(99,102,241,0.10), inset 0 1px 0 rgba(255,255,255,1);
+            transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .dark .mbb-card {
+            background: rgba(30,27,75,0.80);
+            border-color: rgba(99,102,241,0.2);
+        }
+        .mbb-card:hover  { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 24px rgba(99,102,241,0.20); }
+        .mbb-card:active { transform: scale(0.94); }
+
+        /* Icon pill */
+        .mbb-icon {
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; color: #fff;
+            transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+        }
+        .mbb-card:hover .mbb-icon { transform: scale(1.15) rotate(-5deg); }
+        .mbb-i-blue   { background: linear-gradient(135deg,#3b82f6,#6366f1); box-shadow:0 3px 10px rgba(99,102,241,.35); }
+        .mbb-i-purple { background: linear-gradient(135deg,#8b5cf6,#a855f7); box-shadow:0 3px 10px rgba(168,85,247,.35); }
+        .mbb-i-rose   { background: linear-gradient(135deg,#f43f5e,#e11d48); box-shadow:0 3px 10px rgba(244,63,94,.35); }
+        .mbb-i-green  { background: linear-gradient(135deg,#10b981,#059669); box-shadow:0 3px 10px rgba(16,185,129,.35); }
+        .mbb-i-amber  { background: linear-gradient(135deg,#f59e0b,#d97706); box-shadow:0 3px 10px rgba(245,158,11,.35); }
+
+        /* Label */
+        .mbb-label {
+            font-size: 10px; font-weight: 700;
+            color: #1e1b4b; text-align: center; line-height: 1.2;
+        }
+        .dark .mbb-label { color: #e0e7ff; }
+    </style>
+
+    <!-- Fixed bottom bar HTML -->
+    <div id="mob-bottom-bar" aria-label="Quick Navigation" role="navigation">
+        <!-- Wave top edge -->
+        <svg class="mbb-wave" viewBox="0 0 390 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="height:20px;">
+            <path d="M0,10 C65,20 130,0 195,10 C260,20 325,0 390,10 L390,20 L0,20 Z"
+                  fill="#eef2ff" class="dark:hidden"/>
+            <path d="M0,10 C65,20 130,0 195,10 C260,20 325,0 390,10 L390,20 L0,20 Z"
+                  fill="#0f172a" class="hidden dark:block"/>
+        </svg>
+        <div class="mbb-body">
+            <!-- Row 1: Features · Testimonials · Log In -->
+            <div class="mbb-row1">
+                <a href="#features" id="mbb-features" class="mbb-card" aria-label="Features">
+                    <div class="mbb-icon mbb-i-blue"><i class="fa-solid fa-grip"></i></div>
+                    <span class="mbb-label">Features</span>
+                </a>
+                <a href="#testimonials" id="mbb-testimonials" class="mbb-card" aria-label="Testimonials">
+                    <div class="mbb-icon mbb-i-purple"><i class="fa-solid fa-users"></i></div>
+                    <span class="mbb-label">Testimonials</span>
+                </a>
+                <a href="/login" id="mbb-login" class="mbb-card" aria-label="Log In">
+                    <div class="mbb-icon mbb-i-rose"><i class="fa-solid fa-user"></i></div>
+                    <span class="mbb-label">Log in</span>
+                </a>
+            </div>
+            <!-- Row 2: Create Account · Analytics -->
+            <div class="mbb-row2">
+                <button onclick="toggleRegisterModal()" id="mbb-register" class="mbb-card w-full" aria-label="Create Account">
+                    <div class="mbb-icon mbb-i-green"><i class="fa-solid fa-user-plus"></i></div>
+                    <span class="mbb-label">Create Account</span>
+                </button>
+                <a href="#stats" id="mbb-analytics" class="mbb-card" aria-label="Analytics">
+                    <div class="mbb-icon mbb-i-amber"><i class="fa-solid fa-chart-line"></i></div>
+                    <span class="mbb-label">Analytics</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /mob-bottom-bar -->
+
+
+
 
     <div class="relative py-4 overflow-hidden border-y border-white/20 group cursor-pointer text-sm shadow-2xl shadow-brand-500/20">
         <!-- Animated vibrant background -->
@@ -2029,41 +2131,48 @@
         themeToggleBtn.addEventListener('click', toggleTheme);
         themeToggleMobile.addEventListener('click', toggleTheme);
 
-        /* Mobile Menu Toggle Logic */
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-        let isMobileMenuOpen = false;
-
-        function toggleMobileMenu() {
-            isMobileMenuOpen = !isMobileMenuOpen;
-            if (isMobileMenuOpen) {
-                mobileMenu.classList.remove('translate-x-full');
-                mobileMenu.classList.add('translate-x-0');
-                mobileMenuIcon.classList.remove('fa-bars');
-                mobileMenuIcon.classList.add('fa-xmark');
-                document.body.style.overflow = 'hidden';
-            } else {
-                mobileMenu.classList.remove('translate-x-0');
-                mobileMenu.classList.add('translate-x-full');
-                mobileMenuIcon.classList.remove('fa-xmark');
-                mobileMenuIcon.classList.add('fa-bars');
-                if (!document.querySelectorAll('.custom-modal:not(.hidden)').length) {
-                    document.body.style.overflow = 'auto';
+        /* ─────────────────────────────────────────────────────────────
+           FIXED MOBILE BOTTOM BAR – smooth-scroll + ripple
+        ───────────────────────────────────────────────────────────── */
+        (function initMobBottomBar() {
+            const cards = document.querySelectorAll('.mbb-card');
+            if (!cards.length) return;
+            cards.forEach(card => {
+                // Smooth scroll for anchor hrefs
+                const href = card.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    card.addEventListener('click', e => {
+                        e.preventDefault();
+                        const t = document.querySelector(href);
+                        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
                 }
-            }
+                // Ripple on tap
+                card.addEventListener('pointerdown', e => {
+                    const r = document.createElement('span');
+                    const rect = card.getBoundingClientRect();
+                    const sz = Math.max(rect.width, rect.height);
+                    r.style.cssText = `position:absolute;border-radius:50%;pointer-events:none;width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px;background:rgba(99,102,241,0.15);transform:scale(0);transition:transform .5s ease,opacity .5s ease;opacity:1`;
+                    card.appendChild(r);
+                    requestAnimationFrame(() => { r.style.transform = 'scale(2.5)'; r.style.opacity = '0'; });
+                    setTimeout(() => r.remove(), 600);
+                });
+            });
+        })();
+
+        /* Mobile hamburger button – currently unused (no slide menu on homepage).
+           Wired up in case a slide menu is re-added later. */
+        const mobileMenuBtn  = document.getElementById('mobile-menu-btn');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                /* placeholder – can open a side drawer in future */
+                mobileMenuIcon.classList.toggle('fa-bars');
+                mobileMenuIcon.classList.toggle('fa-xmark');
+            });
         }
 
-        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
 
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if(isMobileMenuOpen) toggleMobileMenu();
-            });
-        });
-
-        /* Newsletter Logic */
         const form = document.getElementById('newsletterForm');
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyzMyhmjvyiDU1n8oZGtKIlzbEFeXNgXfJDemrfxcyUW3NF-Q0qcJ9qWWIXhmiV2ZAV1w/exec'; 
         const successModal = document.getElementById('successModal');
