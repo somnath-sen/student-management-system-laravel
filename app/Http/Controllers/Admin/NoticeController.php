@@ -29,9 +29,9 @@ class NoticeController extends Controller
         ]);
 
         Notice::create([
-            'title'    => $request->title,
-            'category' => $request->category,
-            'content'  => $request->content,
+            'title'    => $request->input('title'),
+            'category' => $request->input('category'),
+            'content'  => $request->input('content'),
             'user_id'  => Auth::id(),
         ]);
 
