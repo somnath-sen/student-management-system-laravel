@@ -632,12 +632,18 @@
                 Admissions, attendance, fees, and examinations in one sleek cloud platform. Built for modern institutions that value design and speed.
             </p>
 
-            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style="animation-delay: 0.3s;">
-                <button onclick="toggleRegisterModal()" class="px-8 py-3.5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-sm hover:scale-105 transition-transform shadow-lg shadow-gray-900/20 dark:shadow-white/10">
-                    Apply Now
+            <div class="flex flex-row flex-wrap justify-center gap-3 animate-fade-in" style="animation-delay: 0.3s;">
+                <button onclick="toggleRegisterModal()" class="w-72 flex items-center justify-between px-7 py-4 rounded-full bg-gray-900 dark:bg-gray-950 text-white font-bold text-base hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 shadow-xl shadow-gray-900/30 group">
+                    <span>Apply Now</span>
+                    <span class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
+                        <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-0.5 transition-transform"></i>
+                    </span>
                 </button>
-                <a href="#features" class="px-8 py-3.5 rounded-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors inline-block leading-normal">
-                    Explore Features
+                <a href="#features" class="w-72 flex items-center justify-between px-7 py-4 rounded-full bg-white dark:bg-white/5 text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 font-bold text-base hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-300 shadow-lg shadow-gray-200/60 dark:shadow-none group">
+                    <span>Explore Features</span>
+                    <span class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 group-hover:bg-gray-200 dark:group-hover:bg-white/20 transition-colors">
+                        <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-0.5 transition-transform"></i>
+                    </span>
                 </a>
             </div>
 
@@ -807,6 +813,15 @@
             color: #1e1b4b; text-align: center; line-height: 1.2;
         }
         .dark .mbb-label { color: #e0e7ff; }
+
+        /* ── Botpress chatbot: float at top-right of wave nav on mobile ── */
+        @media (max-width: 767px) {
+            #bp-web-widget-container {
+                bottom: 148px !important;  /* sits right at / overlapping the wave top-right */
+                right: 10px !important;
+                z-index: 9995 !important;
+            }
+        }
     </style>
 
     <!-- Fixed bottom bar HTML -->
@@ -2034,7 +2049,32 @@
                         showPoweredBy: false
                     });
                 }
-            }, 500); 
+            }, 500);
+
+            // ── Force bot position on mobile via JS (CSS can't override Botpress inline styles) ──
+            function applyBotMobilePos() {
+                if (window.innerWidth > 767) return; // desktop: leave as-is
+                const container = document.getElementById('bp-web-widget-container');
+                if (container) {
+                    container.style.setProperty('bottom', '148px', 'important');
+                    container.style.setProperty('right',  '10px',  'important');
+                    container.style.setProperty('z-index','9995',   'important');
+                }
+            }
+
+            // Apply once the widget appears in the DOM
+            const observer = new MutationObserver(() => applyBotMobilePos());
+            observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+
+            // Also reapply on resize
+            window.addEventListener('resize', applyBotMobilePos);
+
+            // Poll briefly after load to catch late injection
+            let polls = 0;
+            const pollPos = setInterval(() => {
+                applyBotMobilePos();
+                if (++polls >= 20) clearInterval(pollPos);
+            }, 500);
         });
 
         // FAQ Accordion Logic
