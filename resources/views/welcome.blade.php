@@ -620,7 +620,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 dark:bg-white/5 backdrop-blur-md border border-gray-200/50 dark:border-white/10 shadow-sm mb-8 animate-fade-in">
                 <span class="w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">EdFlow v2.5.1 Live</span>
+                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">EdFlow v2.6.2 Live</span>
             </div>
 
             <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white mb-6 animate-fade-in leading-tight md:leading-tight" style="animation-delay: 0.1s;">
@@ -741,7 +741,8 @@
             display: block;
             width: 100%;
             line-height: 0;
-            filter: drop-shadow(0 -4px 16px rgba(99,102,241,0.15));
+            overflow: hidden;
+            filter: drop-shadow(0 -6px 18px rgba(99,102,241,0.20));
         }
 
         /* Body of the bar */
@@ -826,13 +827,45 @@
 
     <!-- Fixed bottom bar HTML -->
     <div id="mob-bottom-bar" aria-label="Quick Navigation" role="navigation">
-        <!-- Wave top edge -->
-        <svg class="mbb-wave" viewBox="0 0 390 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="height:20px;">
-            <path d="M0,10 C65,20 130,0 195,10 C260,20 325,0 390,10 L390,20 L0,20 Z"
-                  fill="#eef2ff" class="dark:hidden"/>
-            <path d="M0,10 C65,20 130,0 195,10 C260,20 325,0 390,10 L390,20 L0,20 Z"
-                  fill="#0f172a" class="hidden dark:block"/>
-        </svg>
+        <!-- Animated Water Flow Wave -->
+        <div class="mbb-wave" style="height:32px; position:relative; overflow:hidden;">
+
+            <!-- LIGHT MODE waves -->
+            <svg class="dark:hidden" style="position:absolute;bottom:0;left:0;width:200%;height:100%;" viewBox="0 0 780 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Back wave: slower, lighter -->
+                <path fill="#c7d2fe" fill-opacity="0.5"
+                      d="M0,16 C65,28 130,4 195,16 C260,28 325,4 390,16 C455,28 520,4 585,16 C650,28 715,4 780,16 L780,32 L0,32 Z">
+                    <animateTransform attributeName="transform" type="translate" from="0,0" to="-390,0" dur="4s" repeatCount="indefinite"/>
+                </path>
+                <!-- Front wave: faster, solid fill -->
+                <path fill="#eef2ff"
+                      d="M0,18 C50,8 100,28 155,18 C210,8 265,28 320,18 C375,8 430,28 485,18 C540,8 595,28 650,18 C705,8 760,28 780,18 L780,32 L0,32 Z">
+                    <animateTransform attributeName="transform" type="translate" from="0,0" to="-390,0" dur="2.5s" repeatCount="indefinite"/>
+                </path>
+                <!-- Shimmer highlight -->
+                <path fill="white" fill-opacity="0.35"
+                      d="M0,20 C80,12 160,26 240,20 C320,14 400,26 480,20 C560,14 640,26 720,20 L780,20 L780,32 L0,32 Z">
+                    <animateTransform attributeName="transform" type="translate" from="-390,0" to="0,0" dur="3.5s" repeatCount="indefinite"/>
+                </path>
+            </svg>
+
+            <!-- DARK MODE waves -->
+            <svg class="hidden dark:block" style="position:absolute;bottom:0;left:0;width:200%;height:100%;" viewBox="0 0 780 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#1e1b4b" fill-opacity="0.6"
+                      d="M0,16 C65,28 130,4 195,16 C260,28 325,4 390,16 C455,28 520,4 585,16 C650,28 715,4 780,16 L780,32 L0,32 Z">
+                    <animateTransform attributeName="transform" type="translate" from="0,0" to="-390,0" dur="4s" repeatCount="indefinite"/>
+                </path>
+                <path fill="#0f172a"
+                      d="M0,18 C50,8 100,28 155,18 C210,8 265,28 320,18 C375,8 430,28 485,18 C540,8 595,28 650,18 C705,8 760,28 780,18 L780,32 L0,32 Z">
+                    <animateTransform attributeName="transform" type="translate" from="0,0" to="-390,0" dur="2.5s" repeatCount="indefinite"/>
+                </path>
+                <path fill="#6366f1" fill-opacity="0.08"
+                      d="M0,20 C80,12 160,26 240,20 C320,14 400,26 480,20 C560,14 640,26 720,20 L780,20 L780,32 L0,32 Z">
+                    <animateTransform attributeName="transform" type="translate" from="-390,0" to="0,0" dur="3.5s" repeatCount="indefinite"/>
+                </path>
+            </svg>
+
+        </div>
         <div class="mbb-body">
             <!-- Row 1: Features · Testimonials · Log In -->
             <div class="mbb-row1">
