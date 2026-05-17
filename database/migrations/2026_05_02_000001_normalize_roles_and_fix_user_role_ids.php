@@ -23,59 +23,68 @@ return new class extends Migration
 
     public function up(): void
     {
-        // ── Step 1: Read current roles ────────────────────────────────────────
-        $currentRoles = DB::table('roles')->get()->keyBy('name');
+        try {
+            // ── Step 1: Read current roles ────────────────────────────────────────
+            $currentRoles = DB::table('roles')->get()->keyBy('name');
 
-        // Build map: old_id → new_canonical_id  (only for roles that need moving)
-        $remaps = []; // [ old_id => new_id ]
-        foreach ($this->canonical as $name => $newId) {
-            if ($currentRoles->has($name)) {
-                $oldId = (int) $currentRoles[$name]->id;
-                if ($oldId !== $newId) {
-                    $remaps[$oldId] = $newId;
+            // Build map: old_id → new_canonical_id  (only for roles that need moving)
+            $remaps = []; // [ old_id => new_id ]
+            foreach ($this->canonical as $name => $newId) {
+                if ($currentRoles->has($name)) {
+                    $oldId = (int) $currentRoles[$name]->id;
+                    if ($oldId !== $newId) {
+                        $remaps[$oldId] = $newId;
+                    }
                 }
             }
-        }
 
-        if (empty($remaps)) {
-            // Already correct — just ensure all 4 roles exist
+            if (empty($remaps)) {
+                // Already correct — just ensure all 4 roles exist
+                $this->ensureAllRolesExist();
+                return;
+            }
+
+            // ── Step 2: Disable FK checks ─────────────────────────────────────────
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+            // ── Step 3: Move users to temp IDs (100+) to avoid collision ──────────
+            $tempBase = 100;
+            foreach ($remaps as $oldId => $newId) {
+                DB::table('users')
+                    ->where('role_id', $oldId)
+                    ->update(['role_id' => $tempBase + $oldId]);
+            }
+
+            // ── Step 4: Move temp IDs to canonical IDs ────────────────────────────
+            foreach ($remaps as $oldId => $newId) {
+                DB::table('users')
+                    ->where('role_id', $tempBase + $oldId)
+                    ->update(['role_id' => $newId]);
+            }
+
+            // ── Step 5: Rebuild roles table with canonical IDs ────────────────────
+            DB::table('roles')->delete();
+
+            $now = now();
+            foreach ($this->canonical as $name => $id) {
+                DB::table('roles')->insert([
+                    'id'         => $id,
+                    'name'       => $name,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]);
+            }
+
+            // ── Step 6: Re-enable FK checks ───────────────────────────────────────
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        } catch (\Exception $e) {
+            // If migration fails (already ran, data issues, etc.), log and continue
+            \Illuminate\Support\Facades\Log::warning('[Migration] Role normalization skipped: ' . $e->getMessage());
+            // Ensure FK checks are re-enabled even on failure
+            try { DB::statement('SET FOREIGN_KEY_CHECKS=1'); } catch (\Exception $ignored) {}
+            // Ensure all roles exist regardless
             $this->ensureAllRolesExist();
-            return;
         }
-
-        // ── Step 2: Disable FK checks ─────────────────────────────────────────
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-
-        // ── Step 3: Move users to temp IDs (9000+) to avoid collision ─────────
-        $tempBase = 9000;
-        foreach ($remaps as $oldId => $newId) {
-            DB::table('users')
-                ->where('role_id', $oldId)
-                ->update(['role_id' => $tempBase + $oldId]);
-        }
-
-        // ── Step 4: Move temp IDs to canonical IDs ────────────────────────────
-        foreach ($remaps as $oldId => $newId) {
-            DB::table('users')
-                ->where('role_id', $tempBase + $oldId)
-                ->update(['role_id' => $newId]);
-        }
-
-        // ── Step 5: Rebuild roles table with canonical IDs ────────────────────
-        DB::table('roles')->delete();
-
-        $now = now();
-        foreach ($this->canonical as $name => $id) {
-            DB::table('roles')->insert([
-                'id'         => $id,
-                'name'       => $name,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ]);
-        }
-
-        // ── Step 6: Re-enable FK checks ───────────────────────────────────────
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 
     /**

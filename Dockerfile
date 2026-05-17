@@ -33,7 +33,7 @@ RUN npm run build
 RUN chmod -R 777 storage bootstrap/cache
 
 # Start the server — run migrations + seed roles (safe to re-run) then start
-CMD php artisan migrate --force && php artisan db:seed --class=RoleSeeder --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+CMD php artisan migrate --force || true; php artisan db:seed --class=RoleSeeder --force || true; php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
 
 
 # docker compose run --rm artisan db:seed

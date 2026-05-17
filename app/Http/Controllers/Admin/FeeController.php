@@ -19,8 +19,12 @@ class FeeController extends Controller
         $fees = Fee::with('course')->latest()->get();
         $courses = Course::all();
 
-        // Fetch all successful payments with student details
-        $payments = FeePayment::with(['student', 'fee'])->latest()->get();
+        // Fetch all payments with student details, filtering out orphaned records
+        $payments = FeePayment::with(['student', 'fee'])
+            ->whereHas('student')
+            ->whereHas('fee')
+            ->latest()
+            ->get();
         
         return view('admin.fees.index', compact('fees', 'courses', 'payments'));
     }

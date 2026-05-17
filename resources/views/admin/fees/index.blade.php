@@ -84,7 +84,7 @@
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="py-4 px-6">
                                         <div class="font-bold text-slate-900">{{ $fee->title }}</div>
-                                        <div class="text-xs text-slate-400 mt-0.5">Created {{ $fee->created_at->format('d M, Y') }}</div>
+                                        <div class="text-xs text-slate-400 mt-0.5">Created {{ $fee->created_at ? $fee->created_at->format('d M, Y') : 'N/A' }}</div>
                                     </td>
                                     <td class="py-4 px-6">
                                         <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold border border-emerald-100">
@@ -92,7 +92,7 @@
                                         </span>
                                     </td>
                                     <td class="py-4 px-6">
-                                        @if($fee->course_id)
+                                        @if($fee->course_id && $fee->course)
                                             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
                                                 <i class="fa-solid fa-book-open"></i> {{ $fee->course->name }}
                                             </span>
@@ -144,19 +144,20 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($payments as $payment)
+                            @if(!$payment->student || !$payment->fee) @continue @endif
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs">
-                                            {{ substr($payment->student->name, 0, 1) }}
+                                            {{ substr($payment->student->name ?? '?', 0, 1) }}
                                         </div>
                                         <div>
-                                            <div class="font-bold text-slate-900">{{ $payment->student->name }}</div>
-                                            <div class="text-xs text-slate-500">{{ $payment->student->email }}</div>
+                                            <div class="font-bold text-slate-900">{{ $payment->student->name ?? 'Deleted User' }}</div>
+                                            <div class="text-xs text-slate-500">{{ $payment->student->email ?? '—' }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-6 font-medium text-slate-700">{{ $payment->fee->title }}</td>
+                                <td class="py-4 px-6 font-medium text-slate-700">{{ $payment->fee->title ?? 'Deleted Fee' }}</td>
                                 <td class="py-4 px-6">
                                     <span class="font-bold text-slate-900">₹{{ number_format($payment->amount_paid, 2) }}</span>
                                     
@@ -187,7 +188,7 @@
                                             </form>
                                         </div>
                                     @else
-                                        <span class="text-sm font-medium text-slate-500">{{ $payment->created_at->format('d M Y') }}</span>
+                                        <span class="text-sm font-medium text-slate-500">{{ $payment->created_at ? $payment->created_at->format('d M Y') : '—' }}</span>
                                     @endif
                                 </td>
                             </tr>
