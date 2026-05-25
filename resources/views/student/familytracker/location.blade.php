@@ -4,8 +4,7 @@
 
 @section('content')
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
 
 <style>
     /* ── Fonts & Base ── */
@@ -35,32 +34,11 @@
     .pulse-ring    { animation: pulseRing 2s cubic-bezier(0.4,0,0.6,1) infinite; }
     .ping-dot      { animation: pingDot 1.5s ease-in-out infinite; }
 
-    /* ── Map ── */
-    #map {
-        height: 500px;
+    /* ── Map iframe ── */
+    #map-frame {
         width: 100%;
-        border-radius: 0;
-        z-index: 10;
-    }
-
-    /* ── Leaflet popup ── */
-    .leaflet-popup-content-wrapper {
-        border-radius: 14px;
-        box-shadow: 0 12px 28px -8px rgba(0,0,0,.14);
-    }
-    .leaflet-popup-content {
-        font-family: 'Inter', sans-serif;
-        margin: 14px 18px;
-    }
-
-    /* ── Marker pulse ── */
-    .marker-pulse {
-        width: 20px; height: 20px;
-        border-radius: 50%;
-        background: #e11d48;
-        border: 3px solid #fff;
-        box-shadow: 0 0 0 0 rgba(225,29,72,.7);
-        animation: pulseRing 2s infinite;
+        height: 500px;
+        border: 0;
     }
 
     /* ── Attribution link ── */
@@ -214,6 +192,19 @@
                         <p><span class="text-slate-400">Lat:</span> {{ $student->last_lat }}</p>
                         <p><span class="text-slate-400">Lng:</span> {{ $student->last_lng }}</p>
                     </div>
+                    {{-- Reverse geocoded address (populated by JS) --}}
+                    <div id="address-box" class="mt-3 hidden">
+                        <div class="bg-indigo-50 rounded-xl p-3 border border-indigo-100 text-xs text-indigo-800">
+                            <p class="font-bold text-[10px] text-indigo-400 uppercase tracking-wider mb-1">📍 Detected Address</p>
+                            <p id="address-text" class="font-semibold leading-relaxed"></p>
+                        </div>
+                    </div>
+                    {{-- Google Maps link --}}
+                    <a href="https://www.google.com/maps?q={{ $student->last_lat }},{{ $student->last_lng }}" target="_blank" rel="noopener noreferrer"
+                       class="mt-3 flex items-center justify-center gap-2 w-full py-2.5 bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
+                        <i class="fa-solid fa-diamond-turn-right"></i>
+                        Open in Google Maps
+                    </a>
                 @else
                     <div class="flex items-start gap-3">
                         <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center flex-shrink-0 border border-amber-100">
@@ -235,23 +226,29 @@
 
                 @if($student->last_lat && $student->last_lng)
 
-                    {{-- Map fills the card --}}
-                    <div id="map" class="w-full" style="height:500px; z-index:10;"></div>
+                    {{-- Google Maps embed iframe — perfect Indian place names, no API key --}}
+                    <iframe
+                        id="map-frame"
+                        src="https://maps.google.com/maps?q={{ $student->last_lat }},{{ $student->last_lng }}&z=17&output=embed&hl=en"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="w-full"
+                        style="height:500px; border:0;"
+                    ></iframe>
 
                     {{-- Live badge --}}
-                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-white/60 z-[400] flex items-center gap-2">
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-white/60 z-[20] flex items-center gap-2">
                         <span class="ping-dot w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
                         <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Live GPS</span>
                     </div>
 
-                    {{-- Map attribution overlay (bottom of map) --}}
-                    <div class="absolute bottom-0 inset-x-0 z-[400] px-4 py-2.5 bg-gradient-to-t from-black/30 to-transparent pointer-events-none">
+                    {{-- Google Maps attribution overlay --}}
+                    <div class="absolute bottom-0 inset-x-0 z-[20] px-4 py-2 bg-gradient-to-t from-black/30 to-transparent pointer-events-none">
                         <p class="text-white/80 text-[10px] font-medium text-right pointer-events-auto">
-                            &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer"
-                                class="underline hover:text-white transition-colors">OpenStreetMap</a>
-                            &nbsp;contributors &nbsp;|&nbsp;
-                            &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer"
-                                class="underline hover:text-white transition-colors">CARTO</a>
+                            Map data &copy; {{ date('Y') }}
+                            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer"
+                                class="underline hover:text-white transition-colors">Google</a>
                         </p>
                     </div>
 
@@ -272,26 +269,22 @@
             {{-- ── Map Attribution Card ── --}}
             <div class="mt-4 p-4 bg-white border border-[#F0EBE1] rounded-2xl shadow-sm animate-enter stagger-3">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-
-                    {{-- OSM/CARTO icon --}}
-                    <div class="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100">
-                        <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+                    <div class="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-blue-50 border border-blue-100">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" fill="#4285F4"/>
                         </svg>
                     </div>
-
                     <div class="flex-1 min-w-0">
                         <p class="text-slate-700 text-sm font-semibold mb-0.5">
-                            🗺️ Powered by OpenStreetMap &amp; CARTO
+                            🗺️ Powered by Google Maps
                         </p>
                         <p class="text-slate-400 text-xs leading-relaxed">
-                            Map tiles are provided by
-                            <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="attr-link font-semibold">CARTO Voyager</a>,
-                            using map data from
-                            <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="attr-link font-semibold">OpenStreetMap</a>
-                            contributors, licensed under
-                            <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener noreferrer" class="attr-link">ODbL</a>.
-                            We are grateful to the OSM community for making open geospatial data freely available.
+                            Map is provided by
+                            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="attr-link font-semibold">Google Maps</a>.
+                            We are grateful to Google for their accurate mapping services with detailed Indian place names and landmarks.
+                            Address resolution uses
+                            <a href="https://nominatim.org" target="_blank" rel="noopener noreferrer" class="attr-link">Nominatim</a>
+                            with <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="attr-link">OpenStreetMap</a> data.
                         </p>
                     </div>
                 </div>
@@ -306,9 +299,9 @@
             &copy; {{ date('Y') }} EdFlow Campus Management System. All rights reserved.
         </p>
         <p class="text-[11px] text-slate-300 mt-1">
-            Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">OpenStreetMap</a> contributors
+            Map &copy; <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">Google Maps</a>
             &nbsp;&middot;&nbsp;
-            Tiles &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">CARTO</a>
+            Address data via <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">OpenStreetMap</a>
             &nbsp;&middot;&nbsp;
             Location data is only shared with authorised family members.
         </p>
@@ -323,9 +316,6 @@
     <input type="hidden" name="lat" id="lat-input">
     <input type="hidden" name="lng" id="lng-input">
 </form>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
     // ── Geolocation (Ping button) ─────────────────────────────────────
@@ -377,47 +367,30 @@
         btn.disabled  = false;
     }
 
-    // ── Map Init ─────────────────────────────────────────────────────
+    // ── Reverse Geocoding (fetch address from coordinates) ───────────
     @if($student->last_lat && $student->last_lng)
     document.addEventListener('DOMContentLoaded', function () {
         var lat = {{ floatval($student->last_lat) }};
         var lng = {{ floatval($student->last_lng) }};
 
-        var map = L.map('map', { zoomControl: false }).setView([lat, lng], 17);
-
-        // Carto Voyager — free, reliable, clean Google-Maps-like style, no API key needed
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20,
-            subdomains: 'abcd',
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
-        }).addTo(map);
-
-        // Custom zoom control (top-left)
-        L.control.zoom({ position: 'topleft' }).addTo(map);
-
-        // Pulsing marker — inline styles for reliable rendering in Leaflet DivIcon
-        var customIcon = L.divIcon({
-            className: 'custom-div-icon',
-            html: "<div style='background-color:#e11d48; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 0 0 0 rgba(225,29,72,0.7); animation:pulseRing 2s infinite;'></div>",
-            iconSize:   [22, 22],
-            iconAnchor: [11, 11],
-            popupAnchor:[0, -14]
+        // Nominatim reverse geocode to show actual place name
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=en', {
+            headers: { 'Accept-Language': 'en' }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data && data.display_name) {
+                var addrBox  = document.getElementById('address-box');
+                var addrText = document.getElementById('address-text');
+                if (addrBox && addrText) {
+                    addrText.textContent = data.display_name;
+                    addrBox.classList.remove('hidden');
+                }
+            }
+        })
+        .catch(function(err) {
+            console.warn('[ReverseGeocode] Failed:', err);
         });
-
-        var marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
-
-        marker.bindPopup(`
-            <div style="text-align:center; min-width:140px;">
-                <p style="font-weight:800; font-size:13px; color:#0f172a; margin:0 0 4px;">{{ $student->user->name }}</p>
-                <p style="font-size:11px; color:#64748b; margin:0 0 6px;">Last Known Safe Location</p>
-                <p style="font-size:10px; color:#94a3b8; font-weight:600; margin:0;">
-                    {{ $student->location_updated_at?->timezone('Asia/Kolkata')->format('d M Y, h:i A') ?? '' }}
-                </p>
-            </div>`).openPopup();
-
-        // Force map to recalculate size — critical for absolute/flex containers
-        setTimeout(() => map.invalidateSize(), 100);
-        setTimeout(() => map.invalidateSize(), 500);
     });
     @endif
 </script>
