@@ -37,8 +37,7 @@
 
     /* ── Map ── */
     #map {
-        height: 100%;
-        min-height: 480px;
+        height: 500px;
         width: 100%;
         border-radius: 0;
         z-index: 10;
@@ -237,7 +236,7 @@
                 @if($student->last_lat && $student->last_lng)
 
                     {{-- Map fills the card --}}
-                    <div id="map" class="w-full absolute inset-0 z-0" style="height:100%; min-height:480px;"></div>
+                    <div id="map" class="w-full" style="height:500px; z-index:10;"></div>
 
                     {{-- Live badge --}}
                     <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-white/60 z-[400] flex items-center gap-2">
@@ -380,21 +379,37 @@
 
         var map = L.map('map', { zoomControl: false }).setView([lat, lng], 17);
 
-        // Google Maps standard tile layer
-        L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        // Google Maps standard tile layer — with OSM fallback if blocked
+        var googleLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             maxZoom: 20,
             attribution: 'Map data &copy; <a href="https://www.google.com/maps" target="_blank">Google Maps</a>'
-        }).addTo(map);
+        });
+
+        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        // Try Google first; fall back to OSM after 5 s if no tiles load
+        googleLayer.addTo(map);
+        var googleLoaded = false;
+        googleLayer.on('tileload', function() { googleLoaded = true; });
+        setTimeout(function() {
+            if (!googleLoaded) {
+                map.removeLayer(googleLayer);
+                osmLayer.addTo(map);
+            }
+        }, 5000);
 
         // Custom zoom control (top-left)
         L.control.zoom({ position: 'topleft' }).addTo(map);
 
-        // Pulsing marker
+        // Pulsing marker — inline styles for reliable rendering in Leaflet DivIcon
         var customIcon = L.divIcon({
-            className: '',
-            html: '<div class="marker-pulse"></div>',
-            iconSize:   [20, 20],
-            iconAnchor: [10, 10],
+            className: 'custom-div-icon',
+            html: "<div style='background-color:#e11d48; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 0 0 0 rgba(225,29,72,0.7); animation:pulseRing 2s infinite;'></div>",
+            iconSize:   [22, 22],
+            iconAnchor: [11, 11],
             popupAnchor:[0, -14]
         });
 
@@ -409,7 +424,9 @@
                 </p>
             </div>`).openPopup();
 
-        setTimeout(() => map.invalidateSize(), 250);
+        // Force map to recalculate size — critical for absolute/flex containers
+        setTimeout(() => map.invalidateSize(), 100);
+        setTimeout(() => map.invalidateSize(), 500);
     });
     @endif
 </script>
