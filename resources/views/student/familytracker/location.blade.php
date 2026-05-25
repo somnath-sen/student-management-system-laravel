@@ -323,7 +323,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
-    // ── Geolocation ──────────────────────────────────────────────────
+    // ── Geolocation (Ping button) ─────────────────────────────────────
     function getLocation() {
         const btn    = document.getElementById('ping-btn');
         const status = document.getElementById('geo-status');
@@ -333,40 +333,41 @@
         status.classList.add('hidden');
 
         if (!navigator.geolocation) {
-            status.innerHTML = 'Geolocation is not supported by your browser.';
-            status.classList.remove('hidden');
-            resetButton(btn);
+            showGeoStatus('Geolocation is not supported by your browser.', 'error');
+            resetPingBtn();
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(showPosition, showError, {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0
-        });
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                showGeoStatus('✓ Location acquired — saving…', 'success');
+                document.getElementById('lat-input').value = position.coords.latitude;
+                document.getElementById('lng-input').value = position.coords.longitude;
+                document.getElementById('location-form').submit();
+            },
+            function(error) {
+                const msgs = {
+                    1: '⚠ Location denied — please allow access in your browser settings.',
+                    2: '⚠ Location unavailable. Are you indoors or on a desktop without GPS?',
+                    3: '⚠ GPS request timed out. Please try again.',
+                };
+                showGeoStatus(msgs[error.code] || '⚠ An unknown error occurred.', 'error');
+                resetPingBtn();
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
     }
 
-    function showPosition(position) {
-        document.getElementById('lat-input').value = position.coords.latitude;
-        document.getElementById('lng-input').value = position.coords.longitude;
-        document.getElementById('location-form').submit();
+    function showGeoStatus(msg, type) {
+        const el = document.getElementById('geo-status');
+        el.innerHTML  = msg;
+        el.className  = 'text-xs font-semibold mt-2 leading-relaxed ' +
+                        (type === 'error' ? 'text-rose-500' : 'text-emerald-600');
+        el.classList.remove('hidden');
     }
 
-    function showError(error) {
-        const btn    = document.getElementById('ping-btn');
-        const status = document.getElementById('geo-status');
-        const msgs   = {
-            [error.PERMISSION_DENIED]:      'Location denied — please allow access in your browser settings.',
-            [error.POSITION_UNAVAILABLE]:   'Location unavailable. Are you on a desktop without GPS?',
-            [error.TIMEOUT]:                'GPS request timed out. Please try again.',
-            [error.UNKNOWN_ERROR]:          'An unknown error occurred.',
-        };
-        status.innerHTML = msgs[error.code] || 'An error occurred.';
-        status.classList.remove('hidden');
-        resetButton(btn);
-    }
-
-    function resetButton(btn) {
+    function resetPingBtn() {
+        const btn = document.getElementById('ping-btn');
         btn.innerHTML = '<i class="fa-solid fa-satellite"></i> Ping My Location Now';
         btn.disabled  = false;
     }
@@ -433,6 +434,36 @@
 
 <script>
     // ── Panic / SOS ──────────────────────────────────────────────────
+    const PANIC_BTN_ORIGINAL = `
+        <span class="relative z-10 flex items-center gap-3">
+            <i class="fa-solid fa-exclamation-triangle text-lg"></i>
+            <span>PANIC — Send SOS</span>
+            <i class="fa-solid fa-bell text-lg"></i>
+        </span>
+        <div class="absolute inset-0 bg-white/10 scale-0 group-active:scale-100 transition-transform rounded-xl"></div>`;
+
+    function resetPanicBtn() {
+        const btn = document.getElementById('panic-btn');
+        if (!btn) return;
+        btn.innerHTML = PANIC_BTN_ORIGINAL;
+        btn.disabled  = false;
+    }
+
+    function showPanicStatus(msg, type) {
+        // Show status below the button
+        let el = document.getElementById('panic-status');
+        if (!el) {
+            el = document.createElement('p');
+            el.id = 'panic-status';
+            el.className = 'text-xs font-semibold text-center mt-2 leading-relaxed';
+            const btn = document.getElementById('panic-btn');
+            if (btn) btn.insertAdjacentElement('afterend', el);
+        }
+        el.className = 'text-xs font-semibold text-center mt-2 leading-relaxed ' +
+                       (type === 'error' ? 'text-rose-500' : 'text-emerald-600');
+        el.textContent = msg;
+    }
+
     function triggerPanic() {
         const btn = document.getElementById('panic-btn');
         if (!btn) return;
@@ -442,34 +473,61 @@
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Acquiring GPS & Alerting…';
         btn.disabled  = true;
 
+        // Clear any previous status
+        const prevStatus = document.getElementById('panic-status');
+        if (prevStatus) prevStatus.textContent = '';
+
         if (!navigator.geolocation) {
-            alert('GPS not available on this device.');
-            btn.disabled  = false;
-            btn.innerHTML = '<i class="fa-solid fa-exclamation-triangle text-lg"></i><span>PANIC — Send SOS</span><i class="fa-solid fa-bell text-lg"></i>';
+            showPanicStatus('⚠ GPS not available on this device.', 'error');
+            resetPanicBtn();
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(function (position) {
-            fetch('{{ route("student.location.panic") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type':  'application/json',
-                    'X-CSRF-TOKEN':  '{{ csrf_token() }}',
-                    'Accept':        'application/json',
-                },
-                body: JSON.stringify({ lat: position.coords.latitude, lng: position.coords.longitude })
-            })
-            .then(r => r.json())
-            .then(data => { if (data.status === 'panic_activated') window.location.reload(); })
-            .catch(() => {
-                alert('Failed to send SOS. Please check your internet connection.');
-                btn.disabled = false;
-            });
-        }, function (err) {
-            alert('Could not get GPS location: ' + err.message + '\nPlease allow location access.');
-            btn.disabled  = false;
-            btn.innerHTML = '<i class="fa-solid fa-exclamation-triangle text-lg"></i><span>PANIC — Send SOS</span><i class="fa-solid fa-bell text-lg"></i>';
-        }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                showPanicStatus('✓ GPS locked — sending alert to your parents…', 'success');
+
+                fetch('{{ route("student.location.panic") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':  'application/json',
+                        'X-CSRF-TOKEN':  '{{ csrf_token() }}',
+                        'Accept':        'application/json',
+                    },
+                    body: JSON.stringify({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    })
+                })
+                .then(function(r) {
+                    if (!r.ok) throw new Error('Server responded with status ' + r.status);
+                    return r.json();
+                })
+                .then(function(data) {
+                    if (data.status === 'panic_activated') {
+                        showPanicStatus('✅ Alert sent! Reloading…', 'success');
+                        setTimeout(() => window.location.reload(), 1200);
+                    } else {
+                        throw new Error('Unexpected response from server.');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('[Panic] fetch error:', err);
+                    showPanicStatus('⚠ Failed to send SOS: ' + err.message + '. Please try again.', 'error');
+                    resetPanicBtn();
+                });
+            },
+            function(err) {
+                const gpsErrors = {
+                    1: '⚠ GPS denied — please allow location access in browser settings.',
+                    2: '⚠ GPS unavailable. Try again or move to an open area.',
+                    3: '⚠ GPS timed out. Please try again.',
+                };
+                showPanicStatus(gpsErrors[err.code] || '⚠ Could not get GPS: ' + err.message, 'error');
+                resetPanicBtn();
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
     }
 
     function cancelPanic() {
@@ -487,9 +545,20 @@
                 'Accept':        'application/json',
             }
         })
-        .then(r => r.json())
-        .then(data => { if (data.status === 'panic_cancelled') window.location.reload(); })
-        .catch(() => alert('Failed to cancel alert. Please try again.'));
+        .then(function(r) {
+            if (!r.ok) throw new Error('Server error ' + r.status);
+            return r.json();
+        })
+        .then(function(data) {
+            if (data.status === 'panic_cancelled') window.location.reload();
+        })
+        .catch(function(err) {
+            alert('Failed to cancel alert: ' + err.message + '. Please try again.');
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-shield-check"></i> I Am Safe — Cancel Alert';
+                btn.disabled  = false;
+            }
+        });
     }
 </script>
 
