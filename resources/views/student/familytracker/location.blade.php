@@ -244,12 +244,14 @@
                         <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Live GPS</span>
                     </div>
 
-                    {{-- Google Maps attribution overlay (bottom of map) --}}
+                    {{-- Map attribution overlay (bottom of map) --}}
                     <div class="absolute bottom-0 inset-x-0 z-[400] px-4 py-2.5 bg-gradient-to-t from-black/30 to-transparent pointer-events-none">
                         <p class="text-white/80 text-[10px] font-medium text-right pointer-events-auto">
-                            Map data &copy; <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer"
-                                class="underline hover:text-white transition-colors">Google Maps</a>
-                            &nbsp;|&nbsp; Imagery &copy; {{ date('Y') }} Google
+                            &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer"
+                                class="underline hover:text-white transition-colors">OpenStreetMap</a>
+                            &nbsp;contributors &nbsp;|&nbsp;
+                            &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer"
+                                class="underline hover:text-white transition-colors">CARTO</a>
                         </p>
                     </div>
 
@@ -267,28 +269,29 @@
 
             </div>
 
-            {{-- ── Google Maps Thank-you & Attribution Card ── --}}
+            {{-- ── Map Attribution Card ── --}}
             <div class="mt-4 p-4 bg-white border border-[#F0EBE1] rounded-2xl shadow-sm animate-enter stagger-3">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
 
-                    {{-- Google Maps icon --}}
-                    <div class="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-blue-50 border border-blue-100">
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" fill="#4285F4"/>
+                    {{-- OSM/CARTO icon --}}
+                    <div class="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100">
+                        <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
                         </svg>
                     </div>
 
                     <div class="flex-1 min-w-0">
                         <p class="text-slate-700 text-sm font-semibold mb-0.5">
-                            🗺️ Powered by Google Maps
+                            🗺️ Powered by OpenStreetMap &amp; CARTO
                         </p>
                         <p class="text-slate-400 text-xs leading-relaxed">
-                            Map tiles and satellite imagery are provided by
-                            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="attr-link font-semibold">Google Maps</a>.
-                            We are grateful to Google for their high-accuracy mapping services that power this feature.
-                            Map data &copy; {{ date('Y') }}
-                            <a href="https://www.google.com/intl/en/about/products" target="_blank" rel="noopener noreferrer" class="attr-link">Google</a>.
-                            All rights reserved.
+                            Map tiles are provided by
+                            <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="attr-link font-semibold">CARTO Voyager</a>,
+                            using map data from
+                            <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="attr-link font-semibold">OpenStreetMap</a>
+                            contributors, licensed under
+                            <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener noreferrer" class="attr-link">ODbL</a>.
+                            We are grateful to the OSM community for making open geospatial data freely available.
                         </p>
                     </div>
                 </div>
@@ -303,9 +306,11 @@
             &copy; {{ date('Y') }} EdFlow Campus Management System. All rights reserved.
         </p>
         <p class="text-[11px] text-slate-300 mt-1">
-            Map tiles &copy; <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">Google Maps</a>
+            Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">OpenStreetMap</a> contributors
             &nbsp;&middot;&nbsp;
-            Location data is encrypted and only shared with authorised family members.
+            Tiles &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener" class="hover:text-slate-400 transition-colors underline">CARTO</a>
+            &nbsp;&middot;&nbsp;
+            Location data is only shared with authorised family members.
         </p>
     </div>
 
@@ -380,27 +385,12 @@
 
         var map = L.map('map', { zoomControl: false }).setView([lat, lng], 17);
 
-        // Google Maps standard tile layer — with OSM fallback if blocked
-        var googleLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        // Carto Voyager — free, reliable, clean Google-Maps-like style, no API key needed
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
             maxZoom: 20,
-            attribution: 'Map data &copy; <a href="https://www.google.com/maps" target="_blank">Google Maps</a>'
-        });
-
-        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        });
-
-        // Try Google first; fall back to OSM after 5 s if no tiles load
-        googleLayer.addTo(map);
-        var googleLoaded = false;
-        googleLayer.on('tileload', function() { googleLoaded = true; });
-        setTimeout(function() {
-            if (!googleLoaded) {
-                map.removeLayer(googleLayer);
-                osmLayer.addTo(map);
-            }
-        }, 5000);
+            subdomains: 'abcd',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
+        }).addTo(map);
 
         // Custom zoom control (top-left)
         L.control.zoom({ position: 'topleft' }).addTo(map);
