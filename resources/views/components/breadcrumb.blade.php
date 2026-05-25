@@ -33,7 +33,11 @@
                     
                     // Try to link to index if it exists
                     $indexRoute = $role . '.' . $module . '.index';
-                    $url = Route::has($indexRoute) ? route($indexRoute) : null;
+                    try {
+                        $url = Route::has($indexRoute) ? route($indexRoute, Route::current()->parameters()) : null;
+                    } catch (\Exception $e) {
+                        $url = null;
+                    }
                     
                     $items[] = [
                         'label' => $label,
