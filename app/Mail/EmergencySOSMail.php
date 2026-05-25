@@ -40,7 +40,7 @@ class EmergencySOSMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.emergency_sos',
+            view: 'emails.emergency_sos',
         );
     }
 
