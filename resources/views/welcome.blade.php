@@ -620,7 +620,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 dark:bg-white/5 backdrop-blur-md border border-gray-200/50 dark:border-white/10 shadow-sm mb-8 animate-fade-in">
                 <span class="w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">EdFlow v2.6.2 Live</span>
+                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">EdFlow v1.0.1</span>
             </div>
 
             <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white mb-6 animate-fade-in leading-tight md:leading-tight" style="animation-delay: 0.1s;">
@@ -629,7 +629,7 @@
             </h1>
 
             <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-10 animate-fade-in font-medium" style="animation-delay: 0.2s;">
-                Admissions, attendance, fees, and examinations in one sleek cloud platform. Built for modern institutions that value design and speed.
+                EdFlow is a complete student management system solution that helps you automate tasks manage operations and focus on what matters most - education.
             </p>
 
             <div class="flex flex-row flex-wrap justify-center gap-3 animate-fade-in" style="animation-delay: 0.3s;">
