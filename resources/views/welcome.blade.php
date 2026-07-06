@@ -80,529 +80,607 @@
     </script>
 
     <style>
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .dark .glass {
-            background: rgba(17, 24, 39, 0.7);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        /* Grid Pattern */
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-        }
-        .dark .bg-grid {
-            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+        /* ══════════════════════════════════════════
+           GLASSMORPHISM SaaS — Light Mode Only
+           ══════════════════════════════════════════ */
+
+        body {
+            background: linear-gradient(135deg,
+                #ffffff 0%,
+                #f8f9ff 30%,
+                #f0f4ff 60%,
+                #f8faff 100%) fixed;
         }
 
-        /* Smooth Theme Transition */
-        body, nav, div, section, footer, input, button, p, h1, h2, h3, h4 {
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        /* Glassmorphism Navbar — lighter blur */
+        .glass {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(230, 230, 255, 0.5);
+            box-shadow: 0 1px 20px rgba(99, 102, 241, 0.06);
+        }
+
+        /* Subtle dot-grid pattern */
+        .bg-grid {
+            background-image: radial-gradient(circle, rgba(99,102,241,0.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Glass card base — lighter */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.90);
+            box-shadow: 0 2px 16px rgba(99, 102, 241, 0.07), 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        /* Feature bento card glass — lighter, no saturate */
+        .bento-card-inner {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.07), inset 0 1px 0 rgba(255,255,255,1) !important;
+        }
+
+        /* Targeted transitions — only on interactive elements */
+        a, button,
+        .glass, .glass-card, .bento-card-inner,
+        nav, input, select, textarea {
+            transition: background-color 0.2s ease, color 0.2s ease,
+                        border-color 0.2s ease, box-shadow 0.2s ease,
+                        opacity 0.2s ease, transform 0.2s ease;
         }
 
         /* Hide scrollbar for marquee */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
+
         /* Custom Scrollbar for inner modals */
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 10px; }
-        .dark .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(75, 85, 99, 0.5); }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.4); border-radius: 10px; }
 
         /* Smooth Accordion transition */
         .faq-content {
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transition: max-height 0.28s ease-in-out, opacity 0.28s ease-in-out;
             max-height: 0;
             opacity: 0;
             overflow: hidden;
         }
         .faq-content.open { max-height: 500px; opacity: 1; }
-    </style>
-</head>
-<body class="font-sans antialiased text-gray-900 bg-gray-50 bg-grid dark:bg-black dark:text-gray-100 selection:bg-gray-900 selection:text-white dark:selection:bg-white dark:selection:text-gray-900">
 
-    <!-- ═══════════════════════════════════════════════════════════════════
-         CINEMATIC 3D PRELOADER  |  Three.js + GSAP  |  Cyberpunk Theme
-    ═══════════════════════════════════════════════════════════════════ -->
+        /* Ambient orbs — lighter blur, slower drift */
+        .orb-light {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        /* Section glass divider */
+        .section-glass {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(255,255,255,0.9);
+            border-bottom: 1px solid rgba(230,235,255,0.5);
+        }
+
+        /* Stats section */
+        .stats-glass {
+            background: linear-gradient(135deg,
+                rgba(238,242,255,0.96) 0%,
+                rgba(245,240,255,0.96) 50%,
+                rgba(240,248,255,0.96) 100%);
+            border-top: 1px solid rgba(199,210,254,0.4);
+            border-bottom: 1px solid rgba(199,210,254,0.25);
+        }
+
+        /* Hero badge glass */
+        .badge-glass {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.95);
+            box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+        }
+
+        /* Smooth card hover lift — GPU-friendly (transform only) */
+        #features .grid > div {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            will-change: transform;
+        }
+        #features .grid > div:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(99,102,241,0.13);
+        }
+    </style>
+
+</head>
+<body class="font-sans antialiased text-gray-900 bg-grid selection:bg-indigo-600 selection:text-white">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         LIQUID GLASS PRELOADER — Indigo/Violet SaaS Theme
+    ═══════════════════════════════════════════════════════════════ -->
+    <style>
+        /* ── Preloader keyframes ────────────────────────────────── */
+        @keyframes morph {
+            0%,100% { border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%; }
+            25%      { border-radius: 40% 70% 30% 60% / 65% 35% 65% 35%; }
+            50%      { border-radius: 70% 30% 50% 50% / 30% 70% 50% 60%; }
+            75%      { border-radius: 30% 60% 70% 40% / 55% 45% 70% 30%; }
+        }
+        @keyframes morph2 {
+            0%,100% { border-radius: 50% 60% 40% 70% / 65% 35% 65% 35%; }
+            33%      { border-radius: 70% 40% 60% 30% / 40% 65% 35% 60%; }
+            66%      { border-radius: 30% 70% 30% 70% / 60% 40% 70% 30%; }
+        }
+        @keyframes ring-spin  { to { transform: rotate(360deg); } }
+        @keyframes ring-spin2 { to { transform: rotate(-360deg); } }
+        @keyframes ring-spin3 { to { transform: rotate(360deg); } }
+        @keyframes float-up   { to { transform: translateY(-120vh) scale(0); opacity: 0; } }
+        @keyframes letter-in  {
+            from { opacity: 0; transform: translateY(24px) skewY(6deg); filter: blur(6px); }
+            to   { opacity: 1; transform: translateY(0)    skewY(0deg); filter: blur(0); }
+        }
+        @keyframes shimmer {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+        @keyframes bar-fill { from { width: 0; } to { width: 100%; } }
+        @keyframes pulse-ring {
+            0%   { transform: scale(0.9); opacity: 0.6; }
+            50%  { transform: scale(1.08); opacity: 0.2; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+        @keyframes shard-exit {
+            to { transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(0.2); opacity: 0; }
+        }
+        @keyframes logo-glow {
+            0%,100% { text-shadow: 0 0 20px rgba(99,102,241,0.4), 0 0 60px rgba(139,92,246,0.2); }
+            50%      { text-shadow: 0 0 40px rgba(99,102,241,0.7), 0 0 100px rgba(139,92,246,0.4); }
+        }
+        @keyframes dot-bounce {
+            0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+            40%         { transform: scale(1.1); opacity: 1; }
+        }
+        @keyframes blob-drift { 0%,100% { transform: scale(1) translate(0,0); } 50% { transform: scale(1.15) translate(12px,-8px); } }
+
+        #edflow-loader * { box-sizing: border-box; }
+
+        .pl-letter {
+            display: inline-block;
+            opacity: 0;
+            animation: letter-in 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+        .pl-dot {
+            display: inline-block;
+            animation: dot-bounce 1.4s ease-in-out infinite;
+        }
+    </style>
+
     <div id="edflow-loader" style="
         position:fixed;inset:0;z-index:99999;
-        background:#000000;
+        background: linear-gradient(150deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
         display:flex;flex-direction:column;align-items:center;justify-content:center;
         overflow:hidden;
     ">
+        <!-- ── Ambient blobs ─────────────────────────────────────── -->
+        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+            <div style="
+                position:absolute;top:-20%;left:-15%;
+                width:65vw;height:65vw;max-width:700px;max-height:700px;
+                background:radial-gradient(circle,rgba(99,102,241,0.25) 0%,transparent 70%);
+                animation:blob-drift 12s ease-in-out infinite;
+                filter:blur(60px);border-radius:50%;
+            "></div>
+            <div style="
+                position:absolute;bottom:-20%;right:-15%;
+                width:55vw;height:55vw;max-width:600px;max-height:600px;
+                background:radial-gradient(circle,rgba(139,92,246,0.22) 0%,transparent 70%);
+                animation:blob-drift 16s ease-in-out infinite reverse;
+                filter:blur(70px);border-radius:50%;
+            "></div>
+            <div style="
+                position:absolute;top:35%;left:40%;
+                width:40vw;height:40vw;max-width:400px;max-height:400px;
+                background:radial-gradient(circle,rgba(79,70,229,0.15) 0%,transparent 70%);
+                animation:blob-drift 10s ease-in-out infinite 3s;
+                filter:blur(50px);border-radius:50%;
+            "></div>
+        </div>
 
-        <!-- Three.js canvas will be injected here -->
-        <canvas id="preloader-canvas" style="
-            position:absolute;inset:0;width:100%;height:100%;
-            display:block;
-        "></canvas>
+        <!-- ── Floating particles ────────────────────────────────── -->
+        <div id="pl-particles" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
 
-        <!-- UI Overlay -->
-        <div id="preloader-ui" style="
-            position:relative;z-index:10;
-            display:flex;flex-direction:column;align-items:center;gap:28px;
-            pointer-events:none;
-        ">
-            <!-- Brand -->
-            <div id="preloader-brand" style="opacity:0;transform:translateY(-20px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);">
-                <span style="
-                    font-family:'Plus Jakarta Sans',sans-serif;
-                    font-size:13px;font-weight:800;
-                    letter-spacing:0.35em;text-transform:uppercase;
-                    color:rgba(255,255,255,0.3);
-                ">EdFlow</span>
+        <!-- ── Main glass orb ───────────────────────────────────── -->
+        <div style="position:relative;width:240px;height:240px;margin-bottom:52px;flex-shrink:0;">
+
+            <!-- Pulse rings -->
+            <div style="
+                position:absolute;inset:-28px;border-radius:50%;
+                border:1px solid rgba(99,102,241,0.25);
+                animation:pulse-ring 3s ease-in-out infinite;
+            "></div>
+            <div style="
+                position:absolute;inset:-52px;border-radius:50%;
+                border:1px solid rgba(139,92,246,0.15);
+                animation:pulse-ring 3s ease-in-out infinite 1s;
+            "></div>
+
+            <!-- Orbital rings -->
+            <div style="
+                position:absolute;inset:-20px;
+                border-radius:50%;
+                border-top:2px solid rgba(99,102,241,0.7);
+                border-right:2px solid transparent;
+                border-bottom:2px solid rgba(99,102,241,0.2);
+                border-left:2px solid transparent;
+                animation:ring-spin 3s linear infinite;
+                filter:drop-shadow(0 0 8px rgba(99,102,241,0.8));
+            "></div>
+            <div style="
+                position:absolute;inset:-36px;
+                border-radius:50%;
+                border-top:2px solid transparent;
+                border-right:2px solid rgba(139,92,246,0.6);
+                border-bottom:2px solid transparent;
+                border-left:2px solid rgba(139,92,246,0.2);
+                animation:ring-spin2 4.5s linear infinite;
+                filter:drop-shadow(0 0 8px rgba(139,92,246,0.6));
+            "></div>
+            <div style="
+                position:absolute;inset:-52px;
+                border-radius:50%;
+                border-top:1px solid rgba(167,139,250,0.35);
+                border-right:1px solid transparent;
+                border-bottom:1px solid rgba(167,139,250,0.1);
+                border-left:1px solid transparent;
+                animation:ring-spin3 7s linear infinite;
+            "></div>
+
+            <!-- Morphing glass blob -->
+            <div style="
+                position:absolute;inset:0;
+                background: linear-gradient(135deg,
+                    rgba(99,102,241,0.55) 0%,
+                    rgba(139,92,246,0.45) 40%,
+                    rgba(79,70,229,0.60) 100%);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255,255,255,0.20);
+                box-shadow:
+                    0 8px 60px rgba(99,102,241,0.45),
+                    0 0 0 1px rgba(255,255,255,0.12) inset,
+                    0 2px 0 rgba(255,255,255,0.25) inset;
+                animation: morph 6s ease-in-out infinite;
+                overflow:hidden;
+            ">
+                <!-- Inner shimmer -->
+                <div style="
+                    position:absolute;inset:0;
+                    background:linear-gradient(135deg,rgba(255,255,255,0.18) 0%,transparent 60%,rgba(255,255,255,0.05) 100%);
+                    border-radius:inherit;
+                "></div>
+                <!-- Spinning shimmer sweep -->
+                <div style="
+                    position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+                    background:conic-gradient(from 0deg,transparent 0%,rgba(255,255,255,0.06) 10%,transparent 20%);
+                    animation:ring-spin 4s linear infinite;
+                "></div>
             </div>
 
-            <!-- Percentage -->
-            <div style="text-align:center;">
-                <div id="preloader-pct" style="
-                    font-family:'Plus Jakarta Sans',sans-serif;
-                    font-size:clamp(52px,8vw,88px);
-                    font-weight:900;
-                    letter-spacing:-0.03em;
-                    color:#ffffff;
-                    line-height:1;
-                    opacity:0;
-                    text-shadow:0 0 40px rgba(220,38,38,0.6),0 0 80px rgba(147,51,234,0.3);
-                    transition:opacity 0.6s ease;
-                ">0</div>
-                <div style="
-                    font-family:'Plus Jakarta Sans',sans-serif;
-                    font-size:13px;font-weight:600;
-                    letter-spacing:0.2em;text-transform:uppercase;
-                    color:rgba(255,255,255,0.25);
-                    margin-top:6px;
-                ">%</div>
-            </div>
+            <!-- Secondary blob (behind, offset) -->
+            <div style="
+                position:absolute;inset:12px;
+                background: linear-gradient(225deg,
+                    rgba(167,139,250,0.35) 0%,
+                    rgba(99,102,241,0.2) 100%);
+                animation: morph2 8s ease-in-out infinite;
+                filter:blur(4px);
+                opacity:0.7;
+                border-radius:50%;
+            "></div>
 
-            <!-- Subtitle -->
-            <div id="preloader-sub" style="
-                font-family:'Plus Jakarta Sans',sans-serif;
-                font-size:11px;font-weight:600;
-                letter-spacing:0.3em;text-transform:uppercase;
-                color:rgba(255,255,255,0.2);
-                opacity:0;transition:opacity 0.8s ease 0.4s;
-            ">Loading Experience&thinsp;&hellip;</div>
-
-            <!-- Progress bar -->
-            <div style="width:clamp(160px,25vw,280px);">
+            <!-- Center icon -->
+            <div style="
+                position:absolute;inset:0;
+                display:flex;align-items:center;justify-content:center;
+            ">
                 <div style="
-                    width:100%;height:1px;
-                    background:rgba(255,255,255,0.06);
-                    border-radius:999px;overflow:hidden;
+                    width:72px;height:72px;
+                    background:rgba(255,255,255,0.15);
+                    backdrop-filter:blur(12px);
+                    border:1px solid rgba(255,255,255,0.30);
+                    border-radius:20px;
+                    display:flex;align-items:center;justify-content:center;
+                    box-shadow:0 4px 24px rgba(0,0,0,0.2),inset 0 1px 0 rgba(255,255,255,0.3);
                 ">
-                    <div id="preloader-bar" style="
-                        height:100%;width:0%;
-                        background:linear-gradient(90deg,#dc2626,#9333ea);
-                        border-radius:999px;
-                        box-shadow:0 0 8px rgba(220,38,38,0.8),0 0 20px rgba(147,51,234,0.4);
-                        transition:width 0.4s cubic-bezier(0.4,0,0.2,1);
-                    "></div>
+                    <i class="fa-solid fa-graduation-cap" style="font-size:30px;color:#fff;filter:drop-shadow(0 0 12px rgba(255,255,255,0.5));"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Skip button (fallback for slow devices) -->
-        <button id="preloader-skip" onclick="window.__skipPreloader&&window.__skipPreloader()" style="
-            position:absolute;bottom:32px;right:32px;
+        <!-- ── Brand name ────────────────────────────────────────── -->
+        <div style="margin-bottom:10px;overflow:hidden;">
+            <div id="pl-brand" style="
+                font-family:'Plus Jakarta Sans',sans-serif;
+                font-size:clamp(32px,5vw,48px);
+                font-weight:900;
+                letter-spacing:-0.03em;
+                color:#fff;
+                line-height:1;
+                animation: logo-glow 3s ease-in-out infinite;
+            ">
+                <span class="pl-letter" style="animation-delay:0.05s">E</span><span class="pl-letter" style="animation-delay:0.12s">d</span><span class="pl-letter" style="animation-delay:0.19s">F</span><span class="pl-letter" style="animation-delay:0.26s">l</span><span class="pl-letter" style="animation-delay:0.33s">o</span><span class="pl-letter" style="animation-delay:0.40s">w</span><span class="pl-letter" style="animation-delay:0.47s;color:rgba(167,139,250,1)">.</span>
+            </div>
+        </div>
+
+        <!-- ── Tagline ───────────────────────────────────────────── -->
+        <div id="pl-tag" style="
             font-family:'Plus Jakarta Sans',sans-serif;
-            font-size:10px;font-weight:700;
-            letter-spacing:0.25em;text-transform:uppercase;
-            color:rgba(255,255,255,0.15);
-            background:none;border:none;cursor:pointer;
-            padding:8px 12px;
-            transition:color 0.3s ease;
+            font-size:11px;font-weight:600;
+            letter-spacing:0.28em;text-transform:uppercase;
+            color:rgba(255,255,255,0.35);
+            margin-bottom:44px;
             opacity:0;
-        " onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">
-            Skip &rsaquo;
+            animation: letter-in 0.7s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
+        ">Smart Campus · Reimagined</div>
+
+        <!-- ── Progress bar ──────────────────────────────────────── -->
+        <div style="width:clamp(180px,28vw,320px);">
+            <div style="
+                width:100%;height:3px;
+                background:rgba(255,255,255,0.08);
+                border-radius:999px;overflow:hidden;
+                position:relative;
+            ">
+                <!-- Fill -->
+                <div id="preloader-bar" style="
+                    height:100%;width:0%;
+                    background:linear-gradient(90deg,#6366f1,#8b5cf6,#a78bfa);
+                    border-radius:999px;
+                    transition:width 0.4s cubic-bezier(0.4,0,0.2,1);
+                    position:relative;overflow:hidden;
+                ">
+                    <!-- Shimmer sweep -->
+                    <div style="
+                        position:absolute;top:0;left:0;height:100%;width:40%;
+                        background:linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);
+                        animation:shimmer 1.6s ease-in-out infinite;
+                    "></div>
+                </div>
+            </div>
+
+            <!-- Dots + percent row -->
+            <div style="
+                display:flex;justify-content:space-between;align-items:center;
+                margin-top:14px;
+            ">
+                <!-- Animated dots -->
+                <div style="display:flex;gap:5px;">
+                    <span class="pl-dot" style="width:5px;height:5px;border-radius:50%;background:#6366f1;animation-delay:0s;"></span>
+                    <span class="pl-dot" style="width:5px;height:5px;border-radius:50%;background:#8b5cf6;animation-delay:0.2s;"></span>
+                    <span class="pl-dot" style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation-delay:0.4s;"></span>
+                </div>
+                <!-- Percent -->
+                <div style="
+                    font-family:'Plus Jakarta Sans',sans-serif;
+                    font-size:11px;font-weight:700;
+                    letter-spacing:0.1em;
+                    color:rgba(255,255,255,0.35);
+                "><span id="preloader-pct">0</span>%</div>
+            </div>
+        </div>
+
+        <!-- Skip -->
+        <button id="preloader-skip" onclick="window.__skipPreloader&&window.__skipPreloader()" style="
+            position:absolute;bottom:28px;right:28px;
+            font-family:'Plus Jakarta Sans',sans-serif;
+            font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
+            color:rgba(255,255,255,0.18);
+            background:none;border:none;cursor:pointer;padding:8px 12px;
+            transition:color 0.25s;opacity:0;
+        " onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.18)'">
+            Skip ›
         </button>
     </div>
 
-    <!-- ─── Preloader Script ───────────────────────────────────────────── -->
+    <!-- ── Preloader Script ──────────────────────────────────────── -->
     <script>
     (function() {
         'use strict';
+        const loader  = document.getElementById('edflow-loader');
+        const barEl   = document.getElementById('preloader-bar');
+        const pctEl   = document.getElementById('preloader-pct');
+        const skipBtn = document.getElementById('preloader-skip');
 
-        // ── Bail if Three.js failed to load ──────────────────────────────
-        if (typeof THREE === 'undefined') {
-            document.getElementById('edflow-loader').style.display = 'none';
-            return;
+        let currentPct = 0, targetPct = 0, dismissed = false;
+
+        /* ── Floating particles ──────────────────────────────────── */
+        const pContainer = document.getElementById('pl-particles');
+        const COLORS = ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd','#e0e7ff'];
+        for (let i = 0; i < 38; i++) {
+            const p = document.createElement('div');
+            const size = 3 + Math.random() * 5;
+            const x    = Math.random() * 100;
+            const dur  = 4 + Math.random() * 6;
+            const delay= Math.random() * 5;
+            const color= COLORS[Math.floor(Math.random() * COLORS.length)];
+            p.style.cssText = `
+                position:absolute;bottom:-10px;left:${x}%;
+                width:${size}px;height:${size}px;border-radius:50%;
+                background:${color};opacity:${0.3+Math.random()*0.5};
+                animation:float-up ${dur}s ease-in ${delay}s infinite;
+                pointer-events:none;
+            `;
+            pContainer.appendChild(p);
         }
 
-        // ── DOM refs ─────────────────────────────────────────────────────
-        const loader    = document.getElementById('edflow-loader');
-        const canvas    = document.getElementById('preloader-canvas');
-        const pctEl     = document.getElementById('preloader-pct');
-        const barEl     = document.getElementById('preloader-bar');
-        const brandEl   = document.getElementById('preloader-brand');
-        const subEl     = document.getElementById('preloader-sub');
-        const skipBtn   = document.getElementById('preloader-skip');
+        /* ── Progress tracking ───────────────────────────────────── */
+        let domDone = false, imgsDone = false, fontsDone = false;
+        let totalImgs = 0, loadedImgs = 0;
 
-        // ── State ────────────────────────────────────────────────────────
-        let currentPct  = 0;
-        let targetPct   = 0;
-        let rafId       = null;
-        let dismissed   = false;
-        let orbReady    = false;
-
-        // ── Three.js Setup ───────────────────────────────────────────────
-        const W = window.innerWidth, H = window.innerHeight;
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(W, H);
-        renderer.setClearColor(0x000000, 1);
-
-        const scene  = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 100);
-        camera.position.set(0, 0, 5);
-
-        // ── Mouse parallax ───────────────────────────────────────────────
-        let mouseX = 0, mouseY = 0;
-        window.addEventListener('mousemove', e => {
-            mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-        });
-
-        // ── Orb (energy sphere) ──────────────────────────────────────────
-        const orbGeo  = new THREE.SphereGeometry(1, 64, 64);
-        const orbMat  = new THREE.MeshStandardMaterial({
-            color: 0x1a0000,
-            emissive: new THREE.Color(0xdc2626),
-            emissiveIntensity: 0.0,
-            roughness: 0.1,
-            metalness: 0.9,
-            transparent: true,
-            opacity: 0,
-        });
-        const orb = new THREE.Mesh(orbGeo, orbMat);
-        scene.add(orb);
-
-        // ── Wireframe shell ──────────────────────────────────────────────
-        const shellGeo  = new THREE.SphereGeometry(1.02, 24, 24);
-        const shellMat  = new THREE.MeshBasicMaterial({
-            color: 0xdc2626, wireframe: true,
-            transparent: true, opacity: 0,
-        });
-        const shell = new THREE.Mesh(shellGeo, shellMat);
-        scene.add(shell);
-
-        // ── Inner glow (additive sphere) ─────────────────────────────────
-        const glowGeo = new THREE.SphereGeometry(1.3, 32, 32);
-        const glowMat = new THREE.MeshBasicMaterial({
-            color: 0x9333ea,
-            transparent: true, opacity: 0,
-            side: THREE.BackSide,
-        });
-        const glowMesh = new THREE.Mesh(glowGeo, glowMat);
-        scene.add(glowMesh);
-
-        // ── Particles ────────────────────────────────────────────────────
-        const PARTICLE_COUNT = 280;
-        const pPositions = new Float32Array(PARTICLE_COUNT * 3);
-        const pSpeeds    = [];
-        const pRadii     = [];
-        const pAngles    = [];
-        const pTilts     = [];
-
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-            const ring   = Math.floor(i / (PARTICLE_COUNT / 4));
-            const radius = 1.6 + ring * 0.35 + Math.random() * 0.3;
-            const angle  = Math.random() * Math.PI * 2;
-            const tilt   = (Math.random() - 0.5) * 0.6;
-            pRadii.push(radius);
-            pAngles.push(angle);
-            pTilts.push(tilt);
-            pSpeeds.push((0.003 + Math.random() * 0.004) * (Math.random() < 0.5 ? 1 : -1));
-            pPositions[i * 3]     = Math.cos(angle) * radius;
-            pPositions[i * 3 + 1] = Math.sin(tilt) * radius;
-            pPositions[i * 3 + 2] = Math.sin(angle) * radius;
-        }
-
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-        const pMat = new THREE.PointsMaterial({
-            color: 0xdc2626,
-            size: 0.025,
-            transparent: true,
-            opacity: 0,
-            sizeAttenuation: true,
-        });
-        const particles = new THREE.Points(pGeo, pMat);
-        scene.add(particles);
-
-        // ── Lights ───────────────────────────────────────────────────────
-        scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-        const redLight    = new THREE.PointLight(0xdc2626, 4, 8);
-        redLight.position.set(0, 0, 2);
-        scene.add(redLight);
-        const purpleLight = new THREE.PointLight(0x9333ea, 2, 8);
-        purpleLight.position.set(2, 1, -1);
-        scene.add(purpleLight);
-
-        // ── Resize ───────────────────────────────────────────────────────
-        window.addEventListener('resize', () => {
-            const w = window.innerWidth, h = window.innerHeight;
-            renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        });
-
-        // ── Three.js LoadingManager (real progress) ───────────────────────
-        const manager = new THREE.LoadingManager();
-        window.__THREE_LOADING_MANAGER__ = manager;
-
-        // Simulate page asset progress: combine DOMContentLoaded + images + fonts
-        let domLoaded    = false;
-        let imagesLoaded = 0;
-        let totalImages  = 0;
-        let fontsLoaded  = false;
-
-        function calcProgress() {
-            // DOM:40%, Images:40%, Fonts:20%
+        function calc() {
             let p = 0;
-            if (domLoaded)   p += 40;
-            if (totalImages) p += Math.round((imagesLoaded / totalImages) * 40);
-            else             p += 40; // no images → full credit
-            if (fontsLoaded) p += 20;
-            setTarget(Math.min(p, 99)); // hold at 99 until forceDone
+            if (domDone)  p += 40;
+            if (totalImgs) p += Math.round((loadedImgs / totalImgs) * 35);
+            else           p += 35;
+            if (fontsDone) p += 25;
+            setTarget(Math.min(p, 99));
         }
+        function setTarget(v) { if (v > targetPct) targetPct = v; }
 
-        function setTarget(v) {
-            if (v > targetPct) targetPct = v;
-        }
-
-        // DOM ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => { domLoaded = true; calcProgress(); });
-        } else {
-            domLoaded = true;
-        }
+            document.addEventListener('DOMContentLoaded', () => { domDone = true; calc(); });
+        } else { domDone = true; }
 
-        // Images
-        function trackImages() {
+        function trackImgs() {
             const imgs = Array.from(document.images);
-            totalImages = imgs.length;
-            if (!totalImages) { calcProgress(); return; }
+            totalImgs = imgs.length;
+            if (!totalImgs) { imgsDone = true; calc(); return; }
             imgs.forEach(img => {
-                if (img.complete) { imagesLoaded++; calcProgress(); }
+                if (img.complete) { loadedImgs++; if (loadedImgs >= totalImgs) imgsDone = true; calc(); }
                 else {
-                    img.addEventListener('load',  () => { imagesLoaded++; calcProgress(); });
-                    img.addEventListener('error', () => { imagesLoaded++; calcProgress(); });
+                    img.addEventListener('load',  () => { loadedImgs++; if (loadedImgs >= totalImgs) imgsDone = true; calc(); });
+                    img.addEventListener('error', () => { loadedImgs++; if (loadedImgs >= totalImgs) imgsDone = true; calc(); });
                 }
             });
         }
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', trackImages);
-        } else {
-            trackImages();
-        }
+            document.addEventListener('DOMContentLoaded', trackImgs);
+        } else { trackImgs(); }
 
-        // Fonts
         if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(() => { fontsLoaded = true; calcProgress(); });
-        } else {
-            fontsLoaded = true;
-        }
+            document.fonts.ready.then(() => { fontsDone = true; calc(); });
+        } else { fontsDone = true; }
 
-        // Full-page load → push to 100
         window.addEventListener('load', () => {
-            domLoaded = true; fontsLoaded = true;
-            imagesLoaded = totalImages || 0;
-            calcProgress();
-            setTimeout(() => forceDone(), 300);
+            domDone = true; fontsDone = true; imgsDone = true;
+            loadedImgs = totalImgs || 0;
+            calc();
+            setTimeout(forceDone, 200);
         });
 
-        // Safety timeout (slow devices) – max 8s
-        setTimeout(() => forceDone(), 8000);
+        setTimeout(forceDone, 6000);
 
-        function forceDone() {
-            setTarget(100);
-        }
+        function forceDone() { setTarget(100); }
+        window.__skipPreloader = forceDone;
 
-        // ── Skip handler ─────────────────────────────────────────────────
-        window.__skipPreloader = function() { forceDone(); };
+        /* ── Show skip after 1.8s ────────────────────────────────── */
+        setTimeout(() => { if (!dismissed && skipBtn) skipBtn.style.opacity = '1'; }, 1800);
 
-        // ── Dismiss preloader (called when progress hits 100) ─────────────
+        /* ── Dismiss with glass-shard exit ───────────────────────── */
         function dismiss() {
             if (dismissed) return;
             dismissed = true;
 
-            // 1. Flash surge
-            const surgeTl = window.gsap
-                ? gsap.timeline()
-                : null;
+            /* Shatter the loader into virtual tiles that fly outward */
+            const TILES = 16;
+            const cols  = 4, rows = 4;
+            const W = loader.offsetWidth, H = loader.offsetHeight;
 
-            if (surgeTl) {
-                surgeTl
-                  .to(orbMat,   { emissiveIntensity: 3.5, duration: 0.4, ease: 'power2.in' })
-                  .to(glowMat,  { opacity: 0.5,           duration: 0.3, ease: 'power2.in' }, '<')
-                  .to(pMat,     { opacity: 1.0,           duration: 0.2             }, '<')
-                  // 2. Explode / dissolve
-                  .to(orbMat,   { emissiveIntensity: 0, opacity: 0, duration: 0.5, ease: 'power3.out' })
-                  .to(shellMat, { opacity: 0,             duration: 0.4             }, '<')
-                  .to(glowMat,  { opacity: 0,             duration: 0.4             }, '<')
-                  .to(pMat,     { opacity: 0,             duration: 0.6, ease: 'power3.out' }, '<0.1')
-                  .to([pctEl, barEl.parentElement.parentElement, brandEl, subEl, skipBtn], {
-                        opacity: 0, y: -15, duration: 0.5, stagger: 0.05, ease: 'power2.in'
-                  }, '<')
-                  // 3. Fade out loader
-                  .to(loader, {
-                        opacity: 0, duration: 0.7, ease: 'power2.inOut',
-                        onComplete: () => {
-                            loader.style.display = 'none';
-                            cancelAnimationFrame(rafId);
-                            renderer.dispose();
-                        }
-                  });
-            } else {
-                // Fallback without GSAP
-                loader.style.transition = 'opacity 0.7s ease';
-                loader.style.opacity    = '0';
-                setTimeout(() => { loader.style.display = 'none'; cancelAnimationFrame(rafId); }, 800);
+            const shardWrap = document.createElement('div');
+            shardWrap.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:10;';
+            loader.appendChild(shardWrap);
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const s = document.createElement('div');
+                    const tx = (c - cols/2 + 0.5) * 180 + (Math.random()-0.5) * 80;
+                    const ty = (r - rows/2 + 0.5) * 160 + (Math.random()-0.5) * 80;
+                    const tr = (Math.random() - 0.5) * 60;
+                    s.style.cssText = `
+                        position:absolute;
+                        left:${(c/cols)*100}%;top:${(r/rows)*100}%;
+                        width:${100/cols}%;height:${100/rows}%;
+                        background:linear-gradient(135deg,
+                            rgba(99,102,241,${0.18+Math.random()*0.1}) 0%,
+                            rgba(139,92,246,${0.12+Math.random()*0.1}) 100%);
+                        backdrop-filter:blur(2px);
+                        border:1px solid rgba(255,255,255,0.06);
+                        --tx:${tx}px;--ty:${ty}px;--tr:${tr}deg;
+                        animation: shard-exit 0.7s cubic-bezier(0.4,0,1,1) ${0.05*Math.random()*10}s forwards;
+                        transform-origin:center;
+                    `;
+                    shardWrap.appendChild(s);
+                }
             }
+
+            /* Fade out everything else */
+            const ui = loader.querySelector('#preloader-ui') || loader;
+            if (ui !== loader) {
+                ui.style.transition = 'opacity 0.3s';
+                ui.style.opacity = '0';
+            }
+
+            setTimeout(() => {
+                loader.style.transition = 'opacity 0.55s cubic-bezier(0.4,0,0.2,1)';
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 580);
+            }, 420);
         }
 
-        // ── Intro animation (runs once orb is visible) ────────────────────
-        function introAnimate() {
-            if (window.gsap) {
-                const tl = gsap.timeline({
-                    onComplete: () => { orbReady = true; }
-                });
-                tl
-                  .to(orbMat,  { opacity: 0.95, duration: 1.2, ease: 'power2.out' })
-                  .to(orbMat,  { emissiveIntensity: 0.8, duration: 1.0, ease: 'power2.out' }, '<0.3')
-                  .to(shellMat,{ opacity: 0.08, duration: 0.8, ease: 'power2.out' }, '<0.2')
-                  .to(glowMat, { opacity: 0.12, duration: 0.8, ease: 'power2.out' }, '<')
-                  .to(pMat,    { opacity: 0.7,  duration: 1.0, ease: 'power2.out' }, '<0.2')
-                  .call(() => {
-                        // Reveal UI text
-                        if (pctEl)   { pctEl.style.opacity = '1'; }
-                        if (brandEl) { brandEl.style.opacity = '1'; brandEl.style.transform = 'translateY(0)'; }
-                        if (subEl)   { subEl.style.opacity  = '1'; }
-                        if (skipBtn) { setTimeout(() => { skipBtn.style.opacity = '1'; }, 1500); }
-                  });
-            } else {
-                // Fallback: instant show
-                orbMat.opacity  = 0.95;
-                orbMat.emissiveIntensity = 0.8;
-                pMat.opacity    = 0.7;
-                orbReady = true;
-            }
-        }
-
-        // ── Render loop ───────────────────────────────────────────────────
-        const clock = new THREE.Clock();
-        let introStarted = false;
-
-        function animate() {
-            rafId = requestAnimationFrame(animate);
-            const t = clock.getElapsedTime();
-
-            // Start intro after 1 frame
-            if (!introStarted) { introStarted = true; introAnimate(); }
-
-            // ── Smooth progress interpolation ─────────────────────────
+        /* ── RAF progress ticker ─────────────────────────────────── */
+        (function tick() {
+            if (dismissed) return;
+            requestAnimationFrame(tick);
             if (currentPct < targetPct) {
-                currentPct += (targetPct - currentPct) * 0.04;
+                currentPct += (targetPct - currentPct) * 0.045;
                 if (targetPct - currentPct < 0.15) currentPct = targetPct;
                 const d = Math.round(currentPct);
-                if (pctEl)  pctEl.textContent = d;
-                if (barEl)  barEl.style.width  = currentPct + '%';
-
-                // Trigger dismiss when we hit 100
+                if (pctEl) pctEl.textContent = d;
+                if (barEl) barEl.style.width  = currentPct + '%';
                 if (d >= 100 && !dismissed) dismiss();
             }
-
-            // ── Orb rotation + pulsing ────────────────────────────────
-            if (orbReady) {
-                orb.rotation.y   = t * 0.18;
-                orb.rotation.x   = Math.sin(t * 0.3) * 0.15;
-                shell.rotation.y = -t * 0.12;
-                shell.rotation.z =  t * 0.06;
-
-                // Pulsing glow
-                const pulse = 0.7 + Math.sin(t * 1.8) * 0.3;
-                orbMat.emissiveIntensity = 0.8 * pulse;
-                glowMat.opacity          = 0.12 * pulse;
-                redLight.intensity       = 4  * pulse;
-
-                // Camera parallax (subtle)
-                camera.position.x += (mouseX * 0.4 - camera.position.x) * 0.03;
-                camera.position.y += (-mouseY * 0.3 - camera.position.y) * 0.03;
-                camera.lookAt(0, 0, 0);
-            }
-
-            // ── Particle orbit ────────────────────────────────────────
-            const pos = particles.geometry.attributes.position;
-            for (let i = 0; i < PARTICLE_COUNT; i++) {
-                pAngles[i] += pSpeeds[i];
-                const a = pAngles[i];
-                const r = pRadii[i];
-                pos.array[i * 3]     = Math.cos(a) * r;
-                pos.array[i * 3 + 1] = Math.sin(pTilts[i] + t * 0.1) * r * 0.3;
-                pos.array[i * 3 + 2] = Math.sin(a) * r;
-            }
-            pos.needsUpdate = true;
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
+        })();
     })();
     </script>
 
-    <!-- Elegant animated background effect -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 via-gray-50 to-white dark:from-gray-900 dark:via-black dark:to-black">
-        <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-brand-500/20 dark:bg-brand-500/20 blur-[120px] animate-[blob_15s_ease-in-out_infinite_alternate]"></div>
-        <div class="absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-purple-500/20 dark:bg-purple-900/30 blur-[120px] animate-[blob_20s_ease-in-out_infinite_alternate-reverse]" style="animation-delay: 2s;"></div>
-        <div class="absolute -bottom-[20%] left-[20%] w-[60%] h-[60%] rounded-full bg-indigo-500/10 dark:bg-indigo-900/20 blur-[120px] animate-[blob_18s_ease-in-out_infinite_alternate]" style="animation-delay: 4s;"></div>
+
+    <!-- Ambient background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" style="background: linear-gradient(150deg, #ffffff 0%, #f5f3ff 40%, #eef2ff 70%, #f8faff 100%);">
+        <!-- Two soft orbs only — gentle, non-spinning -->
+        <div class="orb-light" style="width:580px;height:580px;top:-10%;left:-8%;background:radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 70%);animation:blob 24s ease-in-out infinite alternate;"></div>
+        <div class="orb-light" style="width:500px;height:500px;bottom:-12%;right:-6%;background:radial-gradient(circle, rgba(139,92,246,0.09) 0%, transparent 70%);animation:blob 28s ease-in-out infinite alternate-reverse;animation-delay:3s;"></div>
+        <!-- Fine noise texture overlay -->
+        <div style="position:absolute;inset:0;opacity:0.012;background-image:url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);background-size:200px;"></div>
     </div>
 
-    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 glass" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                <div class="flex-shrink-0 flex items-center gap-2.5 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
                         <i class="fa-solid fa-graduation-cap text-xl"></i>
                     </div>
-                    <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white">EdFlow<span class="text-brand-600">.</span></span>
+                    <span class="font-bold text-2xl tracking-tight text-gray-900">EdFlow<span class="text-indigo-500">.</span></span>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="#features" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Features</a>
-                    <a href="#testimonials" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Testimonials</a>
-                    <a href="#stats" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Analytics</a>
-                    <a href="#faq" class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors mr-2">FAQ</a>
-                    
-                    <button id="theme-toggle" class="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-all">
-                        <i class="fa-solid fa-moon text-lg dark:hidden"></i> 
-                        <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i> 
-                    </button>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#features" class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">Features</a>
+                    <a href="#testimonials" class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">Testimonials</a>
+                    <a href="#stats" class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">Analytics</a>
+                    <a href="#faq" class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all mr-2">FAQ</a>
 
-                    <button onclick="toggleRegisterModal()" class="px-5 py-2 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm hover:shadow-md">
+
+
+                    <button onclick="toggleRegisterModal()" class="ml-1 px-5 py-2.5 rounded-xl bg-white/80 text-gray-800 border border-gray-200/80 text-sm font-bold hover:bg-white hover:shadow-md transition-all backdrop-blur-sm">
                         Register
                     </button>
 
-                    <a href="/login" class="px-6 py-2 rounded-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 inline-block">
+                    <a href="/login" class="ml-1 px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold hover:from-indigo-500 hover:to-violet-500 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 inline-block">
                         Log In
                     </a>
                 </div>
 
-                <div class="md:hidden flex items-center gap-4">
-                     <button id="theme-toggle-mobile" class="p-2 rounded-full text-gray-500 dark:text-gray-400 focus:outline-none">
-                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
-                        <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i>
-                    </button>
-                    <button id="mobile-menu-btn" class="w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 shadow-sm">
+                <div class="md:hidden flex items-center gap-3">
+
+                    <button id="mobile-menu-btn" class="w-10 h-10 rounded-xl bg-white/80 border border-gray-200/80 flex items-center justify-center text-gray-700 shadow-sm backdrop-blur-sm">
                         <i id="mobile-menu-icon" class="fa-solid fa-bars text-base transition-transform duration-300"></i>
                     </button>
                 </div>
@@ -618,37 +696,37 @@
 
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 dark:bg-white/5 backdrop-blur-md border border-gray-200/50 dark:border-white/10 shadow-sm mb-8 animate-fade-in">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">EdFlow v1.0.1</span>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-glass mb-8 animate-fade-in">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]"></span>
+                <span class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-widest">EdFlow v1.0.1</span>
             </div>
 
             <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white mb-6 animate-fade-in leading-tight md:leading-tight" style="animation-delay: 0.1s;">
                 Student Management <br class="hidden md:block">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-500">beautifully unified.</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 dark:from-indigo-400 dark:via-violet-400 dark:to-purple-400">beautifully unified.</span>
             </h1>
 
             <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-10 animate-fade-in font-medium" style="animation-delay: 0.2s;">
-                EdFlow is a complete student management system solution that helps you automate tasks manage operations and focus on what matters most - education.
+                EdFlow is a complete student management system solution that helps you automate tasks, manage operations and focus on what matters most — education.
             </p>
 
             <div class="flex flex-row flex-wrap justify-center gap-3 animate-fade-in" style="animation-delay: 0.3s;">
-                <button onclick="toggleRegisterModal()" class="w-72 flex items-center justify-between px-7 py-4 rounded-full bg-gray-900 dark:bg-gray-950 text-white font-bold text-base hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 shadow-xl shadow-gray-900/30 group">
+                <button onclick="toggleRegisterModal()" class="w-72 flex items-center justify-between px-7 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-base hover:from-indigo-500 hover:to-violet-500 transition-all duration-300 shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 group">
                     <span>Apply Now</span>
-                    <span class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
+                    <span class="w-8 h-8 flex items-center justify-center rounded-xl bg-white/20 group-hover:bg-white/30 transition-colors">
                         <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-0.5 transition-transform"></i>
                     </span>
                 </button>
-                <a href="#features" class="w-72 flex items-center justify-between px-7 py-4 rounded-full bg-white dark:bg-white/5 text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 font-bold text-base hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-300 shadow-lg shadow-gray-200/60 dark:shadow-none group">
+                <a href="#features" class="w-72 flex items-center justify-between px-7 py-4 rounded-2xl bg-white/70 dark:bg-white/5 text-gray-900 dark:text-white border border-white/90 dark:border-white/10 font-bold text-base hover:bg-white dark:hover:bg-white/10 transition-all duration-300 shadow-lg shadow-indigo-100/60 dark:shadow-none backdrop-blur-sm group">
                     <span>Explore Features</span>
-                    <span class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 group-hover:bg-gray-200 dark:group-hover:bg-white/20 transition-colors">
-                        <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-0.5 transition-transform"></i>
+                    <span class="w-8 h-8 flex items-center justify-center rounded-xl bg-indigo-50 dark:bg-white/10 group-hover:bg-indigo-100 dark:group-hover:bg-white/20 transition-colors">
+                        <i class="fa-solid fa-arrow-right text-indigo-500 text-sm group-hover:translate-x-0.5 transition-transform"></i>
                     </span>
                 </a>
             </div>
 
-            <div class="mt-20 relative mx-auto max-w-5xl animate-fade-in" style="animation-delay: 0.5s;">
-                <div class="rounded-2xl md:rounded-[2rem] bg-gray-100/50 dark:bg-white/5 p-2 md:p-3 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-2xl">
+            <div class="mt-20 relative mx-auto max-w-5xl animate-fade-in" style="animation-delay: 0.5s; perspective: 1000px;">
+                <div class="rounded-2xl md:rounded-[2rem] bg-white/40 dark:bg-white/5 p-2 md:p-3 backdrop-blur-xl border border-white/80 dark:border-white/10 shadow-2xl shadow-indigo-200/40 dark:shadow-none" style="box-shadow: 0 24px 80px rgba(99,102,241,0.12), 0 0 0 1px rgba(255,255,255,0.8), inset 0 1px 0 rgba(255,255,255,0.9);">
                     <div class="rounded-xl md:rounded-2xl bg-white dark:bg-black overflow-hidden relative aspect-[16/9] border border-gray-200 dark:border-gray-800 flex flex-col shadow-inner">
                         <div class="h-10 border-b border-gray-100 dark:border-gray-800 flex items-center px-4 gap-2 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-md">
                             <div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-700"></div>
@@ -951,7 +1029,7 @@
         </div>
     </div>
 
-    <section id="features" class="py-24 bg-white dark:bg-black transition-colors duration-300">
+    <section id="features" class="py-24 section-glass transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-brand-600 dark:text-gray-400 font-bold tracking-widest uppercase text-xs mb-3">Core Modules</h2>
@@ -959,109 +1037,87 @@
                 <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">Powerful systems perfectly integrated into one unified dashboard.</p>
             </div>
 
-            <!-- New Premium Animated Bento Grid -->
+            <!-- Premium Bento Grid — all 10 cards, smooth & performant -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
-                
-                <!-- Large Card: Analytics -->
-                <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-brand-500/40 dark:hover:from-brand-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-brand-500/50 rounded-full blur-[80px] animate-[spin_8s_linear_infinite]"></div>
-                        <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-purple-600/50 rounded-full blur-[80px] animate-[spin_12s_linear_infinite_reverse]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-xl shadow-brand-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
-                            <i class="fa-solid fa-chart-line text-2xl"></i>
+
+                <!-- 1. Large Card: Analytics -->
+                <div class="md:col-span-2 md:row-span-2 group rounded-[2rem] bg-gradient-to-br from-indigo-50 to-violet-50 shadow-md overflow-hidden border border-indigo-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-10 flex flex-col overflow-hidden">
+                        <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+                            <i class="fa-solid fa-chart-line text-xl"></i>
                         </div>
-                        <!-- Mini bar chart mock-UI -->
-                        <div class="flex items-end gap-2 h-20 mb-6">
-                            <div class="flex-1 bg-brand-500/20 rounded-t-lg group-hover:bg-brand-500/60 transition-all duration-[800ms] ease-out" style="height:40%"></div>
-                            <div class="flex-1 bg-brand-500/20 rounded-t-lg group-hover:bg-brand-500/60 transition-all duration-[900ms] ease-out delay-75" style="height:65%"></div>
-                            <div class="flex-1 bg-brand-500/20 rounded-t-lg group-hover:bg-brand-500/60 transition-all duration-[1000ms] ease-out delay-100" style="height:50%"></div>
-                            <div class="flex-1 bg-purple-500/20 rounded-t-lg group-hover:bg-purple-500/70 transition-all duration-[1100ms] ease-out delay-150" style="height:85%"></div>
-                            <div class="flex-1 bg-purple-500/20 rounded-t-lg group-hover:bg-purple-500/70 transition-all duration-[1200ms] ease-out delay-200" style="height:72%"></div>
-                            <div class="flex-1 bg-brand-500/30 rounded-t-lg group-hover:bg-brand-500/80 shadow-[0_0_12px_rgba(59,130,246,0.5)] transition-all duration-[1300ms] ease-out delay-250" style="height:95%"></div>
+                        <!-- Mini bar chart -->
+                        <div class="flex items-end gap-1.5 h-16 mb-5">
+                            <div class="flex-1 bg-indigo-200 rounded-t group-hover:bg-indigo-400 transition-colors duration-300" style="height:40%"></div>
+                            <div class="flex-1 bg-indigo-200 rounded-t group-hover:bg-indigo-400 transition-colors duration-300 delay-[40ms]" style="height:65%"></div>
+                            <div class="flex-1 bg-indigo-200 rounded-t group-hover:bg-indigo-400 transition-colors duration-300 delay-[80ms]" style="height:50%"></div>
+                            <div class="flex-1 bg-violet-200 rounded-t group-hover:bg-violet-500 transition-colors duration-300 delay-[120ms]" style="height:85%"></div>
+                            <div class="flex-1 bg-violet-200 rounded-t group-hover:bg-violet-500 transition-colors duration-300 delay-[160ms]" style="height:72%"></div>
+                            <div class="flex-1 bg-indigo-300 rounded-t group-hover:bg-indigo-600 transition-colors duration-300 delay-[200ms]" style="height:95%"></div>
                         </div>
-                        <div class="flex gap-3 mb-4">
-                            <div class="flex-1 rounded-xl bg-brand-50 dark:bg-brand-500/10 border border-brand-100 dark:border-brand-500/20 px-3 py-2 text-center">
-                                <div class="text-lg font-black text-brand-600 dark:text-brand-400">94%</div>
-                                <div class="text-[10px] text-brand-500 font-bold uppercase tracking-wider">Efficiency</div>
+                        <div class="flex gap-3 mb-5">
+                            <div class="flex-1 rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-center">
+                                <div class="text-lg font-black text-indigo-600">94%</div>
+                                <div class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Efficiency</div>
                             </div>
-                            <div class="flex-1 rounded-xl bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 px-3 py-2 text-center">
-                                <div class="text-lg font-black text-purple-600 dark:text-purple-400">+18%</div>
-                                <div class="text-[10px] text-purple-500 font-bold uppercase tracking-wider">Growth</div>
+                            <div class="flex-1 rounded-xl bg-violet-50 border border-violet-100 px-3 py-2 text-center">
+                                <div class="text-lg font-black text-violet-600">+18%</div>
+                                <div class="text-[10px] text-violet-400 font-bold uppercase tracking-wider">Growth</div>
                             </div>
                         </div>
-                        <div class="mt-auto relative z-20">
-                            <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">Performance Analytics</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Deep, actionable insights into student performance, attendance patterns, and institutional health across the entire ecosystem.</p>
-                        </div>
-                        <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-brand-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
-                            <div class="w-48 h-48 border border-purple-500/30 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+                        <div class="mt-auto">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-3">Performance Analytics</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium max-w-sm text-base">Deep, actionable insights into student performance, attendance patterns, and institutional health.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Medium Card: QR Identity -->
-                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-blue-500/40 dark:hover:from-blue-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-blue-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <!-- QR mock visual -->
-                        <div class="shrink-0 w-20 h-20 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-blue-100 dark:border-blue-500/20 p-2 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <!-- 2. Medium Card: QR Identity -->
+                <div class="md:col-span-2 md:row-span-1 group rounded-[2rem] bg-gradient-to-br from-blue-50 to-sky-50 shadow-md overflow-hidden border border-blue-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-8 flex flex-row items-center gap-6 overflow-hidden">
+                        <div class="shrink-0 w-20 h-20 rounded-2xl bg-white border-2 border-blue-100 p-2 shadow-md group-hover:scale-105 group-hover:rotate-2 transition-transform duration-200">
                             <div class="grid grid-cols-3 gap-0.5 w-full h-full">
-                                <div class="bg-gray-900 dark:bg-white rounded-sm"></div><div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div><div class="bg-gray-900 dark:bg-white rounded-sm"></div>
-                                <div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div><div class="bg-blue-500 rounded-sm animate-pulse"></div><div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div>
-                                <div class="bg-gray-900 dark:bg-white rounded-sm"></div><div class="bg-gray-100 dark:bg-zinc-700 rounded-sm"></div><div class="bg-gray-900 dark:bg-white rounded-sm"></div>
+                                <div class="bg-gray-800 rounded-sm"></div><div class="bg-gray-100 rounded-sm"></div><div class="bg-gray-800 rounded-sm"></div>
+                                <div class="bg-gray-100 rounded-sm"></div><div class="bg-blue-500 rounded-sm"></div><div class="bg-gray-100 rounded-sm"></div>
+                                <div class="bg-gray-800 rounded-sm"></div><div class="bg-gray-100 rounded-sm"></div><div class="bg-gray-800 rounded-sm"></div>
                             </div>
                         </div>
-                        <div class="relative z-20 flex-1">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 mb-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-                                <span class="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">Instant Scan</span>
+                        <div class="flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest">Instant Scan</span>
                             </div>
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Smart QR Identity</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Instantly generate scannable digital ID cards for dynamic & highly secure campus access control.</p>
+                            <h3 class="text-xl font-black tracking-tight text-gray-900 mb-1.5">Smart QR Identity</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium text-sm">Instantly generate scannable digital ID cards for dynamic &amp; highly secure campus access control.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Small Card: Tracker -->
-                <div class="md:col-span-1 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-emerald-500/40 dark:hover:from-emerald-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute bottom-0 right-0 w-[200px] h-[200px] bg-emerald-500/50 rounded-full blur-[60px] animate-pulse"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-6 flex flex-col justify-between border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden items-center text-center">
-                        <!-- Radar mock-UI -->
-                        <div class="relative w-16 h-16 flex items-center justify-center">
-                            <div class="absolute inset-0 rounded-full border border-emerald-200 dark:border-emerald-500/20 group-hover:scale-150 transition-all duration-700 opacity-0 group-hover:opacity-100"></div>
-                            <div class="absolute inset-2 rounded-full border border-emerald-300 dark:border-emerald-500/30 group-hover:scale-125 transition-all duration-500 opacity-0 group-hover:opacity-60"></div>
-                            <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500">
-                                <i class="fa-solid fa-satellite-dish text-xl animate-[pulse_2s_infinite]"></i>
+                <!-- 3. Small Card: Live Tracker -->
+                <div class="md:col-span-1 md:row-span-1 group rounded-[2rem] bg-gradient-to-br from-emerald-50 to-teal-50 shadow-md overflow-hidden border border-emerald-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-6 flex flex-col justify-between overflow-hidden items-center text-center">
+                        <div class="relative w-14 h-14 flex items-center justify-center">
+                            <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
+                                <i class="fa-solid fa-satellite-dish text-xl"></i>
                             </div>
-                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping"></span>
-                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+                            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"></span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Live Tracker</h3>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Secure live GPS tracking.</p>
+                            <h3 class="text-xl font-black tracking-tight text-gray-900 mb-1">Live Tracker</h3>
+                            <p class="text-gray-500 text-sm font-medium">Secure live GPS tracking.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Small Card: AI Agent -->
-                <div class="md:col-span-1 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-rose-500/40 dark:hover:from-rose-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-gradient-to-r from-rose-500/60 to-orange-500/60 rounded-full blur-[60px] animate-[spin_5s_linear_infinite]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-gray-900 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-6 flex flex-col justify-between border border-transparent dark:border-white/5 group-hover:bg-black transition-colors duration-700 overflow-hidden text-center items-center">
-                        <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl flex items-center justify-center text-white mb-2 shadow-lg shadow-rose-500/30 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 border border-white/20">
+                <!-- 4. Small Card: StudyAI Agent (dark card) -->
+                <div class="md:col-span-1 md:row-span-1 group rounded-[2rem] overflow-hidden shadow-md">
+                    <div class="w-full h-full bg-gray-900 rounded-[2rem] p-6 flex flex-col justify-between overflow-hidden text-center items-center">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-orange-500 rounded-xl flex items-center justify-center text-white mb-2 shadow-lg shadow-rose-500/25 group-hover:scale-105 transition-transform duration-200">
                             <i class="fa-solid fa-robot text-xl"></i>
                         </div>
-                        <!-- AI chat bubble mock -->
                         <div class="w-full space-y-1.5 mb-1">
-                            <div class="flex justify-end"><div class="text-[10px] bg-rose-500/30 text-rose-200 rounded-xl px-2 py-1 max-w-[80%] text-right">Explain photosynthesis</div></div>
-                            <div class="flex justify-start"><div class="text-[10px] bg-white/10 text-gray-300 rounded-xl px-2 py-1 max-w-[80%] opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-300">Sure! It's the process...</div></div>
+                            <div class="flex justify-end"><div class="text-[10px] bg-rose-500/25 text-rose-300 rounded-xl px-2 py-1 max-w-[80%] text-right">Explain photosynthesis</div></div>
+                            <div class="flex justify-start"><div class="text-[10px] bg-white/10 text-gray-400 rounded-xl px-2 py-1 max-w-[80%] opacity-0 group-hover:opacity-100 transition-opacity duration-200">Sure! It's the process...</div></div>
                         </div>
                         <div>
                             <h3 class="text-xl font-black tracking-tight text-white mb-1">StudyAI Agent</h3>
@@ -1070,28 +1126,24 @@
                     </div>
                 </div>
 
-                <!-- Medium Card: Parent Access -->
-                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-indigo-500/40 dark:hover:from-indigo-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-indigo-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shrink-0">
-                            <i class="fa-solid fa-users text-2xl"></i>
+                <!-- 5. Medium Card: Parent Access -->
+                <div class="md:col-span-2 md:row-span-1 group rounded-[2rem] bg-gradient-to-br from-indigo-50 to-blue-50 shadow-md overflow-hidden border border-indigo-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-8 flex flex-row items-center gap-6 overflow-hidden">
+                        <div class="w-14 h-14 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200 shrink-0">
+                            <i class="fa-solid fa-users text-xl"></i>
                         </div>
-                        <div class="relative z-20 flex-1">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 mb-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-                                <span class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Live Updates</span>
+                        <div class="flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                                <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Live Updates</span>
                             </div>
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Parent Access</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">Empower parents with real-time access to their children's attendance, grades, and fee records securely.</p>
-                            <!-- Mini notification feed -->
-                            <div class="mt-3 space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                                <div class="flex items-center gap-2 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+                            <h3 class="text-xl font-black tracking-tight text-gray-900 mb-1.5">Parent Access</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium text-sm">Empower parents with real-time access to their children's attendance, grades, and fee records securely.</p>
+                            <div class="mt-3 space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <div class="flex items-center gap-2 text-[11px] text-indigo-600 font-bold">
                                     <i class="fa-solid fa-circle-check text-emerald-500"></i> Attendance: 91% — On Track
                                 </div>
-                                <div class="flex items-center gap-2 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+                                <div class="flex items-center gap-2 text-[11px] text-indigo-600 font-bold">
                                     <i class="fa-solid fa-indian-rupee-sign text-amber-500"></i> Fee Status: Paid ✓
                                 </div>
                             </div>
@@ -1099,85 +1151,68 @@
                     </div>
                 </div>
 
-                <!-- Medium Card: Broadcasting -->
-                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-amber-500/40 dark:hover:from-amber-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-amber-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite_reverse]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <!-- Signal wave icon -->
-                        <div class="relative shrink-0 w-16 flex flex-col items-center justify-center">
-                            <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-amber-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <!-- 6. Medium Card: Broadcasting -->
+                <div class="md:col-span-2 md:row-span-1 group rounded-[2rem] bg-gradient-to-br from-amber-50 to-orange-50 shadow-md overflow-hidden border border-amber-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-8 flex flex-row items-center gap-6 overflow-hidden">
+                        <div class="relative shrink-0">
+                            <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-500/20 group-hover:scale-105 group-hover:rotate-3 transition-transform duration-200">
                                 <i class="fa-solid fa-bullhorn text-2xl"></i>
                             </div>
-                            <!-- Signal rings -->
-                            <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-400 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity"></div>
                         </div>
-                        <div class="relative z-20 flex-1">
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">Broadcasting</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">Instantly deliver subject-specific announcements and urgent institutional notices across all devices.</p>
-                            <!-- Notice feed mock -->
-                            <div class="mt-3 space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                                <div class="flex items-center gap-2 text-[11px] text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2 py-1">
-                                    <i class="fa-solid fa-circle text-[6px] text-amber-500 animate-pulse"></i> Exam schedule updated — Math, 2nd Floor
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-1">Broadcasting</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium text-sm">Instantly deliver subject-specific announcements and urgent institutional notices across all devices.</p>
+                            <div class="mt-3 space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <div class="flex items-center gap-2 text-[11px] text-amber-700 font-bold bg-amber-50 rounded-lg px-2 py-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span> Exam schedule updated — Math, 2nd Floor
                                 </div>
-                                <div class="flex items-center gap-2 text-[11px] text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2 py-1">
-                                    <i class="fa-solid fa-circle text-[6px] text-amber-500"></i> Holiday notice: 15th April
+                                <div class="flex items-center gap-2 text-[11px] text-amber-700 font-bold bg-amber-50 rounded-lg px-2 py-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span> Holiday notice: 15th April
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Medium Card: AI Study Coach -->
-                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-fuchsia-500/40 dark:hover:from-fuchsia-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-fuchsia-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-fuchsia-400 to-fuchsia-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-fuchsia-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shrink-0">
+                <!-- 7. Medium Card: AI Study Coach -->
+                <div class="md:col-span-2 md:row-span-1 group rounded-[2rem] bg-gradient-to-br from-fuchsia-50 to-purple-50 shadow-md overflow-hidden border border-fuchsia-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-8 flex flex-row items-center gap-6 overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-fuchsia-400 to-fuchsia-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-fuchsia-500/20 group-hover:scale-105 transition-transform duration-200 shrink-0">
                             <i class="fa-solid fa-brain text-2xl"></i>
                         </div>
-                        <div class="relative z-20 flex-1">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-fuchsia-50 dark:bg-fuchsia-500/10 border border-fuchsia-100 dark:border-fuchsia-500/20 mb-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-pulse"></span>
-                                <span class="text-[10px] font-black text-fuchsia-600 dark:text-fuchsia-400 uppercase tracking-widest">Gemini Powered</span>
+                        <div class="flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-fuchsia-50 border border-fuchsia-100 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-500"></span>
+                                <span class="text-[10px] font-black text-fuchsia-600 uppercase tracking-widest">Gemini Powered</span>
                             </div>
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">AI Study Coach</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">An intelligent assistant to personalize study plans, solve queries, and provide 24/7 support.</p>
-                            <!-- Study plan mock -->
-                            <div class="mt-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-fuchsia-100 dark:bg-fuchsia-500/20 text-fuchsia-700 dark:text-fuchsia-300">Math Plan ✓</span>
-                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300">Physics Quiz</span>
-                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">+ 5 more</span>
+                            <h3 class="text-xl font-black tracking-tight text-gray-900 mb-1.5">AI Study Coach</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium text-sm">An intelligent assistant to personalize study plans, solve queries, and provide 24/7 support.</p>
+                            <div class="mt-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-fuchsia-100 text-fuchsia-700">Math Plan ✓</span>
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-purple-100 text-purple-700">Physics Quiz</span>
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-indigo-100 text-indigo-700">+ 5 more</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Medium Card: SOS for Emergency -->
-                <div class="md:col-span-2 md:row-span-1 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-red-500/40 dark:hover:from-red-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-red-500/40 rounded-full blur-[70px] animate-[spin_6s_linear_infinite_reverse]"></div>
-                    </div>
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-8 flex flex-row items-center gap-6 border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <!-- SOS pulsing icon -->
+                <!-- 8. Medium Card: SOS Emergency -->
+                <div class="md:col-span-2 md:row-span-1 group rounded-[2rem] bg-gradient-to-br from-red-50 to-rose-50 shadow-md overflow-hidden border border-red-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-8 flex flex-row items-center gap-6 overflow-hidden">
                         <div class="relative shrink-0">
-                            <div class="absolute inset-0 rounded-2xl bg-red-500/30 group-hover:animate-ping"></div>
-                            <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-red-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 relative">
-                                <i class="fa-solid fa-bell text-2xl animate-pulse"></i>
+                            <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-red-500/20 group-hover:scale-105 group-hover:rotate-3 transition-transform duration-200">
+                                <i class="fa-solid fa-bell text-2xl"></i>
                             </div>
                         </div>
-                        <div class="relative z-20 flex-1">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 mb-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                                <span class="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-widest">Panic Alert Active</span>
+                        <div class="flex-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 border border-red-200 mb-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                <span class="text-[10px] font-black text-red-600 uppercase tracking-widest">Panic Alert Active</span>
                             </div>
-                            <h3 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white mb-1">SOS for Emergency</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-medium text-sm">Instant panic alerts triggered by students automatically notify parents with live location data in case of emergencies.</p>
-                            <!-- Alert status mock -->
-                            <div class="mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                                <div class="flex items-center gap-2 text-[11px] text-red-700 dark:text-red-400 font-bold bg-red-50 dark:bg-red-500/10 rounded-lg px-2 py-1">
+                            <h3 class="text-xl font-black tracking-tight text-gray-900 mb-1.5">SOS for Emergency</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium text-sm">Instant panic alerts triggered by students automatically notify parents with live location data in emergencies.</p>
+                            <div class="mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <div class="flex items-center gap-2 text-[11px] text-red-700 font-bold bg-red-50 rounded-lg px-2 py-1">
                                     <i class="fa-solid fa-location-dot text-red-500"></i> GPS signal acquired — Parent notified in 0.3s
                                 </div>
                             </div>
@@ -1185,124 +1220,97 @@
                     </div>
                 </div>
 
-                <!-- Large Card: AI Attendance Prediction -->
-                <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-cyan-500/40 dark:hover:from-cyan-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-cyan-500/50 rounded-full blur-[80px] animate-[spin_8s_linear_infinite]"></div>
-                        <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-sky-600/50 rounded-full blur-[80px] animate-[spin_12s_linear_infinite_reverse]"></div>
-                    </div>
-
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-sky-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-cyan-500/20 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
+                <!-- 9. Large Card: AI Attendance Prediction -->
+                <div class="md:col-span-2 md:row-span-2 group rounded-[2rem] bg-gradient-to-br from-cyan-50 to-sky-50 shadow-md overflow-hidden border border-cyan-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-10 flex flex-col overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-sky-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform duration-200">
                             <i class="fa-solid fa-chart-simple text-2xl"></i>
                         </div>
-
-                        <!-- Animated prediction bar chart mock-UI -->
+                        <!-- Animated prediction bars -->
                         <div class="mb-6 space-y-3">
                             <div class="flex items-center gap-3">
-                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Week 1</span>
-                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.6)] group-hover:w-[88%] w-[50%] transition-all duration-[1200ms] ease-out"></div>
+                                <span class="text-xs font-bold text-gray-400 w-16 shrink-0">Week 1</span>
+                                <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full group-hover:w-[88%] w-[50%] transition-all duration-700 ease-out"></div>
                                 </div>
                                 <span class="text-xs font-black text-cyan-500 w-10 text-right">88%</span>
                             </div>
                             <div class="flex items-center gap-3">
-                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Week 2</span>
-                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.5)] group-hover:w-[61%] w-[30%] transition-all duration-[1400ms] ease-out"></div>
+                                <span class="text-xs font-bold text-gray-400 w-16 shrink-0">Week 2</span>
+                                <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full group-hover:w-[61%] w-[30%] transition-all duration-700 ease-out delay-75"></div>
                                 </div>
                                 <span class="text-xs font-black text-amber-500 w-10 text-right">61%</span>
                             </div>
                             <div class="flex items-center gap-3">
-                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Week 3</span>
-                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-rose-400 to-red-500 rounded-full shadow-[0_0_8px_rgba(251,113,133,0.5)] group-hover:w-[42%] w-[20%] transition-all duration-[1600ms] ease-out"></div>
+                                <span class="text-xs font-bold text-gray-400 w-16 shrink-0">Week 3</span>
+                                <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-rose-400 to-red-500 rounded-full group-hover:w-[42%] w-[20%] transition-all duration-700 ease-out delay-150"></div>
                                 </div>
                                 <span class="text-xs font-black text-rose-500 w-10 text-right">42%</span>
                             </div>
                             <div class="flex items-center gap-3 mt-1">
-                                <span class="text-xs font-bold text-gray-400 dark:text-gray-500 w-16 shrink-0">Predicted</span>
-                                <div class="flex-1 h-3 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-500 to-purple-600 rounded-full shadow-[0_0_12px_rgba(139,92,246,0.6)] group-hover:w-[38%] w-[15%] transition-all duration-[1800ms] ease-out animate-pulse"></div>
+                                <span class="text-xs font-bold text-gray-400 w-16 shrink-0">Predicted</span>
+                                <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-violet-500 to-purple-600 rounded-full group-hover:w-[38%] w-[15%] transition-all duration-700 ease-out delay-200"></div>
                                 </div>
                                 <span class="text-xs font-black text-violet-500 w-10 text-right">~38%</span>
                             </div>
                         </div>
-
-                        <div class="mt-auto relative z-20">
-                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 mb-3">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
-                                <span class="text-[10px] font-black text-cyan-600 dark:text-cyan-400 uppercase tracking-widest">AI Powered</span>
+                        <div class="mt-auto">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 mb-3">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                                <span class="text-[10px] font-black text-cyan-600 uppercase tracking-widest">AI Powered</span>
                             </div>
-                            <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">AI Attendance Prediction</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Analyzes historical attendance trends to predict future eligibility risk. Automatically triggers smart alerts for at-risk students before it's too late.</p>
-                        </div>
-
-                        <!-- Decorative rings -->
-                        <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-cyan-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
-                            <div class="w-48 h-48 border border-sky-500/30 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-3">AI Attendance Prediction</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium max-w-sm text-base">Analyzes historical trends to predict future eligibility risk. Automatically triggers smart alerts for at-risk students before it's too late.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Large Card: Dropout Risk Detection -->
-                <div class="md:col-span-2 md:row-span-2 group p-1 rounded-[2.5rem] bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10 dark:to-transparent hover:from-rose-500/40 dark:hover:from-rose-500/30 transition-all duration-700 relative overflow-hidden backdrop-blur-2xl shadow-lg">
-                    <!-- Animated Background Layers -->
-                    <div class="absolute inset-0 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-1000 delay-100">
-                        <div class="absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-rose-500/50 rounded-full blur-[80px] animate-[spin_10s_linear_infinite]"></div>
-                        <div class="absolute bottom-[10%] left-[10%] w-[250px] h-[250px] bg-orange-500/40 rounded-full blur-[80px] animate-[spin_14s_linear_infinite_reverse]"></div>
-                    </div>
-
-                    <!-- Content Canvas -->
-                    <div class="relative z-10 w-full h-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[2.4rem] p-10 flex flex-col border border-white/60 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-zinc-950/60 transition-colors duration-700 overflow-hidden">
-                        <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-orange-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-rose-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <!-- 10. Large Card: Dropout Risk Detection -->
+                <div class="md:col-span-2 md:row-span-2 group rounded-[2rem] bg-gradient-to-br from-rose-50 to-orange-50 shadow-md overflow-hidden border border-rose-100/60">
+                    <div class="bento-card-inner w-full h-full rounded-[2rem] p-10 flex flex-col overflow-hidden">
+                        <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-orange-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform duration-200">
                             <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
                         </div>
-
-                        <!-- Risk score mock-UI cards -->
+                        <!-- Risk score cards -->
                         <div class="grid grid-cols-3 gap-3 mb-6">
-                            <div class="rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 p-3 text-center group-hover:scale-105 transition-transform duration-500 delay-100">
-                                <div class="text-xl font-black text-emerald-600 dark:text-emerald-400">Safe</div>
-                                <div class="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold uppercase tracking-wider mt-1">Score &lt; 30</div>
+                            <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-3 text-center group-hover:scale-[1.03] transition-transform duration-200">
+                                <div class="text-xl font-black text-emerald-600">Safe</div>
+                                <div class="text-[10px] text-emerald-500 font-bold uppercase tracking-wider mt-1">Score &lt; 30</div>
                                 <div class="mt-2 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto">
                                     <i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>
                                 </div>
                             </div>
-                            <div class="rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 p-3 text-center group-hover:scale-105 transition-transform duration-500 delay-200">
-                                <div class="text-xl font-black text-amber-600 dark:text-amber-400">At Risk</div>
-                                <div class="text-[10px] text-amber-600 dark:text-amber-500 font-bold uppercase tracking-wider mt-1">Score 30–59</div>
+                            <div class="rounded-2xl bg-amber-50 border border-amber-200 p-3 text-center group-hover:scale-[1.03] transition-transform duration-200 delay-50">
+                                <div class="text-xl font-black text-amber-600">At Risk</div>
+                                <div class="text-[10px] text-amber-500 font-bold uppercase tracking-wider mt-1">Score 30–59</div>
                                 <div class="mt-2 w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto">
-                                    <i class="fa-solid fa-circle-exclamation text-amber-500 text-sm animate-pulse"></i>
+                                    <i class="fa-solid fa-circle-exclamation text-amber-500 text-sm"></i>
                                 </div>
                             </div>
-                            <div class="rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 p-3 text-center group-hover:scale-105 transition-transform duration-500 delay-300">
-                                <div class="text-xl font-black text-rose-600 dark:text-rose-400">High Risk</div>
-                                <div class="text-[10px] text-rose-600 dark:text-rose-500 font-bold uppercase tracking-wider mt-1">Score ≥ 60</div>
+                            <div class="rounded-2xl bg-rose-50 border border-rose-200 p-3 text-center group-hover:scale-[1.03] transition-transform duration-200 delay-100">
+                                <div class="text-xl font-black text-rose-600">High Risk</div>
+                                <div class="text-[10px] text-rose-500 font-bold uppercase tracking-wider mt-1">Score ≥ 60</div>
                                 <div class="mt-2 w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center mx-auto">
-                                    <i class="fa-solid fa-skull-crossbones text-rose-500 text-sm animate-pulse"></i>
+                                    <i class="fa-solid fa-skull-crossbones text-rose-500 text-sm"></i>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mt-auto relative z-20">
-                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 mb-3">
-                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                                <span class="text-[10px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-widest">Early Warning System</span>
+                        <div class="mt-auto">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 mb-3">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                <span class="text-[10px] font-black text-rose-600 uppercase tracking-widest">Early Warning System</span>
                             </div>
-                            <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-4">Dropout Risk Detection</h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg font-medium max-w-sm">Intelligently scores each student's dropout likelihood by fusing attendance, academic performance, and platform engagement data into a single actionable risk index.</p>
-                        </div>
-
-                        <!-- Decorative rings -->
-                        <div class="absolute -bottom-20 -right-20 w-72 h-72 border border-rose-500/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-[1500ms] scale-50 group-hover:scale-100">
-                            <div class="w-48 h-48 border border-orange-500/30 rounded-full animate-ping" style="animation-duration: 2.5s;"></div>
+                            <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-3">Dropout Risk Detection</h3>
+                            <p class="text-gray-500 leading-relaxed font-medium max-w-sm text-base">Intelligently scores each student's dropout likelihood by fusing attendance, academic performance, and engagement data into one actionable risk index.</p>
                         </div>
                     </div>
                 </div>
 
             </div>
+
         </div>
     </section>
 
@@ -1387,58 +1395,58 @@
         </div>
     </section>
 
-    <section id="stats" class="py-24 relative overflow-hidden bg-black border-t border-white/5">
+    <section id="stats" class="py-24 relative overflow-hidden stats-glass">
         <!-- Colorful ambient background glow -->
         <div class="absolute inset-0 z-0 pointer-events-none">
-            <div class="absolute -top-[20%] right-[10%] w-[600px] h-[600px] bg-brand-500/20 rounded-full blur-[100px] mix-blend-screen animate-[pulse_10s_infinite]"></div>
-            <div class="absolute -bottom-[20%] left-[10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[100px] mix-blend-screen animate-[pulse_15s_infinite_reverse]"></div>
+            <div class="absolute -top-[20%] right-[10%] w-[600px] h-[600px] bg-indigo-400/15 rounded-full blur-[100px] dark:mix-blend-screen animate-[pulse_10s_infinite]"></div>
+            <div class="absolute -bottom-[20%] left-[10%] w-[600px] h-[600px] bg-violet-400/10 rounded-full blur-[100px] dark:mix-blend-screen animate-[pulse_15s_infinite_reverse]"></div>
         </div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- Section Title -->
             <div class="text-center mb-16">
-                <h2 class="text-brand-500 font-bold tracking-widest uppercase text-xs mb-3">Live Metrics</h2>
-                <h3 class="text-3xl font-black tracking-tight text-white sm:text-5xl">Scale with confidence.</h3>
+                <h2 class="text-indigo-600 dark:text-brand-400 font-bold tracking-widest uppercase text-xs mb-3">Live Metrics</h2>
+                <h3 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white sm:text-5xl">Scale with confidence.</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                <!-- Stat 1: Blue -->
-                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-br from-brand-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <!-- Stat 1: Indigo -->
+                <div class="group relative p-8 rounded-[2rem] glass-card hover:border-indigo-400/60 hover:shadow-indigo-100/60 dark:hover:border-brand-500/50 dark:hover:bg-white/10 transition-all duration-500 overflow-hidden hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div class="relative z-10">
-                        <i class="fa-solid fa-users text-4xl text-brand-400 mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"></i>
-                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="50">0</span>k+</div>
-                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-brand-300 transition-colors">Students Managed</div>
+                        <i class="fa-solid fa-users text-4xl text-indigo-500 dark:text-brand-400 mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(99,102,241,0.4)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-gray-400 dark:from-white dark:to-gray-500 mb-3"><span class="count-up" data-target="50">0</span>k+</div>
+                        <div class="text-gray-500 dark:text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-indigo-600 dark:group-hover:text-brand-300 transition-colors">Students Managed</div>
                     </div>
                 </div>
-                
+
                 <!-- Stat 2: Purple -->
-                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-purple-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="group relative p-8 rounded-[2rem] glass-card hover:border-violet-400/60 hover:shadow-violet-100/60 dark:hover:border-purple-500/50 dark:hover:bg-white/10 transition-all duration-500 overflow-hidden hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-violet-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div class="relative z-10">
-                        <i class="fa-solid fa-building-columns text-4xl text-purple-400 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
-                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="120">0</span>+</div>
-                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-purple-300 transition-colors">Institutions</div>
+                        <i class="fa-solid fa-building-columns text-4xl text-violet-500 dark:text-purple-400 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(139,92,246,0.4)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-gray-400 dark:from-white dark:to-gray-500 mb-3"><span class="count-up" data-target="120">0</span>+</div>
+                        <div class="text-gray-500 dark:text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-violet-600 dark:group-hover:text-purple-300 transition-colors">Institutions</div>
                     </div>
                 </div>
-                
+
                 <!-- Stat 3: Emerald -->
-                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-emerald-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="group relative p-8 rounded-[2rem] glass-card hover:border-emerald-400/60 hover:shadow-emerald-100/60 dark:hover:border-emerald-500/50 dark:hover:bg-white/10 transition-all duration-500 overflow-hidden hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div class="relative z-10">
-                        <i class="fa-solid fa-server text-4xl text-emerald-400 mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i>
-                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="99.9">0</span>%</div>
-                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-emerald-300 transition-colors">Uptime Guarantee</div>
+                        <i class="fa-solid fa-server text-4xl text-emerald-500 dark:text-emerald-400 mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(52,211,153,0.4)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-gray-400 dark:from-white dark:to-gray-500 mb-3"><span class="count-up" data-target="99.9">0</span>%</div>
+                        <div class="text-gray-500 dark:text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">Uptime Guarantee</div>
                     </div>
                 </div>
-                
+
                 <!-- Stat 4: Orange -->
-                <div class="group relative p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-orange-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-md overflow-hidden hover:-translate-y-2 shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="group relative p-8 rounded-[2rem] glass-card hover:border-orange-400/60 hover:shadow-orange-100/60 dark:hover:border-orange-500/50 dark:hover:bg-white/10 transition-all duration-500 overflow-hidden hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-br from-orange-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div class="relative z-10">
-                        <i class="fa-solid fa-headset text-4xl text-orange-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(251,146,60,0.5)]"></i>
-                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-3"><span class="count-up" data-target="24">0</span>/7</div>
-                        <div class="text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-orange-300 transition-colors">Live Support</div>
+                        <i class="fa-solid fa-headset text-4xl text-orange-500 dark:text-orange-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(251,146,60,0.4)]"></i>
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-gray-400 dark:from-white dark:to-gray-500 mb-3"><span class="count-up" data-target="24">0</span>/7</div>
+                        <div class="text-gray-500 dark:text-gray-400 text-xs font-bold tracking-widest uppercase group-hover:text-orange-600 dark:group-hover:text-orange-300 transition-colors">Live Support</div>
                     </div>
                 </div>
             </div>
@@ -1446,7 +1454,7 @@
     </section>
 
     <!-- How to Use Section -->
-    <section id="how-to-use" class="py-32 relative bg-white dark:bg-black transition-colors duration-300 border-t border-gray-100 dark:border-white/5 overflow-hidden">
+    <section id="how-to-use" class="py-32 relative section-glass transition-colors duration-300 overflow-hidden">
         <!-- Ambient animated background -->
         <div class="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20">
             <div class="absolute top-[20%] right-[10%] w-[400px] h-[400px] bg-brand-500/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen animate-[pulse_10s_infinite]"></div>
@@ -1546,7 +1554,7 @@
         </div>
     </section>
 
-    <section id="faq" class="py-32 relative bg-white dark:bg-black transition-colors duration-300 border-t border-gray-100 dark:border-white/5 overflow-hidden">
+    <section id="faq" class="py-32 relative section-glass transition-colors duration-300 overflow-hidden">
         
         <!-- Animated Ambient Background -->
         <div class="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20">
@@ -1635,10 +1643,10 @@
         </div>
     </section>
 
-    <footer id="contact" class="relative bg-white dark:bg-black border-t border-gray-200 dark:border-white/5 pt-24 pb-10 transition-colors duration-300 overflow-hidden">
+    <footer id="contact" class="relative section-glass border-t border-indigo-100/60 dark:border-white/5 pt-24 pb-10 transition-colors duration-300 overflow-hidden">
         
         <!-- Ambient Footer Glow -->
-        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[800px] h-[400px] bg-brand-600/30 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[800px] h-[400px] bg-indigo-400/15 dark:bg-brand-600/30 rounded-full blur-[120px] dark:mix-blend-screen pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -2156,53 +2164,15 @@
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 20) {
-                navbar.classList.add('glass');
-                navbar.classList.add('shadow-sm');
-                if (document.documentElement.classList.contains('dark')) {
-                    navbar.classList.add('border-b', 'border-gray-800');
-                }
+                navbar.classList.add('glass', 'shadow-sm');
             } else {
-                navbar.classList.remove('glass');
-                navbar.classList.remove('shadow-sm');
-                navbar.classList.remove('border-b', 'border-gray-800');
+                navbar.classList.remove('glass', 'shadow-sm');
             }
         });
 
-        // Dark Mode Logic & Bot Theme Sync
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
-        
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            updateBotTheme('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            updateBotTheme('light');
-        }
-
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
-                updateBotTheme('light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
-                updateBotTheme('dark');
-            }
-        }
-
-        function updateBotTheme(theme) {
-            if (window.botpressWebChat) {
-                window.botpressWebChat.sendEvent({
-                    type: 'CONFIG',
-                    payload: { theme: theme }
-                });
-            }
-        }
-
-        themeToggleBtn.addEventListener('click', toggleTheme);
-        themeToggleMobile.addEventListener('click', toggleTheme);
+        // Theme: permanently locked to light mode (toggle removed)
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
 
         /* ─────────────────────────────────────────────────────────────
            FIXED MOBILE BOTTOM BAR – smooth-scroll + ripple
@@ -2667,57 +2637,9 @@
         );
     }
 
-    // ── 9. PARALLAX BLOBS ────────────────────────────────────────────────
-    const blobs = document.querySelectorAll('.fixed.inset-0.-z-10 > div');
-    blobs.forEach((blob, i) => {
-        const speed = (i + 1) * 0.15;
-        ScrollTrigger.create({
-            trigger: document.body,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: true,
-            onUpdate: self => {
-                const yMove = self.progress * window.innerHeight * speed;
-                gsap.set(blob, { y: yMove, overwrite: 'auto' });
-            }
-        });
-    });
-
-    // ── 10. MAGNETIC BUTTONS (desktop only) ──────────────────────────────
-    if (window.innerWidth >= 768) {
-        document.querySelectorAll('nav a, nav button, section > div > div > .flex > button, section > div > div > .flex > a').forEach(btn => {
-            btn.addEventListener('mousemove', e => {
-                const rect = btn.getBoundingClientRect();
-                const cx = rect.left + rect.width / 2;
-                const cy = rect.top + rect.height / 2;
-                const dx = (e.clientX - cx) * 0.25;
-                const dy = (e.clientY - cy) * 0.25;
-                gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease:'power2.out', overwrite:'auto' });
-            });
-            btn.addEventListener('mouseleave', () => {
-                gsap.to(btn, { x:0, y:0, duration:0.5, ease:'elastic.out(1,0.5)', overwrite:'auto' });
-            });
-        });
-    }
-
-    // ── 11. 3D CARD TILT on Feature Bento cards ──────────────────────────
-    document.querySelectorAll('#features .grid > div').forEach(card => {
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            const rotX = ((e.clientY - cy) / rect.height) * -8;
-            const rotY = ((e.clientX - cx) / rect.width) * 8;
-            gsap.to(card, { rotationX: rotX, rotationY: rotY, transformPerspective: 800, duration:0.4, ease:'power2.out', overwrite:'auto' });
-        });
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, { rotationX:0, rotationY:0, duration:0.6, ease:'elastic.out(1,0.4)', overwrite:'auto' });
-        });
-    });
-
-    // ── 12. SCROLL PROGRESS INDICATOR (thin line on top) ─────────────────
+    // ── 9. SCROLL PROGRESS INDICATOR (thin line on top) ─────────────────
     const progressBar = document.createElement('div');
-    progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#3b82f6,#a855f7);z-index:9998;width:0%;will-change:width;pointer-events:none;';
+    progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#6366f1,#a855f7);z-index:9998;width:0%;will-change:width;pointer-events:none;';
     document.body.appendChild(progressBar);
     ScrollTrigger.create({
         trigger: document.body,
