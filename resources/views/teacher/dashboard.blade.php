@@ -1,191 +1,182 @@
 @extends('layouts.teacher')
-
 @section('title', 'Teacher Dashboard')
 
 @section('content')
-
 <style>
-    /* ================= PREMIUM ANIMATIONS ================= */
-    .animate-fade-up {
-        animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    @keyframes fadeUp {
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Staggered Delays */
-    .delay-100 { animation-delay: 100ms; }
-    .delay-200 { animation-delay: 200ms; }
-    .delay-300 { animation-delay: 300ms; }
-    .delay-400 { animation-delay: 400ms; }
-    .delay-500 { animation-delay: 500ms; }
-
-    /* Interactive Cards */
-    .stat-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.05), 0 4px 8px -4px rgba(0, 0, 0, 0.03);
-    }
+.tc { background:var(--bg); border-radius:22px; box-shadow:8px 8px 20px var(--sh-dark),-8px -8px 20px var(--sh-light); transition:box-shadow 0.3s ease,transform 0.28s ease; }
+.tc:hover { box-shadow:12px 12px 28px var(--sh-dark),-12px -12px 28px var(--sh-light); transform:translateY(-3px); }
+.tc-sm { background:var(--bg); border-radius:16px; box-shadow:5px 5px 13px var(--sh-dark),-5px -5px 13px var(--sh-light); }
+.tc-inset { background:var(--bg); border-radius:14px; box-shadow:inset 4px 4px 10px var(--sh-dark),inset -4px -4px 10px var(--sh-light); }
+.icon-box { border-radius:14px; background:var(--bg); box-shadow:4px 4px 10px var(--sh-dark),-4px -4px 10px var(--sh-light); display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.pill-nm { font-size:0.6rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:9px;background:var(--bg);box-shadow:2px 2px 6px var(--sh-dark),-2px -2px 6px var(--sh-light); }
+.grad-text { background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+.btn-accent { display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:14px;font-weight:800;font-size:0.82rem;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:5px 5px 14px rgba(13,148,136,0.4),-3px -3px 9px rgba(255,255,255,0.8);cursor:pointer;text-decoration:none;border:none;transition:all 0.25s ease; }
+.btn-accent:hover { transform:translateY(-2px);box-shadow:7px 7px 18px rgba(13,148,136,0.45),-4px -4px 12px rgba(255,255,255,0.9); }
+.subject-card { background:var(--bg);border-radius:20px;box-shadow:7px 7px 17px var(--sh-dark),-7px -7px 17px var(--sh-light);transition:all 0.28s ease; }
+.subject-card:hover { box-shadow:10px 10px 24px var(--sh-dark),-10px -10px 24px var(--sh-light);transform:translateY(-4px); }
+.sub-btn { display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:9px 10px;border-radius:12px;font-weight:800;font-size:0.75rem;border:none;cursor:pointer;text-decoration:none;transition:all 0.2s; background:var(--bg);box-shadow:3px 3px 8px var(--sh-dark),-3px -3px 8px var(--sh-light);color:var(--text-secondary); }
+.sub-btn:hover { box-shadow:5px 5px 12px var(--sh-dark),-5px -5px 12px var(--sh-light); color:var(--accent); }
+.sub-btn.primary { background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:4px 4px 12px rgba(13,148,136,0.4),-2px -2px 7px rgba(255,255,255,0.8); }
+.sub-btn.primary:hover { transform:translateY(-1px); }
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.float-icon{animation:floatUp 5s ease-in-out infinite;}
 </style>
 
-<div class="min-h-screen bg-[#FDFBF7] text-slate-800 font-sans p-4 sm:p-6 lg:p-8 transition-colors duration-300">
-    
-    <div class="max-w-7xl mx-auto space-y-8">
+<div style="min-height:100vh;background:var(--bg);padding:28px 28px 40px;max-width:1280px;margin:0 auto;">
 
-        <div class="flex flex-col md:flex-row md:items-end justify-between animate-fade-up">
+    {{-- Welcome --}}
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:32px;">
+        <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <i class="fa-solid fa-chalkboard-user" style="color:var(--accent);font-size:0.85rem;"></i>
+                <span style="font-size:0.65rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);">Instructor Portal</span>
+            </div>
+            <h1 style="font-size:2rem;font-weight:900;color:var(--text-primary);letter-spacing:-0.03em;line-height:1.1;">
+                Hello, <span class="grad-text">{{ auth()->user()->name ?? 'Professor' }}</span> 👨‍🏫
+            </h1>
+            <p style="color:var(--text-muted);font-size:0.88rem;font-weight:500;margin-top:6px;">Manage your classes, record attendance, and evaluate student performance.</p>
+        </div>
+        <div class="tc" style="padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
+            <div class="icon-box" style="width:40px;height:40px;">
+                <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;display:block;" class="animate-pulse"></span>
+            </div>
             <div>
-                <p class="text-indigo-600 font-semibold tracking-wider uppercase text-xs mb-1 flex items-center gap-2">
-                    <i class="fa-solid fa-chalkboard-user"></i> Instructor Portal
-                </p>
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                    Welcome back, <span class="text-indigo-600">{{ auth()->user()->name ?? 'Professor' }}</span>
-                </h1>
-                <p class="text-slate-500 mt-2 font-medium">Manage your classes, record attendance, and evaluate student performance.</p>
-            </div>
-            <div class="mt-4 md:mt-0 flex gap-3">
-                <div class="bg-white px-4 py-2.5 rounded-xl shadow-sm border border-[#F0EBE1] text-sm font-semibold text-slate-700 flex items-center gap-2">
-                    <span class="relative flex h-2.5 w-2.5">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                    </span>
-                    Academic Session: {{ date('Y') }}
-                </div>
+                <p style="font-size:0.58rem;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;color:#22c55e;">Active Session</p>
+                <p style="font-size:0.88rem;font-weight:800;color:var(--text-primary);">{{ date('D, d M Y') }}</p>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-up delay-100">
-            
-            <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-2xl p-6 text-white shadow-md relative overflow-hidden group">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-5 rounded-full z-0 group-hover:scale-150 transition-transform duration-700"></div>
-                <div class="relative z-10 flex justify-between items-start">
-                    <div>
-                        <p class="text-indigo-100 text-xs font-semibold uppercase tracking-wider mb-1">My Subjects</p>
-                        <h3 class="text-4xl font-bold tracking-tight">{{ $subjects->count() ?? 0 }}</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-book-open text-xl"></i>
-                    </div>
-                </div>
-                <p class="text-xs text-indigo-100/80 mt-4 font-medium relative z-10">Assigned for this semester</p>
-            </div>
-
-            <a href="{{ route('teacher.attendance.create') }}" class="stat-card bg-white rounded-2xl p-6 border border-[#F0EBE1] cursor-pointer group flex flex-col justify-between h-full">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
-                        <i class="fa-solid fa-clipboard-user text-xl"></i>
-                    </div>
-                    <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-emerald-500 transform group-hover:translate-x-1 transition-all"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-lg">Mark Attendance</h3>
-                    <p class="text-xs text-slate-500 mt-1">Record daily student presence</p>
-                </div>
-            </a>
-
-            <a href="{{ route('teacher.marks.index') }}" class="stat-card bg-white rounded-2xl p-6 border border-[#F0EBE1] cursor-pointer group flex flex-col justify-between h-full">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
-                        <i class="fa-solid fa-file-pen text-xl"></i>
-                    </div>
-                    <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-amber-500 transform group-hover:translate-x-1 transition-all"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-lg">Upload Marks</h3>
-                    <p class="text-xs text-slate-500 mt-1">Grade assignments and exams</p>
-                </div>
-            </a>
-
-            <a href="{{ route('teacher.performance.index') }}" class="stat-card bg-white rounded-2xl p-6 border border-[#F0EBE1] cursor-pointer group flex flex-col justify-between h-full">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-white transition-colors duration-300">
-                        <i class="fa-solid fa-chart-line text-xl"></i>
-                    </div>
-                    <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-sky-500 transform group-hover:translate-x-1 transition-all"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-900 text-lg">Performance</h3>
-                    <p class="text-xs text-slate-500 mt-1">View class analytics & trends</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="animate-fade-up delay-200">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-layer-group text-indigo-500"></i> My Assigned Subjects
-                </h2>
-                <span class="text-xs font-semibold text-slate-600 bg-[#F5F0E6] px-3 py-1.5 rounded-md border border-[#EBE4D5]">
-                    {{ $subjects->count() ?? 0 }} Classes
-                </span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse($subjects as $index => $subject)
-                    <div class="stat-card bg-white rounded-2xl border border-[#F0EBE1] p-6 relative overflow-hidden group flex flex-col h-full">
-                        
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="w-10 h-10 rounded-lg bg-[#FDFBF7] text-slate-700 flex items-center justify-center border border-[#F0EBE1] group-hover:border-indigo-300 transition-colors">
-                                <span class="font-bold text-lg">{{ substr($subject->name, 0, 1) }}</span>
-                            </div>
-                            <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">
-                                Sub-{{ $index + 1 }}
-                            </span>
-                        </div>
-
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">{{ $subject->name }}</h3>
-                        <p class="text-sm text-slate-500 mb-6 leading-relaxed">Manage your curriculum, student records, and grading for this subject.</p>
-
-                        <div class="border-t border-[#F0EBE1] pt-4 mt-auto flex items-center justify-between gap-2">
-                            <a href="{{ route('teacher.marks.edit', $subject->id) }}" class="flex-1 text-center py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-lg transition-colors border border-indigo-100">
-                                Edit Marks
-                            </a>
-                            <a href="{{ route('teacher.broadcast.index', $subject->id) }}" class="flex-1 text-center py-2 px-3 bg-violet-50 hover:bg-violet-100 text-violet-700 text-sm font-semibold rounded-lg transition-colors border border-violet-100 flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-bullhorn text-xs"></i> Broadcast
-                            </a>
-                            <a href="{{ route('teacher.performance.show', $subject->id) }}" class="p-2 border border-[#F0EBE1] hover:border-slate-300 text-slate-600 rounded-lg transition-colors" title="View Analysis">
-                                <i class="fa-solid fa-chart-pie"></i>
-                            </a>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-full py-16 text-center bg-white rounded-2xl border border-dashed border-[#EBE4D5]">
-                        <div class="w-16 h-16 bg-[#FDFBF7] rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 border border-[#F0EBE1]">
-                            <i class="fa-solid fa-folder-open text-2xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">No Subjects Assigned</h3>
-                        <p class="text-slate-500 text-sm max-w-sm mx-auto">You haven't been assigned any subjects for this semester yet. Please contact the Administration.</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-
-        <div class="animate-fade-up delay-300 mt-8">
-            <div class="bg-slate-900 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between border border-slate-800 relative overflow-hidden shadow-lg">
-                <div class="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div class="flex items-center gap-5 mb-5 md:mb-0 relative z-10">
-                    <div class="w-14 h-14 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-500 p-0.5 shadow-lg">
-                        <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center text-indigo-300">
-                            <i class="fa-solid fa-robot text-xl"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-white">StudyAI Assistant</h3>
-                        <p class="text-slate-400 text-sm mt-1">Generate lesson plans, quizzes, and summaries instantly.</p>
-                    </div>
-                </div>
-                <a href="{{ route('studyai.index') }}" class="px-6 py-2.5 bg-white text-slate-900 hover:bg-slate-100 font-bold rounded-lg transition-transform transform hover:-translate-y-0.5 flex items-center gap-2 w-full md:w-auto justify-center shadow-sm relative z-10">
-                    Launch AI <i class="fa-solid fa-sparkles text-indigo-600 text-sm"></i>
-                </a>
-            </div>
-        </div>
-
     </div>
+
+    {{-- Stat cards --}}
+    <div id="stat-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px;">
+
+        <div class="tc" style="padding:24px 22px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+                <div class="icon-box" style="width:48px;height:48px;color:var(--accent);">
+                    <i class="fa-solid fa-book-open" style="font-size:1.2rem;"></i>
+                </div>
+                <span class="pill-nm" style="color:var(--accent);">Subjects</span>
+            </div>
+            <div style="font-size:2.5rem;font-weight:900;color:var(--text-primary);line-height:1;">{{ $subjects->count() ?? 0 }}</div>
+            <p style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-top:5px;text-transform:uppercase;letter-spacing:0.08em;">Assigned This Semester</p>
+        </div>
+
+        <a href="{{ route('teacher.attendance.create') }}" class="tc" style="padding:24px 22px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+                <div class="icon-box" style="width:48px;height:48px;color:#22c55e;">
+                    <i class="fa-solid fa-clipboard-user" style="font-size:1.2rem;"></i>
+                </div>
+                <i class="fa-solid fa-arrow-right" style="font-size:0.9rem;color:var(--text-muted);margin-top:14px;"></i>
+            </div>
+            <div style="font-size:1.3rem;font-weight:900;color:var(--text-primary);line-height:1.2;">Mark<br>Attendance</div>
+            <p style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.08em;">Record Daily Presence</p>
+        </a>
+
+        <a href="{{ route('teacher.marks.index') }}" class="tc" style="padding:24px 22px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+                <div class="icon-box" style="width:48px;height:48px;color:#f59e0b;">
+                    <i class="fa-solid fa-file-pen" style="font-size:1.2rem;"></i>
+                </div>
+                <i class="fa-solid fa-arrow-right" style="font-size:0.9rem;color:var(--text-muted);margin-top:14px;"></i>
+            </div>
+            <div style="font-size:1.3rem;font-weight:900;color:var(--text-primary);line-height:1.2;">Upload<br>Marks</div>
+            <p style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.08em;">Grade Assignments & Exams</p>
+        </a>
+
+        <a href="{{ route('teacher.performance.index') }}" class="tc" style="padding:24px 22px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+                <div class="icon-box" style="width:48px;height:48px;color:#0ea5e9;">
+                    <i class="fa-solid fa-chart-line" style="font-size:1.2rem;"></i>
+                </div>
+                <i class="fa-solid fa-arrow-right" style="font-size:0.9rem;color:var(--text-muted);margin-top:14px;"></i>
+            </div>
+            <div style="font-size:1.3rem;font-weight:900;color:var(--text-primary);line-height:1.2;">Class<br>Analytics</div>
+            <p style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.08em;">View Trends & Insights</p>
+        </a>
+    </div>
+
+    {{-- My Subjects --}}
+    <div class="tc" style="overflow:hidden;margin-bottom:24px;">
+        <div style="padding:22px 26px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.5);">
+            <div>
+                <div style="font-size:1.05rem;font-weight:800;color:var(--text-primary);">My Assigned Subjects</div>
+                <div style="font-size:0.62rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:1px;">This Semester's Classes</div>
+            </div>
+            <span class="pill-nm" style="color:var(--accent);">{{ $subjects->count() ?? 0 }} Classes</span>
+        </div>
+
+        <div style="padding:22px 22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;">
+            @forelse($subjects as $index => $subject)
+                <div class="subject-card" style="padding:22px;position:relative;overflow:hidden;">
+                    <div style="position:absolute;right:-8px;top:-8px;opacity:0.05;pointer-events:none;">
+                        <i class="fa-solid fa-book-open" style="font-size:5rem;color:var(--text-primary);display:block;"></i>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;position:relative;z-index:1;">
+                        <div class="icon-box" style="width:44px;height:44px;font-size:1.1rem;font-weight:900;color:var(--accent);">
+                            {{ strtoupper(substr($subject->name, 0, 1)) }}
+                        </div>
+                        <span style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);">Subject-{{ $index + 1 }}</span>
+                    </div>
+                    <h3 style="font-size:1.05rem;font-weight:800;color:var(--text-primary);margin-bottom:6px;position:relative;z-index:1;">{{ $subject->name }}</h3>
+                    <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:16px;position:relative;z-index:1;">Manage curriculum, grades & student records for this subject.</p>
+                    <div style="border-top:1px solid rgba(255,255,255,0.5);padding-top:14px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;">
+                        <a href="{{ route('teacher.marks.edit', $subject->id) }}" class="sub-btn primary">
+                            <i class="fa-solid fa-pen"></i> Edit Marks
+                        </a>
+                        <a href="{{ route('teacher.broadcast.index', $subject->id) }}" class="sub-btn">
+                            <i class="fa-solid fa-bullhorn"></i> Broadcast
+                        </a>
+                        <a href="{{ route('teacher.performance.show', $subject->id) }}" class="sub-btn" style="flex:0;padding:9px 12px;" title="View Analysis">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div style="grid-column:1/-1;padding:60px 24px;text-align:center;">
+                    <div class="tc-inset" style="display:inline-flex;flex-direction:column;align-items:center;padding:32px 40px;">
+                        <i class="fa-solid fa-folder-open" style="font-size:2.5rem;color:var(--sh-dark);margin-bottom:14px;" class="float-icon"></i>
+                        <h3 style="font-size:1rem;font-weight:800;color:var(--text-primary);margin-bottom:6px;">No Subjects Assigned</h3>
+                        <p style="font-size:0.8rem;color:var(--text-muted);max-width:300px;line-height:1.55;">You haven't been assigned any subjects for this semester. Contact the Administration.</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    {{-- StudyAI Banner --}}
+    <div style="border-radius:22px;overflow:hidden;position:relative;box-shadow:8px 8px 20px var(--sh-dark),-5px -5px 14px var(--sh-light);background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);">
+        <div style="position:absolute;left:-30px;top:50%;transform:translateY(-50%);width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.35),transparent);filter:blur(22px);pointer-events:none;"></div>
+        <div style="position:absolute;right:60px;top:-20px;opacity:0.08;pointer-events:none;" class="float-icon">
+            <i class="fa-solid fa-robot" style="font-size:8rem;color:#fff;display:block;"></i>
+        </div>
+        <div style="position:relative;z-index:1;padding:28px 32px;display:flex;flex-wrap:wrap;align-items:center;gap:22px;">
+            <div style="width:60px;height:60px;border-radius:20px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">🤖</div>
+            <div style="flex:1;min-width:200px;">
+                <div style="display:flex;gap:7px;margin-bottom:8px;">
+                    <span style="font-size:0.6rem;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.15);padding:3px 9px;border-radius:7px;">AI-Powered</span>
+                </div>
+                <h2 style="font-size:1.3rem;font-weight:900;color:#fff;letter-spacing:-0.02em;line-height:1.2;">StudyAI Assistant</h2>
+                <p style="font-size:0.82rem;color:rgba(255,255,255,0.75);margin-top:5px;line-height:1.5;">Generate lesson plans, quizzes, summaries, and student feedback instantly.</p>
+            </div>
+            <a href="{{ route('studyai.index') }}" style="display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:15px;font-weight:800;font-size:0.88rem;color:#1e1b4b;background:#fff;box-shadow:4px 4px 14px rgba(0,0,0,0.2);cursor:pointer;text-decoration:none;transition:all 0.25s ease;flex-shrink:0;">
+                Launch StudyAI <i class="fa-solid fa-sparkles" style="color:#6366f1;font-size:0.85rem;"></i>
+            </a>
+        </div>
+    </div>
+
 </div>
+
+<script>
+    (function(){
+        const g = document.getElementById('stat-grid');
+        if(!g) return;
+        function resize(){
+            if(window.innerWidth < 640) g.style.gridTemplateColumns = '1fr 1fr';
+            else if(window.innerWidth < 1024) g.style.gridTemplateColumns = 'repeat(2,1fr)';
+            else g.style.gridTemplateColumns = 'repeat(4,1fr)';
+        }
+        resize(); window.addEventListener('resize', resize);
+    })();
+</script>
 
 @endsection

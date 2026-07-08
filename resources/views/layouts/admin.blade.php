@@ -3,455 +3,418 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Portal - @yield('title')</title>
+    <title>Admin Portal — @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #FDFBF7 !important; /* Creamy white background globally */
+        /* ═══════════════════════════════════════════════════
+           PREMIUM NEUMORPHISM — ADMIN DESIGN TOKENS
+           Accent: Indigo/Slate — Authority & Precision
+        ═══════════════════════════════════════════════════ */
+        :root {
+            --bg:       #dde3ee;
+            --bg-light: #eef1f7;
+            --bg-dark:  #cdd3e0;
+            --sh-dark:  #b8bece;
+            --sh-light: #ffffff;
+            --accent:        #4f46e5;
+            --accent-2:      #6d28d9;
+            --accent-glow:   rgba(79,70,229,0.25);
+            --accent-soft:   rgba(79,70,229,0.10);
+            --text-primary:   #1e2340;
+            --text-secondary: #5a6284;
+            --text-muted:     #8c94b0;
+            --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-xl: 28px;
         }
-        
-        /* Smooth Content Entrance */
-        .animate-content {
-            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateY(15px);
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; }
+        html { height: 100%; }
+        body { font-family: 'Inter', 'Plus Jakarta Sans', sans-serif; background: var(--bg) !important; color: var(--text-primary); -webkit-font-smoothing: antialiased; height: 100%; }
 
-        /* Page fade-in on load (replaces skeleton loader) */
-        .page-content-fade {
-            animation: pageFadeIn 0.4s ease forwards;
+        /* ── Sidebar ──────────────────────────────── */
+        .sidebar {
+            background: var(--bg);
+            box-shadow: 8px 0 28px rgba(0,0,0,0.10);
+            border-right: 1px solid rgba(255,255,255,0.55);
+            display: flex; flex-direction: column;
         }
+        .sidebar-logo {
+            padding: 0 20px; height: 72px;
+            display: flex; align-items: center; gap: 13px;
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+            flex-shrink: 0;
+        }
+        .logo-gem {
+            width: 42px; height: 42px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 4px 4px 12px rgba(79,70,229,0.45), -3px -3px 8px rgba(255,255,255,0.8);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .logo-gem i { color: #fff; font-size: 17px; }
+        .logo-text { font-weight: 800; font-size: 1rem; color: var(--text-primary); letter-spacing: -0.02em; }
+        .logo-sub  { font-weight: 600; font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; }
 
-        @keyframes pageFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 14px 12px; }
+        .sidebar-nav::-webkit-scrollbar { width: 3px; }
+        .sidebar-nav::-webkit-scrollbar-thumb { background: var(--sh-dark); border-radius: 4px; }
 
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .nav-label { font-size: 0.58rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 20px 14px 6px; display: block; }
 
-        /* Sidebar Active State Styling */
-        .nav-link.active {
-            background: rgba(99, 102, 241, 0.15); /* Indigo tint */
-            color: #818cf8; /* Indigo-400 */
-            border-right: 3px solid #6366f1;
-            font-weight: 700;
+        .nav-item {
+            display: flex; align-items: center; gap: 11px;
+            padding: 10px 13px; border-radius: var(--r-sm);
+            color: var(--text-secondary); font-weight: 600; font-size: 0.8rem;
+            text-decoration: none; position: relative;
+            transition: all 0.22s ease; user-select: none;
         }
+        .nav-item:hover { color: var(--text-primary); box-shadow: 4px 4px 10px var(--sh-dark), -4px -4px 10px var(--sh-light); background: var(--bg); }
+        .nav-item.active { color: var(--accent); font-weight: 700; box-shadow: inset 4px 4px 10px var(--sh-dark), inset -4px -4px 10px var(--sh-light); background: var(--bg-dark); }
+        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 52%; background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 0 4px 4px 0; box-shadow: 0 0 10px var(--accent-glow); }
 
-        /* Premium Scrollbar */
-        /* Skeleton Shimmer Animation */
-        .shimmer {
-            background: #f1f5f9;
-            background-image: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0) 0,
-                rgba(255, 255, 255, 0.6) 20%,
-                rgba(255, 255, 255, 0) 40%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            background-repeat: no-repeat;
-            background-size: 800px 100%;
-            animation: shimmer 1.5s infinite linear forwards;
-        }
-        @keyframes shimmer {
-            0% { background-position: -468px 0; }
-            100% { background-position: 468px 0; }
-        }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        .nav-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; flex-shrink: 0; background: var(--bg); box-shadow: 3px 3px 7px var(--sh-dark), -3px -3px 7px var(--sh-light); transition: all 0.22s ease; color: inherit; }
+        .nav-item.active .nav-icon { background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 3px 3px 10px rgba(79,70,229,0.45), -2px -2px 6px rgba(255,255,255,0.8); color: #fff; }
+        .nav-item:hover .nav-icon { box-shadow: 5px 5px 12px var(--sh-dark), -5px -5px 12px var(--sh-light); }
+
+        .nav-pill { font-size: 0.55rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border-radius: 7px; background: var(--bg); box-shadow: inset 2px 2px 5px var(--sh-dark), inset -2px -2px 5px var(--sh-light); }
+
+        .sidebar-footer { padding: 16px 14px; border-top: 1px solid rgba(255,255,255,0.45); background: var(--bg); flex-shrink: 0; }
+        .sidebar-footer .avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 3px 3px 9px rgba(79,70,229,0.4), -2px -2px 6px rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+
+        /* ── Header ──────────────────────────────── */
+        .top-header { height: 72px; background: var(--bg); box-shadow: 0 4px 18px rgba(0,0,0,0.07); border-bottom: 1px solid rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 30; flex-shrink: 0; }
+        .header-icon-btn { width: 42px; height: 42px; border-radius: 13px; background: var(--bg); box-shadow: 4px 4px 9px var(--sh-dark), -4px -4px 9px var(--sh-light); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; border: none; position: relative; }
+        .header-icon-btn:hover { color: var(--accent); box-shadow: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+        .header-icon-btn:active { box-shadow: inset 3px 3px 8px var(--sh-dark), inset -3px -3px 8px var(--sh-light); }
+        .header-logout { display: flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 13px; background: var(--bg); box-shadow: 4px 4px 9px var(--sh-dark), -4px -4px 9px var(--sh-light); color: #ef4444; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+        .header-logout:hover { box-shadow: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+        .header-logout:active { box-shadow: inset 3px 3px 8px var(--sh-dark), inset -3px -3px 8px var(--sh-light); }
+
+        .notif-dropdown { background: var(--bg); box-shadow: 10px 10px 28px var(--sh-dark), -6px -6px 16px var(--sh-light); border-radius: var(--r-lg); border: 1px solid rgba(255,255,255,0.65); }
+        .notif-item:hover { background: rgba(255,255,255,0.5); }
+
+        /* ── Mobile Bottom Nav ─────────────────── */
+        .bottom-nav { background: var(--bg); box-shadow: 0 -6px 24px rgba(0,0,0,0.09); border-top: 1px solid rgba(255,255,255,0.55); }
+        .bottom-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 8px; border-radius: 14px; color: var(--text-muted); font-size: 0.58rem; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; background: none; text-decoration: none; }
+        .bottom-tab.is-active { color: var(--accent); }
+        .bottom-tab.is-active i { filter: drop-shadow(0 0 5px var(--accent-glow)); }
+        .bottom-tab i { font-size: 1.15rem; transition: all 0.2s; }
+
+        .side-drawer { background: var(--bg); border-radius: 28px 28px 0 0; box-shadow: 0 -12px 36px rgba(0,0,0,0.12); }
+        .drawer-row { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; color: var(--text-secondary); font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: all 0.2s; background: var(--bg); box-shadow: 4px 4px 10px var(--sh-dark), -4px -4px 10px var(--sh-light); margin-bottom: 8px; }
+        .drawer-row:hover { color: var(--accent); box-shadow: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+        .drawer-icon { width: 36px; height: 36px; border-radius: 11px; display: flex; align-items: center; justify-content: center; background: var(--bg); box-shadow: inset 2px 2px 6px var(--sh-dark), inset -2px -2px 6px var(--sh-light); font-size: 0.88rem; }
+
+        /* ── Animations ─────────────────────────── */
+        @keyframes pageIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        .shimmer { background: var(--bg); background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.55) 35%, rgba(255,255,255,0) 65%); background-repeat: no-repeat; background-size: 900px 100%; animation: shim 1.6s infinite linear; }
+        @keyframes shim { 0%{background-position:-500px 0} 100%{background-position:500px 0} }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: var(--sh-dark); border-radius: 6px; }
     </style>
 </head>
 
-<body class="text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ sidebarOpen: false }">
+<body x-data="{ sidebarOpen: false }">
+<div class="flex h-screen overflow-hidden">
 
+    <!-- Mobile overlay -->
+    <div x-show="sidebarOpen" @click="sidebarOpen = false"
+         x-transition:enter="transition-opacity duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         style="display:none;" class="fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm lg:hidden"></div>
 
+    <!-- ═══ SIDEBAR ════════════════════════════ -->
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+           class="sidebar fixed inset-y-0 left-0 z-50 w-[260px] transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0">
 
-    <div class="flex h-screen overflow-hidden">
+        <!-- Logo -->
+        <div class="sidebar-logo">
+            <div class="logo-gem"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <div class="logo-text">EduAdmin</div>
+                <div class="logo-sub">Control Panel</div>
+            </div>
+        </div>
 
-        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity 
-             class="hidden lg:hidden fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm"></div>
+        <nav class="sidebar-nav">
+            <span class="nav-label">Overview</span>
 
-        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-               class="hidden lg:flex fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-2xl flex-col border-r border-slate-800">
-            
-            <div class="flex items-center justify-center h-20 border-b border-slate-800/60 bg-slate-900/50 backdrop-blur-md px-6">
-                <div class="flex items-center gap-3 font-extrabold text-xl tracking-wide w-full">
-                    <div class="bg-gradient-to-tr from-indigo-600 to-purple-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-white/10">
-                        <i class="fa-solid fa-shield-halved text-white text-lg"></i>
-                    </div>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">EduAdmin</span>
+            <a href="{{ url('admin/dashboard') }}" class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('admin.analytics.index') }}" class="nav-item {{ request()->is('admin/analytics*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+                <span>Analytics</span>
+            </a>
+            <a href="{{ route('admin.student-analysis.index') }}" class="nav-item {{ request()->routeIs('admin.student-analysis.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chart-simple"></i></span>
+                <span>Student Analysis</span>
+            </a>
+            <a href="{{ route('admin.notices.index') }}" class="nav-item {{ request()->is('admin/notices*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-bullhorn"></i></span>
+                <span style="flex:1">Notice Board</span>
+                <span class="nav-pill" style="color:#f43f5e;">Live</span>
+            </a>
+            <a href="{{ route('admin.timetable.index') }}" class="nav-item {{ request()->routeIs('admin.timetable.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-calendar-plus"></i></span>
+                <span>Routine Builder</span>
+            </a>
+            <a href="{{ route('admin.exams.index') }}" class="nav-item {{ request()->routeIs('admin.exams.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span>
+                <span>Exam Calendar</span>
+            </a>
+            <a href="{{ route('admin.admit-card.index') }}" class="nav-item {{ request()->routeIs('admin.admit-card.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-file-export"></i></span>
+                <span>Admit Cards</span>
+            </a>
+
+            <span class="nav-label">Applications</span>
+
+            <a href="{{ route('admin.registrations.index') }}" class="nav-item {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-file-signature"></i></span>
+                <span style="flex:1">Student Regs.</span>
+                @if(($pendingStudentRegistrations ?? 0) > 0)
+                    <span class="nav-pill" style="color:#f59e0b;">{{ $pendingStudentRegistrations }}</span>
+                @endif
+            </a>
+            <a href="{{ route('admin.faculty-registrations.index') }}" class="nav-item {{ request()->routeIs('admin.faculty-registrations.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chalkboard-teacher"></i></span>
+                <span style="flex:1">Faculty Regs.</span>
+                @if(($pendingFacultyRegistrations ?? 0) > 0)
+                    <span class="nav-pill" style="color:var(--accent);">{{ $pendingFacultyRegistrations }}</span>
+                @endif
+            </a>
+
+            <span class="nav-label">Management</span>
+
+            <a href="{{ route('admin.students.index') }}" class="nav-item {{ request()->is('admin/students*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
+                <span>Students</span>
+            </a>
+            <a href="{{ route('admin.teachers.index') }}" class="nav-item {{ request()->is('admin/teachers*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
+                <span>Teachers</span>
+            </a>
+            <a href="{{ route('admin.fees.index') }}" class="nav-item {{ request()->is('admin/fees*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+                <span>Fees Management</span>
+            </a>
+            <a href="{{ route('admin.settings.index') }}" class="nav-item {{ request()->is('admin/settings*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+                <span>System Settings</span>
+            </a>
+            <a href="{{ route('admin.telegram.index') }}" class="nav-item {{ request()->is('admin/telegram*') ? 'active' : '' }}">
+                <span class="nav-icon" style="{{ request()->is('admin/telegram*') ? '' : 'color:#2AABEE' }}"><i class="fa-brands fa-telegram"></i></span>
+                <span style="flex:1">Telegram Alerts</span>
+                <span class="nav-pill" style="color:#2AABEE;">Bot</span>
+            </a>
+
+            <span class="nav-label">Academics</span>
+
+            <a href="{{ route('admin.courses.index') }}" class="nav-item {{ request()->is('admin/courses*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-book-open"></i></span>
+                <span>Courses</span>
+            </a>
+            <a href="{{ route('admin.subjects.index') }}" class="nav-item {{ request()->is('admin/subjects*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-layer-group"></i></span>
+                <span>Subjects</span>
+            </a>
+            <a href="{{ route('admin.results.index') }}" class="nav-item {{ request()->is('admin/results*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-square-poll-vertical"></i></span>
+                <span>Publish Results</span>
+            </a>
+            <a href="{{ route('admin.report-cards.index') }}" class="nav-item {{ request()->is('admin/report-cards*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-file-pdf"></i></span>
+                <span>Report Cards</span>
+            </a>
+            <a href="{{ route('admin.dropout-risk.index') }}" class="nav-item {{ request()->is('admin/dropout-risk*') ? 'active' : '' }}">
+                <span class="nav-icon" style="{{ request()->is('admin/dropout-risk*') ? '' : 'color:#f43f5e' }}"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                <span style="flex:1">Dropout Risk</span>
+                <span class="nav-pill" style="color:#f43f5e;">AI</span>
+            </a>
+            <a href="{{ route('admin.attendance-risk.index') }}" class="nav-item {{ request()->is('admin/attendance-risk*') ? 'active' : '' }}">
+                <span class="nav-icon" style="{{ request()->is('admin/attendance-risk*') ? '' : 'color:#f59e0b' }}"><i class="fa-solid fa-chart-line"></i></span>
+                <span style="flex:1">Attendance Risk</span>
+                <span class="nav-pill" style="color:#f59e0b;">AI</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</div>
+                <div style="overflow:hidden;flex:1;">
+                    <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ auth()->user()->name ?? 'Admin' }}</div>
+                    <div style="font-size:0.6rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;">Super Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN ════════════════════════════════ -->
+    <div style="flex:1;display:flex;flex-direction:column;height:100%;overflow:hidden;background:var(--bg);">
+
+        <header class="top-header">
+            <div style="display:flex;align-items:center;gap:14px;">
+                <button @click="sidebarOpen = true" class="header-icon-btn lg:hidden">
+                    <i class="fa-solid fa-bars" style="font-size:1rem;"></i>
+                </button>
+                <div class="hidden sm:block">
+                    <x-breadcrumb />
+                    <h1 style="font-size:1.15rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.025em;line-height:1.2;">@yield('title', 'Control Panel')</h1>
                 </div>
             </div>
 
-            <nav class="flex-1 overflow-y-auto py-6 space-y-1.5 px-3">
-                
-                <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-2">Overview</p>
-
-                <a href="{{ url('admin/dashboard') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/dashboard') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chart-pie w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Dashboard</span>
-                </a>
-
-                <a href="{{ route('admin.analytics.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/analytics*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chart-line w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Analytics</span>
-                </a>
-
-                <a href="{{ route('admin.student-analysis.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.student-analysis.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chart-simple w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Student Analysis</span>
-                </a>
-
-                <a href="{{ route('admin.notices.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/notices*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-bullhorn w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Notice Board</span>
-                    <span class="text-[10px] text-white px-2.5 py-0.5 rounded-full font-bold bg-gradient-to-r from-rose-500 to-pink-500 shadow-[0_0_10px_rgba(244,63,94,0.4)] animate-pulse">LIVE</span>
-                </a>
-
-                <a href="{{ route('admin.timetable.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.timetable.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-calendar-plus w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Routine Builder</span>
-                </a>
-
-                <a href="{{ route('admin.exams.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.exams.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-calendar-check w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Exam Calendar</span>
-                </a>
-
-                <a href="{{ route('admin.admit-card.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.admit-card.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-file-export w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Admit Cards</span>
-                </a>
-
-                <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Applications</p>
-
-                <a href="{{ route('admin.registrations.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.registrations.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-file-signature w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Student Registrations</span>
-                    @if(($pendingStudentRegistrations ?? 0) > 0)
-                        <span class="text-[10px] text-white px-2 py-0.5 rounded-full font-bold bg-amber-500">{{ $pendingStudentRegistrations }}</span>
-                    @endif
-                </a>
-
-                <a href="{{ route('admin.faculty-registrations.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.faculty-registrations.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chalkboard-teacher w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Faculty Registrations</span>
-                    @if(($pendingFacultyRegistrations ?? 0) > 0)
-                        <span class="text-[10px] text-white px-2 py-0.5 rounded-full font-bold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_8px_rgba(99,102,241,0.4)] animate-pulse">{{ $pendingFacultyRegistrations }}</span>
-                    @endif
-                </a>
-
-                <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Management</p>
-
-                <a href="{{ route('admin.students.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/students*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-users w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Students</span>
-                </a>
-
-                <a href="{{ route('admin.teachers.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/teachers*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chalkboard-user w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Teachers</span>
-                </a>
-
-                <a href="{{ route('admin.settings.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/settings*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-gear w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">System Settings</span>
-                </a>
-
-                <a href="{{ route('admin.telegram.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/telegram*') ? 'active' : 'text-slate-400 hover:text-[#2AABEE] hover:bg-[#2AABEE]/10' }}">
-                    <i class="fa-brands fa-telegram w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Telegram Alerts</span>
-                    <span class="text-[9px] text-[#2AABEE] px-2 py-0.5 rounded border border-[#2AABEE]/30 font-black tracking-wider uppercase group-hover:bg-[#2AABEE] group-hover:text-white transition-colors">BOT</span>
-                </a>
-
-                <a href="{{ route('admin.fees.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/fees*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-file-invoice-dollar w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Fees Management</span>
-                </a>
-
-                <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Academics</p>
-
-                <a href="{{ route('admin.courses.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/courses*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-book-open w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Courses</span>
-                </a>
-
-                <a href="{{ route('admin.subjects.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/subjects*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-layer-group w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Subjects</span>
-                </a>
-
-                <a href="{{ route('admin.results.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/results*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-square-poll-vertical w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Publish Results</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-50"></i>
-                </a>
-
-                <a href="{{ route('admin.report-cards.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/report-cards*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-file-pdf w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Report Cards</span>
-                </a>
-
-                <a href="{{ route('admin.dropout-risk.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/dropout-risk*') ? 'active' : 'text-slate-400 hover:text-rose-400 hover:bg-rose-500/10' }}">
-                    <i class="fa-solid fa-triangle-exclamation w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Dropout Risk</span>
-                    <span class="text-[9px] text-rose-400 px-2 py-0.5 rounded border border-rose-500/30 font-black tracking-wider uppercase group-hover:bg-rose-500 group-hover:text-white transition-colors">AI</span>
-                </a>
-
-                <a href="{{ route('admin.attendance-risk.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('admin/attendance-risk*') ? 'active' : 'text-slate-400 hover:text-amber-400 hover:bg-amber-500/10' }}">
-                    <i class="fa-solid fa-chart-line w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Attendance Risk</span>
-                    <span class="text-[9px] text-amber-400 px-2 py-0.5 rounded border border-amber-500/30 font-black tracking-wider uppercase group-hover:bg-amber-500 group-hover:text-white transition-colors">NEW</span>
-                </a>
-
-            </nav>
-
-            <div class="p-4 border-t border-slate-800 bg-slate-900/80">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 rounded-xl transition-colors border border-rose-500/20">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        <span>Secure Logout</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#FDFBF7]">
-
-            <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 z-30 sticky top-0 shadow-sm overflow-visible">
-                
-                <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = true" class="hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors lg:hidden focus:outline-none">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
-                    <div class="hidden sm:flex flex-col justify-center">
-                        <x-breadcrumb />
-                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight leading-none">@yield('title', 'Control Panel')</h2>
-                    </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <!-- Date chip -->
+                <div class="hidden md:flex" style="align-items:center;gap:8px;padding:8px 16px;border-radius:13px;background:var(--bg);box-shadow:4px 4px 9px var(--sh-dark),-4px -4px 9px var(--sh-light);font-size:0.78rem;font-weight:700;color:var(--text-secondary);">
+                    <i class="fa-regular fa-calendar" style="color:var(--accent);"></i>
+                    {{ date('d M, Y') }}
                 </div>
 
-                <div class="flex items-center gap-3 md:gap-5">
-                    
-                    <div class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-slate-50 rounded-xl shadow-sm border border-slate-200 text-sm font-bold text-slate-600">
-                        <i class="fa-regular fa-calendar text-indigo-500"></i>
-                        <span>{{ date('d M, Y') }}</span>
-                    </div>
-
-                    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
-                        <button @click="open = !open" class="relative p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all outline-none">
-                            <i class="fa-solid fa-bell text-lg"></i>
-                            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white animate-pulse"></span>
-                        </button>
-
-                        <div x-show="open" style="display: none;"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                             x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-                             class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-[9999] overflow-hidden">
-                            
-                            <div class="px-5 py-4 border-b border-[#F0EBE1] bg-[#FDFBF7] flex justify-between items-center">
-                                <h3 class="font-bold text-slate-800">System Alerts</h3>
-                                <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">1 New</span>
-                            </div>
-                            
-                            <div class="max-h-80 overflow-y-auto">
-                                <a href="#" class="block px-5 py-4 hover:bg-slate-50 border-b border-slate-50 transition-colors group">
-                                    <div class="flex gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
-                                            <i class="fa-solid fa-user-plus text-sm"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-slate-700 font-medium group-hover:text-indigo-600 transition-colors">3 new student registrations require your approval.</p>
-                                            <p class="text-xs text-slate-400 mt-1 font-medium">10 mins ago</p>
-                                        </div>
+                <!-- Bell -->
+                <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+                    <button @click="open = !open" class="header-icon-btn">
+                        <i class="fa-solid fa-bell" style="font-size:1rem;"></i>
+                        <span style="position:absolute;top:9px;right:9px;width:8px;height:8px;background:#f43f5e;border-radius:50%;border:2px solid var(--bg);" class="animate-pulse"></span>
+                    </button>
+                    <div x-show="open" style="display:none;"
+                         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                         class="notif-dropdown absolute right-0 mt-3 w-80 z-[9999] overflow-hidden">
+                        <div style="padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.4);display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:0.9rem;font-weight:800;color:var(--text-primary);">System Alerts</span>
+                            <span style="font-size:0.65rem;font-weight:800;color:var(--accent);padding:3px 9px;border-radius:8px;background:var(--bg);box-shadow:2px 2px 6px var(--sh-dark),-2px -2px 6px var(--sh-light);">1 New</span>
+                        </div>
+                        <div style="max-height:320px;overflow-y:auto;">
+                            <a href="{{ route('admin.registrations.index') }}" class="notif-item" style="display:block;padding:14px 20px;text-decoration:none;transition:background 0.15s;">
+                                <div style="display:flex;gap:12px;align-items:flex-start;">
+                                    <div style="width:36px;height:36px;border-radius:11px;background:var(--bg);box-shadow:3px 3px 7px var(--sh-dark),-3px -3px 7px var(--sh-light);display:flex;align-items:center;justify-content:center;color:#f43f5e;flex-shrink:0;">
+                                        <i class="fa-solid fa-user-plus" style="font-size:0.75rem;"></i>
                                     </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="h-6 w-px bg-slate-200 mx-1"></div>
-
-                    <div class="relative" x-data="{ profileOpen: false }" @click.outside="profileOpen = false">
-                        <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 p-1.5 rounded-xl hover:bg-slate-50 transition-colors focus:outline-none">
-                            <div class="text-right hidden sm:block">
-                                <p class="text-sm font-extrabold text-slate-800 leading-tight">{{ auth()->user()->name ?? 'Admin' }}</p>
-                                <p class="text-xs font-medium text-indigo-500">Super Admin</p>
-                            </div>
-                            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black shadow-md border border-indigo-500">
-                                {{ isset(auth()->user()->name) ? substr(auth()->user()->name, 0, 1) : 'A' }}
-                            </div>
-                            <i class="fa-solid fa-chevron-down text-xs text-slate-400 ml-1 hidden sm:block"></i>
-                        </button>
-
-                        <div x-show="profileOpen" style="display: none;"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                             x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-                             class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-[9999] overflow-hidden py-2">
-                            
-                            <div class="px-5 py-3 border-b border-[#F0EBE1] mb-2">
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Signed in as</p>
-                                <p class="text-sm font-bold text-slate-900 truncate mt-1">{{ auth()->user()->email ?? 'admin@edflow.com' }}</p>
-                            </div>
-                            
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
-                                <i class="fa-solid fa-gear w-4 text-center"></i> Account Settings
+                                    <div>
+                                        <p style="font-size:0.82rem;font-weight:700;color:var(--text-primary);">New student registrations pending</p>
+                                        <p style="font-size:0.62rem;color:var(--text-muted);margin-top:3px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Just now</p>
+                                    </div>
+                                </div>
                             </a>
-                            
-                            <div class="border-t border-[#F0EBE1] my-2"></div>
-                            
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button class="flex w-full items-center gap-3 px-5 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors text-left">
-                                    <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Sign Out
-                                </button>
-                            </form>
                         </div>
                     </div>
-
                 </div>
-            </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto relative pb-24 lg:pb-0">
-                <x-skeleton-ui />
-                <div id="main-page-content" class="w-full p-4 sm:p-6 lg:p-8">
-                    @yield('content')
-                </div>
-            </main>
+                <div style="width:1px;height:22px;background:rgba(0,0,0,0.1);" class="hidden sm:block"></div>
 
-        </div>
-    </div>
-
-    <!-- Mobile Bottom Navigation (Admin) -->
-    <div x-data="{ moreDrawerOpen: false }" class="lg:hidden">
-        <!-- Bottom Nav Bar -->
-        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-md bg-white/80 backdrop-blur-3xl border border-white/60 rounded-[2rem] z-[60] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
-            <div class="flex justify-around items-center px-2 py-2">
-                <a href="{{ route('admin.dashboard') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('admin.dashboard') ? 'text-blue-500' : 'text-slate-400 hover:text-blue-400' }}">
-                    <i class="fa-solid fa-chart-pie text-xl mb-1 transition-transform {{ request()->routeIs('admin.dashboard') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Dashboard</span>
-                </a>
-                
-                <a href="{{ route('admin.students.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->is('admin/students*') ? 'text-emerald-500' : 'text-slate-400 hover:text-emerald-400' }}">
-                    <i class="fa-solid fa-user-graduate text-xl mb-1 transition-transform {{ request()->is('admin/students*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Students</span>
-                </a>
-
-                <a href="{{ route('admin.courses.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->is('admin/courses*') ? 'text-amber-500' : 'text-slate-400 hover:text-amber-400' }}">
-                    <i class="fa-solid fa-book text-xl mb-1 transition-transform {{ request()->is('admin/courses*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Courses</span>
-                </a>
-
-                <a href="{{ route('admin.analytics.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->is('admin/analytics*') ? 'text-purple-500' : 'text-slate-400 hover:text-purple-400' }}">
-                    <i class="fa-solid fa-chart-line text-xl mb-1 transition-transform {{ request()->is('admin/analytics*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Analytics</span>
-                </a>
-
-                <button type="button" @click="moreDrawerOpen = true" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] text-slate-400 hover:text-rose-500 transition-all active:scale-90 active:opacity-70">
-                    <i class="fa-solid fa-layer-group text-xl mb-1"></i>
-                    <span class="text-[10px] font-bold">More</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Slide-up Drawer Overlay -->
-        <div x-show="moreDrawerOpen" style="display: none;" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             @click="moreDrawerOpen = false"
-             class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70]"></div>
-
-        <!-- Slide-up Drawer Content -->
-        <div x-show="moreDrawerOpen" style="display: none;"
-             x-transition:enter="transition transform ease-[cubic-bezier(0.2,0.8,0.2,1)] duration-500"
-             x-transition:enter-start="translate-y-full"
-             x-transition:enter-end="translate-y-0"
-             x-transition:leave="transition transform ease-in duration-300"
-             x-transition:leave-start="translate-y-0"
-             x-transition:leave-end="translate-y-full"
-             class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-3xl rounded-t-[2.5rem] z-[80] shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col max-h-[85vh] border-t border-white/50">
-            
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center sticky top-0 z-10 bg-white/50 backdrop-blur-xl">
-                <div class="absolute top-2.5 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 rounded-full"></div>
-                <h3 class="font-bold text-slate-800 text-lg mt-3">More Options</h3>
-                <button type="button" @click="moreDrawerOpen = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors active:scale-90">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
-            
-            <div class="overflow-y-auto flex-1 px-4 py-4 space-y-2 pb-8">
-                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Management</p>
-                <a href="{{ route('admin.teachers.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 transition-all active:scale-95">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-indigo-500"><i class="fa-solid fa-chalkboard-user"></i></div>
-                    <span class="font-bold text-sm flex-1">Teachers</span>
-                </a>
-                <a href="{{ route('admin.exams.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-sky-50 text-slate-700 hover:text-sky-700 transition-all active:scale-95">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-sky-500"><i class="fa-solid fa-calendar-days"></i></div>
-                    <span class="font-bold text-sm flex-1">Exam Calendar</span>
-                </a>
-                <a href="{{ route('admin.fees.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-amber-50 text-slate-700 hover:text-amber-700 transition-all active:scale-95">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-500"><i class="fa-solid fa-indian-rupee-sign"></i></div>
-                    <span class="font-bold text-sm flex-1">Fee Collections</span>
-                </a>
-
-                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">AI & Insights</p>
-                <a href="{{ route('admin.dropout-risk.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all active:scale-95 border border-rose-100">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-rose-500"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <span class="font-bold text-sm flex-1">Dropout Risk AI</span>
-                </a>
-                <a href="{{ route('admin.attendance-risk.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-orange-50 hover:bg-orange-100 text-orange-700 transition-all active:scale-95 border border-orange-100">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-orange-500"><i class="fa-solid fa-chart-line"></i></div>
-                    <span class="font-bold text-sm flex-1">Attendance Risk AI</span>
-                </a>
-
-                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">System</p>
-                <a href="{{ route('admin.notices.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all active:scale-95">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-500"><i class="fa-solid fa-bullhorn"></i></div>
-                    <span class="font-bold text-sm flex-1">Notice Board</span>
-                </a>
-                <a href="{{ route('admin.telegram.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-sky-50 hover:bg-sky-100 text-sky-700 transition-all active:scale-95 border border-sky-100">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-sky-500"><i class="fa-brands fa-telegram"></i></div>
-                    <span class="font-bold text-sm flex-1">Telegram Alerts</span>
-                    <span class="text-[9px] text-sky-500 px-1.5 py-0.5 rounded border border-sky-400/30 font-black tracking-wider uppercase">BOT</span>
-                </a>
-
-                <form method="POST" action="{{ route('logout') }}" class="mt-4 mb-4">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-gray-900 text-white font-bold text-sm hover:bg-gray-800 transition-all active:scale-95 shadow-lg">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Secure Logout
+                <!-- Profile dropdown -->
+                <div class="relative" x-data="{ profileOpen: false }" @click.outside="profileOpen = false">
+                    <button @click="profileOpen = !profileOpen" style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:14px;background:var(--bg);box-shadow:4px 4px 9px var(--sh-dark),-4px -4px 9px var(--sh-light);border:none;cursor:pointer;transition:all 0.2s;">
+                        <div class="hidden sm:block" style="text-align:right;">
+                            <p style="font-size:0.82rem;font-weight:800;color:var(--text-primary);line-height:1.2;">{{ auth()->user()->name ?? 'Admin' }}</p>
+                            <p style="font-size:0.6rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;">Super Admin</p>
+                        </div>
+                        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:3px 3px 8px rgba(79,70,229,0.4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:0.9rem;">
+                            {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                        </div>
+                        <i class="fa-solid fa-chevron-down hidden sm:block" style="font-size:0.7rem;color:var(--text-muted);"></i>
                     </button>
-                </form>
+
+                    <div x-show="profileOpen" style="display:none;"
+                         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                         class="notif-dropdown absolute right-0 mt-3 w-56 z-[9999] overflow-hidden py-2">
+                        <div style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.4);margin-bottom:4px;">
+                            <p style="font-size:0.6rem;font-weight:900;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);">Signed in as</p>
+                            <p style="font-size:0.8rem;font-weight:700;color:var(--text-primary);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ auth()->user()->email ?? 'admin@edu.com' }}</p>
+                        </div>
+                        <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:0.8rem;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:background 0.15s;" class="notif-item">
+                            <i class="fa-solid fa-gear" style="font-size:0.82rem;"></i> Account Settings
+                        </a>
+                        <div style="margin:4px 0;border-top:1px solid rgba(255,255,255,0.4);"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" style="display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:0.8rem;font-weight:700;color:#ef4444;border:none;background:none;cursor:pointer;width:100%;text-align:left;transition:background 0.15s;" class="notif-item">
+                                <i class="fa-solid fa-arrow-right-from-bracket" style="font-size:0.82rem;"></i> Sign Out
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
+        </header>
+
+        <main style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative;" class="pb-24 lg:pb-0">
+            <x-skeleton-ui />
+            <div id="main-page-content" style="padding:28px;">@yield('content')</div>
+        </main>
+
+    </div>
+</div>
+
+<!-- ═══ MOBILE BOTTOM NAV ════════════════════ -->
+<div x-data="{ moreOpen: false }" class="lg:hidden">
+    <div class="bottom-nav fixed bottom-0 inset-x-0 z-[60]">
+        <div style="display:flex;justify-content:space-around;align-items:center;padding:8px 12px;max-width:480px;margin:0 auto;">
+            <a href="{{ route('admin.dashboard') }}" class="bottom-tab {{ request()->routeIs('admin.dashboard') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ route('admin.students.index') }}" class="bottom-tab {{ request()->is('admin/students*') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-users"></i><span>Students</span>
+            </a>
+            <a href="{{ route('admin.courses.index') }}" class="bottom-tab {{ request()->is('admin/courses*') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-book"></i><span>Courses</span>
+            </a>
+            <a href="{{ route('admin.analytics.index') }}" class="bottom-tab {{ request()->is('admin/analytics*') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-chart-line"></i><span>Analytics</span>
+            </a>
+            <button type="button" @click="moreOpen = true" class="bottom-tab">
+                <i class="fa-solid fa-grid-2"></i><span>More</span>
+            </button>
         </div>
     </div>
 
-    <x-sweetalert />
+    <div x-show="moreOpen" style="display:none;"
+         x-transition:enter="transition-opacity duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         @click="moreOpen = false"
+         class="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[70]"></div>
+
+    <div x-show="moreOpen" style="display:none;"
+         x-transition:enter="transition transform ease-out duration-400" x-transition:enter-start="translate-y-full" x-transition:enter-end="translate-y-0"
+         x-transition:leave="transition transform ease-in duration-300" x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-full"
+         class="side-drawer fixed bottom-0 inset-x-0 z-[80] flex flex-col" style="max-height:88vh;">
+        <div style="padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.4);display:flex;justify-content:space-between;align-items:center;">
+            <div style="position:absolute;left:50%;top:10px;transform:translateX(-50%);width:36px;height:4px;border-radius:4px;background:var(--sh-dark);"></div>
+            <span style="font-size:1rem;font-weight:800;color:var(--text-primary);margin-top:8px;">More Options</span>
+            <button @click="moreOpen = false" class="header-icon-btn" style="width:32px;height:32px;border-radius:10px;margin-top:8px;">
+                <i class="fa-solid fa-xmark" style="font-size:0.85rem;"></i>
+            </button>
+        </div>
+        <div style="overflow-y:auto;flex:1;padding:14px 14px 24px;">
+            <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);padding:4px 4px 10px;">Management</p>
+            <a href="{{ route('admin.teachers.index') }}"      class="drawer-row"><span class="drawer-icon" style="color:var(--accent);"><i class="fa-solid fa-chalkboard-user"></i></span>Teachers</a>
+            <a href="{{ route('admin.exams.index') }}"         class="drawer-row"><span class="drawer-icon" style="color:#0ea5e9;"><i class="fa-solid fa-calendar-days"></i></span>Exam Calendar</a>
+            <a href="{{ route('admin.fees.index') }}"          class="drawer-row"><span class="drawer-icon" style="color:#f59e0b;"><i class="fa-solid fa-indian-rupee-sign"></i></span>Fee Collections</a>
+            <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);padding:16px 4px 10px;">AI & Insights</p>
+            <a href="{{ route('admin.dropout-risk.index') }}"  class="drawer-row"><span class="drawer-icon" style="color:#f43f5e;"><i class="fa-solid fa-triangle-exclamation"></i></span><span style="flex:1">Dropout Risk AI</span><span style="font-size:0.55rem;font-weight:900;color:#f43f5e;padding:2px 7px;border-radius:6px;background:var(--bg);box-shadow:inset 2px 2px 5px var(--sh-dark),inset -2px -2px 5px var(--sh-light);">AI</span></a>
+            <a href="{{ route('admin.attendance-risk.index') }}" class="drawer-row"><span class="drawer-icon" style="color:#f97316;"><i class="fa-solid fa-chart-line"></i></span><span style="flex:1">Attendance Risk AI</span><span style="font-size:0.55rem;font-weight:900;color:#f97316;padding:2px 7px;border-radius:6px;background:var(--bg);box-shadow:inset 2px 2px 5px var(--sh-dark),inset -2px -2px 5px var(--sh-light);">AI</span></a>
+            <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);padding:16px 4px 10px;">System</p>
+            <a href="{{ route('admin.notices.index') }}"       class="drawer-row"><span class="drawer-icon" style="color:#8b5cf6;"><i class="fa-solid fa-bullhorn"></i></span>Notice Board</a>
+            <a href="{{ route('admin.telegram.index') }}"      class="drawer-row"><span class="drawer-icon" style="color:#2AABEE;"><i class="fa-brands fa-telegram"></i></span><span style="flex:1">Telegram Alerts</span><span style="font-size:0.55rem;font-weight:900;color:#2AABEE;padding:2px 7px;border-radius:6px;background:var(--bg);box-shadow:inset 2px 2px 5px var(--sh-dark),inset -2px -2px 5px var(--sh-light);">Bot</span></a>
+            <form method="POST" action="{{ route('logout') }}" style="margin-top:14px;">
+                @csrf
+                <button type="submit" style="width:100%;padding:14px;border-radius:16px;background:var(--bg);box-shadow:4px 4px 10px var(--sh-dark),-4px -4px 10px var(--sh-light);font-weight:800;font-size:0.85rem;color:#ef4444;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Secure Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<x-sweetalert />
 </body>
 </html>

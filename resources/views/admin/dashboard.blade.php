@@ -1,356 +1,313 @@
 @extends('layouts.admin')
-
-@section('title', 'Dashboard Overview')
+@section('title', 'System Overview')
 
 @section('content')
-
 <style>
-    /* ================= PREMIUM ANIMATIONS ================= */
-    .animate-fade-up {
-        animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    @keyframes fadeUp {
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Staggered Delays */
-    .delay-100 { animation-delay: 100ms; }
-    .delay-200 { animation-delay: 200ms; }
-    .delay-300 { animation-delay: 300ms; }
-    .delay-400 { animation-delay: 400ms; }
-    .delay-500 { animation-delay: 500ms; }
-    .delay-600 { animation-delay: 600ms; }
-
-    /* Interactive Stat Cards */
-    .stat-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    }
+.ac { background:var(--bg); border-radius:22px; box-shadow:8px 8px 20px var(--sh-dark),-8px -8px 20px var(--sh-light); transition:box-shadow 0.3s ease,transform 0.28s ease; }
+.ac:hover { box-shadow:12px 12px 28px var(--sh-dark),-12px -12px 28px var(--sh-light); transform:translateY(-3px); }
+.ac-sm { background:var(--bg); border-radius:16px; box-shadow:5px 5px 12px var(--sh-dark),-5px -5px 12px var(--sh-light); }
+.ac-inset { background:var(--bg-dark); border-radius:14px; box-shadow:inset 4px 4px 10px var(--sh-dark),inset -4px -4px 10px var(--sh-light); }
+.icon-box { border-radius:14px; background:var(--bg); box-shadow:4px 4px 10px var(--sh-dark),-4px -4px 10px var(--sh-light); display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.icon-box-sm { border-radius:11px; background:var(--bg); box-shadow:3px 3px 8px var(--sh-dark),-3px -3px 8px var(--sh-light); display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.pill-nm { font-size:0.6rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:9px;background:var(--bg);box-shadow:2px 2px 6px var(--sh-dark),-2px -2px 6px var(--sh-light); }
+.grad-text { background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+.sec-title { font-size:1.05rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.02em; }
+.sec-sub   { font-size:0.62rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:1px; }
+.track { background:var(--bg);box-shadow:inset 3px 3px 8px var(--sh-dark),inset -2px -2px 6px var(--sh-light);border-radius:100px;overflow:hidden; }
+.qa-btn { display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:13px;font-size:0.82rem;font-weight:700;text-decoration:none;transition:all 0.22s;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.25);color:#fff;backdrop-filter:blur(4px); }
+.qa-btn:hover { background:rgba(255,255,255,0.25);transform:translateX(3px); }
+.dir-row { display:flex;align-items:center;padding:14px 16px;border-radius:14px;text-decoration:none;transition:all 0.2s;background:var(--bg);box-shadow:4px 4px 10px var(--sh-dark),-4px -4px 10px var(--sh-light);gap:12px;color:var(--text-secondary); }
+.dir-row:hover { box-shadow:6px 6px 14px var(--sh-dark),-6px -6px 14px var(--sh-light);transform:translateY(-2px);color:var(--accent); }
+.pay-row { display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.4);transition:background 0.15s; }
+.pay-row:last-child { border-bottom:none; }
+.pay-row:hover { background:rgba(255,255,255,0.42); }
 </style>
 
-<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 animate-fade-up">
-    <div>
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">System Overview</h1>
-        <p class="text-slate-500 mt-1 text-sm font-medium">Welcome back! Here is the current status of your institution.</p>
+<div style="min-height:100vh;background:var(--bg);max-width:1400px;margin:0 auto;">
+
+    {{-- Header --}}
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:28px;">
+        <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 8px 2px #22c55e;" class="animate-pulse"></span>
+                <span style="font-size:0.65rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);">System Live</span>
+            </div>
+            <h1 style="font-size:2rem;font-weight:900;color:var(--text-primary);letter-spacing:-0.03em;line-height:1.1;">
+                System <span class="grad-text">Overview</span>
+            </h1>
+            <p style="color:var(--text-muted);font-size:0.88rem;font-weight:500;margin-top:6px;">Welcome back, {{ auth()->user()->name ?? 'Admin' }}. Here is the current status of your institution.</p>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <button onclick="window.location.reload()" style="display:flex;align-items:center;gap:7px;padding:10px 18px;border-radius:13px;background:var(--bg);box-shadow:4px 4px 9px var(--sh-dark),-4px -4px 9px var(--sh-light);font-weight:700;font-size:0.8rem;color:var(--text-secondary);border:none;cursor:pointer;transition:all 0.2s;">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+            <a href="{{ route('admin.analytics.export') }}" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:13px;font-weight:800;font-size:0.8rem;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:5px 5px 14px rgba(79,70,229,0.4),-3px -3px 9px rgba(255,255,255,0.8);text-decoration:none;transition:all 0.25s;">
+                <i class="fa-solid fa-download"></i> Export Report
+            </a>
+        </div>
     </div>
-    <div class="mt-4 md:mt-0 flex items-center gap-3">
-        <button onclick="window.location.reload()" class="px-4 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl shadow-sm hover:bg-slate-50 transition-colors font-bold text-sm flex items-center gap-2">
-            <i class="fa-solid fa-rotate-right"></i> Refresh
-        </button>
-        <a href="{{ route('admin.analytics.export') }}" class="inline-flex items-center px-5 py-2.5 bg-slate-900 hover:bg-slate-800 rounded-xl text-sm font-bold text-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            Export Report
+
+    {{-- Stat Cards --}}
+    <div id="admin-stat-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;">
+
+        <a href="{{ route('admin.fees.index') }}" class="ac" style="padding:22px 20px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+                <div class="icon-box" style="width:46px;height:46px;color:#10b981;"><i class="fa-solid fa-indian-rupee-sign" style="font-size:1.1rem;"></i></div>
+                <span class="pill-nm" style="color:#10b981;">Revenue</span>
+            </div>
+            <div style="font-size:1.9rem;font-weight:900;color:var(--text-primary);line-height:1;letter-spacing:-0.02em;">₹{{ number_format($totalRevenue ?? 0, 0) }}</div>
+            <p style="font-size:0.65rem;font-weight:700;color:#10b981;margin-top:6px;display:flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:0.08em;">
+                <i class="fa-solid fa-arrow-trend-up"></i> Vault Active
+            </p>
         </a>
+
+        <a href="{{ route('admin.students.index') }}" class="ac" style="padding:22px 20px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+                <div class="icon-box" style="width:46px;height:46px;color:#3b82f6;"><i class="fa-solid fa-user-graduate" style="font-size:1.1rem;"></i></div>
+                <span class="pill-nm" style="color:#3b82f6;">Students</span>
+            </div>
+            <div style="font-size:2.2rem;font-weight:900;color:var(--text-primary);line-height:1;">{{ $totalStudents ?? 0 }}</div>
+            <p style="font-size:0.65rem;font-weight:700;color:#3b82f6;margin-top:6px;text-transform:uppercase;letter-spacing:0.08em;display:flex;align-items:center;gap:4px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#3b82f6;display:inline-block;"></span> Enrolled
+            </p>
+        </a>
+
+        <a href="{{ route('admin.teachers.index') }}" class="ac" style="padding:22px 20px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+                <div class="icon-box" style="width:46px;height:46px;color:#8b5cf6;"><i class="fa-solid fa-chalkboard-user" style="font-size:1.1rem;"></i></div>
+                <span class="pill-nm" style="color:#8b5cf6;">Teachers</span>
+            </div>
+            <div style="font-size:2.2rem;font-weight:900;color:var(--text-primary);line-height:1;">{{ $totalTeachers ?? 0 }}</div>
+            <p style="font-size:0.65rem;font-weight:700;color:#8b5cf6;margin-top:6px;text-transform:uppercase;letter-spacing:0.08em;display:flex;align-items:center;gap:4px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#8b5cf6;display:inline-block;"></span> Active Staff
+            </p>
+        </a>
+
+        <a href="{{ route('admin.courses.index') }}" class="ac" style="padding:22px 20px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+                <div class="icon-box" style="width:46px;height:46px;color:#6d28d9;"><i class="fa-solid fa-book-open" style="font-size:1.1rem;"></i></div>
+                <span class="pill-nm" style="color:#6d28d9;">Courses</span>
+            </div>
+            <div style="font-size:2.2rem;font-weight:900;color:var(--text-primary);line-height:1;">{{ $totalCourses ?? 0 }}</div>
+            <p style="font-size:0.65rem;font-weight:700;color:#6d28d9;margin-top:6px;text-transform:uppercase;letter-spacing:0.08em;display:flex;align-items:center;gap:4px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#6d28d9;display:inline-block;"></span> Academic
+            </p>
+        </a>
+
+        <a href="{{ route('admin.subjects.index') }}" class="ac" style="padding:22px 20px;text-decoration:none;display:block;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+                <div class="icon-box" style="width:46px;height:46px;color:#f59e0b;"><i class="fa-solid fa-layer-group" style="font-size:1.1rem;"></i></div>
+                <span class="pill-nm" style="color:#f59e0b;">Subjects</span>
+            </div>
+            <div style="font-size:2.2rem;font-weight:900;color:var(--text-primary);line-height:1;">{{ $totalSubjects ?? 0 }}</div>
+            <p style="font-size:0.65rem;font-weight:700;color:#f59e0b;margin-top:6px;text-transform:uppercase;letter-spacing:0.08em;display:flex;align-items:center;gap:4px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block;"></span> Curriculum
+            </p>
+        </a>
+
     </div>
-</div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+    {{-- Mid Section: Quick Actions + System Directory --}}
+    <div id="admin-mid-grid" style="display:grid;grid-template-columns:1fr 2fr;gap:20px;margin-bottom:22px;">
 
-    {{-- 1. Total Revenue (Financial) --}}
-    <a href="{{ route('admin.fees.index') }}" class="stat-card block bg-white p-6 rounded-2xl border border-slate-100 shadow-sm animate-fade-up delay-100 group relative overflow-hidden">
-        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-emerald-50 rounded-full z-0 group-hover:scale-150 transition-transform duration-500"></div>
-        <div class="flex items-start justify-between relative z-10">
-            <div>
-                <p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Total Revenue</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">₹{{ number_format($totalRevenue ?? 0, 0) }}</h3>
-                <p class="text-xs text-emerald-600 mt-2 flex items-center font-bold">
-                    <i class="fa-solid fa-arrow-trend-up mr-1.5"></i> Vault Active
-                </p>
-            </div>
-            <div class="w-12 h-12 bg-emerald-100 rounded-xl text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shadow-inner">
-                <i class="fa-solid fa-indian-rupee-sign text-xl"></i>
-            </div>
-        </div>
-    </a>
-
-    {{-- 2. Total Students --}}
-    <a href="{{ route('admin.students.index') }}" class="stat-card block bg-white p-6 rounded-2xl border border-slate-100 shadow-sm animate-fade-up delay-200 group relative overflow-hidden">
-        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-50 rounded-full z-0 group-hover:scale-150 transition-transform duration-500"></div>
-        <div class="flex items-start justify-between relative z-10">
-            <div>
-                <p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Total Students</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">{{ $totalStudents ?? 0 }}</h3>
-                <p class="text-xs text-blue-600 mt-2 flex items-center font-bold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600 mr-1.5"></span> Enrolled
-                </p>
-            </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-xl text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-inner">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            </div>
-        </div>
-    </a>
-
-    {{-- 3. Total Teachers --}}
-    <a href="{{ route('admin.teachers.index') }}" class="stat-card block bg-white p-6 rounded-2xl border border-slate-100 shadow-sm animate-fade-up delay-300 group relative overflow-hidden">
-        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-50 rounded-full z-0 group-hover:scale-150 transition-transform duration-500"></div>
-        <div class="flex items-start justify-between relative z-10">
-            <div>
-                <p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Total Teachers</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">{{ $totalTeachers ?? 0 }}</h3>
-                <p class="text-xs text-purple-600 mt-2 flex items-center font-bold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-purple-600 mr-1.5"></span> Active Staff
-                </p>
-            </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-xl text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 shadow-inner">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-            </div>
-        </div>
-    </a>
-
-    {{-- 4. Total Courses --}}
-    <a href="{{ route('admin.courses.index') }}" class="stat-card block bg-white p-6 rounded-2xl border border-slate-100 shadow-sm animate-fade-up delay-400 group relative overflow-hidden">
-        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-violet-50 rounded-full z-0 group-hover:scale-150 transition-transform duration-500"></div>
-        <div class="flex items-start justify-between relative z-10">
-            <div>
-                <p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Courses Offered</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">{{ $totalCourses ?? 0 }}</h3>
-                <p class="text-xs text-violet-600 mt-2 flex items-center font-bold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-violet-600 mr-1.5"></span> Academic
-                </p>
-            </div>
-            <div class="w-12 h-12 bg-violet-100 rounded-xl text-violet-600 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition-colors duration-300 shadow-inner">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-            </div>
-        </div>
-    </a>
-
-    {{-- 5. Total Subjects --}}
-    <a href="{{ route('admin.subjects.index') }}" class="stat-card block bg-white p-6 rounded-2xl border border-slate-100 shadow-sm animate-fade-up delay-500 group relative overflow-hidden">
-        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-amber-50 rounded-full z-0 group-hover:scale-150 transition-transform duration-500"></div>
-        <div class="flex items-start justify-between relative z-10">
-            <div>
-                <p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Total Subjects</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">{{ $totalSubjects ?? 0 }}</h3>
-                <p class="text-xs text-amber-600 mt-2 flex items-center font-bold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-600 mr-1.5"></span> Curriculum
-                </p>
-            </div>
-            <div class="w-12 h-12 bg-amber-100 rounded-xl text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300 shadow-inner">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-            </div>
-        </div>
-    </a>
-
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 animate-fade-up delay-600">
-    
-    <div class="lg:col-span-1">
-        <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 text-white shadow-lg h-full relative overflow-hidden group">
-            <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
-            <div class="relative z-10">
-                <h3 class="font-extrabold text-2xl mb-2">Quick Actions</h3>
-                <p class="text-indigo-100 text-sm mb-6 leading-relaxed">Direct links to manage your campus operations and user data.</p>
-                
-                <div class="flex flex-col gap-3">
-                    <a href="{{ route('admin.students.create') }}" class="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold backdrop-blur-sm transition-all border border-white/10 hover:border-white/30 flex justify-between items-center group/btn">
-                        <span>Add New Student</span>
-                        <svg class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    </a>
-                    <a href="{{ route('admin.teachers.create') }}" class="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold backdrop-blur-sm transition-all border border-white/10 hover:border-white/30 flex justify-between items-center group/btn">
-                        <span>Add New Teacher</span>
-                        <svg class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    </a>
-                    <a href="{{ route('admin.courses.create') }}" class="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold backdrop-blur-sm transition-all border border-white/10 hover:border-white/30 flex justify-between items-center group/btn">
-                        <span>Create Course</span>
-                        <svg class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    </a>
+        {{-- Quick Actions --}}
+        <div style="border-radius:22px;overflow:hidden;box-shadow:8px 8px 20px var(--sh-dark),-5px -5px 14px var(--sh-light);background:linear-gradient(135deg,#312e81,#4338ca,#6366f1);">
+            <div style="padding:26px;position:relative;overflow:hidden;">
+                <div style="position:absolute;right:-20px;bottom:-20px;opacity:0.08;pointer-events:none;">
+                    <i class="fa-solid fa-bolt-lightning" style="font-size:9rem;color:#fff;display:block;"></i>
+                </div>
+                <div style="position:relative;z-index:1;">
+                    <div style="width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+                        <i class="fa-solid fa-bolt" style="color:#fff;font-size:1.1rem;"></i>
+                    </div>
+                    <div style="font-size:1.2rem;font-weight:900;color:#fff;margin-bottom:5px;">Quick Actions</div>
+                    <p style="font-size:0.78rem;color:rgba(255,255,255,0.72);line-height:1.5;margin-bottom:18px;">Direct access to core campus operations.</p>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <a href="{{ route('admin.students.create') }}" class="qa-btn">
+                            <span><i class="fa-solid fa-user-plus" style="margin-right:8px;"></i>Add New Student</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.75rem;"></i>
+                        </a>
+                        <a href="{{ route('admin.teachers.create') }}" class="qa-btn">
+                            <span><i class="fa-solid fa-chalkboard-user" style="margin-right:8px;"></i>Add New Teacher</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.75rem;"></i>
+                        </a>
+                        <a href="{{ route('admin.courses.create') }}" class="qa-btn">
+                            <span><i class="fa-solid fa-book-medical" style="margin-right:8px;"></i>Create Course</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.75rem;"></i>
+                        </a>
+                        <a href="{{ route('admin.notices.index') }}" class="qa-btn">
+                            <span><i class="fa-solid fa-bullhorn" style="margin-right:8px;"></i>Post Notice</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:0.75rem;"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="lg:col-span-2">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm h-full flex flex-col">
-            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
-                <h3 class="font-bold text-slate-900 text-lg">System Directory</h3>
-                <span class="text-xs font-semibold px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">System Active</span>
+        {{-- System Directory --}}
+        <div class="ac" style="overflow:hidden;">
+            <div style="padding:22px 24px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.5);">
+                <div>
+                    <div class="sec-title">System Directory</div>
+                    <div class="sec-sub">Institution management links</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:7px;padding:6px 13px;border-radius:10px;background:var(--bg);box-shadow:inset 2px 2px 6px var(--sh-dark),inset -2px -2px 6px var(--sh-light);">
+                    <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;" class="animate-pulse"></span>
+                    <span style="font-size:0.62rem;font-weight:800;color:#22c55e;text-transform:uppercase;letter-spacing:0.1em;">System Active</span>
+                </div>
             </div>
-            
-            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a href="{{ route('admin.students.index') }}" class="flex items-center p-4 rounded-xl border border-slate-100 hover:border-blue-500 hover:shadow-md transition-all group bg-slate-50/50">
-                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 text-sm">Manage Students</h4>
-                        <p class="text-xs text-slate-500 mt-0.5">View and edit student records</p>
-                    </div>
+            <div style="padding:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+                <a href="{{ route('admin.students.index') }}" class="dir-row">
+                    <div class="icon-box-sm" style="width:38px;height:38px;color:#3b82f6;"><i class="fa-solid fa-user-graduate" style="font-size:0.88rem;"></i></div>
+                    <div><div style="font-size:0.85rem;font-weight:800;color:var(--text-primary);">Manage Students</div><div style="font-size:0.68rem;color:var(--text-muted);margin-top:1px;">View & edit records</div></div>
                 </a>
-
-                <a href="{{ route('admin.teachers.index') }}" class="flex items-center p-4 rounded-xl border border-slate-100 hover:border-purple-500 hover:shadow-md transition-all group bg-slate-50/50">
-                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mr-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 text-sm">Manage Teachers</h4>
-                        <p class="text-xs text-slate-500 mt-0.5">View and edit faculty profiles</p>
-                    </div>
+                <a href="{{ route('admin.teachers.index') }}" class="dir-row">
+                    <div class="icon-box-sm" style="width:38px;height:38px;color:#8b5cf6;"><i class="fa-solid fa-chalkboard-user" style="font-size:0.88rem;"></i></div>
+                    <div><div style="font-size:0.85rem;font-weight:800;color:var(--text-primary);">Manage Teachers</div><div style="font-size:0.68rem;color:var(--text-muted);margin-top:1px;">Faculty profiles</div></div>
                 </a>
-
-                <a href="{{ route('admin.courses.index') }}" class="flex items-center p-4 rounded-xl border border-slate-100 hover:border-violet-500 hover:shadow-md transition-all group bg-slate-50/50">
-                    <div class="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mr-4 group-hover:bg-violet-600 group-hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 text-sm">Manage Courses</h4>
-                        <p class="text-xs text-slate-500 mt-0.5">Update academic programs</p>
-                    </div>
+                <a href="{{ route('admin.courses.index') }}" class="dir-row">
+                    <div class="icon-box-sm" style="width:38px;height:38px;color:#6d28d9;"><i class="fa-solid fa-book-open" style="font-size:0.88rem;"></i></div>
+                    <div><div style="font-size:0.85rem;font-weight:800;color:var(--text-primary);">Manage Courses</div><div style="font-size:0.68rem;color:var(--text-muted);margin-top:1px;">Academic programs</div></div>
                 </a>
-
-                <a href="{{ route('admin.subjects.index') }}" class="flex items-center p-4 rounded-xl border border-slate-100 hover:border-amber-500 hover:shadow-md transition-all group bg-slate-50/50">
-                    <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mr-4 group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 text-sm">Manage Subjects</h4>
-                        <p class="text-xs text-slate-500 mt-0.5">Assign subjects to courses</p>
-                    </div>
+                <a href="{{ route('admin.subjects.index') }}" class="dir-row">
+                    <div class="icon-box-sm" style="width:38px;height:38px;color:#f59e0b;"><i class="fa-solid fa-layer-group" style="font-size:0.88rem;"></i></div>
+                    <div><div style="font-size:0.85rem;font-weight:800;color:var(--text-primary);">Manage Subjects</div><div style="font-size:0.68rem;color:var(--text-muted);margin-top:1px;">Course curriculum</div></div>
+                </a>
+                <a href="{{ route('admin.fees.index') }}" class="dir-row">
+                    <div class="icon-box-sm" style="width:38px;height:38px;color:#10b981;"><i class="fa-solid fa-file-invoice-dollar" style="font-size:0.88rem;"></i></div>
+                    <div><div style="font-size:0.85rem;font-weight:800;color:var(--text-primary);">Fee Management</div><div style="font-size:0.68rem;color:var(--text-muted);margin-top:1px;">Collections & dues</div></div>
+                </a>
+                <a href="{{ route('admin.notices.index') }}" class="dir-row">
+                    <div class="icon-box-sm" style="width:38px;height:38px;color:#f43f5e;"><i class="fa-solid fa-bullhorn" style="font-size:0.88rem;"></i></div>
+                    <div><div style="font-size:0.85rem;font-weight:800;color:var(--text-primary);">Notice Board</div><div style="font-size:0.68rem;color:var(--text-muted);margin-top:1px;">Campus announcements</div></div>
                 </a>
             </div>
         </div>
     </div>
-</div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-up delay-600">
-    
-    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-chart-area text-indigo-500 mr-2"></i> Revenue Overview ({{ date('Y') }})</h2>
-            <button class="text-slate-400 hover:text-indigo-600 transition-colors"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
-        <div class="relative h-80 w-full">
-            <canvas id="revenueChart"></canvas>
-        </div>
-    </div>
+    {{-- Bottom: Chart + Payments --}}
+    <div id="admin-bottom-grid" style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
 
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 class="text-lg font-bold text-slate-800 mb-6"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i> Recent Payments</h2>
-        
-        <div class="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
-            
-            @forelse($recentPayments as $payment)
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-emerald-100 text-emerald-600 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm group-hover:border-emerald-200 transition-colors">
-                        <div class="flex items-center justify-between mb-1">
-                            <div class="font-bold text-slate-900 text-sm truncate">{{ $payment->student->name ?? 'Unknown Student' }}</div>
-                            <div class="text-xs font-bold text-emerald-600">+₹{{ number_format($payment->amount_paid) }}</div>
+        {{-- Revenue Chart --}}
+        <div class="ac" style="overflow:hidden;">
+            <div style="padding:22px 24px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.5);">
+                <div>
+                    <div class="sec-title">Revenue Overview</div>
+                    <div class="sec-sub">{{ date('Y') }} Monthly Collections</div>
+                </div>
+                <div class="icon-box" style="width:42px;height:42px;color:#10b981;">
+                    <i class="fa-solid fa-chart-area" style="font-size:1rem;"></i>
+                </div>
+            </div>
+            <div style="padding:22px;height:320px;position:relative;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        {{-- Recent Payments --}}
+        <div class="ac" style="overflow:hidden;">
+            <div style="padding:22px 24px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.5);">
+                <div>
+                    <div class="sec-title">Recent Payments</div>
+                    <div class="sec-sub">Latest fee transactions</div>
+                </div>
+                <div class="icon-box" style="width:42px;height:42px;color:#f59e0b;">
+                    <i class="fa-solid fa-bolt" style="font-size:1rem;"></i>
+                </div>
+            </div>
+            <div>
+                @forelse($recentPayments as $payment)
+                    <div class="pay-row">
+                        <div class="icon-box-sm" style="width:36px;height:36px;font-size:0.7rem;font-weight:900;color:#10b981;flex-shrink:0;">
+                            {{ strtoupper(substr($payment->student->name ?? 'S', 0, 1)) }}
                         </div>
-                        <div class="text-xs text-slate-500 truncate">{{ $payment->fee->title ?? 'General Fee' }}</div>
-                        <div class="text-[10px] font-bold text-slate-400 mt-2">{{ $payment->created_at->diffForHumans() }}</div>
+                        <div style="flex:1;min-width:0;">
+                            <p style="font-size:0.82rem;font-weight:800;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ $payment->student->name ?? 'Unknown' }}</p>
+                            <p style="font-size:0.65rem;color:var(--text-muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $payment->fee->title ?? 'General Fee' }}</p>
+                        </div>
+                        <div style="text-align:right;flex-shrink:0;">
+                            <p style="font-size:0.82rem;font-weight:900;color:#10b981;">+₹{{ number_format($payment->amount_paid) }}</p>
+                            <p style="font-size:0.6rem;color:var(--text-muted);margin-top:1px;">{{ $payment->created_at->diffForHumans() }}</p>
+                        </div>
                     </div>
-                </div>
-            @empty
-                <div class="text-center py-10">
-                    <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
-                        <i class="fa-solid fa-ghost"></i>
+                @empty
+                    <div style="padding:40px 24px;text-align:center;">
+                        <div class="ac-inset" style="display:inline-flex;flex-direction:column;align-items:center;padding:20px 28px;">
+                            <i class="fa-solid fa-ghost" style="font-size:2rem;color:var(--sh-dark);margin-bottom:8px;"></i>
+                            <p style="font-size:0.8rem;font-weight:700;color:var(--text-muted);">No recent activity.</p>
+                        </div>
                     </div>
-                    <p class="text-sm font-medium text-slate-500">No recent activity.</p>
-                </div>
-            @endforelse
-
-        </div>
-        
-        @if($recentPayments->count() > 0)
-            <div class="mt-6 text-center">
-                <a href="{{ route('admin.fees.index') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors">View All Transactions <i class="fa-solid fa-arrow-right text-xs ml-1"></i></a>
+                @endforelse
             </div>
-        @endif
+            @if(isset($recentPayments) && $recentPayments->count() > 0)
+                <div style="padding:14px 24px;border-top:1px solid rgba(255,255,255,0.4);text-align:center;">
+                    <a href="{{ route('admin.fees.index') }}" style="font-size:0.78rem;font-weight:800;color:var(--accent);text-decoration:none;">View All Transactions <i class="fa-solid fa-arrow-right" style="font-size:0.7rem;margin-left:3px;"></i></a>
+                </div>
+            @endif
+        </div>
     </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    // Responsive grids
+    ['admin-stat-grid','admin-mid-grid','admin-bottom-grid'].forEach(id => {
+        const g = document.getElementById(id); if(!g) return;
+        const configs = {
+            'admin-stat-grid': { sm:'1fr 1fr', md:'repeat(3,1fr)', lg:'repeat(5,1fr)' },
+            'admin-mid-grid':  { sm:'1fr',      md:'1fr',           lg:'1fr 2fr' },
+            'admin-bottom-grid':{ sm:'1fr',     md:'1fr',           lg:'2fr 1fr' }
+        };
+        const c = configs[id];
+        function resize(){
+            const w = window.innerWidth;
+            g.style.gridTemplateColumns = w < 640 ? c.sm : (w < 1024 ? c.md : c.lg);
+        }
+        resize(); window.addEventListener('resize', resize);
+    });
+
+    // Chart
+    document.addEventListener('DOMContentLoaded', function() {
         const canvas = document.getElementById('revenueChart');
-        if(!canvas) return; // Prevent error if canvas isn't loaded
-
+        if(!canvas) return;
         const ctx = canvas.getContext('2d');
-        
-        // Pass PHP Array to JavaScript safely
         const revenueData = @json($revenueChartData ?? array_fill(0, 12, 0));
-
-        // Create a beautiful gradient fill for the chart line
-        let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.5)'); // Indigo-500 at top
-        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)'); // Transparent at bottom
-
+        let grad = ctx.createLinearGradient(0, 0, 0, 300);
+        grad.addColorStop(0, 'rgba(79,70,229,0.45)');
+        grad.addColorStop(1, 'rgba(79,70,229,0.01)');
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
                 datasets: [{
-                    label: 'Revenue Collected (₹)',
-                    data: revenueData,
-                    borderColor: '#6366f1', // Indigo-500
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#6366f1',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    fill: true,
-                    tension: 0.4 // Makes the line smooth and curvy
+                    label: 'Revenue Collected (₹)', data: revenueData,
+                    borderColor: '#4f46e5', backgroundColor: grad,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#ffffff', pointBorderColor: '#4f46e5',
+                    pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+                    fill: true, tension: 0.4
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false // Hide default legend for a cleaner look
-                    },
+                    legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#1e293b',
-                        padding: 12,
-                        titleFont: { size: 13, family: "'Plus Jakarta Sans', sans-serif" },
-                        bodyFont: { size: 14, weight: 'bold', family: "'Plus Jakarta Sans', sans-serif" },
+                        backgroundColor: '#1e2340', padding: 12,
+                        titleFont: { size: 12, family: "'Inter', sans-serif" },
+                        bodyFont: { size: 13, weight: 'bold', family: "'Inter', sans-serif" },
                         displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return '₹ ' + context.parsed.y.toLocaleString();
-                            }
-                        }
+                        callbacks: { label: function(c) { return '₹ ' + c.parsed.y.toLocaleString(); } }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: {
-                            display: false,
-                            drawBorder: false
-                        },
-                        ticks: {
-                            font: { family: "'Plus Jakarta Sans', sans-serif", size: 12 },
-                            color: '#94a3b8'
-                        }
-                    },
+                    x: { grid: { display: false, drawBorder: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#8c94b0' } },
                     y: {
-                        grid: {
-                            color: '#f1f5f9',
-                            borderDash: [5, 5],
-                            drawBorder: false
-                        },
+                        grid: { color: 'rgba(0,0,0,0.04)', borderDash: [4,4], drawBorder: false },
                         ticks: {
-                            font: { family: "'Plus Jakarta Sans', sans-serif", size: 12 },
-                            color: '#94a3b8',
-                            callback: function(value) {
-                                if (value >= 1000) {
-                                    return '₹' + (value / 1000) + 'k'; 
-                                }
-                                return '₹' + value;
-                            }
+                            font: { family: "'Inter', sans-serif", size: 11 }, color: '#8c94b0',
+                            callback: function(v) { return v >= 1000 ? '₹' + (v/1000) + 'k' : '₹' + v; }
                         },
                         beginAtZero: true
                     }
@@ -359,4 +316,5 @@
         });
     });
 </script>
+
 @endsection

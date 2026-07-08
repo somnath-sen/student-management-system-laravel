@@ -3,340 +3,285 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Teacher Portal - @yield('title')</title>
+    <title>Teacher Portal — @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #FDFBF7 !important; /* Creamy white background */
+        /* ═══════════════════════════════════════════════════
+           PREMIUM NEUMORPHISM — TEACHER DESIGN TOKENS
+           Accent: Emerald/Teal — Growth & Teaching
+        ═══════════════════════════════════════════════════ */
+        :root {
+            --bg:       #dde3ee;
+            --bg-light: #eef1f7;
+            --bg-dark:  #cdd3e0;
+            --sh-dark:  #b8bece;
+            --sh-light: #ffffff;
+            --accent:        #0d9488;
+            --accent-2:      #0891b2;
+            --accent-glow:   rgba(13,148,136,0.25);
+            --accent-soft:   rgba(13,148,136,0.10);
+            --text-primary:   #1e2340;
+            --text-secondary: #5a6284;
+            --text-muted:     #8c94b0;
+            --r-sm: 12px; --r-md: 18px; --r-lg: 24px;
         }
-        
-        /* Smooth Content Entrance */
-        .animate-content {
-            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateY(15px);
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; }
+        html { height: 100%; }
+        body { font-family: 'Inter', 'Plus Jakarta Sans', sans-serif; background: var(--bg) !important; color: var(--text-primary); -webkit-font-smoothing: antialiased; height: 100%; }
 
-        /* Page fade-in on load (replaces skeleton loader) */
-        .page-content-fade {
-            animation: pageFadeIn 0.4s ease forwards;
-        }
+        .sidebar { background: var(--bg); box-shadow: 8px 0 28px rgba(0,0,0,0.10); border-right: 1px solid rgba(255,255,255,0.55); display: flex; flex-direction: column; }
+        .sidebar-logo { padding: 0 20px; height: 72px; display: flex; align-items: center; gap: 13px; border-bottom: 1px solid rgba(255,255,255,0.4); flex-shrink: 0; }
+        .logo-gem { width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 4px 4px 12px rgba(13,148,136,0.45), -3px -3px 8px rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .logo-gem i { color: #fff; font-size: 17px; }
+        .logo-text { font-weight: 800; font-size: 1rem; color: var(--text-primary); letter-spacing: -0.02em; }
+        .logo-sub  { font-weight: 600; font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; }
 
-        @keyframes pageFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 14px 12px; }
+        .sidebar-nav::-webkit-scrollbar { width: 3px; }
+        .sidebar-nav::-webkit-scrollbar-thumb { background: var(--sh-dark); border-radius: 4px; }
 
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .nav-label { font-size: 0.58rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); padding: 20px 14px 6px; display: block; }
 
-        /* Sidebar Active State Styling */
-        .nav-link.active {
-            background: rgba(99, 102, 241, 0.15); /* Indigo tint */
-            color: #818cf8; /* Indigo-400 */
-            border-right: 3px solid #6366f1;
-            font-weight: 700;
-        }
+        .nav-item { display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: var(--r-sm); color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-decoration: none; position: relative; transition: all 0.22s ease; user-select: none; }
+        .nav-item:hover { color: var(--text-primary); box-shadow: 4px 4px 10px var(--sh-dark), -4px -4px 10px var(--sh-light); background: var(--bg); }
+        .nav-item.active { color: var(--accent); font-weight: 700; box-shadow: inset 4px 4px 10px var(--sh-dark), inset -4px -4px 10px var(--sh-light); background: var(--bg-dark); }
+        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 52%; background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 0 4px 4px 0; box-shadow: 0 0 10px var(--accent-glow); }
 
-        /* Premium Scrollbar */
-        /* Skeleton Shimmer Animation */
-        .shimmer {
-            background: #f1f5f9;
-            background-image: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0) 0,
-                rgba(255, 255, 255, 0.6) 20%,
-                rgba(255, 255, 255, 0) 40%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            background-repeat: no-repeat;
-            background-size: 800px 100%;
-            animation: shimmer 1.5s infinite linear forwards;
-        }
-        @keyframes shimmer {
-            0% { background-position: -468px 0; }
-            100% { background-position: 468px 0; }
-        }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        .nav-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; flex-shrink: 0; background: var(--bg); box-shadow: 3px 3px 7px var(--sh-dark), -3px -3px 7px var(--sh-light); transition: all 0.22s ease; color: inherit; }
+        .nav-item.active .nav-icon { background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 3px 3px 10px rgba(13,148,136,0.45), -2px -2px 6px rgba(255,255,255,0.8); color: #fff; }
+        .nav-item:hover .nav-icon { box-shadow: 5px 5px 12px var(--sh-dark), -5px -5px 12px var(--sh-light); }
+
+        .nav-pill { font-size: 0.55rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border-radius: 7px; background: var(--bg); box-shadow: inset 2px 2px 5px var(--sh-dark), inset -2px -2px 5px var(--sh-light); }
+
+        .sidebar-footer { padding: 16px 14px; border-top: 1px solid rgba(255,255,255,0.45); background: var(--bg); flex-shrink: 0; }
+        .sidebar-footer .avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 3px 3px 9px rgba(13,148,136,0.4), -2px -2px 6px rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+
+        .top-header { height: 72px; background: var(--bg); box-shadow: 0 4px 18px rgba(0,0,0,0.07); border-bottom: 1px solid rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 30; flex-shrink: 0; }
+        .header-icon-btn { width: 42px; height: 42px; border-radius: 13px; background: var(--bg); box-shadow: 4px 4px 9px var(--sh-dark), -4px -4px 9px var(--sh-light); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; border: none; position: relative; }
+        .header-icon-btn:hover { color: var(--accent); box-shadow: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+        .header-icon-btn:active { box-shadow: inset 3px 3px 8px var(--sh-dark), inset -3px -3px 8px var(--sh-light); }
+        .header-logout { display: flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 13px; background: var(--bg); box-shadow: 4px 4px 9px var(--sh-dark), -4px -4px 9px var(--sh-light); color: #ef4444; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+        .header-logout:hover { box-shadow: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+
+        .notif-dropdown { background: var(--bg); box-shadow: 10px 10px 28px var(--sh-dark), -6px -6px 16px var(--sh-light); border-radius: var(--r-lg); border: 1px solid rgba(255,255,255,0.65); }
+        .notif-item:hover { background: rgba(255,255,255,0.5); }
+
+        .bottom-nav { background: var(--bg); box-shadow: 0 -6px 24px rgba(0,0,0,0.09); border-top: 1px solid rgba(255,255,255,0.55); }
+        .bottom-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 8px; border-radius: 14px; color: var(--text-muted); font-size: 0.58rem; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; background: none; text-decoration: none; }
+        .bottom-tab.is-active { color: var(--accent); }
+        .bottom-tab.is-active i { filter: drop-shadow(0 0 5px var(--accent-glow)); }
+        .bottom-tab i { font-size: 1.15rem; transition: all 0.2s; }
+
+        .side-drawer { background: var(--bg); border-radius: 28px 28px 0 0; box-shadow: 0 -12px 36px rgba(0,0,0,0.12); }
+        .drawer-row { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; color: var(--text-secondary); font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: all 0.2s; background: var(--bg); box-shadow: 4px 4px 10px var(--sh-dark), -4px -4px 10px var(--sh-light); margin-bottom: 8px; }
+        .drawer-row:hover { color: var(--accent); box-shadow: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+        .drawer-icon { width: 36px; height: 36px; border-radius: 11px; display: flex; align-items: center; justify-content: center; background: var(--bg); box-shadow: inset 2px 2px 6px var(--sh-dark), inset -2px -2px 6px var(--sh-light); font-size: 0.88rem; }
+
+        .shimmer { background: var(--bg); background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.55) 35%, rgba(255,255,255,0) 65%); background-repeat: no-repeat; background-size: 900px 100%; animation: shim 1.6s infinite linear; }
+        @keyframes shim { 0%{background-position:-500px 0} 100%{background-position:500px 0} }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: var(--sh-dark); border-radius: 6px; }
     </style>
 </head>
 
-<body class="text-slate-800 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ sidebarOpen: false }">
+<body x-data="{ sidebarOpen: false }">
+<div class="flex h-screen overflow-hidden">
 
+    <div x-show="sidebarOpen" @click="sidebarOpen = false"
+         x-transition:enter="transition-opacity duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         style="display:none;" class="fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm lg:hidden"></div>
 
-    
-    <div class="flex h-screen overflow-hidden">
+    <!-- ═══ SIDEBAR ════════════════════════════ -->
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+           class="sidebar fixed inset-y-0 left-0 z-50 w-[260px] transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0">
 
-        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity 
-             class="hidden lg:hidden fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm"></div>
+        <div class="sidebar-logo">
+            <div class="logo-gem"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div>
+                <div class="logo-text">TeacherPanel</div>
+                <div class="logo-sub">Instructor Portal</div>
+            </div>
+        </div>
 
-        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-               class="hidden lg:flex fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shadow-2xl flex-col border-r border-slate-800">
-            
-            <div class="flex items-center justify-center h-20 border-b border-slate-800/60 bg-slate-900/50 backdrop-blur-md px-6">
-                <div class="flex items-center gap-3 font-extrabold text-xl tracking-wide w-full">
-                    <div class="bg-gradient-to-tr from-indigo-600 to-purple-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-white/10">
-                        <i class="fa-solid fa-chalkboard-user text-white text-lg"></i>
-                    </div>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">TeacherPanel</span>
+        <nav class="sidebar-nav">
+            <a href="{{ route('teacher.dashboard') }}" class="nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('teacher.timetable') }}" class="nav-item {{ request()->routeIs('teacher.timetable.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
+                <span>My Schedule</span>
+            </a>
+            <a href="{{ route('teacher.attendance.create') }}" class="nav-item {{ request()->routeIs('teacher.attendance.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-clipboard-user"></i></span>
+                <span>Mark Attendance</span>
+            </a>
+            <a href="{{ route('teacher.marks.index') }}" class="nav-item {{ request()->routeIs('teacher.marks.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-file-pen"></i></span>
+                <span>Student Marks</span>
+            </a>
+            <a href="{{ route('teacher.performance.index') }}" class="nav-item {{ request()->routeIs('teacher.performance.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+                <span style="flex:1">Performance</span>
+                <span class="nav-pill" style="color:var(--accent);">New</span>
+            </a>
+
+            <span class="nav-label">Tools</span>
+
+            <a href="{{ route('studyai.index') }}" class="nav-item {{ request()->routeIs('studyai.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-robot"></i></span>
+                <span style="flex:1">StudyAI</span>
+                <span class="nav-pill" style="color:#a855f7;">AI</span>
+            </a>
+
+            <span class="nav-label">Settings</span>
+
+            <a href="{{ route('teacher.emergency') }}" class="nav-item {{ request()->routeIs('teacher.emergency.*') ? 'active' : '' }}">
+                <span class="nav-icon" style="{{ request()->routeIs('teacher.emergency.*') ? '' : 'color:#f43f5e' }}"><i class="fa-solid fa-shield-halved"></i></span>
+                <span style="flex:1">Emergency Info</span>
+                <span class="nav-pill" style="color:#f43f5e;">SOS</span>
+            </a>
+            <a href="{{ route('teacher.details') }}" class="nav-item {{ request()->routeIs('teacher.details.*') ? 'active' : '' }}">
+                <span class="nav-icon"><i class="fa-solid fa-user"></i></span>
+                <span>My Profile</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'T', 0, 1)) }}</div>
+                <div style="overflow:hidden;flex:1;">
+                    <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ auth()->user()->name ?? 'Teacher' }}</div>
+                    <div style="font-size:0.6rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;">Instructor Account</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN ════════════════════════════════ -->
+    <div style="flex:1;display:flex;flex-direction:column;height:100%;overflow:hidden;background:var(--bg);">
+        <header class="top-header">
+            <div style="display:flex;align-items:center;gap:14px;">
+                <button @click="sidebarOpen = true" class="header-icon-btn lg:hidden">
+                    <i class="fa-solid fa-bars" style="font-size:1rem;"></i>
+                </button>
+                <div class="hidden sm:block">
+                    <x-breadcrumb />
+                    <h1 style="font-size:1.15rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.025em;line-height:1.2;">@yield('title')</h1>
                 </div>
             </div>
 
-            <nav class="flex-1 overflow-y-auto py-6 space-y-1.5 px-3">
-                
-                <a href="{{ route('teacher.dashboard') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.dashboard') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chart-pie w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Dashboard</span>
-                </a>
-
-                <a href="{{ route('teacher.timetable') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.timetable.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-calendar-days w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">My Schedule</span>
-                </a>
-
-                <a href="{{ route('teacher.attendance.create') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.attendance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-clipboard-user w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Mark Attendance</span>
-                </a>
-
-                <a href="{{ route('teacher.marks.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.marks.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-file-pen w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">Student Marks</span>
-                </a>
-
-                <a href="{{ route('teacher.performance.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.performance.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-chart-line w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Performance</span>
-                    <span class="text-[10px] text-white px-2.5 py-0.5 rounded-full font-bold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_10px_rgba(99,102,241,0.6)] animate-pulse">NEW</span>
-                </a>
-
-                <div class="pt-4 pb-2 px-4">
-                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tools</p>
-                </div>
-                <a href="{{ route('studyai.index') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('studyai.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'text-slate-300 hover:bg-indigo-600/10 hover:text-indigo-400' }}">
-                    <i class="fa-solid fa-robot w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-bold text-sm flex-1">StudyAI</span>
-                    <span class="text-[10px] text-white px-2.5 py-0.5 rounded-full font-bold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_10px_rgba(99,102,241,0.6)] animate-pulse">NEW</span>
-                </a>
-
-                <div class="pt-4 pb-2 px-4">
-                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Settings</p>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="hidden md:flex" style="align-items:center;gap:8px;padding:8px 16px;border-radius:13px;background:var(--bg);box-shadow:4px 4px 9px var(--sh-dark),-4px -4px 9px var(--sh-light);font-size:0.78rem;font-weight:700;color:var(--text-secondary);">
+                    <i class="fa-regular fa-calendar" style="color:var(--accent);"></i>
+                    {{ date('d M, Y') }}
                 </div>
 
-                <a href="{{ route('teacher.emergency') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.emergency.*') ? 'active' : 'text-slate-400 hover:text-rose-400 hover:bg-rose-500/10' }}">
-                    <i class="fa-solid fa-shield-halved w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm flex-1">Emergency Info</span>
-                    <span class="text-[10px] text-white px-2.5 py-0.5 rounded-full font-bold bg-gradient-to-r from-rose-500 to-red-500 shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse">NEW</span>
-                </a>
-
-                <a href="{{ route('teacher.details') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('teacher.details.*') ? 'active' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
-                    <i class="fa-solid fa-user w-5 text-center transition-transform group-hover:scale-110"></i>
-                    <span class="font-semibold text-sm">My Profile</span>
-                </a>
-
-            </nav>
-
-            <div class="p-5 border-t border-slate-800 bg-slate-900/80">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center font-bold text-white shadow-inner border border-indigo-400">
-                        {{ substr(auth()->user()->name, 0, 1) }}
-                    </div>
-                    <div class="overflow-hidden flex-1">
-                        <p class="text-sm font-bold text-white truncate">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-indigo-400 truncate font-medium">Instructor Account</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#FDFBF7]">
-
-            <header class="h-20 bg-white/70 backdrop-blur-xl border-b border-[#F0EBE1] flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 shadow-sm">
-                
-                <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = true" class="hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-indigo-600 transition-colors lg:hidden focus:outline-none">
-                        <i class="fa-solid fa-bars text-xl"></i>
+                <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+                    <button @click="open = !open" class="header-icon-btn">
+                        <i class="fa-solid fa-bell" style="font-size:1rem;"></i>
+                        <span style="position:absolute;top:9px;right:9px;width:8px;height:8px;background:#f43f5e;border-radius:50%;border:2px solid var(--bg);" class="animate-pulse"></span>
                     </button>
-                    <div class="hidden sm:flex flex-col justify-center">
-                        <x-breadcrumb />
-                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight leading-none">@yield('title')</h2>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 md:gap-6">
-                    
-                    <div class="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-xl shadow-sm border border-slate-200 text-sm font-bold text-slate-600">
-                        <i class="fa-regular fa-calendar text-indigo-500"></i>
-                        <span>{{ date('d M, Y') }}</span>
-                    </div>
-
-                    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
-                        <button @click="open = !open" class="relative p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all outline-none">
-                            <i class="fa-solid fa-bell text-lg"></i>
-                            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white animate-pulse"></span>
-                        </button>
-
-                        <div x-show="open" style="display: none;"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                             x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-                             class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-[#F0EBE1] z-50 overflow-hidden">
-                            
-                            <div class="px-5 py-4 border-b border-[#F0EBE1] bg-[#FDFBF7] flex justify-between items-center">
-                                <h3 class="font-bold text-slate-800">Notifications</h3>
-                                <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">1 New</span>
+                    <div x-show="open" style="display:none;"
+                         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 translate-y-2" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                         class="notif-dropdown absolute right-0 mt-3 w-72 z-[9999] overflow-hidden">
+                        <div style="padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.4);">
+                            <span style="font-size:0.9rem;font-weight:800;color:var(--text-primary);">Notifications</span>
+                        </div>
+                        <div style="padding:14px 20px;text-align:center;">
+                            <div style="width:40px;height:40px;border-radius:13px;background:var(--bg);box-shadow:3px 3px 8px var(--sh-dark),-3px -3px 8px var(--sh-light);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;color:var(--text-muted);">
+                                <i class="fa-solid fa-check"></i>
                             </div>
-                            
-                            <div class="max-h-80 overflow-y-auto">
-                                <a href="#" class="block px-5 py-4 hover:bg-slate-50 border-b border-slate-50 transition-colors group">
-                                    <div class="flex gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
-                                            <i class="fa-solid fa-bullhorn text-sm"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-slate-700 font-medium group-hover:text-indigo-600 transition-colors">Welcome to your new Teacher Portal!</p>
-                                            <p class="text-xs text-slate-400 mt-1 font-medium">Just now</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                            <p style="font-size:0.8rem;font-weight:700;color:var(--text-muted);">Welcome to your Teacher Portal!</p>
                         </div>
                     </div>
-
-                    <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button class="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-100 hover:border-rose-200 rounded-xl transition-colors shadow-sm">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                            <span class="hidden sm:inline">Sign Out</span>
-                        </button>
-                    </form>
                 </div>
-            </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto relative pb-24 lg:pb-0">
-                <x-skeleton-ui />
-                <div id="main-page-content" class="w-full">
-                    @yield('content')
-                </div>
-            </main>
+                <div style="width:1px;height:22px;background:rgba(0,0,0,0.1);" class="hidden sm:block"></div>
 
-        </div>
-    </div>
-
-    <!-- Mobile Bottom Navigation (Teacher) -->
-    <div x-data="{ moreDrawerOpen: false }" class="lg:hidden">
-        <!-- Bottom Nav Bar -->
-        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-md bg-white/80 backdrop-blur-3xl border border-white/60 rounded-[2rem] z-[60] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
-            <div class="flex justify-around items-center px-2 py-2">
-                <a href="{{ route('teacher.dashboard') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.dashboard') ? 'text-blue-500' : 'text-slate-400 hover:text-blue-400' }}">
-                    <i class="fa-solid fa-chart-pie text-xl mb-1 transition-transform {{ request()->routeIs('teacher.dashboard') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Dashboard</span>
-                </a>
-                
-                <a href="{{ route('teacher.attendance.create') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.attendance.*') ? 'text-emerald-500' : 'text-slate-400 hover:text-emerald-400' }}">
-                    <i class="fa-solid fa-clipboard-user text-xl mb-1 transition-transform {{ request()->routeIs('teacher.attendance.*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Attendance</span>
-                </a>
-
-                <a href="{{ route('teacher.marks.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.marks.*') ? 'text-amber-500' : 'text-slate-400 hover:text-amber-400' }}">
-                    <i class="fa-solid fa-file-pen text-xl mb-1 transition-transform {{ request()->routeIs('teacher.marks.*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Marks</span>
-                </a>
-
-                <a href="{{ route('teacher.performance.index') }}" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] transition-all active:scale-95 {{ request()->routeIs('teacher.performance.*') ? 'text-purple-500' : 'text-slate-400 hover:text-purple-400' }}">
-                    <i class="fa-solid fa-chart-line text-xl mb-1 transition-transform {{ request()->routeIs('teacher.performance.*') ? 'scale-110 drop-shadow-md' : '' }}"></i>
-                    <span class="text-[10px] font-bold">Performance</span>
-                </a>
-
-                <button type="button" @click="moreDrawerOpen = true" class="flex flex-col items-center p-2 rounded-xl min-w-[64px] text-slate-400 hover:text-rose-500 transition-all active:scale-90 active:opacity-70">
-                    <i class="fa-solid fa-layer-group text-xl mb-1"></i>
-                    <span class="text-[10px] font-bold">More</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Slide-up Drawer Overlay -->
-        <div x-show="moreDrawerOpen" style="display: none;" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             @click="moreDrawerOpen = false"
-             class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70]"></div>
-
-        <!-- Slide-up Drawer Content -->
-        <div x-show="moreDrawerOpen" style="display: none;"
-             x-transition:enter="transition transform ease-[cubic-bezier(0.2,0.8,0.2,1)] duration-500"
-             x-transition:enter-start="translate-y-full"
-             x-transition:enter-end="translate-y-0"
-             x-transition:leave="transition transform ease-in duration-300"
-             x-transition:leave-start="translate-y-0"
-             x-transition:leave-end="translate-y-full"
-             class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-3xl rounded-t-[2.5rem] z-[80] shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col max-h-[85vh] border-t border-white/50">
-            
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center sticky top-0 z-10 bg-white/50 backdrop-blur-xl">
-                <div class="absolute top-2.5 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 rounded-full"></div>
-                <h3 class="font-bold text-slate-800 text-lg mt-3">More Options</h3>
-                <button type="button" @click="moreDrawerOpen = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors active:scale-90">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
-            
-            <div class="overflow-y-auto flex-1 px-4 py-4 space-y-2 pb-8">
-                <a href="{{ route('teacher.timetable') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 transition-all active:scale-95">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-blue-500"><i class="fa-solid fa-calendar-days"></i></div>
-                    <span class="font-bold text-sm flex-1">My Schedule</span>
-                </a>
-
-                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">Tools & AI</p>
-                <a href="{{ route('studyai.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-purple-50 text-slate-700 hover:text-purple-700 transition-all active:scale-95 border border-purple-100/50">
-                    <div class="w-10 h-10 rounded-xl bg-purple-500 shadow-sm flex items-center justify-center text-white"><i class="fa-solid fa-robot"></i></div>
-                    <span class="font-bold text-sm flex-1">StudyAI Assistant</span>
-                </a>
-
-                <p class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">Settings</p>
-                <a href="{{ route('teacher.emergency') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all active:scale-95 border border-rose-100">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-red-500"><i class="fa-solid fa-shield-halved"></i></div>
-                    <span class="font-bold text-sm flex-1">Emergency Info</span>
-                </a>
-                <a href="{{ route('teacher.details') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all active:scale-95">
-                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-500"><i class="fa-solid fa-user"></i></div>
-                    <span class="font-bold text-sm flex-1">My Profile</span>
-                </a>
-
-                <form method="POST" action="{{ route('logout') }}" class="mt-4 mb-4">
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-2xl bg-gray-900 text-white font-bold text-sm hover:bg-gray-800 transition-all active:scale-95 shadow-lg">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    <button class="header-logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="hidden sm:inline">Sign Out</span>
                     </button>
                 </form>
             </div>
+        </header>
+
+        <main style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative;" class="pb-24 lg:pb-0">
+            <x-skeleton-ui />
+            <div id="main-page-content">@yield('content')</div>
+        </main>
+    </div>
+</div>
+
+<!-- ═══ MOBILE BOTTOM NAV ════════════════════ -->
+<div x-data="{ moreOpen: false }" class="lg:hidden">
+    <div class="bottom-nav fixed bottom-0 inset-x-0 z-[60]">
+        <div style="display:flex;justify-content:space-around;align-items:center;padding:8px 12px;max-width:480px;margin:0 auto;">
+            <a href="{{ route('teacher.dashboard') }}" class="bottom-tab {{ request()->routeIs('teacher.dashboard') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ route('teacher.attendance.create') }}" class="bottom-tab {{ request()->routeIs('teacher.attendance.*') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-clipboard-user"></i><span>Attendance</span>
+            </a>
+            <a href="{{ route('teacher.marks.index') }}" class="bottom-tab {{ request()->routeIs('teacher.marks.*') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-file-pen"></i><span>Marks</span>
+            </a>
+            <a href="{{ route('teacher.performance.index') }}" class="bottom-tab {{ request()->routeIs('teacher.performance.*') ? 'is-active' : '' }}">
+                <i class="fa-solid fa-chart-line"></i><span>Performance</span>
+            </a>
+            <button type="button" @click="moreOpen = true" class="bottom-tab">
+                <i class="fa-solid fa-grid-2"></i><span>More</span>
+            </button>
         </div>
     </div>
 
-    <x-sweetalert />
+    <div x-show="moreOpen" style="display:none;"
+         x-transition:enter="transition-opacity duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         @click="moreOpen = false"
+         class="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[70]"></div>
+
+    <div x-show="moreOpen" style="display:none;"
+         x-transition:enter="transition transform ease-out duration-400" x-transition:enter-start="translate-y-full" x-transition:enter-end="translate-y-0"
+         x-transition:leave="transition transform ease-in duration-300" x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-full"
+         class="side-drawer fixed bottom-0 inset-x-0 z-[80] flex flex-col" style="max-height:85vh;">
+        <div style="padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.4);display:flex;justify-content:space-between;align-items:center;">
+            <div style="position:absolute;left:50%;top:10px;transform:translateX(-50%);width:36px;height:4px;border-radius:4px;background:var(--sh-dark);"></div>
+            <span style="font-size:1rem;font-weight:800;color:var(--text-primary);margin-top:8px;">More Options</span>
+            <button @click="moreOpen = false" class="header-icon-btn" style="width:32px;height:32px;border-radius:10px;margin-top:8px;">
+                <i class="fa-solid fa-xmark" style="font-size:0.85rem;"></i>
+            </button>
+        </div>
+        <div style="overflow-y:auto;flex:1;padding:14px 14px 24px;">
+            <a href="{{ route('teacher.timetable') }}" class="drawer-row"><span class="drawer-icon" style="color:#3b82f6;"><i class="fa-solid fa-calendar-days"></i></span>My Schedule</a>
+            <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 10px;">Tools & AI</p>
+            <a href="{{ route('studyai.index') }}" class="drawer-row"><span class="drawer-icon" style="color:#a855f7;"><i class="fa-solid fa-robot"></i></span><span style="flex:1">StudyAI Assistant</span><span style="font-size:0.55rem;font-weight:900;color:#a855f7;padding:2px 7px;border-radius:6px;background:var(--bg);box-shadow:inset 2px 2px 5px var(--sh-dark),inset -2px -2px 5px var(--sh-light);">AI</span></a>
+            <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 10px;">Settings</p>
+            <a href="{{ route('teacher.emergency') }}" class="drawer-row"><span class="drawer-icon" style="color:#ef4444;"><i class="fa-solid fa-shield-halved"></i></span>Emergency Info</a>
+            <a href="{{ route('teacher.details') }}" class="drawer-row"><span class="drawer-icon" style="color:var(--text-secondary);"><i class="fa-solid fa-user"></i></span>My Profile</a>
+            <form method="POST" action="{{ route('logout') }}" style="margin-top:14px;">
+                @csrf
+                <button type="submit" style="width:100%;padding:14px;border-radius:16px;background:var(--bg);box-shadow:4px 4px 10px var(--sh-dark),-4px -4px 10px var(--sh-light);font-weight:800;font-size:0.85rem;color:#ef4444;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<x-sweetalert />
 </body>
 </html>
