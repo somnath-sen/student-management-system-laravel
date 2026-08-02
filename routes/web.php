@@ -82,7 +82,7 @@ Route::get('/register/teacher', function () {
 Route::post('/register/faculty', [FacultyRegistrationController::class, 'store'])->name('register.faculty.store');
 
 // Put this at the BOTTOM of web.php (Outside Auth middleware!)
-Route::get('/verify/student/{id}', function($id) {
+Route::get('/verify/student/{id}', function ($id) {
     $student = \App\Models\Student::with(['user', 'course'])->findOrFail($id);
     return view('public.verify-student', compact('student'));
 })->name('verify.student');
@@ -116,7 +116,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -128,7 +128,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     /* Dashboard */
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-        
+
     /* Student Registrations */
     Route::get('/admin/registrations', [AdminRegistrationController::class, 'index'])->name('admin.registrations.index');
     Route::post('/admin/registrations/{id}/approve', [AdminRegistrationController::class, 'approve'])->name('admin.registrations.approve');
@@ -145,12 +145,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/settings/update', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
 
     // Emergency Database Deduplication Route (Temp)
-    Route::get('/admin/deduplicate-database-now', function() {
+    Route::get('/admin/deduplicate-database-now', function () {
         set_time_limit(300); // Allow 5 minutes for processing
         \Illuminate\Support\Facades\Artisan::call('edflow:deduplicate');
         return "<pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre><br><a href='/admin/dashboard'>Go back to Dashboard</a>";
     });
-        
+
     /* Courses CRUD */
     Route::post('/admin/courses/bulk-delete', [CourseController::class, 'bulkDelete'])->name('admin.courses.bulk-delete');
     Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses.index');
@@ -212,7 +212,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     /* Student Analysis (New Feature) */
     Route::get('/admin/student-analysis', [StudentAnalysisController::class, 'index'])->name('admin.student-analysis.index');
     Route::post('/admin/student-analysis/{student}/status', [StudentAnalysisController::class, 'updateStatus'])->name('admin.student-analysis.update-status');
-    
+
     // Fee Management Routes
     Route::get('/admin/fees', [AdminFeeController::class, 'index'])->name('admin.fees.index');
     Route::post('/admin/fees', [AdminFeeController::class, 'store'])->name('admin.fees.store');
@@ -273,7 +273,7 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     // Attendance
     Route::get('/teacher/attendance/create', [TeacherAttendanceController::class, 'create'])->name('teacher.attendance.create');
     Route::post('/teacher/attendance/store', [TeacherAttendanceController::class, 'store'])->name('teacher.attendance.store');
-    
+
     // Details
     Route::get('/teacher/details', [DetailsController::class, 'index'])->name('teacher.details');
 
@@ -312,7 +312,7 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
 */
 
 Route::middleware(['auth', 'role:student'])->group(function () {
-    
+
     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
 
     /* Attendance (Read-only) */
@@ -353,11 +353,11 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     //Notice
     Route::get('/student/notices/{notice}', [StudentDashboardController::class, 'showNotice'])->name('student.notices.show');
 
-    
+
     // Digital Smart ID Card Routes
     Route::get('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'index'])->name('student.smart-id');
     Route::post('/student/smart-id', [\App\Http\Controllers\Student\SmartIdController::class, 'update'])->name('student.smart-id.update');
-    
+
     // Location Tracker Routes
     Route::get('/student/location', [LocationController::class, 'index'])->name('student.location');
     Route::post('/student/location', [LocationController::class, 'update'])->name('student.location.update');

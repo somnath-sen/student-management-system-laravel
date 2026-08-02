@@ -698,7 +698,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-glass mb-8 animate-fade-in">
                 <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]"></span>
-                <span class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-widest">EdFlow v1.0.1</span>
+                <span class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-widest">EdFlow v1.0.2</span>
             </div>
 
             <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white mb-6 animate-fade-in leading-tight md:leading-tight" style="animation-delay: 0.1s;">
