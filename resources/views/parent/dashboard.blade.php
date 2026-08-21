@@ -458,6 +458,44 @@
 @if($anyPanicking ?? false)
     <script>setTimeout(() => window.location.reload(), 10000);</script>
 @endif
+
+{{-- ── SUPPORT SECTION ──────────────────────────────────────────── --}}
+<div style="max-width:1200px;margin:0 auto;padding:0 20px 28px;" class="fade-up">
+    <div class="ios-card" style="overflow:hidden;">
+        <div style="background:linear-gradient(135deg,#5856D6,#007AFF);padding:22px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+            <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;flex-shrink:0;">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <div>
+                    <h3 style="font-size:1.05rem;font-weight:800;color:#fff;letter-spacing:-0.025em;">Support Center</h3>
+                    <p style="font-size:0.78rem;color:rgba(255,255,255,0.8);margin-top:2px;">Have a question? Our team is here to help</p>
+                </div>
+            </div>
+            <button onclick="openSupportModal()" style="display:flex;align-items:center;gap:9px;padding:11px 22px;border-radius:14px;background:rgba(255,255,255,0.22);color:#fff;font-size:0.85rem;font-weight:700;border:1.5px solid rgba(255,255,255,0.3);cursor:pointer;transition:all 0.2s;backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.22)'">
+                <i class="fa-solid fa-circle-question"></i>
+                Ask a Doubt
+            </button>
+        </div>
+        <div style="padding:20px 26px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;">
+                <div style="background:#F2F2F7;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,122,255,0.1);display:flex;align-items:center;justify-content:center;color:#007AFF;font-size:0.9rem;flex-shrink:0;"><i class="fa-solid fa-bolt"></i></div>
+                    <div><p style="font-size:0.72rem;font-weight:700;color:#1C1C1E;">Fast Response</p><p style="font-size:0.65rem;color:#8E8E93;">Usually within 24h</p></div>
+                </div>
+                <div style="background:#F2F2F7;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:rgba(52,199,89,0.1);display:flex;align-items:center;justify-content:center;color:#34C759;font-size:0.9rem;flex-shrink:0;"><i class="fa-solid fa-envelope"></i></div>
+                    <div><p style="font-size:0.72rem;font-weight:700;color:#1C1C1E;">Email Reply</p><p style="font-size:0.65rem;color:#8E8E93;">Get notified by email</p></div>
+                </div>
+                <div style="background:#F2F2F7;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:rgba(88,86,214,0.1);display:flex;align-items:center;justify-content:center;color:#5856D6;font-size:0.9rem;flex-shrink:0;"><i class="fa-solid fa-chart-gantt"></i></div>
+                    <div><p style="font-size:0.72rem;font-weight:700;color:#1C1C1E;">Track Progress</p><p style="font-size:0.65rem;color:#8E8E93;">Live status updates</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </main>
 
 <!-- ═══ MOBILE BOTTOM NAV ════════════════════════════════════ -->
@@ -506,6 +544,12 @@
         <p style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 9px;">Security</p>
         <a href="#" class="drawer-row"><span class="drawer-icon" style="color:#FF3B30;"><i class="fa-solid fa-triangle-exclamation"></i></span>Emergency Alerts</a>
         <a href="#" class="drawer-row"><span class="drawer-icon" style="color:var(--text-secondary);"><i class="fa-solid fa-gear"></i></span>Settings</a>
+        <p style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 9px;">Help</p>
+        <a href="{{ route('parent.support.index') }}" class="drawer-row" style="text-decoration:none;">
+            <span class="drawer-icon" style="color:#5856D6;"><i class="fa-solid fa-circle-question"></i></span>
+            <span style="flex:1;">Support &amp; Doubts</span>
+            <span style="font-size:0.55rem;font-weight:700;padding:2px 7px;border-radius:100px;background:rgba(88,86,214,0.1);color:#5856D6;">Help</span>
+        </a>
         <form method="POST" action="{{ route('logout') }}" style="margin-top:12px;">
             @csrf
             <button type="submit" style="width:100%;padding:13px;border-radius:14px;background:rgba(255,59,48,0.08);font-weight:700;font-size:0.85rem;color:#FF3B30;border:1px solid rgba(255,59,48,0.15);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
@@ -538,5 +582,6 @@ if(tgBody){
 const mn = document.getElementById('mobile-nav');
 if(mn){ if(window.innerWidth < 1024) mn.style.display='block'; window.addEventListener('resize',()=>{ mn.style.display = window.innerWidth<1024?'block':'none'; }); }
 </script>
+<x-support-modal />
 </body>
 </html>

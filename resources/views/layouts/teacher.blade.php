@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Teacher Portal — @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,6 +143,15 @@
             <a href="{{ route('teacher.details') }}" class="nav-item {{ request()->routeIs('teacher.details.*') ? 'active' : '' }}">
                 <span class="nav-icon"><i class="fa-solid fa-user"></i></span><span>My Profile</span>
             </a>
+
+            <span class="nav-section">Help</span>
+            <a href="{{ route('teacher.support.index') }}"
+                class="nav-item {{ request()->routeIs('teacher.support.*') ? 'active' : '' }}"
+                style="text-decoration:none;">
+                <span class="nav-icon" style="background:rgba(48,209,88,0.12);color:#30D158;"><i class="fa-solid fa-headset"></i></span>
+                <span style="flex:1;">Support</span>
+                <span class="nav-badge" style="background:rgba(48,209,88,0.1);color:#30D158;">Help</span>
+            </a>
         </nav>
 
         <div class="sidebar-footer">
@@ -229,6 +239,12 @@
             <p style="font-size:0.62rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 8px;">Account</p>
             <a href="{{ route('teacher.emergency') }}" class="drawer-row"><span class="drawer-icon" style="color:#FF3B30;"><i class="fa-solid fa-shield-halved"></i></span>Emergency Info</a>
             <a href="{{ route('teacher.details') }}" class="drawer-row"><span class="drawer-icon"><i class="fa-solid fa-user"></i></span>My Profile</a>
+            <p style="font-size:0.62rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 8px;">Help</p>
+            <a href="{{ route('teacher.support.index') }}" class="drawer-row" style="text-decoration:none;">
+                <span class="drawer-icon" style="color:#30D158;"><i class="fa-solid fa-circle-question"></i></span>
+                <span style="flex:1;">Support &amp; Doubts</span>
+                <span style="font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(48,209,88,0.1);color:#30D158;">Help</span>
+            </a>
             <form method="POST" action="{{ route('logout') }}" style="margin-top:12px;">
                 @csrf
                 <button type="submit" style="width:100%;padding:13px;border-radius:14px;background:rgba(255,59,48,0.10);font-weight:600;font-size:0.85rem;color:#FF3B30;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
@@ -240,5 +256,6 @@
 </div>
 
 <x-sweetalert />
+<x-support-modal />
 </body>
 </html>

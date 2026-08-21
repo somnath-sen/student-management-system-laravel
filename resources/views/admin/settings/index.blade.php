@@ -49,6 +49,30 @@
             
         </div>
     </div>
+
+    <!-- Support & Chat Card -->
+    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 animate-content mt-6" style="animation-delay: 0.2s;">
+        
+        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <i class="fa-solid fa-headset text-emerald-500"></i> Support & Chat
+        </h2>
+
+        <div class="space-y-6">
+            <!-- Support Chat Toggle -->
+            <div class="flex items-center justify-between p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-slate-100/50 transition-colors">
+                <div>
+                    <h3 class="font-bold text-slate-800 text-lg">Support Chat</h3>
+                    <p class="text-sm text-slate-500 mt-1">Allow students, teachers & parents to send chat replies on their support tickets. When disabled, users can still submit new tickets but cannot chat.</p>
+                </div>
+                <div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer toggle-setting" data-key="support_chat_enabled" {{ $chatEnabled ? 'checked' : '' }}>
+                        <div class="w-14 h-7 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Toast Notification Container -->

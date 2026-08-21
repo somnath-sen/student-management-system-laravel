@@ -12,8 +12,9 @@ class SettingsController extends Controller
     {
         $studentEnabled = Setting::get('student_registration_enabled', true);
         $facultyEnabled = Setting::get('faculty_registration_enabled', true);
+        $chatEnabled    = Setting::get('support_chat_enabled', false);
 
-        return view('admin.settings.index', compact('studentEnabled', 'facultyEnabled'));
+        return view('admin.settings.index', compact('studentEnabled', 'facultyEnabled', 'chatEnabled'));
     }
 
     public function update(Request $request)

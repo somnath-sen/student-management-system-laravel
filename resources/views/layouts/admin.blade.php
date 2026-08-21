@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin Portal — @yield('title', 'Control Panel')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -193,6 +194,16 @@
                 <span style="flex:1">Attendance Risk</span>
                 <span class="nav-badge">AI</span>
             </a>
+
+            <span class="nav-section">Support</span>
+            <a href="{{ route('admin.support.index') }}" class="nav-item {{ request()->is('admin/support*') ? 'active' : '' }}">
+                <span class="nav-icon" style="{{ request()->is('admin/support*') ? '' : 'color:#5856D6' }}"><i class="fa-solid fa-headset"></i></span>
+                <span style="flex:1">Support Center</span>
+                @php $openSupportCount = \App\Models\SupportTicket::whereIn('status',['submitted','in_progress'])->count(); @endphp
+                @if($openSupportCount > 0)
+                    <span class="nav-badge" style="background:rgba(88,86,214,0.12);color:#5856D6;">{{ $openSupportCount }}</span>
+                @endif
+            </a>
         </nav>
 
         <div class="sidebar-footer">
@@ -313,6 +324,8 @@
             <p style="font-size:0.62rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 8px;">System</p>
             <a href="{{ route('admin.telegram.index') }}" class="drawer-row"><span class="drawer-icon" style="color:#2AABEE;"><i class="fa-brands fa-telegram"></i></span><span style="flex:1">Telegram Alerts</span><span class="nav-badge" style="background:rgba(42,171,238,0.12);color:#2AABEE;">Bot</span></a>
             <a href="{{ route('admin.settings.index') }}" class="drawer-row"><span class="drawer-icon"><i class="fa-solid fa-gear"></i></span>System Settings</a>
+            <p style="font-size:0.62rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);padding:14px 4px 8px;">Support</p>
+            <a href="{{ route('admin.support.index') }}" class="drawer-row"><span class="drawer-icon" style="color:#5856D6;"><i class="fa-solid fa-headset"></i></span><span style="flex:1">Support Center</span>@if(($openSupportCount ?? 0) > 0)<span class="nav-badge" style="background:rgba(88,86,214,0.12);color:#5856D6;">{{ $openSupportCount }}</span>@endif</a>
             <form method="POST" action="{{ route('logout') }}" style="margin-top:12px;">
                 @csrf
                 <button type="submit" style="width:100%;padding:13px;border-radius:14px;background:rgba(255,59,48,0.10);font-weight:600;font-size:0.85rem;color:#FF3B30;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.18s;">

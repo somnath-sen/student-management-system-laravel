@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\AttendanceRiskController;
 use App\Http\Controllers\Student\AttendanceInsightsController;
 use App\Http\Controllers\Admin\TelegramNotificationController;
 use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\Support\SupportController;
 // use App\Http\Controllers\Student\TimetableController;
 // use App\Http\Controllers\Admin\TimetableController;
 
@@ -257,6 +258,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/telegram/test', [TelegramNotificationController::class, 'sendTest'])->name('admin.telegram.test');
     Route::get('/admin/telegram/logs', [TelegramNotificationController::class, 'logs'])->name('admin.telegram.logs');
 
+    // ── Support Center (Admin) ────────────────────────────────────────────────
+    Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');
+    Route::post('/admin/support/{ticket}/reply', [SupportController::class, 'adminReply'])->name('admin.support.reply');
+    Route::post('/admin/support/{ticket}/close', [SupportController::class, 'adminClose'])->name('admin.support.close');
+    Route::get('/admin/support/count', [SupportController::class, 'adminCount'])->name('admin.support.count');
+    // ── Chat: admin send + read messages ─────────────────────────────────────
+    Route::post('/admin/support/{ticket}/message', [SupportController::class, 'adminSendMessage'])->name('admin.support.message');
+    Route::get('/admin/support/{ticket}/messages', [SupportController::class, 'getMessages'])->name('admin.support.messages');
+
 });
 
 
@@ -302,6 +312,9 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::post('/teacher/broadcast/{subject}', [TeacherBroadcastController::class, 'store'])->name('teacher.broadcast.store');
     Route::delete('/teacher/broadcast/message/{message}', [TeacherBroadcastController::class, 'destroy'])->name('teacher.broadcast.destroy');
     Route::get('/teacher/broadcast/message/{message}/seen-count', [TeacherBroadcastController::class, 'seenCount'])->name('teacher.broadcast.seen-count');
+
+    // ── Support Page ──────────────────────────────────────────────
+    Route::get('/teacher/support', [SupportController::class, 'userSupportIndex'])->name('teacher.support.index');
 
 });
 
@@ -385,6 +398,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     // ── Telegram Connect ───────────────────────────────────────────
     Route::get('/student/telegram/connect', [TelegramController::class, 'generateToken'])->name('student.telegram.connect');
     Route::post('/student/telegram/disconnect', [TelegramController::class, 'disconnect'])->name('student.telegram.disconnect');
+
+    // ── Support Page ──────────────────────────────────────────────
+    Route::get('/student/support', [SupportController::class, 'userSupportIndex'])->name('student.support.index');
 });
 
 
@@ -413,4 +429,21 @@ Route::middleware(['auth', 'role:parent'])->group(function () {
     // ── Telegram Connect ───────────────────────────────────────────
     Route::get('/parent/telegram/connect', [TelegramController::class, 'generateToken'])->name('parent.telegram.connect');
     Route::post('/parent/telegram/disconnect', [TelegramController::class, 'disconnect'])->name('parent.telegram.disconnect');
+
+    // ── Support Page ──────────────────────────────────────────────
+    Route::get('/parent/support', [SupportController::class, 'userSupportIndex'])->name('parent.support.index');
+});
+
+/*
+|--------------------------------------------------------------------------
+| SHARED SUPPORT ROUTES (All authenticated roles)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    // Support / Doubt Ticket System
+    Route::post('/support/tickets', [SupportController::class, 'store'])->name('support.store');
+    Route::get('/support/tickets', [SupportController::class, 'myTickets'])->name('support.my-tickets');
+    // ── Chat: user send + read messages ──────────────────────────────────────
+    Route::post('/support/tickets/{ticket}/message', [SupportController::class, 'userSendMessage'])->name('support.message');
+    Route::get('/support/tickets/{ticket}/messages', [SupportController::class, 'getMessages'])->name('support.messages');
 });
