@@ -128,10 +128,17 @@ class RegistrationController extends Controller
                 ]
             );
 
+            // Auto-generate roll number if not supplied (students.roll_number is NOT NULL)
+            $rollNumber = $registration->roll
+                ?: ('STU-' . date('Y') . '-' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT));
+
+            // Persist the roll back to registration so the student can see it
+            $registration->update(['roll' => $rollNumber]);
+
             $studentProfile = Student::create([
                 'user_id'      => $studentUser->id,
                 'course_id'    => $courseId,
-                'roll_number'  => $registration->roll,
+                'roll_number'  => $rollNumber,
                 'phone'        => $registration->phone,
                 'parent_name'  => $parentName,
                 'blood_group'  => $registration->blood_group,
@@ -140,7 +147,7 @@ class RegistrationController extends Controller
 
             DB::table('parent_student')->insert([
                 'parent_id'  => $parentUser->id,
-                'student_id' => $studentProfile->id,
+                'student_id' => $studentUser->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

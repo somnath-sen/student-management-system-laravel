@@ -39,8 +39,9 @@ class FacultyRegistrationController extends Controller
 
         $registrations = $query->latest()->paginate(15)->withQueryString();
         $pendingCount  = FacultyRegistration::where('status', 'pending')->count();
+        $subjects      = Subject::orderBy('name')->get();
 
-        return view('admin.faculty-registrations.index', compact('registrations', 'pendingCount'));
+        return view('admin.faculty-registrations.index', compact('registrations', 'pendingCount', 'subjects'));
     }
 
     public function show(FacultyRegistration $facultyRegistration)
