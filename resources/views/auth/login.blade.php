@@ -4,768 +4,327 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-        font-family: 'Outfit', sans-serif;
-        min-height: 100vh;
-        overflow: hidden;
-    }
-
-    /* ===== FULL SCREEN WRAPPER ===== */
-    .login-wrapper {
-        display: flex;
-        min-height: 100vh;
-        width: 100%;
-        position: relative;
-    }
-
-    /* ===== LEFT PANEL — BRAND SIDE ===== */
-    .brand-panel {
-        flex: 1;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 3rem;
-        overflow: hidden;
-        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    }
-
-    /* Animated gradient layer */
-    .brand-panel::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            -45deg,
-            #6366f1,
-            #8b5cf6,
-            #ec4899,
-            #f43f5e,
-            #f97316,
-            #8b5cf6,
-            #6366f1
-        );
-        background-size: 400% 400%;
-        animation: gradientShift 10s ease infinite;
-        opacity: 0.18;
-        z-index: 0;
-    }
-
-    @keyframes gradientShift {
-        0%   { background-position: 0% 50%; }
-        50%  { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    /* Decorative animated rings */
-    .ring {
-        position: absolute;
-        border-radius: 50%;
-        border: 2px solid rgba(255,255,255,0.06);
-        animation: ringPulse 6s ease-in-out infinite;
-    }
-    .ring-1 { width: 300px; height: 300px; top: -80px; left: -80px; animation-delay: 0s; }
-    .ring-2 { width: 500px; height: 500px; top: -150px; left: -150px; animation-delay: 1s; border-color: rgba(139,92,246,0.12); }
-    .ring-3 { width: 250px; height: 250px; bottom: -60px; right: -60px; animation-delay: 2s; border-color: rgba(236,72,153,0.12); }
-    .ring-4 { width: 450px; height: 450px; bottom: -130px; right: -130px; animation-delay: 1.5s; }
-
-    @keyframes ringPulse {
-        0%, 100% { transform: scale(1); opacity: 0.6; }
-        50%       { transform: scale(1.05); opacity: 1; }
-    }
-
-    /* Glowing orbs — CSS only, no particles */
-    .orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(60px);
-        animation: orbFloat 8s ease-in-out infinite alternate;
-        z-index: 0;
-    }
-    .orb-1 { width: 300px; height: 300px; background: rgba(99,102,241,0.45); top: 5%; left: 5%; animation-duration: 9s; }
-    .orb-2 { width: 250px; height: 250px; background: rgba(236,72,153,0.35); bottom: 10%; right: 5%; animation-duration: 11s; animation-delay: 2s; }
-    .orb-3 { width: 180px; height: 180px; background: rgba(249,115,22,0.3); top: 50%; left: 40%; animation-duration: 7s; animation-delay: 4s; }
-
-    @keyframes orbFloat {
-        from { transform: translateY(0px) translateX(0px); }
-        to   { transform: translateY(-40px) translateX(20px); }
-    }
-
-    /* Brand content */
-    .brand-content {
-        position: relative;
-        z-index: 1;
-        text-align: center;
-        color: white;
-    }
-
-    .brand-logo {
-        width: 80px; height: 80px;
-        background: rgba(255,255,255,0.12);
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 28px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2.2rem;
-        margin: 0 auto 2rem;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 0 40px rgba(139,92,246,0.5), 0 20px 40px rgba(0,0,0,0.3);
-        animation: logoBounce 3s ease-in-out infinite;
-    }
-    @keyframes logoBounce {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50%       { transform: translateY(-8px) rotate(3deg); }
-    }
-
-    .brand-name {
-        font-size: 3rem;
-        font-weight: 900;
-        letter-spacing: -0.03em;
-        line-height: 1;
-        background: linear-gradient(90deg, #fff 0%, #c4b5fd 50%, #f9a8d4 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 0.75rem;
-    }
-
-    .brand-tagline {
-        font-size: 1rem;
-        color: rgba(255,255,255,0.6);
-        font-weight: 500;
-        max-width: 280px;
-        margin: 0 auto 3rem;
-        line-height: 1.6;
-    }
-
-    /* Stats row */
-    .stats-row {
-        display: flex;
-        gap: 1.5rem;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    .stat-chip {
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.15);
-        border-radius: 16px;
-        padding: 0.9rem 1.3rem;
-        text-align: center;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-        min-width: 90px;
-    }
-    .stat-chip:hover {
-        background: rgba(255,255,255,0.15);
-        transform: translateY(-4px);
-        border-color: rgba(255,255,255,0.3);
-    }
-    .stat-chip .num {
-        font-size: 1.6rem;
-        font-weight: 900;
-        color: white;
-        line-height: 1;
-        margin-bottom: 0.25rem;
-    }
-    .stat-chip .lbl {
-        font-size: 0.65rem;
-        font-weight: 700;
-        color: rgba(255,255,255,0.5);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-    }
-
-    /* Floating badge strip at bottom of left panel */
-    .badge-strip {
-        position: absolute;
-        bottom: 2rem;
-        left: 0; right: 0;
-        display: flex;
-        justify-content: center;
-        gap: 0.6rem;
-        flex-wrap: wrap;
-        padding: 0 2rem;
-        z-index: 1;
-    }
-    .badge-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 99px;
-        padding: 0.35rem 0.9rem;
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: rgba(255,255,255,0.7);
-        backdrop-filter: blur(6px);
-    }
-    .badge-dot {
-        width: 6px; height: 6px;
-        border-radius: 50%;
-        animation: dotPulse 2s ease-in-out infinite;
-    }
-    @keyframes dotPulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50%       { opacity: 0.5; transform: scale(0.7); }
-    }
-
-    /* ===== RIGHT PANEL — FORM SIDE ===== */
-    .form-panel {
-        width: 480px;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 2.5rem 2.5rem;
-        background: #f8faff;
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* Subtle colorful top bar */
-    .form-panel::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #6366f1, #ec4899, #f97316, #6366f1);
-        background-size: 200% 100%;
-        animation: barSlide 3s linear infinite;
-    }
-    @keyframes barSlide {
-        0%   { background-position: 0% 50%; }
-        100% { background-position: 200% 50%; }
-    }
-
-    .form-inner {
-        width: 100%;
-        max-width: 380px;
-        animation: slideInRight 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(30px); }
-        to   { opacity: 1; transform: translateX(0); }
-    }
-
-    /* Welcome heading */
-    .form-heading {
-        margin-bottom: 2.5rem;
-    }
-    .form-heading .label {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(135deg, #ede9fe, #fce7f3);
-        border: 1px solid #ddd6fe;
-        border-radius: 99px;
-        padding: 0.3rem 0.85rem;
-        font-size: 0.72rem;
-        font-weight: 800;
-        color: #7c3aed;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 1rem;
-    }
-    .form-heading h1 {
-        font-size: 2rem;
-        font-weight: 900;
-        color: #0f172a;
-        letter-spacing: -0.03em;
-        line-height: 1.15;
-        margin-bottom: 0.4rem;
-    }
-    .form-heading p {
-        font-size: 0.9rem;
-        color: #64748b;
-        font-weight: 500;
-    }
-
-    /* ===== INPUTS ===== */
-    .field-label {
-        display: block;
-        font-size: 0.72rem;
-        font-weight: 800;
-        color: #475569;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 0.5rem;
-    }
-    .input-wrap {
-        position: relative;
-        margin-bottom: 1.25rem;
-    }
-    .input-icon-left {
-        position: absolute;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #94a3b8;
-        font-size: 0.9rem;
-        pointer-events: none;
-        transition: color 0.3s;
-        z-index: 1;
-    }
-    .prem-input {
-        width: 100%;
-        padding: 0.9rem 1rem 0.9rem 2.75rem;
-        border-radius: 14px;
-        border: 1.5px solid #e2e8f0;
-        background: white;
-        font-family: 'Outfit', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #0f172a;
-        outline: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .prem-input::placeholder { color: #cbd5e1; }
-    .prem-input:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 4px rgba(99,102,241,0.12), 0 4px 12px rgba(99,102,241,0.1);
-        transform: translateY(-1px);
-    }
-    .prem-input:focus + .input-icon-left,
-    .input-wrap:focus-within .input-icon-left {
-        color: #6366f1;
-    }
-    .pw-toggle {
-        position: absolute;
-        right: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #94a3b8;
-        font-size: 0.9rem;
-        transition: color 0.2s;
-        padding: 4px;
-    }
-    .pw-toggle:hover { color: #6366f1; }
-
-    /* ===== REMEMBER / FORGOT ===== */
-    .row-opts {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1.75rem;
-    }
-    .remember-label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #475569;
-        user-select: none;
-    }
-    .custom-check {
-        width: 18px; height: 18px;
-        border: 2px solid #cbd5e1;
-        border-radius: 6px;
-        display: flex; align-items: center; justify-content: center;
-        transition: all 0.2s;
-        flex-shrink: 0;
-        background: white;
-    }
-    .remember-label input[type=checkbox]:checked + .custom-check {
-        background: #6366f1;
-        border-color: #6366f1;
-    }
-    .remember-label input[type=checkbox]:checked + .custom-check::after {
-        content: '';
-        width: 9px; height: 5px;
-        border-left: 2px solid white;
-        border-bottom: 2px solid white;
-        transform: rotate(-45deg) translateY(-1px);
-    }
-    .remember-label input[type=checkbox] { display: none; }
-    .forgot-link {
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: #6366f1;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-    .forgot-link:hover { color: #4f46e5; text-decoration: underline; }
-
-    /* ===== SUBMIT BTN ===== */
-    .submit-btn {
-        width: 100%;
-        padding: 1rem;
-        border: none;
-        border-radius: 14px;
-        font-family: 'Outfit', sans-serif;
-        font-size: 1rem;
-        font-weight: 800;
-        color: white;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-        background-size: 200% 200%;
-        background-position: 0% 50%;
-        box-shadow: 0 10px 25px rgba(99,102,241,0.35);
-    }
-    .submit-btn::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777);
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-    .submit-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 16px 35px rgba(99,102,241,0.45);
-    }
-    .submit-btn:hover::before { opacity: 1; }
-    .submit-btn:active { transform: translateY(0) scale(0.98); }
-    .submit-btn span {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-    .btn-arrow {
-        transition: transform 0.3s;
-        font-size: 0.85rem;
-    }
-    .submit-btn:hover .btn-arrow { transform: translateX(4px); }
-
-    /* Divider */
-    .divider {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin: 1.5rem 0;
-        color: #cbd5e1;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .divider::before, .divider::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: #e2e8f0;
-    }
-
-    /* Role chips */
-    .role-chips {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
-    .role-chip {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        padding: 0.7rem 0.5rem;
-        border-radius: 12px;
-        border: 1.5px solid #e2e8f0;
-        background: white;
-        cursor: pointer;
-        font-size: 0.7rem;
-        font-weight: 700;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        transition: all 0.25s ease;
-        user-select: none;
-    }
-    .role-chip i { font-size: 1.1rem; }
-    .role-chip.student { --chip-color: #6366f1; }
-    .role-chip.teacher { --chip-color: #ec4899; }
-    .role-chip.admin   { --chip-color: #f97316; }
-    .role-chip.parent  { --chip-color: #10b981; }
-    .role-chip:hover {
-        border-color: var(--chip-color);
-        color: var(--chip-color);
-        background: rgba(from var(--chip-color), 0.05);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    .role-chip.active {
-        border-color: var(--chip-color);
-        background: var(--chip-color);
-        color: white;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    }
-
-    /* Sign up row */
-    .signup-row {
-        text-align: center;
-        margin-top: 1.75rem;
-        font-size: 0.88rem;
-        font-weight: 600;
-        color: #64748b;
-    }
-    .signup-row a {
-        color: #6366f1;
-        font-weight: 800;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-    .signup-row a:hover { color: #4f46e5; text-decoration: underline; }
-
-    /* Error messages */
-    .field-error { color: #f43f5e; font-size: 0.75rem; font-weight: 700; margin-top: 4px; }
-
-    /* Session status */
-    .session-msg {
-        background: #f0fdf4;
-        border: 1px solid #86efac;
-        color: #166534;
-        font-weight: 700;
-        font-size: 0.85rem;
-        border-radius: 12px;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1.25rem;
-        text-align: center;
-    }
-
-    /* Stagger animations */
-    .anim-item {
-        opacity: 0;
-        animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(16px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-    .d1 { animation-delay: 0.1s; }
-    .d2 { animation-delay: 0.2s; }
-    .d3 { animation-delay: 0.3s; }
-    .d4 { animation-delay: 0.4s; }
-    .d5 { animation-delay: 0.5s; }
-    .d6 { animation-delay: 0.6s; }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .brand-panel { display: none; }
-        .form-panel { width: 100%; padding: 2rem 1.5rem; }
-    }
+/* ================================================================
+   RESET & BASE
+   ================================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+    --navy-900:#050814;--navy-800:#080B2A;--navy-700:#0D1035;--navy-600:#11154A;
+    --orange:#FF9F0A;--orange-lt:#FFB000;--orange-dk:#F97316;
+    --white:#FFFFFF;--off-white:#F8FAFC;
+    --text-dark:#0F172A;--text-mid:#475569;--text-soft:#64748B;
+    --border:#E2E8F0;--error:#DC2626;--success:#16A34A;
+}
+html,body{font-family:'Outfit',sans-serif;min-height:100vh;background:var(--navy-800);overflow-x:hidden}
+.ef-login-wrap{display:flex;min-height:100vh;width:100%}
+.ef-brand{flex:0 0 47%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2.5rem 2.5rem 2rem;background:var(--navy-800);overflow:hidden}
+.ef-brand::before{content:'';position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 30% 20%,rgba(255,159,10,.09) 0%,transparent 60%),linear-gradient(160deg,var(--navy-700) 0%,var(--navy-900) 60%,#060A22 100%)}
+.ef-brand::after{content:'';position:absolute;bottom:-80px;left:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(79,70,229,.18) 0%,transparent 70%);z-index:0;animation:glowPulse 6s ease-in-out infinite alternate}
+@keyframes glowPulse{from{transform:scale(1);opacity:.7}to{transform:scale(1.15);opacity:1}}
+.ef-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.045);z-index:0;animation:ringPulse 7s ease-in-out infinite}
+.ef-ring-1{width:320px;height:320px;top:-100px;left:-100px;animation-delay:0s}
+.ef-ring-2{width:520px;height:520px;top:-180px;left:-180px;animation-delay:1.5s;border-color:rgba(255,159,10,.07)}
+.ef-ring-3{width:260px;height:260px;bottom:80px;right:-80px;animation-delay:3s;border-color:rgba(99,102,241,.1)}
+.ef-ring-4{width:460px;height:460px;bottom:0;right:-180px;animation-delay:1s}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.04);opacity:1}}
+.ef-orb-orange{position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,159,10,.2) 0%,transparent 65%);z-index:0;filter:blur(20px);animation:orbFloat 9s ease-in-out infinite alternate}
+@keyframes orbFloat{from{transform:translateY(0) translateX(0)}to{transform:translateY(20px) translateX(-15px)}}
+.ef-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.045) 1px,transparent 1px);background-size:28px 28px;z-index:0;mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.6) 30%,rgba(0,0,0,.6) 70%,transparent 100%)}
+.ef-top-bar{position:relative;z-index:2;width:100%;display:flex;align-items:center;gap:12px}
+.ef-logo-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--orange),var(--orange-dk));display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:var(--navy-800);box-shadow:0 6px 20px rgba(255,159,10,.4),0 0 0 1px rgba(255,159,10,.2);flex-shrink:0}
+.ef-logo-text .ef-word{font-size:1.6rem;font-weight:900;letter-spacing:-.04em;color:var(--white);line-height:1}
+.ef-logo-text .ef-word span{color:var(--orange)}
+.ef-logo-text .ef-sub{font-size:.65rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.ef-portrait-zone{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:1rem 0}
+.ef-portrait-glow{position:relative;display:flex;align-items:flex-end;justify-content:center}
+.ef-portrait-glow::before{content:'';position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,159,10,.28) 0%,transparent 65%);filter:blur(30px);z-index:0}
+.ef-portrait-glow::after{content:'';position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);width:340px;height:340px;border-radius:50%;border:1.5px solid rgba(255,159,10,.12);z-index:0}
+.ef-portrait-ring-2{position:absolute;bottom:-50px;left:50%;transform:translateX(-50%);width:420px;height:420px;border-radius:50%;border:1px solid rgba(255,159,10,.07);z-index:0;pointer-events:none}
+.ef-portrait-img{position:relative;z-index:1;width:clamp(220px,28vw,360px);height:clamp(260px,34vw,430px);object-fit:cover;object-position:top center;border-radius:28px 28px 0 0;display:block;filter:drop-shadow(0 -10px 40px rgba(255,159,10,.35)) drop-shadow(0 20px 60px rgba(0,0,0,.6));animation:portraitRise 1s cubic-bezier(.22,1,.36,1) both}
+@keyframes portraitRise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.ef-float-badge{position:absolute;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.45rem .85rem;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.8);backdrop-filter:blur(10px);z-index:3;animation:floatBadge 4s ease-in-out infinite alternate;white-space:nowrap}
+.ef-badge-1{top:15%;left:-5px;animation-duration:4s;border-color:rgba(255,159,10,.25)}
+.ef-badge-2{top:42%;right:-5px;animation-duration:5s;animation-delay:1s;border-color:rgba(99,102,241,.3)}
+.ef-badge-3{bottom:20%;left:2%;animation-duration:4.5s;animation-delay:.5s}
+@keyframes floatBadge{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+.ef-brand-text{position:relative;z-index:2;text-align:center;color:var(--white);padding:0 1rem;margin-top:1.5rem}
+.ef-brand-text h2{font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:800;color:rgba(255,255,255,.95);letter-spacing:.02em;margin-bottom:.35rem}
+.ef-brand-text p{font-size:clamp(.7rem,1.1vw,.8rem);color:rgba(255,255,255,.45);max-width:300px;margin:0 auto;line-height:1.6}
+.ef-caps{position:relative;z-index:2;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;width:100%;padding:0 .5rem}
+.ef-cap-card{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.55rem .9rem;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.7);backdrop-filter:blur(8px);transition:all .25s ease;cursor:default}
+.ef-cap-card:hover{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.3);color:var(--orange-lt);transform:translateY(-2px)}
+.ef-cap-card i{color:var(--orange);font-size:.75rem}
+.ef-form-panel{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 2.5rem;background:var(--off-white);position:relative;overflow:hidden;min-height:100vh}
+.ef-form-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--navy-600),var(--orange),var(--orange-dk),var(--navy-600));background-size:200% 100%;animation:barSlide 4s linear infinite}
+@keyframes barSlide{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.ef-form-panel::after{content:'';position:absolute;top:-100px;right:-100px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(255,159,10,.06) 0%,transparent 65%);z-index:0;pointer-events:none}
+.ef-form-inner{position:relative;z-index:1;width:100%;max-width:440px;animation:slideInForm .65s cubic-bezier(.22,1,.36,1) both}
+@keyframes slideInForm{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+.ef-secure-badge{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(8,11,42,.07),rgba(255,159,10,.08));border:1px solid rgba(255,159,10,.25);border-radius:99px;padding:.35rem 1rem;font-size:.68rem;font-weight:800;color:var(--navy-600);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1.1rem}
+.ef-secure-badge i{color:var(--orange);font-size:.8rem}
+.ef-form-head{margin-bottom:1.75rem}
+.ef-form-head h1{font-size:clamp(1.7rem,2.5vw,2.1rem);font-weight:900;color:var(--text-dark);letter-spacing:-.03em;line-height:1.15;margin-bottom:.4rem}
+.ef-form-head p{font-size:.88rem;color:var(--text-soft);font-weight:500}
+.ef-roles{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.5rem}
+.ef-role-card{display:flex;align-items:center;gap:10px;padding:.8rem 1rem;border-radius:14px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);user-select:none;outline:none;text-align:left;width:100%;font-family:'Outfit',sans-serif}
+.ef-role-card:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.ef-role-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;transition:all .22s ease}
+.ef-role-info{flex:1;min-width:0}
+.ef-rn{font-size:.82rem;font-weight:800;color:var(--text-dark);line-height:1;margin-bottom:2px;transition:color .2s}
+.ef-rd{font-size:.67rem;font-weight:600;color:var(--text-soft);transition:color .2s}
+.ef-role-card[data-role="student"] .ef-role-icon{background:rgba(99,102,241,.1);color:#6366f1}
+.ef-role-card[data-role="teacher"] .ef-role-icon{background:rgba(236,72,153,.1);color:#ec4899}
+.ef-role-card[data-role="admin"] .ef-role-icon{background:rgba(255,159,10,.12);color:var(--orange)}
+.ef-role-card[data-role="parent"] .ef-role-icon{background:rgba(16,185,129,.1);color:#10b981}
+.ef-role-card[data-role="student"]:hover{border-color:#6366f1;box-shadow:0 4px 16px rgba(99,102,241,.12);transform:translateY(-2px)}
+.ef-role-card[data-role="teacher"]:hover{border-color:#ec4899;box-shadow:0 4px 16px rgba(236,72,153,.12);transform:translateY(-2px)}
+.ef-role-card[data-role="admin"]:hover{border-color:var(--orange);box-shadow:0 4px 16px rgba(255,159,10,.15);transform:translateY(-2px)}
+.ef-role-card[data-role="parent"]:hover{border-color:#10b981;box-shadow:0 4px 16px rgba(16,185,129,.12);transform:translateY(-2px)}
+.ef-role-card[data-role="student"].active{border-color:#6366f1;background:rgba(99,102,241,.06)}
+.ef-role-card[data-role="teacher"].active{border-color:#ec4899;background:rgba(236,72,153,.06)}
+.ef-role-card[data-role="admin"].active{border-color:var(--orange);background:rgba(255,159,10,.07)}
+.ef-role-card[data-role="parent"].active{border-color:#10b981;background:rgba(16,185,129,.06)}
+.ef-role-card[data-role="student"].active .ef-rn{color:#6366f1}
+.ef-role-card[data-role="teacher"].active .ef-rn{color:#ec4899}
+.ef-role-card[data-role="admin"].active .ef-rn{color:var(--orange-dk)}
+.ef-role-card[data-role="parent"].active .ef-rn{color:#10b981}
+.ef-field-wrap{margin-bottom:1.1rem}
+.ef-label{display:block;font-size:.7rem;font-weight:800;color:var(--text-mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.45rem}
+.ef-input-row{position:relative}
+.ef-input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:.85rem;pointer-events:none;transition:color .25s;z-index:1}
+.ef-input{width:100%;padding:.875rem 1rem .875rem 2.75rem;border-radius:13px;border:1.5px solid var(--border);background:var(--white);font-family:'Outfit',sans-serif;font-size:.93rem;font-weight:500;color:var(--text-dark);outline:none;transition:all .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 3px rgba(0,0,0,.04);-webkit-appearance:none;appearance:none}
+.ef-input::placeholder{color:#c0cfe0}
+.ef-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.15),0 2px 8px rgba(255,159,10,.08);transform:translateY(-1px)}
+.ef-input-row:focus-within .ef-input-icon{color:var(--orange)}
+.ef-pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.85rem;transition:color .2s;padding:5px;border-radius:6px;line-height:1}
+.ef-pw-toggle:hover{color:var(--orange)}
+.ef-pw-toggle:focus-visible{outline:2px solid var(--orange)}
+.ef-field-error{display:flex;align-items:center;gap:5px;color:var(--error);font-size:.73rem;font-weight:700;margin-top:5px;padding:.3rem .6rem;background:rgba(220,38,38,.06);border-radius:7px;border-left:3px solid var(--error)}
+.ef-field-error i{font-size:.7rem;flex-shrink:0}
+.ef-opts-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;gap:.5rem}
+.ef-remember{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:.83rem;font-weight:600;color:var(--text-mid);user-select:none}
+.ef-remember input[type="checkbox"]{position:absolute;opacity:0;width:0;height:0}
+.ef-checkbox-ui{width:18px;height:18px;border:2px solid var(--border);border-radius:6px;background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s ease}
+.ef-checkbox-ui::after{content:'';display:block;width:9px;height:5px;border-left:2px solid transparent;border-bottom:2px solid transparent;transform:rotate(-45deg) translateY(-1px);transition:all .15s ease}
+.ef-remember input[type="checkbox"]:checked ~ .ef-checkbox-ui{background:var(--orange);border-color:var(--orange)}
+.ef-remember input[type="checkbox"]:checked ~ .ef-checkbox-ui::after{border-left-color:white;border-bottom-color:white}
+.ef-remember input[type="checkbox"]:focus-visible ~ .ef-checkbox-ui{outline:2px solid var(--orange);outline-offset:2px}
+.ef-forgot{font-size:.8rem;font-weight:700;color:var(--navy-600);text-decoration:none;transition:color .2s,opacity .2s;white-space:nowrap}
+.ef-forgot:hover{color:var(--orange-dk);text-decoration:underline}
+.ef-recaptcha-wrap{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:1.25rem;overflow:hidden}
+.session-msg{background:#f0fdf4;border:1px solid #86efac;color:var(--success);font-weight:700;font-size:.83rem;border-radius:12px;padding:.7rem 1rem;margin-bottom:1.1rem;display:block}
+.ef-submit-btn{width:100%;padding:1rem 1.5rem;border:none;border-radius:14px;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:800;color:var(--navy-800);cursor:pointer;position:relative;overflow:hidden;transition:all .28s cubic-bezier(.25,1,.5,1);background:linear-gradient(135deg,var(--orange-lt) 0%,var(--orange) 50%,var(--orange-dk) 100%);background-size:200% 200%;background-position:0% 50%;box-shadow:0 8px 24px rgba(255,159,10,.35),0 2px 4px rgba(0,0,0,.1);letter-spacing:.01em}
+.ef-submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dk) 60%,#ea6c00 100%);opacity:0;transition:opacity .28s}
+.ef-submit-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(255,159,10,.45),0 4px 8px rgba(0,0,0,.12)}
+.ef-submit-btn:hover::before{opacity:1}
+.ef-submit-btn:active{transform:translateY(0) scale(.985)}
+.btn-content{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:9px}
+.btn-arrow{transition:transform .25s;font-size:.9rem}
+.ef-submit-btn:hover .btn-arrow{transform:translateX(4px)}
+.ef-signup-row{text-align:center;margin-top:1.5rem;font-size:.85rem;font-weight:600;color:var(--text-soft)}
+.ef-signup-row a{color:var(--navy-600);font-weight:800;text-decoration:none;transition:color .2s}
+.ef-signup-row a:hover{color:var(--orange-dk);text-decoration:underline}
+.ef-anim{opacity:0;animation:fadeUp .55s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.ef-d1{animation-delay:.08s}.ef-d2{animation-delay:.16s}.ef-d3{animation-delay:.24s}
+.ef-d4{animation-delay:.32s}.ef-d5{animation-delay:.40s}.ef-d6{animation-delay:.48s}.ef-d7{animation-delay:.56s}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:1024px){.ef-brand{flex:0 0 42%;padding:2rem 1.5rem 1.5rem}.ef-badge-1,.ef-badge-2,.ef-badge-3{display:none}.ef-portrait-img{width:clamp(200px,26vw,300px);height:clamp(240px,32vw,360px)}.ef-form-panel{padding:1.5rem}}
+@media(max-width:768px){html,body{background:var(--off-white)}.ef-login-wrap{flex-direction:column;min-height:100vh}.ef-brand{flex:none;width:100%;min-height:auto;padding:1.5rem 1.5rem 0;justify-content:flex-start;align-items:center;gap:0}.ef-brand::after{display:none}.ef-ring,.ef-orb-orange,.ef-dots{opacity:.5}.ef-top-bar{justify-content:center;margin-bottom:1.25rem}.ef-portrait-zone{flex:none;padding:0}.ef-portrait-glow::before,.ef-portrait-glow::after,.ef-portrait-ring-2{display:none}.ef-portrait-img{width:130px;height:155px;border-radius:20px 20px 0 0;filter:drop-shadow(0 -6px 20px rgba(255,159,10,.3))}.ef-badge-1,.ef-badge-2,.ef-badge-3{display:none}.ef-brand-text,.ef-caps{display:none}.ef-form-panel{flex:1;width:100%;padding:1.75rem 1.25rem 2rem;min-height:auto;border-radius:24px 24px 0 0;margin-top:-20px;justify-content:flex-start}.ef-form-panel::after{display:none}.ef-form-inner{max-width:100%;width:100%}.ef-form-head h1{font-size:1.65rem}.ef-roles{gap:.5rem}.ef-role-card{padding:.65rem .75rem}.ef-role-icon{width:30px;height:30px;font-size:.8rem;border-radius:8px}.ef-rn{font-size:.75rem}.ef-rd{font-size:.62rem}.ef-recaptcha-wrap{align-items:center}.g-recaptcha{transform:scale(.95);transform-origin:left top}}
+@media(max-width:375px){.g-recaptcha{transform:scale(.82);transform-origin:left top}.ef-roles{gap:.4rem}}
+@media(min-width:1440px){.ef-brand{flex:0 0 45%}.ef-portrait-img{width:380px;height:450px}.ef-form-inner{max-width:460px}}
 </style>
 
-<div class="login-wrapper">
+<div class="ef-login-wrap">
 
-    <!-- ===================== LEFT: BRAND PANEL ===================== -->
-    <div class="brand-panel">
-        <!-- CSS Orbs, no particles -->
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <!-- Decorative rings -->
-        <div class="ring ring-1"></div>
-        <div class="ring ring-2"></div>
-        <div class="ring ring-3"></div>
-        <div class="ring ring-4"></div>
+    <aside class="ef-brand" aria-label="EdFlow branding panel">
+        <div class="ef-dots" aria-hidden="true"></div>
+        <div class="ef-orb-orange" aria-hidden="true"></div>
+        <div class="ef-ring ef-ring-1" aria-hidden="true"></div>
+        <div class="ef-ring ef-ring-2" aria-hidden="true"></div>
+        <div class="ef-ring ef-ring-3" aria-hidden="true"></div>
+        <div class="ef-ring ef-ring-4" aria-hidden="true"></div>
 
-        <!-- Brand content -->
-        <div class="brand-content">
-            <div class="brand-logo">
-                <i class="fa-solid fa-graduation-cap" style="color:white;"></i>
+        <div class="ef-top-bar">
+            <div class="ef-logo-icon" aria-hidden="true">
+                <i class="fa-solid fa-graduation-cap"></i>
             </div>
-            <div class="brand-name">EdFlow</div>
-            <p class="brand-tagline">The smart campus management platform for modern institutions.</p>
-
-            <div class="stats-row">
-                <div class="stat-chip">
-                    <div class="num">12K+</div>
-                    <div class="lbl">Students</div>
-                </div>
-                <div class="stat-chip">
-                    <div class="num">500+</div>
-                    <div class="lbl">Teachers</div>
-                </div>
-                <div class="stat-chip">
-                    <div class="num">98%</div>
-                    <div class="lbl">Satisfaction</div>
-                </div>
+            <div class="ef-logo-text">
+                <div class="ef-word">Ed<span>Flow</span></div>
+                <div class="ef-sub">Smart Campus Platform</div>
             </div>
         </div>
 
-        <!-- Bottom badge strip -->
-        <div class="badge-strip">
-            <div class="badge-chip">
-                <span class="badge-dot" style="background:#4ade80;"></span> Live Analytics
+        <div class="ef-portrait-zone">
+            <div class="ef-portrait-glow">
+                <div class="ef-portrait-ring-2" aria-hidden="true"></div>
+                <div class="ef-float-badge ef-badge-1" aria-hidden="true">
+                    <i class="fa-solid fa-chart-line" style="color:var(--orange);"></i> Live Analytics
+                </div>
+                <div class="ef-float-badge ef-badge-2" aria-hidden="true">
+                    <i class="fa-solid fa-shield-halved" style="color:#818cf8;"></i> Secure Platform
+                </div>
+                <div class="ef-float-badge ef-badge-3" aria-hidden="true">
+                    <i class="fa-solid fa-users" style="color:#4ade80;"></i> Multi-Role Access
+                </div>
+                <img src="{{ asset('images/edflow-founder.jpg') }}" alt="EdFlow Founder" class="ef-portrait-img" loading="eager" draggable="false">
             </div>
-            <div class="badge-chip">
-                <span class="badge-dot" style="background:#818cf8;"></span> Gamification
-            </div>
-            <div class="badge-chip">
-                <span class="badge-dot" style="background:#f472b6;"></span> Smart Results
-            </div>
-            <div class="badge-chip">
-                <span class="badge-dot" style="background:#fb923c;"></span> Fee Tracking
+            <div class="ef-brand-text">
+                <h2>Smart Campus Management</h2>
+                <p>A complete platform to manage students, teachers, academics, attendance, exams, fees and more.</p>
             </div>
         </div>
-    </div>
 
-    <!-- ===================== RIGHT: FORM PANEL ===================== -->
-    <div class="form-panel">
-        <div class="form-inner">
+        <div class="ef-caps">
+            <div class="ef-cap-card"><i class="fa-solid fa-user-graduate"></i> Student Management</div>
+            <div class="ef-cap-card"><i class="fa-solid fa-chalkboard-user"></i> Teacher Management</div>
+            <div class="ef-cap-card"><i class="fa-solid fa-book-open-reader"></i> Academic Management</div>
+        </div>
+    </aside>
 
-            <!-- Heading -->
-            <div class="form-heading anim-item d1">
-                <div class="label">
+    <main class="ef-form-panel" id="login-main" role="main">
+        <div class="ef-form-inner">
+
+            <div class="ef-anim ef-d1">
+                <div class="ef-secure-badge">
                     <i class="fa-solid fa-shield-halved"></i> Secure Login
                 </div>
+            </div>
+
+            <div class="ef-form-head ef-anim ef-d2">
                 <h1>Welcome Back! 👋</h1>
                 <p>Sign in to access your EdFlow Dashboard.</p>
             </div>
 
-            <!-- Role selector chips -->
-            <div class="role-chips anim-item d2" id="role-chips">
-                <div class="role-chip student" onclick="selectRole('student',this)">
-                    <i class="fa-solid fa-user-graduate" style="color:inherit;"></i>
-                    Student
-                </div>
-                <div class="role-chip teacher" onclick="selectRole('teacher',this)">
-                    <i class="fa-solid fa-chalkboard-user" style="color:inherit;"></i>
-                    Teacher
-                </div>
-                <div class="role-chip admin" onclick="selectRole('admin',this)">
-                    <i class="fa-solid fa-user-shield" style="color:inherit;"></i>
-                    Admin
-                </div>
-                <div class="role-chip parent" onclick="selectRole('parent',this)">
-                    <i class="fa-solid fa-user-group" style="color:inherit;"></i>
-                    Parent
-                </div>
-            </div>
-
-            <!-- Session status -->
             <x-auth-session-status class="session-msg" :status="session('status')" />
 
-            <!-- FORM -->
-            <form method="POST" action="{{ route('login') }}" id="login-form">
+            <div class="ef-roles ef-anim ef-d3" id="role-chips" role="group" aria-label="Select your role">
+                <button type="button" class="ef-role-card" data-role="student" onclick="selectRole('student',this)" aria-pressed="false" id="role-student">
+                    <div class="ef-role-icon" aria-hidden="true"><i class="fa-solid fa-user-graduate"></i></div>
+                    <div class="ef-role-info"><div class="ef-rn">Student</div><div class="ef-rd">Courses &amp; Results</div></div>
+                </button>
+                <button type="button" class="ef-role-card" data-role="teacher" onclick="selectRole('teacher',this)" aria-pressed="false" id="role-teacher">
+                    <div class="ef-role-icon" aria-hidden="true"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div class="ef-role-info"><div class="ef-rn">Teacher</div><div class="ef-rd">Classes &amp; Attendance</div></div>
+                </button>
+                <button type="button" class="ef-role-card" data-role="admin" onclick="selectRole('admin',this)" aria-pressed="false" id="role-admin">
+                    <div class="ef-role-icon" aria-hidden="true"><i class="fa-solid fa-user-shield"></i></div>
+                    <div class="ef-role-info"><div class="ef-rn">Admin</div><div class="ef-rd">System Management</div></div>
+                </button>
+                <button type="button" class="ef-role-card" data-role="parent" onclick="selectRole('parent',this)" aria-pressed="false" id="role-parent">
+                    <div class="ef-role-icon" aria-hidden="true"><i class="fa-solid fa-user-group"></i></div>
+                    <div class="ef-role-info"><div class="ef-rn">Parent</div><div class="ef-rd">Child &amp; Progress</div></div>
+                </button>
+            </div>
+
+            <form method="POST" action="{{ route('login') }}" id="login-form" novalidate>
                 @csrf
 
-                <!-- Email -->
-                <div class="anim-item d3">
-                    <label class="field-label">Email Address</label>
-                    <div class="input-wrap">
-                        <input id="email" type="email" name="email" class="prem-input" value="{{ old('email') }}"
-                               placeholder="you@edflow.com" required autofocus autocomplete="username">
-                        <i class="fa-solid fa-envelope input-icon-left"></i>
+                <div class="ef-field-wrap ef-anim ef-d4">
+                    <label class="ef-label" for="email">Email Address</label>
+                    <div class="ef-input-row">
+                        <i class="fa-solid fa-envelope ef-input-icon" aria-hidden="true"></i>
+                        <input id="email" type="email" name="email" class="ef-input"
+                            value="{{ old('email') }}" placeholder="you@edflow.com"
+                            required autofocus autocomplete="username"
+                            aria-describedby="email-error"
+                            aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}">
                     </div>
                     @error('email')
-                        <div class="field-error">{{ $message }}</div>
+                        <div class="ef-field-error" id="email-error" role="alert">
+                            <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                        </div>
                     @enderror
                 </div>
 
-                <!-- Password -->
-                <div class="anim-item d4" style="margin-top: 0.25rem;">
-                    <label class="field-label">Password</label>
-                    <div class="input-wrap">
-                        <input id="password" type="password" name="password" class="prem-input" id="pw-field"
-                               placeholder="••••••••••" required autocomplete="current-password"
-                               style="padding-right: 3rem;">
-                        <i class="fa-solid fa-lock input-icon-left"></i>
-                        <button type="button" class="pw-toggle" onclick="togglePw()" id="pw-btn">
+                <div class="ef-field-wrap ef-anim ef-d5">
+                    <label class="ef-label" for="pw-field">Password</label>
+                    <div class="ef-input-row">
+                        <i class="fa-solid fa-lock ef-input-icon" aria-hidden="true"></i>
+                        <input id="pw-field" type="password" name="password" class="ef-input"
+                            placeholder="Enter your password" required autocomplete="current-password"
+                            style="padding-right:3rem;"
+                            aria-describedby="pw-error"
+                            aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}">
+                        <button type="button" class="ef-pw-toggle" onclick="togglePw()" id="pw-btn"
+                                aria-label="Toggle password visibility" aria-pressed="false">
                             <i class="fa-regular fa-eye" id="pw-eye"></i>
                         </button>
                     </div>
                     @error('password')
-                        <div class="field-error">{{ $message }}</div>
+                        <div class="ef-field-error" id="pw-error" role="alert">
+                            <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                        </div>
                     @enderror
                 </div>
 
-                <!-- Remember / forgot -->
-                <div class="row-opts anim-item d5" style="margin-top: 0.75rem;">
-                    <label class="remember-label">
+                <div class="ef-opts-row ef-anim ef-d6">
+                    <label class="ef-remember" for="remember_me">
                         <input type="checkbox" name="remember" id="remember_me">
-                        <div class="custom-check"></div>
+                        <div class="ef-checkbox-ui" aria-hidden="true"></div>
                         Remember me
                     </label>
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="forgot-link">Forgot password?</a>
+                        <a href="{{ route('password.request') }}" class="ef-forgot">Forgot password?</a>
                     @endif
                 </div>
 
-                <!-- Google reCAPTCHA -->
-                <div class="anim-item d5" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+                <div class="ef-recaptcha-wrap ef-anim ef-d6">
                     <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
                     @error('g-recaptcha-response')
-                        <div class="field-error" style="margin-top: 8px;">{{ $message }}</div>
+                        <div class="ef-field-error" style="margin-top:8px;width:100%;" role="alert">
+                            <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                        </div>
                     @enderror
                 </div>
 
-                <!-- Submit -->
-                <div class="anim-item d6">
-                    <button type="submit" class="submit-btn" id="login-btn">
-                        <span>
+                <div class="ef-anim ef-d7">
+                    <button type="submit" class="ef-submit-btn" id="login-btn">
+                        <div class="btn-content">
                             Log in to Dashboard
-                            <i class="fa-solid fa-arrow-right btn-arrow"></i>
-                        </span>
+                            <i class="fa-solid fa-arrow-right btn-arrow" aria-hidden="true"></i>
+                        </div>
                     </button>
                 </div>
             </form>
 
-            <!-- Sign up -->
-            <div class="signup-row anim-item d6">
-                New to EdFlow? <a href="/register/student">Apply as Student →</a>
+            <div class="ef-signup-row ef-anim ef-d7">
+                New to EdFlow? <a href="/register/student">Apply as a Student &rarr;</a>
             </div>
 
         </div>
-    </div>
-
+    </main>
 </div>
 
 <script>
-    // Password visibility toggle
-    function togglePw() {
-        const field = document.getElementById('pw-field') ?? document.getElementById('password');
-        const eye   = document.getElementById('pw-eye');
-        if (!field) return;
-        if (field.type === 'password') {
-            field.type = 'text';
-            eye.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            field.type = 'password';
-            eye.classList.replace('fa-eye-slash', 'fa-eye');
-        }
+    function togglePw(){
+        var field=document.getElementById('pw-field')||document.getElementById('password');
+        var eye=document.getElementById('pw-eye');
+        var btn=document.getElementById('pw-btn');
+        if(!field)return;
+        var isHidden=field.type==='password';
+        field.type=isHidden?'text':'password';
+        if(eye){eye.classList.toggle('fa-eye',!isHidden);eye.classList.toggle('fa-eye-slash',isHidden)}
+        if(btn)btn.setAttribute('aria-pressed',isHidden?'true':'false');
     }
-
-    // Role chip selector — purely cosmetic to indicate intent
-    function selectRole(role, el) {
-        document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active'));
-        el.classList.add('active');
-        // Prefill placeholder hint
-        const placeholders = {
-            student: 'student@edflow.com',
-            teacher: 'teacher@edflow.com',
-            admin:   'admin@edflow.com',
-            parent:  'parent@edflow.com',
-        };
-        const emailInput = document.getElementById('email');
-        if (emailInput && !emailInput.value) {
-            emailInput.placeholder = placeholders[role] ?? 'you@edflow.com';
-        }
+    function selectRole(role,el){
+        document.querySelectorAll('.ef-role-card').forEach(function(c){c.classList.remove('active');c.setAttribute('aria-pressed','false')});
+        el.classList.add('active');el.setAttribute('aria-pressed','true');
+        var ph={student:'student@edflow.com',teacher:'teacher@edflow.com',admin:'admin@edflow.com',parent:'parent@edflow.com'};
+        var emailInput=document.getElementById('email');
+        if(emailInput&&!emailInput.value)emailInput.placeholder=ph[role]||'you@edflow.com';
     }
-
-    // Submit button loading state
-    document.getElementById('login-form')?.addEventListener('submit', function () {
-        const btn = document.getElementById('login-btn');
-        btn.innerHTML = '<span><i class="fa-solid fa-circle-notch fa-spin"></i> Signing in…</span>';
-        btn.style.opacity = '0.85';
-        btn.disabled = true;
-    });
+    (function(){
+        var form=document.getElementById('login-form');
+        if(!form)return;
+        form.addEventListener('submit',function(){
+            var btn=document.getElementById('login-btn');
+            if(!btn)return;
+            btn.innerHTML='<div class="btn-content"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Signing in\u2026</div>';
+            btn.style.opacity='0.82';btn.disabled=true;btn.style.cursor='wait';
+        });
+    })();
 </script>
 
 </x-guest-layout>
