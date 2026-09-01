@@ -25,7 +25,9 @@ WORKDIR /app
 COPY . .
 
 # Install PHP and Node dependencies
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader --no-dev --prefer-dist \
+    || (sleep 5 && composer install --optimize-autoloader --no-dev --prefer-dist) \
+    || (sleep 10 && composer install --optimize-autoloader --no-dev --prefer-dist)
 RUN npm install
 RUN npm run build
 
