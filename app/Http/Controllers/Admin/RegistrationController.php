@@ -15,110 +15,153 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentCredentialsMail;
 use App\Mail\ParentCredentialsMail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class RegistrationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = StudentRegistration::query();
-        
-        if ($request->has('status') && $request->status != 'all') {
+        $query = StudentRegistration::query()->with(['course']);
+
+        if ($request->filled('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
 
-        $registrations = $query->latest()->paginate(10);
-        return view('admin.registrations.index', compact('registrations'));
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(function ($q) use ($s) {
+                $q->where('name', 'like', "%{$s}%")
+                  ->orWhere('email', 'like', "%{$s}%")
+                  ->orWhere('application_no', 'like', "%{$s}%")
+                  ->orWhere('phone', 'like', "%{$s}%");
+            });
+        }
+
+        if ($request->filled('course_id')) {
+            $query->where('course_id', $request->course_id);
+        }
+
+        $registrations = $query->latest()->paginate(15)->withQueryString();
+        $courses        = Course::orderBy('name')->get();
+        $pendingCount   = StudentRegistration::where('status', 'pending')->count();
+
+        return view('admin.registrations.index', compact('registrations', 'courses', 'pendingCount'));
+    }
+
+    public function show(StudentRegistration $registration)
+    {
+        $registration->load([
+            'course',
+            'guardians',
+            'documents',
+            'approvedBy',
+            'rejectedBy',
+            'reviewedBy',
+        ]);
+
+        return view('admin.registrations.show', compact('registration'));
     }
 
     public function approve(Request $request, $id)
     {
-        $registration = StudentRegistration::findOrFail($id);
-        
+        $registration = StudentRegistration::with(['course'])->findOrFail($id);
+
         if ($registration->status !== 'pending') {
             return back()->with('error', 'Only pending registrations can be approved.');
         }
 
+        $request->validate([
+            'roll' => 'nullable|string|max:50',
+        ]);
+
         try {
             DB::beginTransaction();
 
-            if ($request->has('roll')) {
+            if ($request->filled('roll')) {
                 $registration->roll = $request->roll;
                 $registration->save();
             }
 
             $studentRole = Role::where('name', 'student')->firstOrFail();
-            $parentRole = Role::where('name', 'parent')->firstOrFail();
-            
-            $course = Course::where('name', $registration->course)->first();
-            if (!$course) {
-                // Attempt to match common acronyms to database values
-                if (stripos($registration->course, 'MBA') !== false || stripos($registration->course, 'BBA') !== false) {
-                    $course = Course::where('name', 'like', '%Business%')->first();
-                } elseif (stripos($registration->course, 'CS') !== false || stripos($registration->course, 'Computer') !== false) {
-                    $course = Course::where('name', 'like', '%Computer%')->first();
-                }
-                
-                // Fallback to first available course if still not found
+            $parentRole  = Role::where('name', 'parent')->firstOrFail();
+
+            // Prefer course_id FK, fall back to string matching (BC)
+            if ($registration->course_id) {
+                $course = Course::find($registration->course_id);
+            } else {
+                $course = Course::where('name', $registration->course)->first();
                 if (!$course) {
-                    $course = Course::first();
+                    if (stripos($registration->course, 'MBA') !== false || stripos($registration->course, 'BBA') !== false) {
+                        $course = Course::where('name', 'like', '%Business%')->first();
+                    } elseif (stripos($registration->course, 'CS') !== false || stripos($registration->course, 'Computer') !== false) {
+                        $course = Course::where('name', 'like', '%Computer%')->first();
+                    }
+                    if (!$course) {
+                        $course = Course::first();
+                    }
                 }
             }
-            $courseId = $course ? $course->id : null;
+            $courseId = $course?->id;
 
             $studentPassword = Str::random(10);
-            $parentPassword = Str::random(10);
+            $parentPassword  = Str::random(10);
 
-            // Create Student User
             $studentUser = User::create([
-                'name' => $registration->name,
-                'email' => $registration->email,
+                'name'     => $registration->full_name ?: $registration->name,
+                'email'    => $registration->email,
                 'password' => Hash::make($studentPassword),
-                'role_id' => $studentRole->id,
+                'role_id'  => $studentRole->id,
             ]);
 
-            // Create Parent User (use parent email as unique identifier or check if exists)
+            $parentEmail = $registration->parent_email
+                ?: ($registration->primaryGuardian?->email);
+
+            $parentName = $registration->parent_name
+                ?: ($registration->primaryGuardian?->full_name ?? 'Parent');
+
             $parentUser = User::firstOrCreate(
-                ['email' => $registration->parent_email],
+                ['email' => $parentEmail],
                 [
-                    'name' => $registration->parent_name,
+                    'name'     => $parentName,
                     'password' => Hash::make($parentPassword),
-                    'role_id' => $parentRole->id,
+                    'role_id'  => $parentRole->id,
                 ]
             );
 
-            // Create Student Profile
             $studentProfile = Student::create([
-                'user_id' => $studentUser->id,
-                'course_id' => $courseId,
-                'roll_number' => $registration->roll,
-                'phone' => $registration->phone,
-                'parent_name' => $registration->parent_name,
+                'user_id'      => $studentUser->id,
+                'course_id'    => $courseId,
+                'roll_number'  => $registration->roll,
+                'phone'        => $registration->phone,
+                'parent_name'  => $parentName,
+                'blood_group'  => $registration->blood_group,
+                'home_address' => $registration->permanent_address,
             ]);
 
-            // Link Parent and Student
             DB::table('parent_student')->insert([
-                'parent_id' => $parentUser->id,
+                'parent_id'  => $parentUser->id,
                 'student_id' => $studentProfile->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            $registration->update(['status' => 'approved']);
+            $registration->update([
+                'status'      => 'approved',
+                'approved_at' => now(),
+                'approved_by' => Auth::id(),
+            ]);
 
             DB::commit();
 
-            // Send Emails
             Mail::to($studentUser->email)->send(new StudentCredentialsMail($studentUser, $studentPassword, $registration));
-            
-            // Only send parent email if parent was newly created or password was regenerated
+
             if ($parentUser->wasRecentlyCreated) {
                 Mail::to($parentUser->email)->send(new ParentCredentialsMail($parentUser, $parentPassword, $registration));
             } else {
-                // You could send a different email logic here, but keeping it simple as requested
                 Mail::to($parentUser->email)->send(new ParentCredentialsMail($parentUser, 'Your existing password', $registration));
             }
 
-            return back()->with('success', 'Registration approved and accounts created successfully.');
+            return back()->with('success', "✅ Application approved! Accounts created for {$registration->full_name}. Credentials sent.");
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -129,16 +172,22 @@ class RegistrationController extends Controller
     public function reject(Request $request, $id)
     {
         $registration = StudentRegistration::findOrFail($id);
-        
+
         $request->validate([
-            'reason' => 'nullable|string|max:1000'
+            'reason' => 'required|string|max:1000',
         ]);
+
+        if ($registration->status !== 'pending') {
+            return back()->with('error', 'Only pending registrations can be rejected.');
+        }
 
         $registration->update([
-            'status' => 'rejected',
-            'reject_reason' => $request->reason
+            'status'        => 'rejected',
+            'reject_reason' => $request->reason,
+            'rejected_at'   => now(),
+            'rejected_by'   => Auth::id(),
         ]);
 
-        return back()->with('success', 'Registration rejected.');
+        return back()->with('success', 'Registration rejected successfully.');
     }
 }

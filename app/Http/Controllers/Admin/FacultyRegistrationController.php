@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\FacultyCredentialsMail;
+use Illuminate\Http\Request;
 use App\Models\FacultyRegistration;
+use App\Models\User;
+use App\Models\Teacher;
 use App\Models\Role;
 use App\Models\Subject;
-use App\Models\Teacher;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
+use App\Mail\FacultyCredentialsMail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class FacultyRegistrationController extends Controller
 {
@@ -21,25 +22,41 @@ class FacultyRegistrationController extends Controller
     {
         $query = FacultyRegistration::query();
 
-        // Filter by status
-        if ($request->has('status') && $request->status !== 'all') {
-            $query->where('status', $request->status);
+        $status = $request->input('status', 'all');
+        if ($status !== 'all') {
+            $query->where('status', $status);
         }
 
-        // Search by name or email
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+            $s = $request->search;
+            $query->where(function ($q) use ($s) {
+                $q->where('name', 'like', "%{$s}%")
+                  ->orWhere('email', 'like', "%{$s}%")
+                  ->orWhere('application_no', 'like', "%{$s}%")
+                  ->orWhere('department', 'like', "%{$s}%");
             });
         }
 
-        $registrations = $query->latest()->paginate(10)->withQueryString();
-        $subjects = Subject::all()->keyBy('id');
-        $pendingCount = FacultyRegistration::where('status', 'pending')->count();
+        $registrations = $query->latest()->paginate(15)->withQueryString();
+        $pendingCount  = FacultyRegistration::where('status', 'pending')->count();
 
-        return view('admin.faculty-registrations.index', compact('registrations', 'subjects', 'pendingCount'));
+        return view('admin.faculty-registrations.index', compact('registrations', 'pendingCount'));
+    }
+
+    public function show(FacultyRegistration $facultyRegistration)
+    {
+        $facultyRegistration->load([
+            'qualifications',
+            'experiences',
+            'documents',
+            'approvedBy',
+            'rejectedBy',
+            'reviewedBy',
+        ]);
+
+        $resolvedSubjects = $facultyRegistration->resolvedSubjects();
+
+        return view('admin.faculty-registrations.show', compact('facultyRegistration', 'resolvedSubjects'));
     }
 
     public function approve(Request $request, $id)
@@ -50,42 +67,28 @@ class FacultyRegistrationController extends Controller
             return back()->with('error', 'Only pending registrations can be approved.');
         }
 
+        $request->validate([
+            'employee_id' => 'nullable|string|max:50|unique:teachers,employee_id',
+        ]);
+
         try {
             DB::beginTransaction();
 
             $teacherRole = Role::where('name', 'teacher')->firstOrFail();
 
-            // Use admin-provided Employee ID or auto-generate one
-            $customId = $request->filled('employee_id')
-                ? 'FAC-' . strtoupper(trim($request->employee_id))
-                : null;
+            $password = Str::random(10);
 
-            if ($customId) {
-                // Check uniqueness of custom ID
-                if (Teacher::where('employee_id', $customId)->exists()) {
-                    return back()->with('error', "Employee ID \"{$customId}\" is already in use. Please choose a different one.");
-                }
-                $employeeId = $customId;
-            } else {
-                // Auto-generate unique ID
-                $employeeId = 'FAC-' . strtoupper(Str::random(6));
-                while (Teacher::where('employee_id', $employeeId)->exists()) {
-                    $employeeId = 'FAC-' . strtoupper(Str::random(6));
-                }
-            }
-
-            // Generate a secure random password
-            $generatedPassword = Str::random(12);
-
-            // Create User
             $user = User::create([
-                'name'     => $registration->name,
+                'name'     => $registration->full_name ?: $registration->name,
                 'email'    => $registration->email,
-                'password' => Hash::make($generatedPassword),
+                'password' => Hash::make($password),
                 'role_id'  => $teacherRole->id,
             ]);
 
-            // Create Teacher profile
+            $employeeId = $request->filled('employee_id')
+                ? $request->employee_id
+                : 'FAC-' . strtoupper(Str::random(6));
+
             $teacher = Teacher::create([
                 'user_id'       => $user->id,
                 'employee_id'   => $employeeId,
@@ -94,35 +97,23 @@ class FacultyRegistrationController extends Controller
                 'experience'    => $registration->experience,
             ]);
 
-            // Sync subjects from registration
-            $subjectIds = array_filter(explode(',', $registration->subjects));
+            // Sync subjects (backward compat — comma-separated string)
+            $subjectIds = array_filter(explode(',', $registration->subjects ?? ''));
             if (!empty($subjectIds)) {
                 $teacher->subjects()->sync($subjectIds);
             }
 
-            // Mark as approved
             $registration->update([
                 'status'      => 'approved',
                 'approved_at' => now(),
+                'approved_by' => Auth::id(),
             ]);
 
             DB::commit();
 
-            // Send credentials email
-            try {
-                Mail::to($registration->email)->send(new FacultyCredentialsMail([
-                    'name'        => $registration->name,
-                    'email'       => $registration->email,
-                    'password'    => $generatedPassword,
-                    'employee_id' => $employeeId,
-                    'login_url'   => url('/login'),
-                ]));
-            } catch (\Exception $mailEx) {
-                // Don't fail the whole approval if mail fails
-                return back()->with('warning', 'Faculty approved successfully, but the credentials email could not be sent. Please resend manually.');
-            }
+            Mail::to($user->email)->send(new FacultyCredentialsMail($user, $password));
 
-            return back()->with('success', "✅ Faculty approved! Account created for {$registration->name}. Credentials sent to {$registration->email}.");
+            return back()->with('success', "✅ Application approved! Faculty account created for {$registration->full_name}. Credentials sent by email.");
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -135,7 +126,7 @@ class FacultyRegistrationController extends Controller
         $registration = FacultyRegistration::findOrFail($id);
 
         $request->validate([
-            'reason' => 'nullable|string|max:1000',
+            'reason' => 'required|string|max:1000',
         ]);
 
         if ($registration->status !== 'pending') {
@@ -145,43 +136,10 @@ class FacultyRegistrationController extends Controller
         $registration->update([
             'status'        => 'rejected',
             'reject_reason' => $request->reason,
+            'rejected_at'   => now(),
+            'rejected_by'   => Auth::id(),
         ]);
 
-        return back()->with('success', 'Registration has been rejected.');
-    }
-
-    public function resend($id)
-    {
-        $registration = FacultyRegistration::findOrFail($id);
-
-        if ($registration->status !== 'approved') {
-            return back()->with('error', 'Can only resend credentials for approved faculty.');
-        }
-
-        // Find the user account
-        $user = User::where('email', $registration->email)->first();
-        if (!$user) {
-            return back()->with('error', 'No user account found for this registration.');
-        }
-
-        // Generate a new password and update
-        $newPassword = Str::random(12);
-        $user->update(['password' => Hash::make($newPassword)]);
-
-        $teacher = Teacher::where('user_id', $user->id)->first();
-        $employeeId = $teacher ? $teacher->employee_id : 'N/A';
-
-        try {
-            Mail::to($registration->email)->send(new FacultyCredentialsMail([
-                'name'        => $registration->name,
-                'email'       => $registration->email,
-                'password'    => $newPassword,
-                'employee_id' => $employeeId,
-                'login_url'   => url('/login'),
-            ]));
-            return back()->with('success', "Credentials re-sent to {$registration->email} with a new password.");
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to send email: ' . $e->getMessage());
-        }
+        return back()->with('success', 'Faculty registration rejected.');
     }
 }

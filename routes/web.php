@@ -18,6 +18,7 @@ use App\Http\Controllers\Teacher\DetailsController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\StudyAIController;
 use App\Http\Controllers\Admin\ApplicantController;
+use App\Http\Controllers\Admin\ApplicationDocumentController;
 use App\Http\Controllers\Admin\FeeController as AdminFeeController;
 use App\Http\Controllers\Student\FeeController as StudentFeeController;
 use App\Http\Controllers\Admin\NoticeController;
@@ -81,6 +82,8 @@ Route::get('/register/teacher', function () {
     return view('register.teacher', compact('subjects'));
 });
 Route::post('/register/faculty', [FacultyRegistrationController::class, 'store'])->name('register.faculty.store');
+Route::get('/register/student/success', [RegistrationController::class, 'success'])->name('register.student.success');
+Route::get('/register/faculty/success', [FacultyRegistrationController::class, 'success'])->name('register.faculty.success');
 
 // Put this at the BOTTOM of web.php (Outside Auth middleware!)
 Route::get('/verify/student/{id}', function ($id) {
@@ -132,14 +135,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     /* Student Registrations */
     Route::get('/admin/registrations', [AdminRegistrationController::class, 'index'])->name('admin.registrations.index');
+    Route::get('/admin/registrations/{registration}', [AdminRegistrationController::class, 'show'])->name('admin.registrations.show');
     Route::post('/admin/registrations/{id}/approve', [AdminRegistrationController::class, 'approve'])->name('admin.registrations.approve');
     Route::post('/admin/registrations/{id}/reject', [AdminRegistrationController::class, 'reject'])->name('admin.registrations.reject');
 
     /* Faculty Registrations */
     Route::get('/admin/faculty-registrations', [AdminFacultyRegistrationController::class, 'index'])->name('admin.faculty-registrations.index');
+    Route::get('/admin/faculty-registrations/{facultyRegistration}', [AdminFacultyRegistrationController::class, 'show'])->name('admin.faculty-registrations.show');
     Route::post('/admin/faculty-registrations/{id}/approve', [AdminFacultyRegistrationController::class, 'approve'])->name('admin.faculty-registrations.approve');
     Route::post('/admin/faculty-registrations/{id}/reject', [AdminFacultyRegistrationController::class, 'reject'])->name('admin.faculty-registrations.reject');
     Route::post('/admin/faculty-registrations/{id}/resend', [AdminFacultyRegistrationController::class, 'resend'])->name('admin.faculty-registrations.resend');
+
+    /* Application Documents (secure, admin-only) */
+    Route::get('/admin/documents/{document}/view', [ApplicationDocumentController::class, 'view'])->name('admin.documents.view');
+    Route::get('/admin/documents/{document}/download', [ApplicationDocumentController::class, 'download'])->name('admin.documents.download');
 
     /* System Settings */
     Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings.index');

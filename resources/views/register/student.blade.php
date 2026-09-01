@@ -4,380 +4,627 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Application | EdFlow</title>
-    <meta name="description" content="Apply for student enrollment at EdFlow. Submit your application for admin review.">
-
+    <meta name="description" content="Apply for student enrollment at EdFlow. Complete your institutional admission application.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Outfit"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            400: '#2dd4bf',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            900: '#134e4a',
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 10s infinite',
-                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(40px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
-                }
-            }
+            theme: { extend: { fontFamily: { sans: ['"Outfit"', 'sans-serif'] } } }
         }
     </script>
-
     <style>
-        body {
-            background-color: #fafaf9;
-            color: #1c1917;
-            min-height: 100vh;
-        }
-
-        /* Soft Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Light Input Styles */
-        .input-field {
-            background: #ffffff;
-            border: 2px solid #f0fdfa;
-            color: #1c1917;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02) inset;
-        }
-        .input-field:focus {
-            background: #ffffff;
-            border-color: #2dd4bf;
-            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
-            outline: none;
-        }
-        .input-field::placeholder {
-            color: #a8a29e;
-        }
-        
-        select.input-field option {
-            background: #ffffff;
-            color: #1c1917;
-        }
-        select.input-field optgroup {
-            background: #fafaf9;
-            color: #57534e;
-            font-weight: 700;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
-
-        .gradient-text {
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        @keyframes scaleIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
+        body { font-family: 'Outfit', sans-serif; background: #f1f5f9; }
+        .step-panel { display: none; }
+        .step-panel.active { display: block; }
+        .field { width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid #e2e8f0; background:#fff; font-size:14px; color:#1e293b; outline:none; transition:all .2s; box-sizing:border-box; }
+        .field:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.1); }
+        .field.error { border-color:#f43f5e; }
+        .label { display:block; font-size:13px; font-weight:600; color:#475569; margin-bottom:5px; }
+        .required::after { content:" *"; color:#f43f5e; }
+        .step-indicator { transition: all .3s; }
+        @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+        .step-panel.active { animation: slideIn .3s ease; }
+        /* Document upload card */
+        .doc-card { border:2px dashed #cbd5e1; border-radius:14px; overflow:hidden; transition:all .2s; background:#f8fafc; cursor:pointer; }
+        .doc-card:hover { border-color:#6366f1; background:#eef2ff; }
+        .doc-card input[type=file] { display:none; }
+        .doc-card-header { display:flex; align-items:center; gap:10px; padding:10px 14px; background:#fff; border-bottom:1.5px solid #e2e8f0; }
+        .doc-card-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:#eef2ff; color:#6366f1; font-size:14px; }
+        .doc-card-title { font-size:13px; font-weight:700; color:#1e293b; line-height:1.3; }
+        .doc-card-title .req-star { color:#f43f5e; margin-left:2px; }
+        .doc-card-body { padding:14px; text-align:center; }
+        .doc-card-hint { font-size:11px; color:#94a3b8; margin-top:2px; }
+        .doc-card-chosen { font-size:11px; font-weight:700; color:#6366f1; margin-top:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     </style>
 </head>
-<body class="relative overflow-x-hidden antialiased font-sans selection:bg-brand-100 selection:text-brand-900 bg-gradient-to-br from-orange-50 via-rose-50 to-teal-50">
+<body class="min-h-screen">
 
-    <!-- Light & Colorful Animated Background -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <!-- Pastel Blobs -->
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-pink-200/50 blur-[100px] animate-blob"></div>
-        <div class="absolute top-[20%] right-[-10%] w-[450px] h-[450px] rounded-full bg-cyan-200/50 blur-[120px] animate-blob" style="animation-delay: 2s;"></div>
-        <div class="absolute bottom-[-20%] left-[10%] w-[600px] h-[600px] rounded-full bg-yellow-200/50 blur-[120px] animate-blob" style="animation-delay: 4s;"></div>
-        <div class="absolute bottom-[10%] right-[20%] w-[350px] h-[350px] rounded-full bg-violet-200/50 blur-[90px] animate-blob" style="animation-delay: 6s;"></div>
-        
-        <!-- Subtle dot pattern -->
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wMikiLz48L3N2Zz4=')]"></div>
+{{-- Top nav bar --}}
+<nav class="bg-white border-b border-slate-200 px-6 py-3 flex items-center gap-4 sticky top-0 z-30 shadow-sm">
+    <a href="/" class="flex items-center gap-2 font-black text-slate-900 text-lg">
+        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm font-black">E</span>
+        EdFlow
+    </a>
+    <span class="text-slate-300">|</span>
+    <span class="text-slate-500 text-sm font-medium">Student Admission Application</span>
+</nav>
+
+<div class="max-w-3xl mx-auto px-4 py-8">
+
+    @if($errors->any())
+    <div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-5 mb-6">
+        <p class="font-bold text-sm mb-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Please fix the following errors:</p>
+        <ul class="list-disc list-inside text-sm space-y-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    {{-- Progress Steps --}}
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+        <div class="flex items-center justify-between relative">
+            <div class="absolute top-5 left-0 right-0 h-0.5 bg-slate-200 z-0"></div>
+            <div id="progress-line" class="absolute top-5 left-0 h-0.5 bg-indigo-500 z-0 transition-all duration-500" style="width:0%"></div>
+            @php
+                $steps = ['Personal', 'Contact', 'Guardian', 'Academic', 'Documents', 'Review'];
+            @endphp
+            @foreach($steps as $i => $label)
+            <div class="step-indicator flex flex-col items-center z-10" id="step-indicator-{{ $i+1 }}">
+                <div class="w-10 h-10 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center text-sm font-bold text-slate-400 transition-all"
+                     id="step-circle-{{ $i+1 }}">
+                    <span class="step-number">{{ $i+1 }}</span>
+                    <i class="fa-solid fa-check hidden step-check"></i>
+                </div>
+                <span class="text-xs font-semibold text-slate-400 mt-1 hidden sm:block" id="step-label-{{ $i+1 }}">{{ $label }}</span>
+            </div>
+            @endforeach
+        </div>
     </div>
 
-    <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative z-10">
-        
-        <!-- Header / Nav -->
-        <div class="w-full max-w-5xl flex justify-between items-center mb-8 animate-fade-in-up" style="animation-delay: 0.1s;">
-            <a href="/" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center text-brand-500 border border-white/60 group-hover:bg-white transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 shadow-sm">
-                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+    {{-- THE FORM --}}
+    <form method="POST" action="{{ route('register.student.store') }}"
+          enctype="multipart/form-data" id="admissionForm" novalidate>
+        @csrf
+
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        {{-- STEP 1 — Personal Information --}}
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        <div class="step-panel active" id="panel-1">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+                <h2 class="text-xl font-extrabold text-slate-900 mb-1">Personal Information</h2>
+                <p class="text-slate-500 text-sm mb-6">Start with your basic personal details.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="label required">First Name</label>
+                        <input type="text" name="first_name" class="field" value="{{ old('first_name') }}" placeholder="First" required>
+                    </div>
+                    <div>
+                        <label class="label">Middle Name</label>
+                        <input type="text" name="middle_name" class="field" value="{{ old('middle_name') }}" placeholder="Middle (optional)">
+                    </div>
+                    <div>
+                        <label class="label required">Last Name</label>
+                        <input type="text" name="last_name" class="field" value="{{ old('last_name') }}" placeholder="Last" required>
+                    </div>
                 </div>
-                <span class="font-bold text-2xl tracking-tight text-gray-800 group-hover:text-brand-600 transition-colors">EdFlow<span class="text-brand-500">.</span></span>
-            </a>
-            
-            <a href="/" class="px-5 py-2.5 rounded-full bg-white/80 hover:bg-white text-gray-700 text-sm font-semibold border border-white/60 backdrop-blur-md transition-all duration-300 hover:shadow-md flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Back to Home
-            </a>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label class="label required">Date of Birth</label>
+                        <input type="date" name="date_of_birth" class="field" value="{{ old('date_of_birth') }}" max="{{ date('Y-m-d') }}" required>
+                    </div>
+                    <div>
+                        <label class="label required">Gender</label>
+                        <select name="gender" class="field" required>
+                            <option value="">Select gender</option>
+                            <option value="male" {{ old('gender')=='male'?'selected':'' }}>Male</option>
+                            <option value="female" {{ old('gender')=='female'?'selected':'' }}>Female</option>
+                            <option value="other" {{ old('gender')=='other'?'selected':'' }}>Other</option>
+                            <option value="prefer_not" {{ old('gender')=='prefer_not'?'selected':'' }}>Prefer not to say</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label required">Nationality</label>
+                        <input type="text" name="nationality" class="field" value="{{ old('nationality','Indian') }}" required>
+                    </div>
+                    <div>
+                        <label class="label">Blood Group</label>
+                        <select name="blood_group" class="field">
+                            <option value="">Select</option>
+                            @foreach(['A+','A-','B+','B-','O+','O-','AB+','AB-'] as $bg)
+                                <option value="{{ $bg }}" {{ old('blood_group')==$bg?'selected':'' }}>{{ $bg }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label">Category</label>
+                        <select name="category" class="field">
+                            <option value="">Select</option>
+                            @foreach(['General','OBC','SC','ST','EWS','Other'] as $cat)
+                                <option value="{{ $cat }}" {{ old('category')==$cat?'selected':'' }}>{{ $cat }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label">Religion</label>
+                        <input type="text" name="religion" class="field" value="{{ old('religion') }}" placeholder="e.g. Hindu, Islam, Christian...">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Main Form Container -->
-        <div class="w-full max-w-5xl glass-panel rounded-[2.5rem] p-6 sm:p-10 lg:p-14 relative overflow-hidden animate-fade-in-up shadow-2xl shadow-rose-100/50" style="animation-delay: 0.2s;">
-            
-            <!-- Colorful top accent -->
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-400"></div>
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        {{-- STEP 2 — Contact Details --}}
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        <div class="step-panel" id="panel-2">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+                <h2 class="text-xl font-extrabold text-slate-900 mb-1">Contact Details</h2>
+                <p class="text-slate-500 text-sm mb-6">Your primary contact and address information.</p>
 
-            <div class="text-center mb-12 relative z-10">
-                <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white border border-rose-100 text-pink-500 font-bold tracking-widest uppercase text-xs mb-6 shadow-sm animate-float">
-                    <i class="fa-solid fa-sparkles text-yellow-400"></i> New Admission
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="label required">Email Address</label>
+                        <input type="email" name="email" class="field" value="{{ old('email') }}" placeholder="your@email.com" required>
+                    </div>
+                    <div>
+                        <label class="label required">Mobile Number</label>
+                        <input type="tel" name="phone" class="field" value="{{ old('phone') }}" placeholder="+91 9876543210" required>
+                    </div>
+                    <div>
+                        <label class="label">Alternate Phone</label>
+                        <input type="tel" name="alternate_phone" class="field" value="{{ old('alternate_phone') }}" placeholder="Optional">
+                    </div>
+                    <div>
+                        <label class="label">WhatsApp Number</label>
+                        <input type="tel" name="whatsapp_number" class="field" value="{{ old('whatsapp_number') }}" placeholder="If different from mobile">
+                    </div>
                 </div>
-                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-gray-800 mb-5">
-                    Start Your <span class="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 gradient-text">Bright Future</span>
-                </h1>
-                <p class="text-gray-500 text-lg sm:text-xl max-w-2xl mx-auto font-medium">Join our vibrant campus and shape the career of your dreams. Fill out the application below.</p>
+
+                <div class="mt-4">
+                    <label class="label required">Permanent Address</label>
+                    <textarea name="permanent_address" class="field" rows="2" placeholder="House/Flat No., Street, Locality" required>{{ old('permanent_address') }}</textarea>
+                </div>
+                <div class="mt-4">
+                    <label class="label required">Current Address</label>
+                    <textarea name="current_address" class="field" rows="2" placeholder="If same as permanent, enter same">{{ old('current_address') }}</textarea>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="label required">City</label>
+                        <input type="text" name="city" class="field" value="{{ old('city') }}" required>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="label required">State</label>
+                        <input type="text" name="state" class="field" value="{{ old('state') }}" required>
+                    </div>
+                    <div>
+                        <label class="label required">PIN Code</label>
+                        <input type="text" name="postal_code" class="field" value="{{ old('postal_code') }}" required>
+                    </div>
+                    <div>
+                        <label class="label required">Country</label>
+                        <input type="text" name="country" class="field" value="{{ old('country','India') }}" required>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <!-- Form -->
-            <form id="studentForm" class="relative z-10">
-                @csrf
-                <input type="hidden" name="type" value="Students">
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        {{-- STEP 3 — Guardian Details --}}
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        <div class="step-panel" id="panel-3">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+                <h2 class="text-xl font-extrabold text-slate-900 mb-1">Guardian / Parent Details</h2>
+                <p class="text-slate-500 text-sm mb-6">Provide details of your parent or legal guardian.</p>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                    
-                    <!-- Left Column -->
-                    <div class="space-y-8">
-                        <!-- Personal Details -->
-                        <div class="bg-gradient-to-br from-white to-rose-50/50 p-7 rounded-3xl border border-white/80 shadow-sm relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-32 h-32 bg-pink-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                            
-                            <div class="flex items-center gap-4 mb-6 relative">
-                                <div class="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-500 shadow-sm border border-pink-200/50">
-                                    <i class="fa-regular fa-id-card text-xl"></i>
-                                </div>
-                                <h2 class="text-2xl font-bold text-gray-800">Who are you?</h2>
-                            </div>
-
-                            <div class="space-y-5 relative">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Full Name <span class="text-pink-500">*</span></label>
-                                    <input type="text" name="name" required placeholder="e.g. Emma Watson" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Email Address <span class="text-pink-500">*</span></label>
-                                    <input type="email" name="email" required placeholder="emma@example.com" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Phone Number <span class="text-pink-500">*</span></label>
-                                    <input type="tel" name="phone" required placeholder="+1 (555) 000-0000" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1 flex justify-between">
-                                        <span>Registration No.</span> <span class="text-gray-400 font-medium normal-case tracking-normal">Optional</span>
-                                    </label>
-                                    <input type="text" name="roll" placeholder="e.g. 2026-CS-001" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium bg-gray-50/50">
-                                </div>
-                            </div>
+                {{-- Primary Guardian --}}
+                <div class="mb-6">
+                    <h3 class="text-sm font-bold text-indigo-600 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-black">1</span>
+                        Primary Guardian <span class="text-red-400 font-normal normal-case tracking-normal text-xs ml-1">(required)</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label required">Full Name</label>
+                            <input type="text" name="guardian_primary_name" class="field" value="{{ old('guardian_primary_name') }}" required>
                         </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div class="space-y-8">
-                        <!-- Program Selection -->
-                        <div class="bg-gradient-to-br from-white to-cyan-50/50 p-7 rounded-3xl border border-white/80 shadow-sm relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                            
-                            <div class="flex items-center gap-4 mb-6 relative">
-                                <div class="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 shadow-sm border border-cyan-200/50">
-                                    <i class="fa-solid fa-laptop-code text-xl"></i>
-                                </div>
-                                <h2 class="text-2xl font-bold text-gray-800">What will you study?</h2>
-                            </div>
-
-                            <div class="relative">
-                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Desired Program <span class="text-cyan-500">*</span></label>
-                                <div class="relative">
-                                    <select name="course" required class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium appearance-none cursor-pointer pr-10">
-                                        <option value="" disabled selected>Select an awesome program...</option>
-                                        @if(isset($courses) && $courses->count() > 0)
-                                            @foreach($courses as $course)
-                                                <option value="{{ $course->name }}">{{ $course->name }}</option>
-                                            @endforeach
-                                        @else
-                                            <option value="" disabled>No programs available at the moment</option>
-                                        @endif
-                                    </select>
-                                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-cyan-500">
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <label class="label required">Relationship</label>
+                            <select name="guardian_primary_relationship" class="field" required>
+                                <option value="">Select</option>
+                                @foreach(['Father','Mother','Grandfather','Grandmother','Brother','Sister','Uncle','Aunt','Spouse','Legal Guardian'] as $rel)
+                                    <option value="{{ $rel }}" {{ old('guardian_primary_relationship')==$rel?'selected':'' }}>{{ $rel }}</option>
+                                @endforeach
+                            </select>
                         </div>
-
-                        <!-- Parent Details -->
-                        <div class="bg-gradient-to-br from-white to-amber-50/50 p-7 rounded-3xl border border-white/80 shadow-sm relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                            
-                            <div class="flex items-center gap-4 mb-6 relative">
-                                <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 shadow-sm border border-amber-200/50">
-                                    <i class="fa-solid fa-people-roof text-xl"></i>
-                                </div>
-                                <h2 class="text-2xl font-bold text-gray-800">Guardian Details</h2>
-                            </div>
-
-                            <div class="space-y-5 relative">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Parent's Full Name <span class="text-amber-500">*</span></label>
-                                    <input type="text" name="parent_name" required placeholder="e.g. Richard Watson" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Parent's Email <span class="text-amber-500">*</span></label>
-                                    <input type="email" name="parent_email" required placeholder="richard@example.com" class="input-field w-full px-5 py-4 rounded-2xl text-base font-medium">
-                                </div>
-                            </div>
+                        <div>
+                            <label class="label required">Phone</label>
+                            <input type="tel" name="guardian_primary_phone" class="field" value="{{ old('guardian_primary_phone') }}" required>
+                        </div>
+                        <div>
+                            <label class="label">Email</label>
+                            <input type="email" name="guardian_primary_email" class="field" value="{{ old('guardian_primary_email') }}" placeholder="Optional">
+                        </div>
+                        <div>
+                            <label class="label">Occupation</label>
+                            <input type="text" name="guardian_primary_occupation" class="field" value="{{ old('guardian_primary_occupation') }}" placeholder="e.g. Government Employee">
+                        </div>
+                        <div>
+                            <label class="label">Annual Income</label>
+                            <input type="text" name="guardian_primary_income" class="field" value="{{ old('guardian_primary_income') }}" placeholder="e.g. ₹5,00,000">
                         </div>
                     </div>
                 </div>
 
-                <!-- Terms & Submit -->
-                <div class="mt-12 pt-8 border-t border-gray-100 max-w-3xl mx-auto flex flex-col items-center gap-6">
-
-                    <!-- Google reCAPTCHA -->
-                    <div class="w-full flex flex-col items-center">
-                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
-                        @error('g-recaptcha-response')
-                            <p class="text-rose-500 text-xs font-bold mt-2">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <label class="flex items-start gap-4 cursor-pointer group bg-white p-5 rounded-2xl border border-rose-100 hover:border-brand-300 hover:bg-brand-50/30 transition-all w-full shadow-sm">
-                        <div class="relative flex items-center justify-center mt-0.5 shrink-0">
-                            <input type="checkbox" required class="peer appearance-none w-6 h-6 border-2 border-gray-200 rounded-lg checked:bg-brand-500 checked:border-brand-500 transition-all cursor-pointer bg-gray-50">
-                            <i class="fa-solid fa-check absolute text-white text-sm opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></i>
+                {{-- Secondary Guardian --}}
+                <div class="mb-6 border-t border-slate-100 pt-6">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-xs font-black">2</span>
+                        Secondary Guardian <span class="text-slate-400 font-normal normal-case tracking-normal text-xs ml-1">(optional)</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label">Full Name</label>
+                            <input type="text" name="guardian_secondary_name" class="field" value="{{ old('guardian_secondary_name') }}" placeholder="Optional">
                         </div>
-                        <span class="text-base text-gray-600 group-hover:text-gray-800 transition-colors leading-relaxed font-medium">
-                            I verify that all information provided is completely accurate. I understand that my journey at EdFlow begins with this commitment to truth.
+                        <div>
+                            <label class="label">Relationship</label>
+                            <select name="guardian_secondary_relationship" class="field">
+                                <option value="">Select</option>
+                                @foreach(['Father','Mother','Grandfather','Grandmother','Brother','Sister','Uncle','Aunt','Spouse','Legal Guardian'] as $rel)
+                                    <option value="{{ $rel }}" {{ old('guardian_secondary_relationship')==$rel?'selected':'' }}>{{ $rel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label">Phone</label>
+                            <input type="tel" name="guardian_secondary_phone" class="field" value="{{ old('guardian_secondary_phone') }}" placeholder="Optional">
+                        </div>
+                        <div>
+                            <label class="label">Email</label>
+                            <input type="email" name="guardian_secondary_email" class="field" value="{{ old('guardian_secondary_email') }}" placeholder="Optional">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Emergency Contact --}}
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="text-sm font-bold text-rose-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xs font-black"><i class="fa-solid fa-phone-volume text-[9px]"></i></span>
+                        Emergency Contact <span class="text-slate-400 font-normal normal-case tracking-normal text-xs ml-1">(optional)</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="label">Full Name</label>
+                            <input type="text" name="guardian_emergency_name" class="field" value="{{ old('guardian_emergency_name') }}" placeholder="Optional">
+                        </div>
+                        <div>
+                            <label class="label">Relationship</label>
+                            <input type="text" name="guardian_emergency_relationship" class="field" value="{{ old('guardian_emergency_relationship') }}" placeholder="e.g. Uncle">
+                        </div>
+                        <div>
+                            <label class="label">Phone</label>
+                            <input type="tel" name="guardian_emergency_phone" class="field" value="{{ old('guardian_emergency_phone') }}" placeholder="Emergency number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        {{-- STEP 4 — Academic Details --}}
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        <div class="step-panel" id="panel-4">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+                <h2 class="text-xl font-extrabold text-slate-900 mb-1">Academic Details</h2>
+                <p class="text-slate-500 text-sm mb-6">Your educational background and desired course.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="label required">Desired Course</label>
+                        <select name="course_id" class="field" required>
+                            <option value="">— Select a course —</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course->id }}" {{ old('course_id')==$course->id?'selected':'' }}>
+                                    {{ $course->name }}{{ $course->course_code ? ' ('.$course->course_code.')' : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="label required">Last Institution Attended</label>
+                        <input type="text" name="last_institution" class="field" value="{{ old('last_institution') }}" placeholder="School / College / University name" required>
+                    </div>
+                    <div>
+                        <label class="label">Board / University</label>
+                        <input type="text" name="board_university" class="field" value="{{ old('board_university') }}" placeholder="e.g. CBSE, Mumbai University">
+                    </div>
+                    <div>
+                        <label class="label required">Last Qualification</label>
+                        <select name="last_qualification" class="field" required>
+                            <option value="">Select</option>
+                            @foreach(['Class 10 (SSC)','Class 12 (HSC)','Diploma','Bachelor\'s Degree','Master\'s Degree','PhD','Other'] as $q)
+                                <option value="{{ $q }}" {{ old('last_qualification')==$q?'selected':'' }}>{{ $q }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label">Stream / Branch</label>
+                        <input type="text" name="stream" class="field" value="{{ old('stream') }}" placeholder="e.g. Science, Commerce, Arts">
+                    </div>
+                    <div>
+                        <label class="label required">Year of Passing</label>
+                        <input type="text" name="passing_year" class="field" value="{{ old('passing_year') }}" placeholder="e.g. 2024" maxlength="4" required>
+                    </div>
+                    <div>
+                        <label class="label required">Percentage / CGPA</label>
+                        <input type="text" name="percentage_cgpa" class="field" value="{{ old('percentage_cgpa') }}" placeholder="e.g. 78.5% or 8.2 CGPA" required>
+                    </div>
+                    <div>
+                        <label class="label">Roll / Registration No.</label>
+                        <input type="text" name="roll_registration_no" class="field" value="{{ old('roll_registration_no') }}" placeholder="From your marksheet">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        {{-- STEP 5 — Identity & Documents --}}
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        <div class="step-panel" id="panel-5">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+                <h2 class="text-xl font-extrabold text-slate-900 mb-1">Identity &amp; Documents</h2>
+                <p class="text-slate-500 text-sm mb-2">Upload supporting documents. Max 5MB per file. Accepted: JPG, PNG, PDF.</p>
+                <div class="bg-amber-50 border border-amber-200 text-amber-700 text-xs rounded-xl px-4 py-2.5 mb-6 flex items-start gap-2">
+                    <i class="fa-solid fa-shield-halved mt-0.5 flex-shrink-0"></i>
+                    <span>Your Aadhaar number is encrypted before storage and displayed only in masked form (XXXX XXXX XXXX) to all staff. Full number is never shown in the admin UI.</span>
+                </div>
+
+                <div class="mb-6">
+                    <label class="label">Aadhaar Number</label>
+                    <input type="text" name="aadhaar" class="field font-mono" value="{{ old('aadhaar') }}"
+                           placeholder="XXXX XXXX XXXX" maxlength="14"
+                           oninput="this.value=this.value.replace(/[^0-9\s]/g,'')">
+                    <p class="text-xs text-slate-400 mt-1">Your Aadhaar is encrypted at rest and never shared.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    @php
+                        $docFields = [
+                            ['doc_photo',          'Applicant Photo',                  'fa-camera',                 true,  'JPG / PNG only'],
+                            ['doc_aadhaar',         'Aadhaar / Govt. ID',              'fa-id-card',                false, 'PDF / Image'],
+                            ['doc_marksheet_10',    'Class 10 Marksheet',               'fa-file-lines',             false, 'PDF / Image'],
+                            ['doc_marksheet_12',    'Class 12 Marksheet',               'fa-file-lines',             false, 'PDF / Image'],
+                            ['doc_prev_marksheet',  'Previous Qualification Marksheet', 'fa-scroll',                 false, 'PDF / Image'],
+                            ['doc_birth_cert',      'Birth Certificate',                'fa-baby',                   false, 'PDF / Image'],
+                            ['doc_transfer_cert',   'Transfer Certificate',             'fa-right-left',             false, 'PDF / Image'],
+                            ['doc_migration_cert',  'Migration Certificate',            'fa-arrow-right-arrow-left', false, 'PDF / Image'],
+                            ['doc_character_cert',  'Character Certificate',            'fa-award',                  false, 'PDF / Image'],
+                            ['doc_other',           'Other Document',                   'fa-paperclip',              false, 'PDF / Image'],
+                        ];
+                    @endphp
+
+                    @foreach($docFields as [$field, $label, $icon, $required, $hint])
+                    <label class="doc-card" for="{{ $field }}">
+                        <input type="file" name="{{ $field }}" id="{{ $field }}"
+                               accept="image/jpg,image/jpeg,image/png,application/pdf"
+                               onchange="showDocName(this)">
+                        {{-- Card header: icon + title always visible --}}
+                        <div class="doc-card-header">
+                            <div class="doc-card-icon">
+                                <i class="fa-solid {{ $icon }}"></i>
+                            </div>
+                            <div class="doc-card-title">
+                                {{ $label }}
+                                @if($required)<span class="req-star">*</span>@endif
+                            </div>
+                        </div>
+                        {{-- Card body: upload prompt --}}
+                        <div class="doc-card-body">
+                            <div style="color:#94a3b8; font-size:22px; margin-bottom:4px;">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <p style="font-size:12px; color:#64748b; font-weight:600;">Click to choose file</p>
+                            <p class="doc-card-hint">{{ $hint }} &bull; Max 5 MB</p>
+                            <p class="doc-card-chosen" id="name-{{ $field }}">No file chosen</p>
+                        </div>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        {{-- STEP 6 — Review & Submit --}}
+        {{-- ════════════════════════════════════════════════════════════════ --}}
+        <div class="step-panel" id="panel-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-4">
+                <h2 class="text-xl font-extrabold text-slate-900 mb-1">Review &amp; Submit</h2>
+                <p class="text-slate-500 text-sm mb-6">Please review your application before final submission.</p>
+
+                {{-- Summary cards --}}
+                <div class="space-y-4" id="reviewSummary">
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Step 1 — Personal</p>
+                        <div class="grid grid-cols-2 gap-2 text-sm" id="review-personal">
+                            <div><span class="text-slate-400 text-xs">Name</span><p class="font-semibold text-slate-800" id="rv-name">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Date of Birth</span><p class="font-semibold text-slate-800" id="rv-dob">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Gender</span><p class="font-semibold text-slate-800 capitalize" id="rv-gender">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Nationality</span><p class="font-semibold text-slate-800" id="rv-nationality">—</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Step 2 — Contact</p>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div><span class="text-slate-400 text-xs">Email</span><p class="font-semibold text-slate-800" id="rv-email">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Phone</span><p class="font-semibold text-slate-800" id="rv-phone">—</p></div>
+                            <div><span class="text-slate-400 text-xs">City</span><p class="font-semibold text-slate-800" id="rv-city">—</p></div>
+                            <div><span class="text-slate-400 text-xs">State</span><p class="font-semibold text-slate-800" id="rv-state">—</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Step 3 — Guardian</p>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div><span class="text-slate-400 text-xs">Primary Guardian</span><p class="font-semibold text-slate-800" id="rv-guardian">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Relationship</span><p class="font-semibold text-slate-800" id="rv-guardian-rel">—</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Step 4 — Academic</p>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div><span class="text-slate-400 text-xs">Course</span><p class="font-semibold text-slate-800" id="rv-course">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Last Qualification</span><p class="font-semibold text-slate-800" id="rv-qual">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Percentage/CGPA</span><p class="font-semibold text-slate-800" id="rv-cgpa">—</p></div>
+                            <div><span class="text-slate-400 text-xs">Passing Year</span><p class="font-semibold text-slate-800" id="rv-year">—</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Declaration --}}
+                <div class="mt-6 p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="declaration" class="mt-1 w-4 h-4 accent-indigo-600" required>
+                        <span class="text-sm text-slate-700">
+                            I hereby declare that all information provided in this application is <strong>true, complete, and accurate</strong> to the best of my knowledge.
+                            I understand that submission of false information will result in immediate disqualification.
                         </span>
                     </label>
-
-                    <button type="submit" id="submitBtn" class="w-full sm:w-auto min-w-[300px] relative group/btn inline-flex items-center justify-center px-10 py-5 font-bold text-white rounded-full overflow-hidden shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all hover:-translate-y-1 focus:outline-none">
-                        <div class="absolute inset-0 bg-gradient-to-r from-brand-400 via-cyan-400 to-brand-500 transition-all duration-300 group-hover/btn:scale-105"></div>
-                        <span class="relative z-10 flex items-center gap-3 text-lg">
-                            <span id="btnText">Submit Application</span>
-                            <i id="btnIcon" class="fa-solid fa-rocket text-base transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform"></i>
-                            <i id="btnLoader" class="fa-solid fa-circle-notch animate-spin text-base hidden"></i>
-                        </span>
-                    </button>
                 </div>
-            </form>
 
-            <!-- Success State Panel (Hidden by default) -->
-            <div id="successMessage" class="hidden absolute inset-0 z-50 glass-panel bg-white/95 backdrop-blur-3xl flex flex-col items-center justify-center p-8 text-center border-none">
-                <div class="relative w-28 h-28 mb-8">
-                    <div class="absolute inset-0 bg-brand-200 rounded-full animate-ping opacity-60"></div>
-                    <div class="relative w-full h-full bg-gradient-to-br from-brand-400 to-cyan-500 rounded-full flex items-center justify-center text-white text-5xl shadow-xl shadow-brand-500/30 transform scale-0 animate-[scaleIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
+                {{-- reCAPTCHA --}}
+                <div class="mt-4 flex justify-center">
+                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY','6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MfLiIiD') }}"></div>
                 </div>
-                
-                <h2 class="text-4xl sm:text-5xl font-black text-gray-800 mb-5 transform translate-y-4 opacity-0 animate-[fadeInUp_0.5s_0.2s_forwards]">You're on the list!</h2>
-                <p class="text-gray-500 text-xl max-w-lg mx-auto mb-10 transform translate-y-4 opacity-0 animate-[fadeInUp_0.5s_0.3s_forwards] leading-relaxed font-medium">
-                    We've received your application. Get ready for an amazing journey! Check your inbox soon for the next steps.
-                </p>
-                
-                <a href="/" class="px-8 py-4 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold shadow-sm transition-all hover:-translate-y-1 transform translate-y-4 opacity-0 animate-[fadeInUp_0.5s_0.4s_forwards] flex items-center gap-2">
-                    <i class="fa-solid fa-home"></i> Back to Homepage
-                </a>
             </div>
-
         </div>
-    </div>
 
-    <script>
-        const scriptURL = "{{ route('register.student.store') }}";
+        {{-- ── Navigation Buttons ──────────────────────────────────────────── --}}
+        <div class="flex items-center justify-between gap-4">
+            <button type="button" id="prevBtn" onclick="changeStep(-1)"
+                    class="hidden px-6 py-3 bg-white border border-slate-300 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <div class="ml-auto flex gap-3">
+                <button type="button" id="nextBtn" onclick="changeStep(1)"
+                        class="px-7 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-lg flex items-center gap-2">
+                    Continue <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button type="submit" id="submitBtn"
+                        class="hidden px-7 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Application
+                </button>
+            </div>
+        </div>
 
-        const form          = document.getElementById("studentForm");
-        const submitBtn     = document.getElementById("submitBtn");
-        const btnText       = document.getElementById("btnText");
-        const btnIcon       = document.getElementById("btnIcon");
-        const btnLoader     = document.getElementById("btnLoader");
-        const successPanel  = document.getElementById("successMessage");
+    </form>
+</div>
 
-        form.addEventListener("submit", async function(e) {
-            e.preventDefault();
+<script>
+    const TOTAL_STEPS = 6;
+    let currentStep = 1;
 
-            submitBtn.disabled = true;
-            btnText.innerText  = "Sending Magic...";
-            btnIcon.classList.add('hidden');
-            btnLoader.classList.remove('hidden');
-            submitBtn.classList.add('opacity-90', 'cursor-not-allowed', 'scale-95');
+    function changeStep(direction) {
+        if (direction === 1 && !validateStep(currentStep)) return;
 
-            try {
-                const formData = new FormData(this);
-                const response = await fetch(scriptURL, {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                    }
-                });
+        const oldPanel = document.getElementById('panel-' + currentStep);
+        oldPanel.classList.remove('active');
+        markStepDone(currentStep);
 
-                const result = await response.json();
+        currentStep += direction;
+        currentStep = Math.max(1, Math.min(TOTAL_STEPS, currentStep));
 
-                if (response.ok && result.success) {
-                    form.style.opacity = '0';
-                    form.style.transition = 'opacity 0.4s ease';
-                    setTimeout(() => {
-                        successPanel.classList.remove('hidden');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }, 400);
-                } else {
-                    let msg = result.message || "An error occurred during submission.";
-                    if (result.errors) { msg = Object.values(result.errors)[0][0]; }
-                    alert("Oops: " + msg);
-                }
-            } catch (err) {
-                alert("Network error. Please check your connection and try again.");
-                console.error(err);
-            } finally {
-                submitBtn.disabled = false;
-                btnText.innerText  = "Submit Application";
-                btnIcon.classList.remove('hidden');
-                btnLoader.classList.add('hidden');
-                submitBtn.classList.remove('opacity-90', 'cursor-not-allowed', 'scale-95');
-                form.style.opacity = '1';
+        const newPanel = document.getElementById('panel-' + currentStep);
+        newPanel.classList.add('active');
+        activateStepIndicator(currentStep);
+
+        if (currentStep === TOTAL_STEPS) populateReview();
+
+        document.getElementById('prevBtn').classList.toggle('hidden', currentStep === 1);
+        document.getElementById('nextBtn').classList.toggle('hidden', currentStep === TOTAL_STEPS);
+        document.getElementById('submitBtn').classList.toggle('hidden', currentStep !== TOTAL_STEPS);
+
+        updateProgressBar();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateStep(step) {
+        const panel = document.getElementById('panel-' + step);
+        const required = panel.querySelectorAll('[required]');
+        let valid = true;
+        required.forEach(el => {
+            el.classList.remove('error');
+            if (!el.value.trim()) {
+                el.classList.add('error');
+                el.scrollIntoView({ behavior:'smooth', block:'center' });
+                valid = false;
             }
         });
-    </script>
+        if (!valid) { alert('Please fill all required fields before proceeding.'); }
+        return valid;
+    }
+
+    function markStepDone(step) {
+        const circle = document.getElementById('step-circle-' + step);
+        circle.classList.remove('border-slate-200','text-slate-400');
+        circle.classList.add('border-emerald-500','bg-emerald-500','text-white');
+        circle.querySelector('.step-number').classList.add('hidden');
+        circle.querySelector('.step-check').classList.remove('hidden');
+    }
+
+    function activateStepIndicator(step) {
+        const circle = document.getElementById('step-circle-' + step);
+        // Only activate if not already done
+        if (!circle.classList.contains('bg-emerald-500')) {
+            circle.classList.remove('border-slate-200','text-slate-400');
+            circle.classList.add('border-indigo-500','text-indigo-600','font-black');
+        }
+    }
+
+    function updateProgressBar() {
+        const pct = ((currentStep - 1) / (TOTAL_STEPS - 1)) * 100;
+        document.getElementById('progress-line').style.width = pct + '%';
+    }
+
+    function populateReview() {
+        const g = id => document.querySelector(`[name="${id}"]`)?.value ?? '—';
+        const sel = id => {
+            const el = document.querySelector(`[name="${id}"]`);
+            return el?.options[el.selectedIndex]?.text ?? '—';
+        };
+        document.getElementById('rv-name').textContent = `${g('first_name')} ${g('middle_name')} ${g('last_name')}`.trim();
+        document.getElementById('rv-dob').textContent = g('date_of_birth');
+        document.getElementById('rv-gender').textContent = sel('gender');
+        document.getElementById('rv-nationality').textContent = g('nationality');
+        document.getElementById('rv-email').textContent = g('email');
+        document.getElementById('rv-phone').textContent = g('phone');
+        document.getElementById('rv-city').textContent = g('city');
+        document.getElementById('rv-state').textContent = g('state');
+        document.getElementById('rv-guardian').textContent = g('guardian_primary_name');
+        document.getElementById('rv-guardian-rel').textContent = sel('guardian_primary_relationship');
+        document.getElementById('rv-course').textContent = sel('course_id');
+        document.getElementById('rv-qual').textContent = sel('last_qualification');
+        document.getElementById('rv-cgpa').textContent = g('percentage_cgpa');
+        document.getElementById('rv-year').textContent = g('passing_year');
+    }
+
+    function showFileName(input) {
+        const el = document.getElementById('name-' + input.name);
+        if (el) el.textContent = input.files[0]?.name ?? 'No file chosen';
+    }
+    // Alias used by new doc-card design
+    function showDocName(input) { showFileName(input); }
+
+    // Init
+    activateStepIndicator(1);
+    document.getElementById('prevBtn').classList.add('hidden');
+    updateProgressBar();
+</script>
 </body>
 </html>

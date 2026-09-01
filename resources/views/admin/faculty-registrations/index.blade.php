@@ -111,9 +111,9 @@
                 <thead>
                     <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200">
                         <th class="px-6 py-4">Applicant</th>
+                        <th class="px-6 py-4">App No.</th>
                         <th class="px-6 py-4">Subjects</th>
                         <th class="px-6 py-4">Qualification</th>
-                        <th class="px-6 py-4">Department</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4">Date</th>
                         <th class="px-6 py-4 text-center">Actions</th>
@@ -134,11 +134,14 @@
                                         {{ strtoupper(substr($reg->name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <div class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ $reg->name }}</div>
+                                        <div class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ $reg->full_name ?: $reg->name }}</div>
                                         <div class="text-xs text-gray-500">{{ $reg->email }}</div>
                                         <div class="text-xs text-gray-400">{{ $reg->phone }}</div>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">{{ $reg->application_no ?? '—' }}</span>
                             </td>
 
                             <td class="px-6 py-4 max-w-[180px]">
@@ -196,7 +199,13 @@
                             </td>
 
                             <td class="px-6 py-4 text-center">
-                                @if($reg->status === 'pending')
+                                <div class="flex items-center justify-center gap-2 flex-wrap">
+                                    {{-- Always visible: View --}}
+                                    <a href="{{ route('admin.faculty-registrations.show', $reg->id) }}"
+                                       class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs transition border border-indigo-100 flex items-center gap-1">
+                                        <i class="fa-solid fa-eye"></i> View
+                                    </a>
+                                    @if($reg->status === 'pending')
                                     <div class="flex items-center justify-center gap-2">
                                         {{-- Approve Button → triggers modal --}}
                                         <button type="button"
@@ -221,9 +230,8 @@
                                             <i class="fa-solid fa-paper-plane"></i> Resend Credentials
                                         </button>
                                     </form>
-                                @else
-                                    <span class="text-xs text-gray-400">Action taken</span>
-                                @endif
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
