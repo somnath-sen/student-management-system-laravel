@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ApplicationDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ApplicationDocumentController extends Controller
 {
@@ -14,7 +14,7 @@ class ApplicationDocumentController extends Controller
      * View (inline) a document — for images and PDFs.
      * Only accessible to admin users (enforced via route middleware).
      */
-    public function view(ApplicationDocument $document): StreamedResponse|\Illuminate\Http\Response
+    public function view(ApplicationDocument $document): \Illuminate\Http\Response
     {
         abort_unless($document->storageExists(), 404, 'Document not found in storage.');
 
@@ -44,14 +44,16 @@ class ApplicationDocumentController extends Controller
      * Force-download a document.
      * Only accessible to admin users (enforced via route middleware).
      */
-    public function download(ApplicationDocument $document): StreamedResponse
+    public function download(ApplicationDocument $document): BinaryFileResponse
     {
         abort_unless($document->storageExists(), 404, 'Document not found in storage.');
 
         $disk = $document->disk ?? 'local';
 
-        return Storage::disk($disk)->download(
-            $document->stored_path,
+        $filePath = Storage::disk($disk)->path($document->stored_path);
+
+        return response()->download(
+            $filePath,
             $document->original_name,
             [
                 'Content-Type'              => $document->mime_type ?? 'application/octet-stream',

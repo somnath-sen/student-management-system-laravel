@@ -16,6 +16,9 @@ use App\Mail\StudentCredentialsMail;
 use App\Mail\ParentCredentialsMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
+use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
 {
@@ -70,6 +73,26 @@ class RegistrationController extends Controller
             return back()->with('error', 'Only pending registrations can be approved.');
         }
 
+        // ── DOB validation (Required before account creation) ────────────────
+        if (empty($registration->date_of_birth)) {
+            return back()->with('error', 'Approval cannot be completed because the applicant\'s date of birth is missing or invalid. Please update the application and try again.');
+        }
+
+        try {
+            $dobCarbon = Carbon::parse((string) $registration->date_of_birth);
+
+            if ($dobCarbon->isFuture() || $dobCarbon->year < 1900) {
+                return back()->with('error', 'Approval cannot be completed because the applicant\'s date of birth is invalid. Please update the application and try again.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Approval cannot be completed because the applicant\'s date of birth is missing or invalid. Please update the application and try again.');
+        }
+
+        // ── Duplicate User check ──────────────────────────────────────────────
+        if (User::where('email', $registration->email)->exists()) {
+            return back()->with('error', "Approval cannot be completed because a user account with email '{$registration->email}' already exists.");
+        }
+
         $request->validate([
             'roll' => 'nullable|string|max:50',
         ]);
@@ -103,7 +126,9 @@ class RegistrationController extends Controller
             }
             $courseId = $course?->id;
 
-            $studentPassword = Str::random(10);
+            // ── Password = DOB in DDMMYYYY format (e.g. 03032003) ─────────────
+            $studentPassword = $dobCarbon->format('dmY');
+            $dobDisplay      = $dobCarbon->format('d-m-Y');
             $parentPassword  = Str::random(10);
 
             $studentUser = User::create([
@@ -160,15 +185,21 @@ class RegistrationController extends Controller
 
             DB::commit();
 
-            Mail::to($studentUser->email)->send(new StudentCredentialsMail($studentUser, $studentPassword, $registration));
+            // ── Send credentials email with safe error handling ───────────────
+            try {
+                Mail::to($studentUser->email)->send(new StudentCredentialsMail($studentUser, $studentPassword, $registration, $dobDisplay));
 
-            if ($parentUser->wasRecentlyCreated) {
-                Mail::to($parentUser->email)->send(new ParentCredentialsMail($parentUser, $parentPassword, $registration));
-            } else {
-                Mail::to($parentUser->email)->send(new ParentCredentialsMail($parentUser, 'Your existing password', $registration));
+                if ($parentUser->wasRecentlyCreated) {
+                    Mail::to($parentUser->email)->send(new ParentCredentialsMail($parentUser, $parentPassword, $registration));
+                } else {
+                    Mail::to($parentUser->email)->send(new ParentCredentialsMail($parentUser, 'Your existing password', $registration));
+                }
+            } catch (\Exception $mailEx) {
+                Log::error('Student approval credentials email failed to send: ' . $mailEx->getMessage());
+                return back()->with('warning', "Student application approved and account created, but the credentials email could not be sent. Please inform the student or check mail settings. Error: " . $mailEx->getMessage());
             }
 
-            return back()->with('success', "✅ Application approved! Accounts created for {$registration->full_name}. Credentials sent.");
+            return back()->with('success', 'Student application approved. Login credentials have been sent to the student\'s registered email address.');
 
         } catch (\Exception $e) {
             DB::rollBack();

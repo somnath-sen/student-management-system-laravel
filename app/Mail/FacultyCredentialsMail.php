@@ -22,7 +22,7 @@ class FacultyCredentialsMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🎉 Welcome to EdFlow — Your Faculty Account is Ready',
+            subject: 'EdFlow Faculty Account Approved — Your Login Credentials',
         );
     }
 

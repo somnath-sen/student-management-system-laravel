@@ -223,7 +223,7 @@
                                     </div>
                                 @elseif($reg->status === 'approved')
                                     <form method="POST" action="{{ route('admin.faculty-registrations.resend', $reg->id) }}"
-                                        data-confirm="This will generate a NEW password and send it to {{ addslashes($reg->email) }}. Continue?">
+                                        data-confirm="This will reset the login password to the applicant's Date of Birth (DDMMYYYY) and send it to {{ addslashes($reg->email) }}. Continue?">
                                         @csrf
                                         <button type="submit"
                                             class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold rounded-lg text-xs transition border border-indigo-200 flex items-center gap-1 mx-auto">
@@ -277,7 +277,7 @@
         <div class="p-6">
             <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-5 text-sm text-emerald-800">
                 <ul class="space-y-1.5">
-                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> A secure password will be auto-generated</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Initial login password will be applicant's DOB (DDMMYYYY)</li>
                     <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> A teacher account will be created</li>
                     <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Subjects will be assigned automatically</li>
                     <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Credentials will be emailed to the faculty</li>

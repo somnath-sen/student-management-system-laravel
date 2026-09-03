@@ -18,15 +18,18 @@ class StudentCredentialsMail extends Mailable
     public $user;
     public $password;
     public $registration;
+    /** Formatted DOB for display in email e.g. "03-03-2003" */
+    public $dob;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, $password, StudentRegistration $registration)
+    public function __construct(User $user, string $password, StudentRegistration $registration, string $dob = '')
     {
-        $this->user = $user;
-        $this->password = $password;
+        $this->user         = $user;
+        $this->password     = $password;
         $this->registration = $registration;
+        $this->dob          = $dob;
     }
 
     /**
@@ -35,7 +38,7 @@ class StudentCredentialsMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your EdFlow Student Account Credentials',
+            subject: 'EdFlow Student Account Approved — Your Login Credentials',
         );
     }
 
