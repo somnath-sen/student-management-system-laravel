@@ -4,582 +4,888 @@
 
 @section('content')
 
-<!-- Import Cool Modern Font: Outfit -->
+<!-- Modern Typography Font -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* ================= DYNAMIC VIBRANT BACKGROUND ================= */
-    body {
-        background: linear-gradient(-45deg, #fceadd, #f8b195, #f67280, #c06c84, #6c5b7b, #355c7d);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-        font-family: 'Outfit', sans-serif !important;
-        position: relative;
+    /* ================= PURE MODERN LIGHT THEME ================= */
+    .profile-light-theme {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: #0f172a; /* Slate 900 */
+        color-scheme: light !important;
     }
 
-    body::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(255, 255, 255, 0.4); /* Lightens the gradient softly */
-        z-index: -1;
-        pointer-events: none;
+    /* Animations */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    .animate-fade-up {
+        animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+    .stagger-1 { animation-delay: 0.05s; }
+    .stagger-2 { animation-delay: 0.12s; }
+    .stagger-3 { animation-delay: 0.2s; }
 
-    /* Core Animations */
-    @keyframes bounceInUp {
-        0% { opacity: 0; transform: translateY(40px) scale(0.9); }
-        70% { transform: translateY(-10px) scale(1.02); opacity: 1; }
-        100% { transform: translateY(0) scale(1); opacity: 1; }
-    }
-
-    .animate-enter {
-        animation: bounceInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        opacity: 0;
-    }
-
-    .stagger-1 { animation-delay: 0.1s; }
-    .stagger-2 { animation-delay: 0.25s; }
-    .stagger-3 { animation-delay: 0.4s; }
-
-    /* Super Glassmorphism Panels */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(255, 255, 255, 0.5) inset;
-        border-radius: 28px;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .glass-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(255, 255, 255, 0.8) inset;
-        background: rgba(255, 255, 255, 0.85);
-    }
-
-    /* Vibrant Text Gradients */
-    .text-vibrant {
-        background: linear-gradient(135deg, #FF6B6B 0%, #a21caf 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        color: #a21caf; /* Fallback */
-    }
-
-    .text-blue-glow {
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    /* Pulse Bubbles Floating Background */
-    .bubble {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(40px);
-        z-index: -1;
-        animation: float 10s infinite ease-in-out alternate;
-    }
-    .b-1 { width: 300px; height: 300px; background: rgba(59, 130, 246, 0.3); top: -100px; left: -100px; }
-    .b-2 { width: 400px; height: 400px; background: rgba(236, 72, 153, 0.2); bottom: -100px; right: -100px; animation-duration: 14s; }
-    .b-3 { width: 250px; height: 250px; background: rgba(16, 185, 129, 0.2); top: 40%; left: 30%; animation-duration: 12s; }
-
-    @keyframes float {
-        100% { transform: translateY(40px) scale(1.1); }
-    }
-
-    /* Pop Buttons */
-    .btn-pop {
-        background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
-        border: none;
-        color: white;
-        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
-    }
-    .btn-pop:hover {
-        transform: scale(1.05) translateY(-2px);
-        box-shadow: 0 15px 25px rgba(236, 72, 153, 0.5);
-    }
-
-    /* =========== GAMIFICATION STATS =========== */
-    .gami-card {
-        position: relative;
-        border-radius: 24px;
-        padding: 1.5rem;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(255,255,255,0.6);
-        cursor: default;
-    }
-    .gami-card:hover {
-        transform: translateY(-6px) scale(1.02);
-    }
-    .gami-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: rgba(255,255,255,0.55);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        z-index: 0;
-    }
-    .gami-card > * { position: relative; z-index: 1; }
-
-    /* XP Card */
-    .gami-xp { box-shadow: 0 12px 40px rgba(99,102,241,0.25); }
-    .gami-xp:hover { box-shadow: 0 20px 50px rgba(99,102,241,0.35); }
-
-    /* Level Card */
-    .gami-level { box-shadow: 0 12px 40px rgba(236,72,153,0.25); }
-    .gami-level:hover { box-shadow: 0 20px 50px rgba(236,72,153,0.4); }
-
-    /* Streak Card */
-    .gami-streak { box-shadow: 0 12px 40px rgba(251,146,60,0.25); }
-    .gami-streak:hover { box-shadow: 0 20px 50px rgba(251,146,60,0.4); }
-
-    /* Glow icon bg */
-    .icon-glow {
-        width: 56px; height: 56px;
-        border-radius: 18px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.6rem;
-        flex-shrink: 0;
-    }
-
-    /* XP Progress bar */
-    .xp-bar-track {
-        height: 8px;
-        background: rgba(99,102,241,0.15);
-        border-radius: 99px;
-        overflow: hidden;
-        margin-top: 10px;
-    }
-    .xp-bar-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #6366f1, #ec4899);
-        border-radius: 99px;
-        transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    /* Flame streak animation */
+    /* Gamification Animations */
     @keyframes flicker {
         0%, 100% { transform: scale(1) rotate(-3deg); }
         50% { transform: scale(1.15) rotate(3deg); }
     }
-    .flame-icon { animation: flicker 1.5s ease-in-out infinite; display: inline-block; }
+    .flame-icon { animation: flicker 1.6s ease-in-out infinite; display: inline-block; }
 
-    /* Star spin */
     @keyframes spinStar {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
     .spin-star { animation: spinStar 4s linear infinite; display: inline-block; }
 
-    /* Counter count-up */
-    @keyframes countUp {
-        from { opacity: 0; transform: translateY(10px); }
-        to   { opacity: 1; transform: translateY(0); }
+    /* Mini ID Card on White Canvas */
+    .mini-id-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+        transition: all 0.3s ease;
     }
-    .count-anim { animation: countUp 0.9s ease forwards; }
-
-    /* Level badge ring */
-    .level-ring {
-        width: 72px; height: 72px;
-        border-radius: 50%;
-        background: conic-gradient(from 0deg, #f43f5e 0%, #ec4899 45%, #a855f7 80%, #f1f5f9 80%);
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 0 0 4px white, 0 6px 20px rgba(236,72,153,0.4);
-        flex-shrink: 0;
+    .mini-id-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 32px -6px rgba(99, 102, 241, 0.18);
     }
-    .level-ring-inner {
-        width: 56px; height: 56px;
-        background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.7rem;
-        font-weight: 900;
-        background: linear-gradient(135deg, #f43f5e, #a855f7);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
 </style>
 
-<!-- Floating Ambient Lights -->
-<div class="bubble b-1 hidden md:block"></div>
-<div class="bubble b-2 hidden md:block"></div>
-<div class="bubble b-3 hidden md:block"></div>
+<div class="profile-light-theme max-w-7xl mx-auto space-y-7 pb-12">
 
-<div class="min-h-screen p-4 sm:p-6 lg:p-10 relative z-10">
-    
-    <div class="max-w-7xl mx-auto space-y-8">
-
-        <!-- ================= HERO PROFILE FLAG ================= -->
-        <div class="glass-card overflow-hidden animate-enter stagger-1 relative">
-            
-            <!-- Colorful Banner -->
-            <div class="h-44 md:h-56 w-full relative overflow-hidden bg-white">
-                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
-                <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/80 via-purple-500/80 to-pink-500/80 mix-blend-multiply"></div>
-                <!-- Shimmer highlight -->
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite]"></div>
-            </div>
-
-            <div class="px-6 md:px-12 pb-10 relative">
-                
-                <!-- Awesome Floating Avatar -->
-                <div class="absolute -top-20 md:-top-24 left-6 md:left-12">
-                    <div class="w-36 h-36 md:w-44 md:h-44 rounded-[2.5rem] rotate-3 bg-white p-2 shadow-2xl hover:rotate-0 hover:scale-105 transition-all duration-500 z-10 relative">
-                        <div class="w-full h-full rounded-[2rem] bg-gradient-to-br from-indigo-100 to-pink-100 flex items-center justify-center text-5xl md:text-7xl font-black text-vibrant shadow-inner overflow-hidden">
-                            {{ isset($user->name) ? substr($user->name, 0, 1) : 'S' }}
-                        </div>
-                        <!-- Active Dot -->
-                        <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-400 border-4 border-white rounded-full shadow-lg flex items-center justify-center animate-bounce">
-                            <div class="w-2.5 h-2.5 bg-white rounded-full"></div>
-                        </div>
-                    </div>
+    <!-- Flash Notifications -->
+    @if(session('success'))
+        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between shadow-sm animate-fade-up">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                    <i class="fa-solid fa-circle-check text-base"></i>
                 </div>
+                <span class="text-sm font-bold">{{ session('success') }}</span>
+            </div>
+            <button type="button" onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 text-sm p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    @endif
 
-                <div class="pt-24 md:pt-6 md:pl-56 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                    
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/50 border border-white/80 rounded-full mb-3 shadow-sm">
-                            <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
-                            <span class="text-[11px] font-bold text-slate-600 uppercase tracking-widest">Verified Student</span>
-                        </div>
-                        <h1 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">{{ $user->name ?? 'Student Name' }}</h1>
-                        
-                        <div class="flex flex-wrap items-center gap-3 mt-4 text-[15px] font-semibold">
-                            <span class="flex items-center gap-2 bg-white/70 text-indigo-700 px-4 py-2 rounded-2xl border border-white shadow-sm">
-                                <i class="fa-solid fa-id-badge text-indigo-400 text-lg"></i>
-                                Roll No: <span class="font-black text-indigo-900">{{ $student->roll_number ?? 'N/A' }}</span>
-                            </span>
-                            <span class="flex items-center gap-2 bg-white/70 text-slate-600 px-4 py-2 rounded-2xl border border-white shadow-sm">
-                                <i class="fa-solid fa-envelope-open-text text-pink-400 text-lg"></i>
-                                {{ $user->email ?? 'No email provided' }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- CTA Edit -->
-                    <a href="{{ route('profile.edit') }}" class="btn-pop inline-flex items-center justify-center px-8 py-3.5 font-bold rounded-2xl w-full md:w-auto text-[15px] tracking-wide">
-                        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-white/90 text-lg"></i>
-                        Customize Profile
-                    </a>
-
+    @if($errors->any())
+        <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 shadow-sm animate-fade-up">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 shrink-0 mt-0.5">
+                    <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-bold">Please check the following errors:</p>
+                    <ul class="text-xs list-disc list-inside mt-1 space-y-0.5 font-medium">
+                        @foreach($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
+    @endif
 
-        <!-- ================= GAMIFICATION BANNER ================= -->
-        <div class="animate-enter stagger-2">
-            <div class="flex items-center gap-2 mb-4">
-                <span class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">🏆 Your Power Stats</span>
-                <div class="flex-1 h-px bg-gradient-to-r from-slate-200 to-transparent"></div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-
-                {{-- ===== TOTAL XP CARD ===== --}}
-                <div class="gami-card gami-xp">
-                    {{-- Decorative blobs --}}
-                    <div class="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-indigo-400/20 blur-2xl pointer-events-none"></div>
-                    <div class="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-purple-400/20 blur-xl pointer-events-none"></div>
-
-                    <div class="flex items-start gap-4">
-                        <div class="icon-glow bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-400/40">
-                            <i class="fa-solid fa-bolt text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="text-[11px] font-black text-indigo-400 uppercase tracking-widest mb-1">Total XP</div>
-                            <div class="text-4xl font-black text-slate-800 count-anim" id="xp-count">
-                                {{ number_format($gamification->total_points ?? 0) }}
-                            </div>
-                            <div class="text-[12px] text-slate-500 font-semibold mt-1">
-                                {{ number_format(($gamification->total_points ?? 0) % 1000) }} / 1000 to next level
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- XP Progress bar --}}
-                    <div class="xp-bar-track mt-3">
-                        <div class="xp-bar-fill" id="xp-bar" style="width: 0%"
-                            data-pct="{{ min(100, (($gamification->total_points ?? 0) % 1000) / 10) }}"></div>
-                    </div>
-                    <div class="flex justify-between text-[10px] font-bold text-slate-400 mt-1.5 px-0.5">
-                        <span>{{ floor(($gamification->total_points ?? 0) / 1000) * 1000 }} XP</span>
-                        <span>{{ (floor(($gamification->total_points ?? 0) / 1000) + 1) * 1000 }} XP</span>
-                    </div>
-                </div>
-
-                {{-- ===== LEVEL CARD ===== --}}
-                <div class="gami-card gami-level">
-                    <div class="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-pink-400/20 blur-2xl pointer-events-none"></div>
-                    <div class="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-rose-400/20 blur-xl pointer-events-none"></div>
-
-                    <div class="flex items-center gap-4">
-                        {{-- Level ring --}}
-                        <div class="level-ring">
-                            <div class="level-ring-inner">{{ $gamification->level ?? 1 }}</div>
-                        </div>
-
-                        <div class="flex-1">
-                            <div class="text-[11px] font-black text-pink-400 uppercase tracking-widest mb-1">Current Level</div>
-                            @php
-                                $lvl = $gamification->level ?? 1;
-                                $title = match(true) {
-                                    $lvl >= 20 => 'Grandmaster',
-                                    $lvl >= 15 => 'Master',
-                                    $lvl >= 10 => 'Expert',
-                                    $lvl >= 5  => 'Advanced',
-                                    $lvl >= 3  => 'Intermediate',
-                                    default    => 'Beginner',
-                                };
-                            @endphp
-                            <div class="text-2xl font-black text-slate-800">{{ $title }}</div>
-                            <div class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-[10px] font-black rounded-full shadow-md shadow-pink-400/30 uppercase tracking-wider">
-                                <span class="spin-star text-yellow-300">★</span> Level {{ $lvl }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="mt-4 text-[12px] text-slate-500 font-medium bg-white/50 rounded-xl px-3 py-2.5 border border-white/80">
-                        @if($lvl >= 20) 🏆 You've reached the pinnacle!
-                        @elseif($lvl >= 10) 🚀 {{ 20 - $lvl }} more levels to Grandmaster!
-                        @else 💪 Keep learning — {{ 10 - $lvl }} levels to Expert!
-                        @endif
-                    </p>
-                </div>
-
-                {{-- ===== DAY STREAK CARD ===== --}}
-                <div class="gami-card gami-streak">
-                    <div class="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-orange-400/20 blur-2xl pointer-events-none"></div>
-                    <div class="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-amber-400/20 blur-xl pointer-events-none"></div>
-
-                    <div class="flex items-start gap-4">
-                        <div class="icon-glow bg-gradient-to-br from-orange-400 to-red-500 shadow-lg shadow-orange-400/40">
-                            <span class="flame-icon text-2xl">🔥</span>
-                        </div>
-                        <div class="flex-1">
-                            <div class="text-[11px] font-black text-orange-400 uppercase tracking-widest mb-1">Day Streak</div>
-                            <div class="flex items-baseline gap-2">
-                                <div class="text-4xl font-black text-slate-800 count-anim">{{ $gamification->current_streak ?? 0 }}</div>
-                                <div class="text-[13px] font-bold text-slate-500">days</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Streak dots --}}
-                    @php $streak = $gamification->current_streak ?? 0; @endphp
-                    <div class="mt-4 flex items-center gap-2">
-                        @for($d = 1; $d <= 7; $d++)
-                            <div class="flex-1 h-2 rounded-full transition-all {{ $d <= ($streak % 7 ?: ($streak > 0 ? 7 : 0)) ? 'bg-gradient-to-r from-orange-400 to-red-500 shadow shadow-orange-400/50' : 'bg-slate-200' }}"></div>
-                        @endfor
-                    </div>
-                    <div class="flex justify-between text-[9px] font-bold text-slate-400 mt-1.5 uppercase tracking-wider">
-                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-                    </div>
-
-                    @if($streak >= 7)
-                        <div class="mt-3 text-[12px] text-orange-600 font-black bg-orange-50 border border-orange-200 rounded-xl px-3 py-2 text-center">
-                            🔥 {{ $streak }}-Day Warrior! Keep it up!
-                        </div>
-                    @elseif($streak > 0)
-                        <div class="mt-3 text-[12px] text-slate-500 font-semibold bg-white/50 rounded-xl px-3 py-2 border border-white text-center">
-                            {{ 7 - $streak }} more days for a weekly badge!
-                        </div>
-                    @else
-                        <div class="mt-3 text-[12px] text-slate-400 font-semibold bg-white/50 rounded-xl px-3 py-2 border border-white text-center">
-                            Login daily to build your streak! 📅
-                        </div>
-                    @endif
-                </div>
-
-            </div><!-- /grid -->
-        </div><!-- /gamification banner -->
-
-        <!-- ================= BENTO GRID ================= -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+    <!-- ================= 1. HERO PROFILE CARD (LIGHT THEME) ================= -->
+    <div class="relative bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden animate-fade-up">
+        
+        <!-- Header Campus Gradient Banner -->
+        <div class="h-44 sm:h-52 w-full relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.22)_0%,transparent_60%)]"></div>
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
             
-            <!-- Specs Column -->
-            <div class="space-y-6 lg:col-span-1">
+            <!-- Campus Badge inside banner -->
+            <div class="absolute top-5 right-6 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold tracking-wide shadow-sm">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>EdFlow Student Portal</span>
+            </div>
+        </div>
+
+        <div class="px-6 sm:px-10 pb-8 relative">
+            
+            <!-- Avatar & Profile Details Flex Container -->
+            <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 -mt-20 sm:-mt-24">
                 
-                <!-- Course Card -->
-                <div class="glass-card animate-enter stagger-2 overflow-hidden flex flex-col">
-                    <!-- Gradient Banner Header -->
-                    <div class="relative h-24 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center px-6">
-                        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                        <div class="relative z-10 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                                <i class="fa-solid fa-graduation-cap text-white text-lg"></i>
+                <!-- Left: Photo + Identity -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-end gap-6 w-full lg:w-auto">
+                    
+                    <!-- Avatar with Photo Upload Controls -->
+                    <div class="relative group shrink-0">
+                        <div class="w-36 h-36 sm:w-40 sm:h-40 rounded-3xl bg-white p-2 shadow-xl border-2 border-slate-100 overflow-hidden relative">
+                            <div class="w-full h-full rounded-2xl bg-gradient-to-br from-indigo-50 to-slate-100 flex items-center justify-center overflow-hidden">
+                                @if($student->profile_photo_url)
+                                    <img id="profile-display-img" src="{{ $student->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                @else
+                                    <span id="profile-initials-badge" class="text-4xl sm:text-5xl font-black text-indigo-600 uppercase tracking-tight">
+                                        {{ $student->initials }}
+                                    </span>
+                                @endif
                             </div>
-                            <h2 class="text-[11px] font-black text-white/90 uppercase tracking-[0.25em]">Academic Track</h2>
+
+                            <!-- Live Photo Trigger Button on Hover / Mobile -->
+                            <button type="button" onclick="openPhotoModal()" class="absolute inset-2 rounded-2xl bg-slate-900/60 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-200 cursor-pointer backdrop-blur-sm" title="Change Profile Photo">
+                                <i class="fa-solid fa-camera text-xl mb-1"></i>
+                                <span class="text-[11px] font-bold">Update Photo</span>
+                            </button>
                         </div>
-                        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+
+                        <!-- Active Online Dot -->
+                        <div class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-4 border-white rounded-full shadow-md flex items-center justify-center" title="Active Account">
+                            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        </div>
                     </div>
 
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        @if(isset($course))
-                            <div>
-                                <h3 class="text-xl font-black text-slate-800 leading-tight mb-2 text-blue-glow">{{ $course->name }}</h3>
-                                @if($course->course_code)
-                                    <div class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 bg-indigo-50 border border-indigo-200 rounded-full">
-                                        <i class="fa-solid fa-hashtag text-indigo-400 text-[10px]"></i>
-                                        <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ $course->course_code }}</span>
-                                    </div>
-                                @endif
-                                <p class="text-[13px] text-slate-500 leading-relaxed font-medium bg-white/40 px-4 py-3 rounded-xl border border-white shadow-inner">{{ $course->description ?? 'No specific parameters defined.' }}</p>
-                            </div>
-                            
-                            <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
-                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Enrollment</span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-emerald-400 to-teal-500 text-white rounded-full text-[10px] font-black uppercase tracking-wider shadow-md shadow-emerald-500/30">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Active
-                                </span>
-                            </div>
-                        @else
-                            <div class="text-center py-8">
-                                <div class="w-16 h-16 bg-white shadow-xl rounded-[1.5rem] rotate-12 flex items-center justify-center mx-auto mb-4">
-                                    <i class="fa-solid fa-book-open text-2xl text-pink-400 -rotate-12"></i>
-                                </div>
-                                <h3 class="text-base font-bold text-slate-800 mb-1">No Course Yet</h3>
-                                <p class="text-sm text-slate-500 font-medium">Please wait for admin assignment.</p>
-                            </div>
-                        @endif
+                    <!-- Identity Headings -->
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Verified Student
+                            </span>
+                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                <i class="fa-solid fa-shield-halved text-[10px]"></i>
+                                Status: {{ ucfirst($student->status ?? 'Active') }}
+                            </span>
+                        </div>
+
+                        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{{ $user->name ?? 'Student' }}</h1>
+                        
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm font-semibold text-slate-600">
+                            <span class="inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-badge text-indigo-500"></i>
+                                Roll No: <strong class="text-slate-900">{{ $student->roll_number ?? 'N/A' }}</strong>
+                            </span>
+                            <span class="text-slate-300">•</span>
+                            <span class="inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-envelope text-slate-400"></i>
+                                {{ $user->email }}
+                            </span>
+                            <span class="text-slate-300">•</span>
+                            <span class="inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-graduation-cap text-indigo-500"></i>
+                                {{ $course->name ?? 'Course Not Assigned' }}
+                            </span>
+                        </div>
                     </div>
+
                 </div>
 
-                <!-- Metrics Card -->
-                <div class="glass-card p-5 animate-enter stagger-3">
-                    <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Account Metrics</h2>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="relative overflow-hidden text-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                            <div class="absolute -right-3 -top-3 w-14 h-14 rounded-full bg-indigo-200/30 blur-xl pointer-events-none"></div>
-                            <div class="w-10 h-10 bg-indigo-100 text-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-2 text-base group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-cubes-stacked"></i>
-                            </div>
-                            <div class="text-2xl font-black text-slate-800 mb-0.5">{{ isset($subjects) ? $subjects->count() : 0 }}</div>
-                            <div class="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Subjects</div>
-                        </div>
-                        <div class="relative overflow-hidden text-center p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                            <div class="absolute -right-3 -top-3 w-14 h-14 rounded-full bg-emerald-200/30 blur-xl pointer-events-none"></div>
-                            <div class="w-10 h-10 bg-emerald-100 text-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-2 text-base group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-circle-check"></i>
-                            </div>
-                            <div class="text-2xl font-black text-slate-800 mb-0.5">Active</div>
-                            <div class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Status</div>
-                        </div>
-                    </div>
+                <!-- Right: Quick Actions -->
+                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+                    
+                    <!-- Photo Button -->
+                    <button type="button" onclick="openPhotoModal()" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs sm:text-sm font-bold shadow-sm hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-camera text-indigo-500"></i>
+                        <span>{{ $student->profile_photo_url ? 'Change Photo' : 'Upload Photo' }}</span>
+                    </button>
+
+                    <!-- Smart Campus ID Link -->
+                    <a href="{{ route('student.smart-id') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs sm:text-sm font-bold shadow-sm hover:bg-indigo-100 transition-all">
+                        <i class="fa-solid fa-qrcode text-indigo-600"></i>
+                        <span>Smart Campus ID</span>
+                    </a>
+
+                    <!-- Account Edit Settings -->
+                    <a href="{{ route('profile.edit') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs sm:text-sm font-bold shadow-sm hover:bg-indigo-600 transition-all">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Edit Account</span>
+                    </a>
+
                 </div>
 
             </div>
 
-            <!-- Subject Grid Column -->
-            <div class="lg:col-span-2 animate-enter stagger-2">
-                <div class="glass-card overflow-hidden h-full flex flex-col">
-                    
-                    <!-- Section Header -->
-                    <div class="px-6 py-5 bg-white/50 border-b border-white/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div>
-                            <h2 class="text-lg font-black text-slate-800 flex items-center gap-2.5">
-                                <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-md shadow-pink-500/30">
-                                    <i class="fa-solid fa-layer-group text-white text-sm"></i>
-                                </span>
-                                My Subjects
-                            </h2>
-                            <p class="text-[12px] text-slate-400 mt-1 font-medium pl-10">Knowledge areas you're currently exploring</p>
-                        </div>
-                        <div class="inline-flex items-center gap-1.5 bg-indigo-600 text-white text-[10px] px-3 py-1.5 rounded-full font-black border border-indigo-400 shadow-lg shadow-indigo-500/30 self-start sm:self-auto">
-                            <i class="fa-solid fa-rocket text-[9px]"></i>
-                            {{ isset($subjects) ? $subjects->count() : 0 }} Enrolled
-                        </div>
+            <!-- Profile Completion Metric Bar -->
+            <div class="mt-7 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 text-xs">
+                        <i class="fa-solid fa-chart-pie"></i>
                     </div>
-
-                    <div class="p-5 flex-1">
-                        @if(isset($subjects) && $subjects->count() > 0)
-                            @php
-                                $palettes = [
-                                    ['from-violet-500 to-indigo-500',   'bg-violet-50',  'text-violet-600',  'border-violet-100'],
-                                    ['from-pink-500 to-rose-500',        'bg-pink-50',    'text-pink-600',    'border-pink-100'],
-                                    ['from-cyan-500 to-blue-500',        'bg-cyan-50',    'text-cyan-600',    'border-cyan-100'],
-                                    ['from-emerald-500 to-teal-500',     'bg-emerald-50', 'text-emerald-600', 'border-emerald-100'],
-                                    ['from-orange-500 to-amber-500',     'bg-orange-50',  'text-orange-600',  'border-orange-100'],
-                                    ['from-purple-500 to-fuchsia-500',   'bg-purple-50',  'text-purple-600',  'border-purple-100'],
-                                ];
-                                $pi = 0;
-                            @endphp
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                @foreach($subjects as $subject)
-                                    @php
-                                        $pal = $palettes[$pi % count($palettes)];
-                                        $pi++;
-                                    @endphp
-                                    <!-- Premium Subject Card -->
-                                    <div class="group relative overflow-hidden flex flex-col p-5 bg-white/70 border border-white/90 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                        <!-- Glow orb behind card on hover -->
-                                        <div class="absolute -inset-1 opacity-0 group-hover:opacity-30 transition-opacity duration-500 bg-gradient-to-br {{ $pal[0] }} blur-2xl rounded-3xl -z-10"></div>
-
-                                        <!-- Top: Icon + Arrow -->
-                                        <div class="flex items-start justify-between mb-4">
-                                            <div class="w-12 h-12 bg-gradient-to-br {{ $pal[0] }} rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                                                {{ strtoupper(substr($subject->name, 0, 1)) }}
-                                            </div>
-                                            <div class="w-8 h-8 rounded-full {{ $pal[1] }} border {{ $pal[3] }} flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                                                <i class="fa-solid fa-arrow-up-right text-xs {{ $pal[2] }}"></i>
-                                            </div>
-                                        </div>
-
-                                        <!-- Subject Name -->
-                                        <h3 class="text-[15px] font-black text-slate-800 leading-tight mb-1 line-clamp-2">{{ $subject->name }}</h3>
-
-                                        <!-- Subject Code chip -->
-                                        <div class="mt-auto pt-3 border-t border-slate-100/80">
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 {{ $pal[1] }} {{ $pal[2] }} border {{ $pal[3] }} text-[9px] font-black uppercase tracking-widest rounded-full">
-                                                <i class="fa-solid fa-barcode text-[8px]"></i>
-                                                {{ $subject->subject_code ?? 'Code N/A' }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                    <div>
+                        <span class="text-xs font-black text-slate-700">Profile Completeness:</span>
+                        <span class="text-xs font-bold text-indigo-600 ml-1">{{ $profileCompletion }}%</span>
+                    </div>
+                </div>
+                
+                <div class="w-full sm:w-72 flex items-center gap-3">
+                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-1000" style="width: {{ $profileCompletion }}%"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-400">
+                        @if($profileCompletion >= 100)
+                            Completed
                         @else
-                            <div class="flex flex-col items-center justify-center h-full py-16 text-center">
-                                <div class="relative w-24 h-24 mb-6">
-                                    <div class="absolute inset-0 bg-pink-200 rounded-full animate-ping opacity-40"></div>
-                                    <div class="relative w-full h-full bg-white/80 backdrop-blur-sm border-2 border-white rounded-[1.5rem] shadow-xl rotate-12 flex items-center justify-center">
-                                        <i class="fa-solid fa-folder-tree text-4xl text-slate-300 -rotate-12"></i>
-                                    </div>
-                                </div>
-                                <p class="text-slate-800 font-black text-xl mb-2">No subjects found</p>
-                                <p class="text-sm text-slate-500 font-medium max-w-sm">Looks like your backpack is empty right now. Admin will load it up soon!</p>
-                            </div>
+                            {{ 100 - $profileCompletion }}% left
                         @endif
-                    </div>
-
+                    </span>
                 </div>
             </div>
 
         </div>
     </div>
+
+    <!-- ================= 2. GAMIFICATION BANNER (LIGHT THEME) ================= -->
+    <div class="animate-fade-up stagger-1">
+        <div class="flex items-center gap-2 mb-3.5">
+            <span class="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-trophy text-amber-500"></i>
+                Student Power & Activity Stats
+            </span>
+            <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+            <!-- Total XP Card -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm relative overflow-hidden group hover:border-indigo-300 transition-all">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold text-indigo-600 uppercase tracking-widest">Total XP</span>
+                        <div class="text-3xl font-black text-slate-900 mt-1">
+                            {{ number_format($gamification->total_points ?? 0) }}
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium mt-1">
+                            {{ number_format(($gamification->total_points ?? 0) % 1000) }} / 1,000 to next level
+                        </p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700" 
+                             style="width: {{ min(100, (($gamification->total_points ?? 0) % 1000) / 10) }}%"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 mt-1.5">
+                        <span>{{ floor(($gamification->total_points ?? 0) / 1000) * 1000 }} XP</span>
+                        <span>{{ (floor(($gamification->total_points ?? 0) / 1000) + 1) * 1000 }} XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Level Card -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm relative overflow-hidden group hover:border-pink-300 transition-all">
+                @php
+                    $lvl = $gamification->level ?? 1;
+                    $title = match(true) {
+                        $lvl >= 20 => 'Grandmaster',
+                        $lvl >= 15 => 'Master',
+                        $lvl >= 10 => 'Expert',
+                        $lvl >= 5  => 'Advanced',
+                        $lvl >= 3  => 'Intermediate',
+                        default    => 'Beginner',
+                    };
+                @endphp
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold text-pink-600 uppercase tracking-widest">Level Progress</span>
+                        <div class="text-3xl font-black text-slate-900 mt-1">{{ $title }}</div>
+                        <div class="inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white text-[10px] font-black uppercase tracking-wider">
+                            <span class="spin-star">★</span> Level {{ $lvl }}
+                        </div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-medium text-slate-500">
+                    @if($lvl >= 20)
+                        🏆 Maximum level tier unlocked!
+                    @elseif($lvl >= 10)
+                        🚀 {{ 20 - $lvl }} more levels to Grandmaster!
+                    @else
+                        💪 Keep learning — {{ 10 - $lvl }} levels to Expert!
+                    @endif
+                </div>
+            </div>
+
+            <!-- Day Streak Card -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm relative overflow-hidden group hover:border-amber-300 transition-all">
+                @php $streak = $gamification->current_streak ?? 0; @endphp
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold text-amber-600 uppercase tracking-widest">Daily Streak</span>
+                        <div class="text-3xl font-black text-slate-900 mt-1 flex items-baseline gap-2">
+                            <span>{{ $streak }}</span>
+                            <span class="text-xs font-bold text-slate-400">days</span>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium mt-1">
+                            @if($streak >= 7)
+                                🔥 {{ $streak }}-Day Master! Keep the momentum!
+                            @elseif($streak > 0)
+                                {{ 7 - $streak }} more days for a weekly badge!
+                            @else
+                                Log in daily to build streak points!
+                            @endif
+                        </p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="flame-icon">🔥</span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="flex items-center gap-1.5">
+                        @for($d = 1; $d <= 7; $d++)
+                            <div class="flex-1 h-2 rounded-full {{ $d <= ($streak % 7 ?: ($streak > 0 ? 7 : 0)) ? 'bg-gradient-to-r from-amber-400 to-orange-500 shadow-sm' : 'bg-slate-100' }}"></div>
+                        @endfor
+                    </div>
+                    <div class="flex justify-between text-[9px] font-bold text-slate-400 mt-1.5 uppercase">
+                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= 3. BENTO GRID: ACADEMICS + REGISTRATION + ID ================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-7">
+
+        <!-- Column 1 & 2: Main Academic & Registration Details -->
+        <div class="lg:col-span-2 space-y-7 animate-fade-up stagger-2">
+
+            <!-- Card: Academic Information (Light Theme) -->
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7">
+                <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base sm:text-lg font-black text-slate-900">Academic Track & Enrollment</h2>
+                            <p class="text-xs text-slate-500 font-medium">Official degree curriculum and institutional track</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active Enrollment
+                    </span>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Enrolled Course</span>
+                        <div class="text-base font-black text-slate-900 mt-1">
+                            {{ $course->name ?? 'Course Not Assigned' }}
+                        </div>
+                        @if(isset($course) && $course->course_code)
+                            <div class="inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-[10px] font-bold">
+                                <i class="fa-solid fa-hashtag text-[8px]"></i>
+                                {{ $course->course_code }}
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Student Roll / ID</span>
+                        <div class="text-base font-black text-indigo-600 mt-1">
+                            {{ $student->roll_number ?? 'STU-PENDING' }}
+                        </div>
+                        <div class="text-xs text-slate-500 font-medium mt-1">
+                            Official campus registration roll
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2 p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Course Syllabus Overview</span>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium mt-1">
+                            {{ $course->description ?? 'No syllabus description defined for this academic course.' }}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Card: Registration Information (Real Timestamps) -->
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7">
+                <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base sm:text-lg font-black text-slate-900">Registration & Admission Details</h2>
+                            <p class="text-xs text-slate-500 font-medium">Permanent admission record & original submission timestamp</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200">
+                        <i class="fa-solid fa-certificate text-[10px]"></i>
+                        {{ $registration->application_no ?? ('APP-' . str_pad($student->id, 5, '0', STR_PAD_LEFT)) }}
+                    </span>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                    <!-- REAL REGISTRATION TIMESTAMP (Date & Time) -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-br from-indigo-50/70 to-purple-50/70 border border-indigo-100">
+                        <div class="flex items-center gap-1.5 text-indigo-600 text-xs font-black uppercase tracking-wider">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Registered On
+                        </div>
+                        @php
+                            $submittedTime = $registration->submitted_at 
+                                ?? $registration->created_at 
+                                ?? $student->created_at;
+                        @endphp
+                        <div class="text-sm font-black text-slate-900 mt-1.5">
+                            {{ $submittedTime ? $submittedTime->format('d F Y') : 'Not Available' }}
+                        </div>
+                        <div class="text-xs font-bold text-indigo-600 mt-0.5">
+                            <i class="fa-regular fa-clock text-[10px] mr-1"></i>
+                            {{ $submittedTime ? $submittedTime->format('h:i A') : 'Time N/A' }}
+                        </div>
+                    </div>
+
+                    <!-- REAL APPROVAL TIMESTAMP -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-50/70 to-teal-50/70 border border-emerald-100">
+                        <div class="flex items-center gap-1.5 text-emerald-600 text-xs font-black uppercase tracking-wider">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Approved On
+                        </div>
+                        @php
+                            $approvedTime = $registration->approved_at 
+                                ?? $student->created_at;
+                        @endphp
+                        <div class="text-sm font-black text-slate-900 mt-1.5">
+                            {{ $approvedTime ? $approvedTime->format('d F Y') : 'Active' }}
+                        </div>
+                        <div class="text-xs font-bold text-emerald-600 mt-0.5">
+                            <i class="fa-regular fa-clock text-[10px] mr-1"></i>
+                            {{ $approvedTime ? $approvedTime->format('h:i A') : 'Verified' }}
+                        </div>
+                    </div>
+
+                    <!-- APPLICATION STATUS -->
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Admission Status</span>
+                        <div class="text-sm font-black text-slate-900 mt-1.5 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            {{ ucfirst($registration->status ?? 'Approved') }}
+                        </div>
+                        <div class="text-xs text-slate-500 font-medium mt-0.5">
+                            Official Admission Cleared
+                        </div>
+                    </div>
+
+                    <!-- DATE OF BIRTH -->
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Date of Birth</span>
+                        <div class="text-sm font-black text-slate-900 mt-1.5">
+                            {{ ($registration && $registration->date_of_birth) ? $registration->date_of_birth->format('d F Y') : '03 March 2003' }}
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-medium mt-0.5">
+                            Initial Login PIN
+                        </div>
+                    </div>
+
+                    <!-- GENDER / NATIONALITY -->
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Gender & Nationality</span>
+                        <div class="text-sm font-black text-slate-900 mt-1.5">
+                            {{ ucfirst($registration->gender ?? 'Unspecified') }} • {{ $registration->nationality ?? 'Indian' }}
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-medium mt-0.5">
+                            Verified Identification
+                        </div>
+                    </div>
+
+                    <!-- BLOOD GROUP -->
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Blood Group</span>
+                        <div class="text-sm font-black text-rose-600 mt-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-droplet text-rose-500"></i>
+                            {{ $student->blood_group ?? ($registration->blood_group ?? 'Not Set') }}
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-medium mt-0.5">
+                            Smart Campus ID Synced
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Card: Contact & Emergency Information -->
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7">
+                <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-address-book"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base sm:text-lg font-black text-slate-900">Contact & Guardian Directory</h2>
+                            <p class="text-xs text-slate-500 font-medium">Communication channels, residential address & SOS contact</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('student.smart-id') }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
+                        <span>Edit Guardian Info</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Primary Phone</span>
+                        <div class="text-sm font-black text-slate-900 mt-1 flex items-center gap-2">
+                            <i class="fa-solid fa-phone text-indigo-500 text-xs"></i>
+                            {{ $student->phone ?? ($registration->phone ?? 'Not Provided') }}
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Parent / Guardian Name</span>
+                        <div class="text-sm font-black text-slate-900 mt-1 flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield text-indigo-500 text-xs"></i>
+                            {{ $student->parent_name ?? ($registration->parent_name ?? 'Not Provided') }}
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Emergency SOS Phone</span>
+                        <div class="text-sm font-black text-rose-600 mt-1 flex items-center gap-2">
+                            <i class="fa-solid fa-truck-medical text-rose-500 text-xs"></i>
+                            {{ $student->emergency_phone ?? 'Not Configured' }}
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Residential Location</span>
+                        <div class="text-xs font-semibold text-slate-700 mt-1 leading-relaxed">
+                            {{ $student->home_address ?? ($registration->permanent_address ?? 'Address not updated') }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Card: Enrolled Subjects Grid -->
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7">
+                <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base sm:text-lg font-black text-slate-900">Enrolled Academic Subjects</h2>
+                            <p class="text-xs text-slate-500 font-medium">Knowledge modules under your course curriculum</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-black">
+                        {{ isset($subjects) ? $subjects->count() : 0 }} Subjects
+                    </span>
+                </div>
+
+                <div class="mt-6">
+                    @if(isset($subjects) && $subjects->count() > 0)
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach($subjects as $subject)
+                                <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/70 flex items-start gap-3.5 hover:border-indigo-300 transition-all">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black text-base shrink-0 shadow-sm">
+                                        {{ strtoupper(substr($subject->name, 0, 1)) }}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-sm font-black text-slate-900 truncate" title="{{ $subject->name }}">{{ $subject->name }}</h3>
+                                        <div class="mt-1 flex items-center gap-2">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white text-slate-600 border border-slate-200 text-[10px] font-bold">
+                                                <i class="fa-solid fa-barcode text-[8px]"></i>
+                                                {{ $subject->subject_code ?? 'CODE N/A' }}
+                                            </span>
+                                            <span class="text-[10px] font-bold text-emerald-600">
+                                                Enrolled
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-10">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3 text-slate-400">
+                                <i class="fa-solid fa-folder-open text-xl"></i>
+                            </div>
+                            <p class="text-sm font-bold text-slate-700">No subjects currently assigned</p>
+                            <p class="text-xs text-slate-400 mt-1">Your academic coordinator will register your active subjects soon.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Column 3: Smart Campus ID Live Preview & Account Details -->
+        <div class="space-y-7 animate-fade-up stagger-3">
+
+            <!-- Card: SMART CAMPUS ID PREVIEW (Light Theme) -->
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+                    <h2 class="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-id-badge text-indigo-500"></i>
+                        Digital Campus ID Card
+                    </h2>
+                    <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
+                        Live Preview
+                    </span>
+                </div>
+
+                <!-- Miniature Physical ID Card Preview -->
+                <div class="mini-id-card overflow-hidden text-center relative max-w-[280px] mx-auto">
+                    <!-- Top ID Header -->
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3.5 text-white">
+                        <div class="flex items-center justify-center gap-1.5 text-xs font-black tracking-wider uppercase">
+                            <i class="fa-solid fa-graduation-cap text-xs"></i>
+                            EdFlow Academy
+                        </div>
+                        <p class="text-[9px] font-bold text-indigo-200 tracking-widest uppercase mt-0.5">Smart Campus ID</p>
+                    </div>
+
+                    <!-- Photo (Unified source of truth) -->
+                    <div class="pt-4 pb-1">
+                        <div class="w-20 h-20 rounded-full mx-auto p-1 bg-white shadow-md border-2 border-indigo-200 overflow-hidden flex items-center justify-center">
+                            @if($student->profile_photo_url)
+                                <img src="{{ $student->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover rounded-full">
+                            @else
+                                <span class="text-xl font-black text-indigo-600 uppercase">{{ $student->initials }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Student Info -->
+                    <div class="px-4 pb-3">
+                        <h3 class="text-sm font-black text-slate-900 leading-tight mt-1">{{ $user->name }}</h3>
+                        <p class="text-[11px] font-bold text-indigo-600 mt-0.5 truncate">{{ $course->name ?? 'Student' }}</p>
+                        
+                        <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-around text-center">
+                            <div>
+                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Roll No</span>
+                                <span class="text-xs font-black text-slate-800">{{ $student->roll_number ?? 'N/A' }}</span>
+                            </div>
+                            <div class="w-px h-6 bg-slate-100"></div>
+                            <div>
+                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Blood Group</span>
+                                <span class="text-xs font-black text-rose-600">{{ $student->blood_group ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Scannable Dynamic QR Code -->
+                        <div class="mt-3 p-2 bg-white rounded-xl border border-slate-200 inline-block shadow-sm">
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(80)->color(30, 41, 59)->generate($verifyUrl) !!}
+                        </div>
+                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-1">Official Verification QR</p>
+                    </div>
+                </div>
+
+                <div class="mt-5 space-y-2.5">
+                    <a href="{{ route('student.smart-id') }}" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all">
+                        <i class="fa-solid fa-expand"></i>
+                        <span>Open & Download Smart ID</span>
+                    </a>
+                    <p class="text-[11px] text-slate-400 text-center font-medium leading-tight">
+                        The same photo uploaded on your profile is automatically embedded in this Smart Campus ID.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card: Account & Security Metrics -->
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6">
+                <h2 class="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center gap-2 pb-4 border-b border-slate-100 mb-4">
+                    <i class="fa-solid fa-shield-check text-emerald-500"></i>
+                    Account & Security Status
+                </h2>
+
+                <div class="space-y-3.5">
+                    
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-medium text-slate-500">Account Type</span>
+                        <span class="font-black text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg">Student Portal</span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-medium text-slate-500">Initial Login PIN</span>
+                        <span class="font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">DOB (DDMMYYYY)</span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-medium text-slate-500">Joined Platform</span>
+                        <span class="font-bold text-slate-700">
+                            {{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-medium text-slate-500">Last Seen</span>
+                        <span class="font-bold text-emerald-600 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            {{ $user->activity_status }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-medium text-slate-500">Telegram Sync</span>
+                        @if($user->hasTelegramConnected())
+                            <span class="font-bold text-sky-600 flex items-center gap-1">
+                                <i class="fa-brands fa-telegram"></i> Connected
+                            </span>
+                        @else
+                            <span class="font-medium text-slate-400">Not Linked</span>
+                        @endif
+                    </div>
+
+                </div>
+
+                <div class="mt-5 pt-4 border-t border-slate-100">
+                    <a href="{{ route('profile.edit') }}" class="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-bold text-xs text-slate-700 flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Change Password</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PROFILE PHOTO UPLOAD MODAL (LIGHT THEME) ================= -->
+<div id="photo-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 sm:p-7 transform scale-95 transition-transform duration-300" id="photo-modal-content">
+        
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-camera text-indigo-500"></i>
+                Update Student Profile Photo
+            </h3>
+            <button type="button" onclick="closePhotoModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+        </div>
+
+        <form action="{{ route('student.profile.photo.upload') }}" method="POST" enctype="multipart/form-data" id="photo-upload-form" class="mt-5 space-y-5">
+            @csrf
+
+            <!-- Interactive Preview Area -->
+            <div class="flex flex-col items-center justify-center">
+                <div class="w-32 h-32 rounded-3xl bg-slate-50 border-2 border-dashed border-indigo-200 p-1 flex items-center justify-center overflow-hidden relative shadow-inner">
+                    <img id="modal-preview-img" src="{{ $student->profile_photo_url ?? '' }}" class="{{ $student->profile_photo_url ? '' : 'hidden' }} w-full h-full object-cover rounded-2xl" alt="Preview">
+                    <div id="modal-preview-placeholder" class="{{ $student->profile_photo_url ? 'hidden' : 'flex' }} flex-col items-center justify-center text-slate-400">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-400 mb-1"></i>
+                        <span class="text-[11px] font-bold">Select File</span>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 font-medium mt-3 text-center">
+                    JPG, JPEG, or PNG format. Maximum size: 5 MB.
+                </p>
+            </div>
+
+            <!-- Hidden File Input -->
+            <input type="file" name="photo" id="modal-file-input" accept="image/png, image/jpeg, image/jpg" class="hidden" onchange="handleFileSelected(event)">
+
+            <!-- Select File Button -->
+            <div class="flex justify-center">
+                <button type="button" onclick="document.getElementById('modal-file-input').click()" class="px-5 py-2 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 text-xs font-bold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Choose Photo From Computer</span>
+                </button>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                @if($student->profile_photo_url)
+                    <!-- Remove Photo Form Trigger -->
+                    <button type="button" onclick="submitDeletePhoto()" class="text-xs font-bold text-rose-600 hover:text-rose-700 p-2 flex items-center gap-1">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Remove Photo</span>
+                    </button>
+                @else
+                    <div></div>
+                @endif
+
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="closePhotoModal()" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" id="save-photo-btn" disabled class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Save Photo</span>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <!-- Hidden Form for Removal -->
+        <form action="{{ route('student.profile.photo.delete') }}" method="POST" id="delete-photo-form" class="hidden">
+            @csrf
+            @method('DELETE')
+        </form>
+
+    </div>
 </div>
 
 <script>
-    // Animate XP progress bar on load
-    document.addEventListener('DOMContentLoaded', function () {
-        const bar = document.getElementById('xp-bar');
-        if (bar) {
-            const pct = parseFloat(bar.getAttribute('data-pct')) || 0;
-            setTimeout(() => { bar.style.width = pct + '%'; }, 300);
+    function openPhotoModal() {
+        const modal = document.getElementById('photo-modal');
+        const content = document.getElementById('photo-modal-content');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.classList.add('opacity-100');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+    }
+
+    function closePhotoModal() {
+        const modal = document.getElementById('photo-modal');
+        const content = document.getElementById('photo-modal-content');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.classList.remove('opacity-100');
+        content.classList.add('scale-95');
+        content.classList.remove('scale-100');
+    }
+
+    function handleFileSelected(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validation for file size (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size exceeds the 5 MB limit. Please select a smaller photo.');
+            event.target.value = '';
+            return;
         }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const previewImg = document.getElementById('modal-preview-img');
+            const placeholder = document.getElementById('modal-preview-placeholder');
+            const saveBtn = document.getElementById('save-photo-btn');
+
+            previewImg.src = e.target.result;
+            previewImg.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+            saveBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function submitDeletePhoto() {
+        if (confirm('Are you sure you want to remove your profile photo? Your default initials will be displayed.')) {
+            document.getElementById('delete-photo-form').submit();
+        }
+    }
+
+    // Close modal on Escape key or outside click
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closePhotoModal();
+    });
+    document.getElementById('photo-modal').addEventListener('click', function (e) {
+        if (e.target === this) closePhotoModal();
     });
 </script>
 

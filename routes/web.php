@@ -341,6 +341,9 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/attendance', [StudentAttendanceController::class, 'index'])->name('student.attendance.index');
 
     Route::get('/student/details', [\App\Http\Controllers\Student\DetailsController::class, 'index'])->name('student.details');
+    Route::post('/student/profile/photo', [\App\Http\Controllers\Student\DetailsController::class, 'uploadPhoto'])->name('student.profile.photo.upload');
+    Route::delete('/student/profile/photo', [\App\Http\Controllers\Student\DetailsController::class, 'deletePhoto'])->name('student.profile.photo.delete');
+    Route::get('/student/profile/photo', [\App\Http\Controllers\Student\DetailsController::class, 'getPhoto'])->name('student.profile.photo');
 
     // Results
     Route::get('/student/results', [ResultController::class, 'index'])->name('student.results.index');

@@ -47,8 +47,12 @@
             <div class="absolute -bottom-10 -left-10 w-48 h-48 border border-white/10 rounded-full"></div>
 
             <div class="relative z-10">
-                <div class="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center text-5xl font-black text-indigo-600 shadow-xl border-4 border-white/20">
-                    {{ substr($student->user->name, 0, 1) }}
+                <div class="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center text-5xl font-black text-indigo-600 shadow-xl border-4 border-white/20 overflow-hidden">
+                    @if($student->profile_photo_url)
+                        <img src="{{ $student->profile_photo_url }}" alt="{{ $student->user->name }}" class="w-full h-full object-cover rounded-full">
+                    @else
+                        <span>{{ substr($student->user->name, 0, 1) }}</span>
+                    @endif
                 </div>
                 <h1 class="text-2xl font-black text-white mt-4 tracking-tight">{{ $student->user->name }}</h1>
                 <p class="text-indigo-200 font-semibold text-sm mt-1">{{ $student->course->name ?? 'Enrolled Student' }}</p>

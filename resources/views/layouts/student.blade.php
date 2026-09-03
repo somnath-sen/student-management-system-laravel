@@ -617,7 +617,13 @@
             <!-- Footer -->
             <div class="sidebar-footer">
                 <div class="user-chip">
-                    <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'S', 0, 1)) }}</div>
+                    <div class="user-avatar overflow-hidden">
+                        @if(auth()->user()->student?->profile_photo_url)
+                            <img src="{{ auth()->user()->student->profile_photo_url }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover rounded-full">
+                        @else
+                            {{ strtoupper(substr(auth()->user()->name ?? 'S', 0, 1)) }}
+                        @endif
+                    </div>
                     <div style="overflow:hidden;flex:1;">
                         <div
                             style="font-size:0.82rem;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">

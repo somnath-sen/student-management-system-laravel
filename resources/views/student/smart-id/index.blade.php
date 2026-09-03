@@ -37,8 +37,7 @@
         border-radius: 50%;
         position: absolute;
         top: 70px;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 100px;
         border: 4px solid #ffffff;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         display: flex;
@@ -47,6 +46,14 @@
         font-size: 2.5rem;
         font-weight: 900;
         color: #4f46e5;
+        overflow: hidden;
+    }
+    .id-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
     }
     .id-body {
         margin-top: 60px;
@@ -138,8 +145,15 @@
                         <p class="text-[10px] font-medium opacity-60">Smart Campus ID</p>
                     </div>
                     
-                    <div class="id-photo">
-                        {{ substr($student->user->name, 0, 1) }}
+                    <div class="id-photo overflow-hidden">
+                        @php
+                            $photoSrc = $student->profile_photo_base64 ?? $student->profile_photo_url;
+                        @endphp
+                        @if($photoSrc)
+                            <img src="{{ $photoSrc }}" crossorigin="anonymous" alt="{{ $student->user->name }}">
+                        @else
+                            <span>{{ substr($student->user->name, 0, 1) }}</span>
+                        @endif
                     </div>
 
                     <div class="id-body">
@@ -158,7 +172,7 @@
                         </div>
 
                         <div class="id-qr-container">
-                            {!! QrCode::size(110)->color(30, 41, 59)->generate($verifyUrl) !!}
+                            {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(110)->color(30, 41, 59)->generate($verifyUrl) !!}
                         </div>
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-2">Scan to verify identity</p>
                     </div>
@@ -176,6 +190,16 @@
                         </p>
                         <p class="text-[11px] font-mono font-bold text-emerald-800 break-all">{{ $verifyUrl }}</p>
                         <p class="text-[10px] text-emerald-500 mt-1">Make sure your phone is on the same Wi-Fi network.</p>
+                    </div>
+
+                    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-center">
+                        <p class="text-xs text-slate-600 font-medium">
+                            <i class="fa-solid fa-camera text-indigo-500 mr-1"></i> ID Photo synced from profile.
+                        </p>
+                        <a href="{{ route('student.details') }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1 mt-1">
+                            <span>Change Photo in My Profile</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
                     </div>
 
                     <p class="text-xs font-medium text-slate-500 text-center">
@@ -200,7 +224,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
-    function downloadIDCard() {
+    async function downloadIDCard() {
         const btn = document.getElementById('download-btn');
         const originalText = btn.innerHTML;
         
@@ -210,27 +234,38 @@
 
         const cardElement = document.getElementById('student-id-card');
 
-        // Capture the card element at 3x scale for crisp, high-resolution printing
-        html2canvas(cardElement, {
-            scale: 3, 
-            useCORS: true,
-            backgroundColor: null
-        }).then(canvas => {
+        try {
+            // Ensure all images inside card are fully loaded before rendering
+            const images = cardElement.querySelectorAll('img');
+            await Promise.all(Array.from(images).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+            }));
+
+            // Capture the card element at 3x scale with white background and CORS/taint support
+            const canvas = await html2canvas(cardElement, {
+                scale: 3, 
+                useCORS: true,
+                allowTaint: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+
             // Convert to PNG and download
             const link = document.createElement('a');
             link.download = `Smart_ID_Card_{{ $student->roll_number ?? time() }}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-
-            // Restore button state
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }).catch(err => {
+        } catch (err) {
             console.error("Error generating ID card:", err);
             alert("Sorry, an error occurred while generating the ID card.");
+        } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
-        });
+        }
     }
 </script>
 

@@ -72,6 +72,14 @@ class User extends Authenticatable
     }
 
     /**
+     * User → Student Registration record
+     */
+    public function studentRegistration()
+    {
+        return $this->hasOne(StudentRegistration::class, 'email', 'email');
+    }
+
+    /**
      * User → Teacher profile
      */
     public function teacher()

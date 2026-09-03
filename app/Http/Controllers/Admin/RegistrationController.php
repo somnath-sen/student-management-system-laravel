@@ -17,7 +17,7 @@ use App\Mail\ParentCredentialsMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
@@ -160,14 +160,28 @@ class RegistrationController extends Controller
             // Persist the roll back to registration so the student can see it
             $registration->update(['roll' => $rollNumber]);
 
+            // Promote/copy registration applicant photo to student profile_photo
+            $profilePhoto = null;
+            if (!empty($registration->photo_path)) {
+                if (Storage::disk('local')->exists($registration->photo_path)) {
+                    $ext = pathinfo($registration->photo_path, PATHINFO_EXTENSION) ?: 'jpg';
+                    $newPath = 'profile-photos/' . Str::uuid() . '.' . $ext;
+                    Storage::disk('public')->put($newPath, Storage::disk('local')->get($registration->photo_path));
+                    $profilePhoto = $newPath;
+                } elseif (Storage::disk('public')->exists($registration->photo_path)) {
+                    $profilePhoto = $registration->photo_path;
+                }
+            }
+
             $studentProfile = Student::create([
-                'user_id'      => $studentUser->id,
-                'course_id'    => $courseId,
-                'roll_number'  => $rollNumber,
-                'phone'        => $registration->phone,
-                'parent_name'  => $parentName,
-                'blood_group'  => $registration->blood_group,
-                'home_address' => $registration->permanent_address,
+                'user_id'       => $studentUser->id,
+                'course_id'     => $courseId,
+                'roll_number'   => $rollNumber,
+                'phone'         => $registration->phone,
+                'profile_photo' => $profilePhoto,
+                'parent_name'   => $parentName,
+                'blood_group'   => $registration->blood_group,
+                'home_address'  => $registration->permanent_address,
             ]);
 
             DB::table('parent_student')->insert([
