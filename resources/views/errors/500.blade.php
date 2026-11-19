@@ -81,6 +81,18 @@
                 Something went wrong on our end. Our engineering team has been notified and is working to restore normal operations as quickly as possible.
             </p>
 
+            <!-- Debug: {{ isset($exception) ? get_class($exception) . ': ' . $exception->getMessage() : 'No exception available' }} -->
+
+            @if(config('app.debug') || request('debug') === '1')
+                <div class="mb-8 p-4 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 rounded-xl text-left text-xs font-mono text-red-700 dark:text-red-300 overflow-x-auto max-h-60">
+                    <p class="font-bold mb-1">Diagnostic Exception:</p>
+                    <p>{{ isset($exception) ? get_class($exception) . ': ' . $exception->getMessage() : 'No exception message passed' }}</p>
+                    @if(isset($exception))
+                        <p class="text-gray-500 mt-2">File: {{ $exception->getFile() }}:{{ $exception->getLine() }}</p>
+                    @endif
+                </div>
+            @endif
+
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 
                 <button onclick="window.location.reload()" class="px-8 py-3.5 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 font-bold text-base hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 group">

@@ -11,9 +11,9 @@ RUN apt-get update -y && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev
 
-# Configure and install PHP extensions
+# Configure and install PHP extensions (MySQL + PostgreSQL + GD + bcmath)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install pdo pdo_mysql bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql bcmath gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -24,6 +24,9 @@ WORKDIR /app
 # Copy all project files into the server
 COPY . .
 
+# Ensure SQLite file exists if SQLite is used as fallback, and directory permissions
+RUN mkdir -p database && touch database/database.sqlite
+
 # Install PHP and Node dependencies
 RUN composer install --optimize-autoloader --no-dev --prefer-dist \
     || (sleep 5 && composer install --optimize-autoloader --no-dev --prefer-dist) \
@@ -31,8 +34,11 @@ RUN composer install --optimize-autoloader --no-dev --prefer-dist \
 RUN npm install
 RUN npm run build
 
-# Give permission to Laravel to save files
-RUN chmod -R 777 storage bootstrap/cache
+# Give permission to Laravel to save files and database
+RUN chmod -R 777 storage bootstrap/cache database
+
+# Output Laravel logs to stderr for Render dashboard visibility
+ENV LOG_CHANNEL=stderr
 
 # Start the server — run migrations + seed roles (safe to re-run) then start
 CMD php artisan migrate --force || true; php artisan db:seed --class=RoleSeeder --force || true; php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
